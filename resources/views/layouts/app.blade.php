@@ -24,25 +24,25 @@
                 <span class="brand-mark" aria-hidden="true">AB</span>
                 <span>
                     <strong>A11Y Bridge</strong>
-                    <small>Platform for hosted website accessibility management</small>
+                    <small>פלטפורמה לניהול נגישות אתר, widget hosted והטמעה קבועה</small>
                 </span>
             </a>
 
             <nav class="site-nav" aria-label="ניווט ראשי">
                 @auth
-                    <a class="{{ request()->routeIs('home') ? 'is-current' : '' }}" href="{{ route('home') }}">Home</a>
-                    <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
-                    <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">Install</a>
-                    <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">Compliance</a>
-                    <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account') }}">Account</a>
+                    <a class="{{ request()->routeIs('home') ? 'is-current' : '' }}" href="{{ route('home') }}">עמוד הבית</a>
+                    <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">הגדרות ה־widget</a>
+                    <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">התקנה</a>
+                    <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">ציות ומסגור</a>
+                    <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account') }}">חשבון</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button class="nav-button" type="submit">התנתקות</button>
                     </form>
                 @else
-                    <a href="#why-a11y-bridge">למה אנחנו</a>
+                    <a href="#why-a11y-bridge">למה A11Y Bridge</a>
+                    <a href="#how-it-works">איך זה עובד</a>
                     <a href="#articles">מאמרים</a>
-                    <a href="#signup-form">פתיחת חשבון</a>
                     <a class="nav-button nav-button-primary" href="#signup-form">פתח חשבון</a>
                 @endauth
             </nav>

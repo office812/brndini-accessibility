@@ -6,15 +6,15 @@
     <section class="home-hero" id="top">
         <div class="hero-copy hero-copy-wide">
             <p class="eyebrow">Website accessibility platform</p>
-            <h1>פלטפורמת נגישות לאתרים עם widget hosted, דשבורד ניהול וקוד הטמעה קבוע.</h1>
+            <h1>מנהלים את ה־widget, ההטמעה והמסגור של הנגישות ממקום אחד.</h1>
             <p class="hero-text hero-text-lead">
-                A11Y Bridge מאפשרת לבעלי אתרים, סוכנויות ועסקים לנהל שכבת נגישות באתר ממקום אחד:
-                widget מעוצב, עדכון אוטומטי לפי site key, הצהרת נגישות, install guidance ו־governance ברור.
+                A11Y Bridge נותנת לבעלי אתרים ולסוכנויות שכבת ניהול אחת: widget hosted מעוצב,
+                קוד הטמעה קבוע, עדכון אוטומטי לפי site key, מסך התקנה ברור וחיבור נוח להצהרת נגישות.
             </p>
 
             <div class="hero-action-row">
                 <a class="primary-button button-link" href="#signup-form">פתח חשבון</a>
-                <a class="ghost-button button-link" href="#articles">קרא מאמרים</a>
+                <a class="ghost-button button-link" href="#how-it-works">איך זה עובד</a>
             </div>
 
             <div class="seo-bullets">
@@ -28,8 +28,8 @@
         <aside class="hero-visual">
             <div class="hero-panel">
                 <span class="eyebrow">Live platform snapshot</span>
-                <strong>One hosted script. Centralized control.</strong>
-                <p>שינוי צבע, טקסט, מיקום או statement URL מתעדכן באתר בלי להחליף שוב קוד.</p>
+                <strong>קוד אחד באתר. שליטה מלאה מהפלטפורמה.</strong>
+                <p>צבע, טקסט, מיקום, שפה ו־statement URL מתעדכנים באתר בלי להחליף שוב snippet.</p>
 
                 <div class="hero-stat-grid">
                     <div class="metric-card">
@@ -52,10 +52,10 @@
     <section class="section-band" id="why-a11y-bridge">
         <div class="section-heading">
             <p class="eyebrow">Built for growth</p>
-            <h2>גם מוצר שמרגיש premium, גם בסיס חזק לצמיחה אורגנית.</h2>
+            <h2>מוצר שנראה כמו SaaS אמיתי, ומסביר נגישות בצורה אחראית.</h2>
             <p class="hero-text">
-                עמוד הבית בנוי כדי להסביר בצורה פשוטה מה המערכת עושה, למה hosted configuration הוא יתרון,
-                ואיך מציגים נגישות בצורה אחראית יותר.
+                הפלטפורמה לא מוכרת "כפתור קסם". היא מוכרת שכבת ניהול, הטמעה עקבית, הצהרה ברורה,
+                ותהליך מוצרי נכון יותר למי שרוצה להיראות מקצועי ולהתרחב.
             </p>
         </div>
 
@@ -82,7 +82,7 @@
     <section class="section-band section-band-alt" id="how-it-works">
         <div class="section-heading">
             <p class="eyebrow">How it works</p>
-            <h2>כך העסק עולה לאוויר עם מערכת נגישות hosted.</h2>
+            <h2>שלושה צעדים כדי לעלות לאוויר עם widget hosted.</h2>
         </div>
 
         <div class="process-grid">
@@ -107,9 +107,9 @@
     <section class="section-band articles-band" id="articles">
         <div class="section-heading">
             <p class="eyebrow">Articles</p>
-            <h2>מאמרים על נגישות אתרים, widget hosted ו-governance נכון.</h2>
+            <h2>מאמרים שמחזקים את ה־SEO ומסבירים את המוצר כמו שצריך.</h2>
             <p class="hero-text">
-                אזור התוכן הזה נועד גם לעזור ללקוחות להבין את המוצר, וגם לענות לחיפושים אורגניים רלוונטיים
+                אזור התוכן נועד גם לעזור ללקוחות להבין את הפלטפורמה, וגם לענות לחיפושים אורגניים
                 סביב תוסף נגישות לאתר, הצהרת נגישות, workflow ל־WCAG וניהול שכבת נגישות.
             </p>
         </div>
@@ -170,7 +170,7 @@
                 <p class="eyebrow">Open account</p>
                 <h2>פתיחת חשבון חדש</h2>
                 <p class="hero-text">
-                    התחילו עם dashboard, widget hosted, install center, compliance center וקוד הטמעה קבוע.
+                    מתחילים עם dashboard, widget hosted, install center, compliance center וקוד הטמעה קבוע.
                 </p>
 
                 <form class="stack-form" method="POST" action="{{ route('register') }}">
@@ -199,7 +199,7 @@
                 <p class="eyebrow">Sign in</p>
                 <h2 id="login-title">כניסה למשתמש קיים</h2>
                 <p class="hero-text">
-                    חזרה מהירה ל־dashboard, install center, compliance center ואזור החשבון.
+                    כניסה מהירה להגדרות ה־widget, למסך ההתקנה, למסגור ה־compliance ולאזור החשבון.
                 </p>
 
                 <form class="stack-form" method="POST" action="{{ route('login') }}">

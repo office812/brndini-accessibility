@@ -8,8 +8,8 @@
             <p class="eyebrow">Dashboard</p>
             <h1>{{ $user->name }}</h1>
             <p class="hero-text">
-                פה הלקוח מגדיר את ה־widget, מעתיק את קוד ההטמעה, וכל שינוי נשמר מיידית לפי
-                <code>site key</code>.
+                כאן מגדירים את ה־widget, שומרים שפת מותג אחידה, ומעתיקים קוד הטמעה קבוע.
+                כל שינוי נשמר מיד ונמשך לפי <code>site key</code>.
             </p>
 
             <div class="metric-grid">
@@ -30,7 +30,8 @@
 
         <div class="code-card">
             <span class="meta-label">Site key</span>
-            <strong>{{ $site->public_key }}</strong>
+            <strong>{{ $site->site_name }}</strong>
+            <p class="inline-note">המזהה הציבורי של האתר: <code>{{ $site->public_key }}</code></p>
             <span class="meta-label">Embed script</span>
             <code id="embed-code">{{ $embedCode }}</code>
             <button class="copy-button" type="button" data-copy-target="embed-code">העתק קוד הטמעה</button>
@@ -42,7 +43,7 @@
             @csrf
 
             <p class="eyebrow">Company</p>
-            <h2>פרטי הלקוח</h2>
+            <h2>פרטי מותג ואתר</h2>
 
             <label for="company_name">שם החברה</label>
             <input id="company_name" name="company_name" type="text" value="{{ old('company_name', $user->name) }}" required>
@@ -67,7 +68,7 @@
             </select>
 
             <p class="eyebrow">Widget</p>
-            <h2>הגדרות widget</h2>
+            <h2>התנהגות ועיצוב ה־widget</h2>
 
             <label for="widget_position">מיקום</label>
             <select id="widget_position" name="widget[position]" data-preview="position">
@@ -125,16 +126,16 @@
 
         <aside class="panel-card">
             <p class="eyebrow">Preview</p>
-            <h2>תצוגה מקדימה</h2>
+            <h2>איך זה ייראה אצל הלקוח</h2>
 
             <div class="preview-stage">
                 <div class="preview-window">
                     <div class="preview-content">
                         <strong>{{ $site->site_name }}</strong>
-                        <p>כך תיראה ההטמעה הראשונית אצל הלקוח. השינויים נמשכים מהשרת בזמן טעינה.</p>
+                        <p>כך נראה ה־widget בצד האתר. השינויים שתשמור כאן נמשכים מהשרת בזמן טעינה.</p>
 
                         <div class="preview-details">
-                            <span class="preview-pill">Live site key</span>
+                            <span class="preview-pill">Hosted configuration</span>
                             <span class="preview-pill">{{ $widget['language'] === 'en' ? 'English UI' : 'עברית' }}</span>
                         </div>
                     </div>
@@ -145,7 +146,7 @@
                     >
                         <div class="preview-shell">
                             <strong>Accessibility settings</strong>
-                            <p>לוח העדפות קומפקטי, ברור ונקי יותר שמרגיש כמו מוצר premium.</p>
+                            <p>פאנל קומפקטי, שקט וברור עם פעולות חשובות בלבד ובלי עומס מיותר.</p>
                         </div>
                         <button
                             class="preview-badge"
