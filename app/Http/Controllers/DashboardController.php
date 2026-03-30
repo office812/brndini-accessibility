@@ -39,6 +39,11 @@ class DashboardController extends Controller
         return view('compliance', $this->buildDashboardData($request->user()));
     }
 
+    public function account(Request $request): View
+    {
+        return view('account', $this->buildDashboardData($request->user()));
+    }
+
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -144,6 +149,15 @@ class DashboardController extends Controller
                 $embedScriptUrl,
                 $site->public_key
             ),
+            'currentPlan' => [
+                'name' => 'Hosted Standard',
+                'price' => 'Custom onboarding',
+                'description' => 'מתאים ללקוח שמנהל widget hosted, site key קבוע ודשבורד אחד מרכזי.',
+            ],
+            'recommendedPlan' => [
+                'name' => 'Managed Accessibility',
+                'description' => 'מתאים כשמוסיפים audit קבוע, remediation workflow וליווי compliance.',
+            ],
             'statementStatus' => $site->statement_url ? 'connected' : 'missing',
             'featureCount' => $featureCount,
         ];
