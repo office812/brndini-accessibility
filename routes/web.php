@@ -10,6 +10,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+    Route::get('/dashboard/install', [DashboardController::class, 'install'])->name('dashboard.install');
+    Route::get('/dashboard/compliance', [DashboardController::class, 'compliance'])->name('dashboard.compliance');
     Route::post('/dashboard', [DashboardController::class, 'update'])->name('dashboard.update');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

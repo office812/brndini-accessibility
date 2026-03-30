@@ -21,7 +21,9 @@
 
             <nav class="site-nav" aria-label="ניווט ראשי">
                 @auth
-                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                    <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
+                    <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">Install</a>
+                    <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">Compliance</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button class="nav-button" type="submit">התנתקות</button>

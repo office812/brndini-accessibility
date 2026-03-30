@@ -155,6 +155,11 @@ code {
     color: var(--text);
 }
 
+.site-nav a.is-current {
+    background: linear-gradient(135deg, rgba(15, 106, 115, 0.14), rgba(24, 56, 63, 0.14));
+    border-color: rgba(15, 106, 115, 0.18);
+}
+
 .nav-button,
 .copy-button {
     cursor: pointer;
@@ -534,6 +539,81 @@ code {
 
 .info-card-tight {
     margin-top: 16px;
+}
+
+.step-list,
+.check-list {
+    margin: 14px 0 0;
+    padding-inline-start: 20px;
+    display: grid;
+    gap: 14px;
+}
+
+.step-list li,
+.check-list li {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.step-list strong {
+    display: block;
+    color: var(--text);
+    margin-bottom: 4px;
+}
+
+.step-list span {
+    display: block;
+}
+
+.inline-note {
+    margin: 0;
+    font-size: 0.94rem;
+}
+
+.status-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.status-card {
+    padding: 16px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(248, 240, 227, 0.88));
+    border: 1px solid rgba(23, 48, 58, 0.08);
+}
+
+.status-card p {
+    margin: 10px 0 0;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.status-pill.is-good {
+    background: rgba(28, 139, 84, 0.14);
+    color: #236842;
+}
+
+.status-pill.is-warn {
+    background: rgba(217, 140, 43, 0.16);
+    color: #8a5518;
+}
+
+.status-pill.is-neutral {
+    background: rgba(15, 106, 115, 0.12);
+    color: var(--accent-deep);
+}
+
+.cta-link {
+    margin-top: 18px;
+    width: fit-content;
 }
 
 .site-nav a:focus-visible,

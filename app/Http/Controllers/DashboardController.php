@@ -25,15 +25,18 @@ class DashboardController extends Controller
     public function show(Request $request): View
     {
         $user = $request->user();
-        $site = $this->ensureSite($user);
 
-        return view('dashboard', [
-            'user' => $user,
-            'site' => $site,
-            'widget' => $site->widgetConfig(),
-            'serviceModes' => $this->serviceModes(),
-            'embedScriptUrl' => url('/widget.js'),
-        ]);
+        return view('dashboard', $this->buildDashboardData($user));
+    }
+
+    public function install(Request $request): View
+    {
+        return view('install', $this->buildDashboardData($request->user()));
+    }
+
+    public function compliance(Request $request): View
+    {
+        return view('compliance', $this->buildDashboardData($request->user()));
     }
 
     public function update(Request $request): RedirectResponse
@@ -114,6 +117,36 @@ class DashboardController extends Controller
                 'widget_settings' => SiteSettings::defaultWidget(),
             ]
         );
+    }
+
+    private function buildDashboardData(User $user): array
+    {
+        $site = $this->ensureSite($user);
+        $widget = $site->widgetConfig();
+        $serviceModes = $this->serviceModes();
+        $embedScriptUrl = url('/widget.js');
+        $featureCount = count(array_filter([
+            $widget['showContrast'],
+            $widget['showFontScale'],
+            $widget['showUnderlineLinks'],
+            $widget['showReduceMotion'],
+        ]));
+
+        return [
+            'user' => $user,
+            'site' => $site,
+            'widget' => $widget,
+            'serviceModes' => $serviceModes,
+            'serviceModeLabel' => $serviceModes[$site->service_mode] ?? $site->service_mode,
+            'embedScriptUrl' => $embedScriptUrl,
+            'embedCode' => sprintf(
+                '<script async src="%s" data-a11y-bridge="%s"></script>',
+                $embedScriptUrl,
+                $site->public_key
+            ),
+            'statementStatus' => $site->statement_url ? 'connected' : 'missing',
+            'featureCount' => $featureCount,
+        ];
     }
 
     private function serviceModes(): array

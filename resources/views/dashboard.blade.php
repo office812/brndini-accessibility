@@ -32,7 +32,7 @@
             <span class="meta-label">Site key</span>
             <strong>{{ $site->public_key }}</strong>
             <span class="meta-label">Embed script</span>
-            <code id="embed-code">&lt;script async src="{{ $embedScriptUrl }}" data-a11y-bridge="{{ $site->public_key }}"&gt;&lt;/script&gt;</code>
+            <code id="embed-code">{{ $embedCode }}</code>
             <button class="copy-button" type="button" data-copy-target="embed-code">העתק קוד הטמעה</button>
         </div>
     </section>
