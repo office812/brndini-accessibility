@@ -31,10 +31,13 @@ class AuthController extends Controller
         }
 
         $user = DB::transaction(function () use ($validated, $domain) {
+            $isFirstUser = User::query()->count() === 0;
+
             $user = User::create([
                 'name' => $validated['company_name'],
                 'email' => strtolower($validated['email']),
                 'contact_email' => strtolower($validated['email']),
+                'is_admin' => $isFirstUser,
                 'password' => Hash::make($validated['password']),
             ]);
 

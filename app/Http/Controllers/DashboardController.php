@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\User;
 use App\Support\SiteSettings;
 use Illuminate\Contracts\View\View;
@@ -13,12 +14,10 @@ class DashboardController extends Controller
 {
     public function home(Request $request): View|RedirectResponse
     {
-        if ($request->user()) {
-            return redirect()->route('dashboard');
-        }
-
         return view('home', [
-            'serviceModes' => $this->serviceModes(),
+            'articles' => Article::published()->latest('published_at')->take(6)->get(),
+            'metaDescription' => 'פלטפורמת נגישות לאתרים עם widget hosted, קוד הטמעה קבוע, dashboard ניהול והצהרת נגישות במקום אחד.',
+            'canonicalUrl' => route('home'),
         ]);
     }
 
