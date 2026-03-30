@@ -1,0 +1,29 @@
+.ab-skip-link {
+	position: absolute;
+	left: 12px;
+	top: 12px;
+	transform: translateY(-160%);
+	padding: 10px 14px;
+	border-radius: 999px;
+	background: #153d53;
+	color: #fffdf8;
+	text-decoration: none;
+	z-index: 999999;
+	box-shadow: 0 10px 30px rgba(19, 40, 56, 0.2);
+}
+
+.ab-skip-link:focus {
+	transform: translateY(0);
+}
+
+body.ab-focus-ready a:focus-visible,
+body.ab-focus-ready button:focus-visible,
+body.ab-focus-ready input:focus-visible,
+body.ab-focus-ready select:focus-visible,
+body.ab-focus-ready textarea:focus-visible,
+body.ab-focus-ready summary:focus-visible,
+body.ab-focus-ready [tabindex]:focus-visible {
+	outline: 3px solid #0f6a73;
+	outline-offset: 3px;
+	box-shadow: 0 0 0 6px rgba(15, 106, 115, 0.14);
+}
