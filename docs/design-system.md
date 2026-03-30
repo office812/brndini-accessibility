@@ -54,11 +54,13 @@ The goal is to reach that level of restraint and consistency.
 
 - Serif with elegance and authority
 - Used for major headlines and named sections
+- Recommended family: `Frank Ruhl Libre`
 
 ### UI / Body
 
 - Clean sans serif
 - Used for controls, helper text, and dense information
+- Recommended family: `Heebo`
 
 ### Rules
 

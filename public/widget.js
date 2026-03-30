@@ -330,7 +330,7 @@
     var style = document.createElement('style');
     style.id = 'ab-widget-styles';
     style.textContent = ''
-      + '.ab-widget-shell{--ab-radius:28px;--ab-radius-small:18px;--ab-motion-fast:140ms;--ab-motion-base:180ms;--ab-motion-soft:220ms;position:fixed;z-index:999999;bottom:20px;right:20px;display:flex;flex-direction:column-reverse;gap:14px;align-items:flex-end;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}'
+      + '.ab-widget-shell{--ab-radius:28px;--ab-radius-small:18px;--ab-motion-fast:140ms;--ab-motion-base:180ms;--ab-motion-soft:220ms;position:fixed;z-index:999999;bottom:20px;right:20px;display:flex;flex-direction:column-reverse;gap:14px;align-items:flex-end;font-family:"Heebo","Segoe UI",Arial,sans-serif;}'
       + '.ab-widget-shell.ab-bottom-left{left:20px;right:auto;align-items:flex-start;}'
       + '.ab-widget-button{--ab-widget-color:#0f6a73;position:relative;display:inline-flex;align-items:center;gap:12px;min-height:60px;padding:0 18px 0 14px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--ab-widget-color),#16333a 72%);color:#fff;font-weight:700;box-shadow:0 18px 46px rgba(8,22,31,.24);cursor:pointer;overflow:hidden;backdrop-filter:blur(10px);transition:transform var(--ab-motion-base) ease,box-shadow var(--ab-motion-base) ease,filter var(--ab-motion-base) ease;}'
       + '.ab-widget-button-glow{position:absolute;inset:-1px;background:radial-gradient(circle at top right,rgba(255,255,255,.32),transparent 36%);pointer-events:none;}'
@@ -354,7 +354,7 @@
       + '.ab-widget-brand-badge{width:42px;height:42px;display:inline-grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#173941,#0f6a73);color:#fff;font-weight:800;box-shadow:0 10px 24px rgba(15,106,115,.18);}'
       + '.ab-widget-brand-text{display:grid;gap:2px;}'
       + '.ab-widget-eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6f7f85;font-weight:800;}'
-      + '.ab-widget-title{margin:0;font:700 22px/1.05 Georgia,"Times New Roman",serif;}'
+      + '.ab-widget-title{margin:0;font:700 22px/1.05 "Frank Ruhl Libre",Georgia,serif;}'
       + '.ab-widget-close{width:36px;height:36px;border:1px solid rgba(22,48,58,.1);border-radius:14px;background:rgba(255,255,255,.72);color:#16303a;font-size:26px;line-height:1;cursor:pointer;transition:transform var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease;}'
       + '.ab-widget-close:hover{transform:translateY(-1px);background:#fff;}'
       + '.ab-widget-description{position:relative;margin:14px 0 0;color:#53646b;font-size:14px;line-height:1.7;}'

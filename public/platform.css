@@ -1,6 +1,6 @@
 :root {
-    --font-ui: Inter, "Segoe UI", system-ui, sans-serif;
-    --font-display: Georgia, "Times New Roman", serif;
+    --font-ui: "Heebo", "Segoe UI", Arial, sans-serif;
+    --font-display: "Frank Ruhl Libre", Georgia, serif;
     --bg: #f3efe6;
     --bg-2: #e9dfc9;
     --card: rgba(255, 251, 243, 0.86);
