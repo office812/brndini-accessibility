@@ -11,6 +11,21 @@
                 פה הלקוח מגדיר את ה־widget, מעתיק את קוד ההטמעה, וכל שינוי נשמר מיידית לפי
                 <code>site key</code>.
             </p>
+
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <strong>Hosted widget</strong>
+                    <span>האתר מקבל שינויים אוטומטית מאותו סקריפט קבוע.</span>
+                </div>
+                <div class="metric-card">
+                    <strong>Live branding</strong>
+                    <span>צבע, גודל, מיקום ושפה מעודכנים מתוך הדשבורד.</span>
+                </div>
+                <div class="metric-card">
+                    <strong>Governance</strong>
+                    <span>הצהרת נגישות והעדפות תצוגה באותה שכבת ניהול.</span>
+                </div>
+            </div>
         </div>
 
         <div class="code-card">
@@ -117,12 +132,21 @@
                     <div class="preview-content">
                         <strong>{{ $site->site_name }}</strong>
                         <p>כך תיראה ההטמעה הראשונית אצל הלקוח. השינויים נמשכים מהשרת בזמן טעינה.</p>
+
+                        <div class="preview-details">
+                            <span class="preview-pill">Live site key</span>
+                            <span class="preview-pill">{{ $widget['language'] === 'en' ? 'English UI' : 'עברית' }}</span>
+                        </div>
                     </div>
 
                     <div
                         class="preview-widget preview-{{ $widget['position'] }} preview-size-{{ $widget['size'] }}"
                         id="widget-preview"
                     >
+                        <div class="preview-shell">
+                            <strong>Accessibility settings</strong>
+                            <p>לוח העדפות קומפקטי, ברור ונקי יותר שמרגיש כמו מוצר premium.</p>
+                        </div>
                         <button
                             class="preview-badge"
                             id="widget-preview-button"
