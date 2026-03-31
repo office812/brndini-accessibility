@@ -746,13 +746,26 @@ class DashboardController extends Controller
             ->sortByDesc('sort_timestamp')
             ->values();
 
+        $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
+        $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
+        $clientUsersCount = max($users->count() - $superAdminUsersCount - $adminUsersCount, 0);
+        $installedSitesCount = $sites->filter(fn (Site $site) => filled($site->last_seen_at))->count();
+        $pendingInstallSitesCount = max($sites->count() - $installedSitesCount, 0);
+        $trackingScriptsActiveCount = collect($tracking)->filter(fn ($script) => filled(trim((string) $script)))->count();
+
         return [
             'title' => 'מרכז סופר־אדמין | A11Y Bridge',
             'user' => $user,
             'trackingScripts' => $tracking,
+            'trackingScriptsActiveCount' => $trackingScriptsActiveCount,
             'adminUsers' => $users,
             'adminSites' => $sites,
             'adminSupportTickets' => $tickets,
+            'superAdminUsersCount' => $superAdminUsersCount,
+            'adminUsersCount' => $adminUsersCount,
+            'clientUsersCount' => $clientUsersCount,
+            'installedSitesCount' => $installedSitesCount,
+            'pendingInstallSitesCount' => $pendingInstallSitesCount,
             'supportCategories' => $this->supportCategories(),
             'supportPriorityLabels' => $this->supportPriorityLabels(),
             'supportStatusLabels' => $this->supportStatusLabels(),

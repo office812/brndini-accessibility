@@ -16,15 +16,6 @@
                 </section>
             @endunless
 
-            @php
-                $superAdminUsersCount = $adminUsers->filter(fn ($adminUser) => $adminUser->isSuperAdmin())->count();
-                $adminUsersCount = $adminUsers->filter(fn ($adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
-                $clientUsersCount = max($adminSummary['users'] - $superAdminUsersCount - $adminUsersCount, 0);
-                $installedSitesCount = $adminSites->filter(fn ($adminSite) => filled($adminSite->last_seen_at))->count();
-                $pendingInstallSitesCount = max($adminSites->count() - $installedSitesCount, 0);
-                $trackingScriptsActiveCount = collect($trackingScripts)->filter(fn ($script) => filled(trim((string) $script)))->count();
-            @endphp
-
             <section class="dashboard-workspace dashboard-workspace-inline super-admin-workspace" data-dashboard-tabs>
                 <aside class="dashboard-tab-rail super-admin-rail">
                     <div class="licenses-sidebar-block">
