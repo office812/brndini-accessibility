@@ -42,12 +42,6 @@
 
             <section class="dashboard-workspace" data-dashboard-tabs>
                 <aside class="dashboard-tab-rail" aria-label="לשוניות הדשבורד">
-                    <div class="dashboard-tab-rail-card">
-                        <p class="eyebrow">ניווט מהיר</p>
-                        <h2>עבודה ממוקדת לכל שירות</h2>
-                        <p class="panel-intro">כל אזור בדשבורד יושב עכשיו בלשונית נפרדת כדי שלא תצטרך לגלול עמוד ארוך בכל שינוי קטן.</p>
-                    </div>
-
                     <nav class="dashboard-tab-nav">
                         <button class="dashboard-tab-button is-active" type="button" data-dashboard-tab-button="overview">סקירה</button>
                         <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="licenses">רישיונות</button>
