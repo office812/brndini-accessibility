@@ -1,30 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @php
-        $adminUsers = $adminUsers ?? collect();
-        $adminSites = $adminSites ?? collect();
-        $adminSupportTickets = $adminSupportTickets ?? collect();
-        $trackingScripts = $trackingScripts ?? [];
-        $supportCategories = $supportCategories ?? [];
-        $supportPriorityLabels = $supportPriorityLabels ?? [];
-        $supportStatusLabels = $supportStatusLabels ?? [];
-        $supportUsesRuntimeFallback = $supportUsesRuntimeFallback ?? false;
-        $platformReadiness = $platformReadiness ?? ['ready' => true, 'summary' => '', 'checks' => []];
-        $adminSummary = array_merge([
-            'users' => $adminUsers->count(),
-            'sites' => $adminSites->count(),
-            'active_sites' => $adminSites->filter(fn ($adminSite) => method_exists($adminSite, 'licenseActive') ? $adminSite->licenseActive() : false)->count(),
-            'tickets_open' => $adminSupportTickets->whereIn('status', ['open', 'pending'])->count(),
-        ], $adminSummary ?? []);
-        $trackingScriptsActiveCount = $trackingScriptsActiveCount ?? collect($trackingScripts)->filter(fn ($script) => filled(trim((string) $script)))->count();
-        $superAdminUsersCount = $superAdminUsersCount ?? $adminUsers->filter(fn ($adminUser) => $adminUser->isSuperAdmin())->count();
-        $adminUsersCount = $adminUsersCount ?? $adminUsers->filter(fn ($adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
-        $clientUsersCount = $clientUsersCount ?? max(($adminSummary['users'] ?? $adminUsers->count()) - $superAdminUsersCount - $adminUsersCount, 0);
-        $installedSitesCount = $installedSitesCount ?? $adminSites->filter(fn ($adminSite) => $adminSite->installationSignal()['installed'])->count();
-        $pendingInstallSitesCount = $pendingInstallSitesCount ?? max($adminSites->count() - $installedSitesCount, 0);
-    @endphp
-
     <section class="domain-shell super-admin-shell">
         <div class="domain-shell-main super-admin-main">
             <section class="domain-shell-header">
