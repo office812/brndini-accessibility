@@ -32,27 +32,35 @@
                     </a>
                 </div>
 
-                <div class="app-header-left">
-                    <nav class="app-nav" aria-label="ניווט מערכת">
-                        <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard', $siteRouteParams) }}">הרישיונות שלי</a>
-                        <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install', $siteRouteParams) }}">השירותים שלי</a>
-                        <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', $siteRouteParams) }}">דוחות ובקרה</a>
-                        <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account', $siteRouteParams) }}">החשבון</a>
-                    </nav>
-                </div>
+                <button class="header-menu-toggle" type="button" aria-expanded="false" aria-label="פתח תפריט" data-header-menu-toggle="app-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
-                <div class="app-header-right">
-                    <a class="app-header-cta" href="{{ route('dashboard.install', $siteRouteParams) }}">יצירת קשר</a>
-                    <a class="app-header-icon" href="{{ route('dashboard.compliance', $siteRouteParams) }}" aria-label="מרכז תמיכה">?</a>
-                    <span class="app-header-icon" aria-hidden="true">•</span>
-                    <div class="app-user-pill">
-                        <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>
-                        <span>{{ $user->name ?? Auth::user()->name }}</span>
+                <div class="app-header-menu" data-header-menu-panel="app-menu">
+                    <div class="app-header-left">
+                        <nav class="app-nav" aria-label="ניווט מערכת">
+                            <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard', $siteRouteParams) }}">הרישיונות שלי</a>
+                            <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install', $siteRouteParams) }}">השירותים שלי</a>
+                            <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', $siteRouteParams) }}">דוחות ובקרה</a>
+                            <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account', $siteRouteParams) }}">החשבון</a>
+                        </nav>
                     </div>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button class="app-logout-button" type="submit">התנתקות</button>
-                    </form>
+
+                    <div class="app-header-right">
+                        <a class="app-header-cta" href="{{ route('dashboard.install', $siteRouteParams) }}">יצירת קשר</a>
+                        <a class="app-header-icon" href="{{ route('dashboard.compliance', $siteRouteParams) }}" aria-label="מרכז תמיכה">?</a>
+                        <span class="app-header-icon" aria-hidden="true">•</span>
+                        <div class="app-user-pill">
+                            <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>
+                            <span>{{ $user->name ?? Auth::user()->name }}</span>
+                        </div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="app-logout-button" type="submit">התנתקות</button>
+                        </form>
+                    </div>
                 </div>
             </header>
         @else
@@ -65,13 +73,21 @@
                     </span>
                 </a>
 
-                <nav class="site-nav" aria-label="ניווט ראשי">
-                    <a href="#solutions">פתרונות</a>
-                    <a href="#platform-flow">איך זה עובד</a>
-                    <a href="#articles">משאבים</a>
-                    <a href="{{ route('login.show') }}">Login</a>
-                    <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">Start free trial</a>
-                </nav>
+                <button class="header-menu-toggle" type="button" aria-expanded="false" aria-label="פתח תפריט" data-header-menu-toggle="site-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div class="site-header-menu" data-header-menu-panel="site-menu">
+                    <nav class="site-nav" aria-label="ניווט ראשי">
+                        <a href="#solutions">פתרונות</a>
+                        <a href="#platform-flow">איך זה עובד</a>
+                        <a href="#articles">משאבים</a>
+                        <a href="{{ route('login.show') }}">התחברות</a>
+                        <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון</a>
+                    </nav>
+                </div>
             </header>
         @endauth
 
