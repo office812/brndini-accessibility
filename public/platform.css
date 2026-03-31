@@ -2946,8 +2946,21 @@ body.page-is-ready .auth-shell {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.super-admin-shell {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+}
+
+.super-admin-main {
+    width: 100%;
+    min-width: 0;
+    gap: 24px;
+}
+
 .super-admin-workspace {
-    grid-template-columns: 280px minmax(0, 1fr);
+    grid-template-columns: minmax(300px, 340px) minmax(0, 1fr);
+    gap: 24px;
+    width: 100%;
 }
 
 .super-admin-rail {
@@ -2966,15 +2979,24 @@ body.page-is-ready .auth-shell {
 }
 
 .super-admin-main .dashboard-tab-panel.is-active {
+    width: 100%;
+    min-width: 0;
     gap: 22px;
+}
+
+.super-admin-main .dashboard-tab-content,
+.super-admin-main .domain-card,
+.super-admin-main .portal-content-card {
+    width: 100%;
+    min-width: 0;
 }
 
 .super-admin-hero-card {
     display: grid;
-    grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
-    gap: 18px;
+    grid-template-columns: minmax(0, 1.42fr) minmax(340px, 0.82fr);
+    gap: 20px;
     align-items: stretch;
-    padding: 24px;
+    padding: 28px;
     border-radius: 28px;
     background: linear-gradient(135deg, #0d49df 0%, #194ad0 46%, #eff5ff 46%, #eff5ff 100%);
     border: 1px solid rgba(29, 109, 255, 0.18);
@@ -3037,7 +3059,7 @@ body.page-is-ready .auth-shell {
 .super-admin-kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
+    gap: 16px;
 }
 
 .super-admin-kpi-grid-compact {
@@ -3078,15 +3100,15 @@ body.page-is-ready .auth-shell {
 
 .super-admin-content-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
-    gap: 18px;
+    grid-template-columns: minmax(0, 1.46fr) minmax(340px, 0.9fr);
+    gap: 20px;
     align-items: start;
 }
 
 .super-admin-main-stack,
 .super-admin-side-stack {
     display: grid;
-    gap: 18px;
+    gap: 20px;
 }
 
 .super-admin-actions-list {
