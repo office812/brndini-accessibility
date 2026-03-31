@@ -25,6 +25,7 @@
   var purchaseFallbackUrl = platformOrigin + '/#pricing';
   var guideOverlay = null;
   var guideMoveHandlerAttached = false;
+  var featureLabelMap = {};
 
   var defaultPrefs = {
     fontScale: 'normal',
@@ -259,6 +260,10 @@
       }
     }
   ];
+
+  featureCatalog.forEach(function (feature) {
+    featureLabelMap[feature.key] = feature.title;
+  });
 
   injectStyles();
 
@@ -510,6 +515,7 @@
       panelBody.className = 'ab-widget-body ab-layout-' + panelLayout;
 
       panelBody.appendChild(createOverviewCard(config, plan, prefs));
+      panelBody.appendChild(createActiveStateCard(prefs));
 
       var sectionsWrap = document.createElement('div');
       sectionsWrap.className = 'ab-widget-sections ab-layout-' + panelLayout;
@@ -587,6 +593,103 @@
       });
 
       return overview;
+    }
+
+    function createActiveStateCard(currentPrefs) {
+      var entries = getActiveAdjustmentEntries(currentPrefs);
+      var section = document.createElement('section');
+      section.className = 'ab-widget-active-state';
+
+      var head = document.createElement('div');
+      head.className = 'ab-widget-active-head';
+
+      var titleNode = document.createElement('strong');
+      titleNode.className = 'ab-widget-active-title';
+      titleNode.textContent = 'התאמות פעילות כרגע';
+
+      var metaNode = document.createElement('span');
+      metaNode.className = 'ab-widget-active-meta';
+      metaNode.textContent = entries.length ? String(entries.length) + ' פעילות' : 'הכול במצב רגיל';
+
+      head.appendChild(titleNode);
+      head.appendChild(metaNode);
+      section.appendChild(head);
+
+      if (!entries.length) {
+        var emptyNode = document.createElement('p');
+        emptyNode.className = 'ab-widget-active-empty';
+        emptyNode.textContent = 'עדיין לא הופעלה התאמה. כל שינוי שתבצע יופיע כאן ויהיה זמין לאיפוס מהיר.';
+        section.appendChild(emptyNode);
+        return section;
+      }
+
+      var chips = document.createElement('div');
+      chips.className = 'ab-widget-active-chips';
+
+      entries.forEach(function (entry) {
+        var chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'ab-widget-active-chip';
+        chip.textContent = entry.label + ' ×';
+        chip.addEventListener('click', function () {
+          if (entry.key === 'profile') {
+            updatePrefs(Object.assign({}, defaultPrefs));
+            return;
+          }
+
+          updatePrefs({
+            profile: 'none',
+            [entry.key]: defaultPrefs[entry.key]
+          });
+        });
+        chips.appendChild(chip);
+      });
+
+      section.appendChild(chips);
+      return section;
+    }
+
+    function getActiveAdjustmentEntries(currentPrefs) {
+      var entries = [];
+
+      if (currentPrefs.profile && currentPrefs.profile !== 'none') {
+        var currentProfile = profiles.find(function (profile) {
+          return profile.key === currentPrefs.profile;
+        });
+
+        entries.push({
+          key: 'profile',
+          label: currentProfile ? currentProfile.title : 'פרופיל פעיל'
+        });
+      }
+
+      featureCatalog.forEach(function (feature) {
+        var currentValue = currentPrefs[feature.key];
+        var defaultValue = defaultPrefs[feature.key];
+
+        if (feature.type === 'toggle') {
+          if (Boolean(currentValue) && !Boolean(defaultValue)) {
+            entries.push({
+              key: feature.key,
+              label: feature.title
+            });
+          }
+          return;
+        }
+
+        if (typeof currentValue !== 'undefined' && currentValue !== defaultValue) {
+          var option = (feature.options || []).find(function (item) {
+            return item.value === currentValue;
+          });
+
+          entries.push({
+            key: feature.key,
+            label: feature.title + (option ? ' · ' + option.label : '')
+          });
+        }
+      });
+
+      return entries;
     }
 
     button.addEventListener('click', function (event) {
@@ -1090,6 +1193,14 @@
       .ab-widget-overview-card{display:grid;gap:4px;padding:12px 13px;border-radius:16px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
       .ab-widget-overview-label{font-size:11px;color:#64748b;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
       .ab-widget-overview-value{font-size:15px;font-weight:800;}
+      .ab-widget-active-state{display:grid;gap:10px;padding:13px 14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(247,250,253,.96));border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
+      .ab-widget-active-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+      .ab-widget-active-title{font-size:13px;font-weight:800;}
+      .ab-widget-active-meta{font-size:11px;color:#64748b;font-weight:800;}
+      .ab-widget-active-empty{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
+      .ab-widget-active-chips{display:flex;flex-wrap:wrap;gap:8px;}
+      .ab-widget-active-chip{min-height:34px;padding:0 12px;border:1px solid rgba(29,109,255,.12);border-radius:999px;background:rgba(29,109,255,.08);color:#0d3ea7;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease;}
+      .ab-widget-active-chip:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(29,109,255,.12);background:rgba(29,109,255,.12);}
       .ab-widget-sections{display:grid;gap:14px;min-width:0;grid-template-columns:1fr;}
       .ab-widget-sections.ab-layout-split{grid-template-columns:1fr;align-items:start;}
       .ab-widget-section{display:grid;gap:10px;}
