@@ -418,6 +418,11 @@
                                 <p>הטמעות שזוהו</p>
                             </article>
                             <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">⏱</span>
+                                <strong>{{ $staleInstallSitesCount }}</strong>
+                                <p>לא זוהו לאחרונה</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🧱</span>
                                 <strong>{{ $pendingInstallSitesCount }}</strong>
                                 <p>ממתינים להטמעה</p>
@@ -450,6 +455,7 @@
                                     <select id="super_admin_sites_install" data-filter-field="install">
                                         <option value="">כל מצבי ההתקנה</option>
                                         <option value="installed">זוהתה טעינה</option>
+                                        <option value="stale">לא זוהה לאחרונה</option>
                                         <option value="pending">ממתין להטמעה</option>
                                     </select>
                                 </div>
@@ -470,7 +476,8 @@
                                         @foreach ($adminSites as $adminSite)
                                             @php
                                                 $licenseKey = $adminSite->licenseActive() ? 'active' : 'inactive';
-                                                $installKey = $adminSite->installationSignal()['installed'] ? 'installed' : 'pending';
+                                                $adminInstallSignal = $adminSite->installationSignal();
+                                                $installKey = $adminInstallSignal['status'];
                                                 $ownerEmail = $adminSite->user?->email ?? 'לא ידוע';
                                             @endphp
                                             <tr
@@ -488,8 +495,8 @@
                                                     </span>
                                                 </td>
                                                 <td data-label="הטמעה">
-                                                    <span class="status-pill {{ $adminSite->installationSignal()['installed'] ? 'is-good' : 'is-neutral' }}">
-                                                        {{ $adminSite->installationSignal()['installed'] ? 'זוהתה טעינה' : 'ממתין להטמעה' }}
+                                                    <span class="status-pill {{ $adminInstallSignal['tone'] === 'good' ? 'is-good' : ($adminInstallSignal['tone'] === 'neutral' ? 'is-neutral' : 'is-warn') }}">
+                                                        {{ $adminInstallSignal['label'] }}
                                                     </span>
                                                 </td>
                                             </tr>

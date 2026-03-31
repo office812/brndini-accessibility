@@ -182,20 +182,54 @@ class Site extends Model
     public function installationSignal(): array
     {
         if (static::columnsAvailable(['last_seen_at', 'last_seen_url'])) {
+            $lastSeenAt = $this->last_seen_at;
+            $pageUrl = filled($this->last_seen_url) ? $this->last_seen_url : null;
+        } else {
+            $cachedSeenAt = RuntimeStore::get($this->runtimeScope(), 'widget_seen_at');
+            $cachedPageUrl = RuntimeStore::get($this->runtimeScope(), 'widget_seen_url');
+
+            $lastSeenAt = is_string($cachedSeenAt) && trim($cachedSeenAt) !== ''
+                ? Carbon::parse($cachedSeenAt)
+                : null;
+            $pageUrl = is_string($cachedPageUrl) && trim($cachedPageUrl) !== ''
+                ? $cachedPageUrl
+                : null;
+        }
+
+        if (! $lastSeenAt instanceof Carbon) {
             return [
-                'installed' => filled($this->last_seen_at),
-                'last_seen_at' => $this->last_seen_at,
-                'page_url' => filled($this->last_seen_url) ? $this->last_seen_url : null,
+                'status' => 'pending',
+                'label' => 'ממתין להטמעה',
+                'tone' => 'warn',
+                'installed' => false,
+                'ever_seen' => false,
+                'last_seen_at' => null,
+                'page_url' => $pageUrl,
             ];
         }
 
-        $lastSeenAt = RuntimeStore::get($this->runtimeScope(), 'widget_seen_at');
-        $pageUrl = RuntimeStore::get($this->runtimeScope(), 'widget_seen_url');
+        $isRecent = $lastSeenAt->greaterThanOrEqualTo(now()->subDays(7));
+
+        if ($isRecent) {
+            return [
+                'status' => 'installed',
+                'label' => 'הוטמע באתר',
+                'tone' => 'good',
+                'installed' => true,
+                'ever_seen' => true,
+                'last_seen_at' => $lastSeenAt,
+                'page_url' => $pageUrl,
+            ];
+        }
 
         return [
-            'installed' => is_string($lastSeenAt) && trim($lastSeenAt) !== '',
-            'last_seen_at' => is_string($lastSeenAt) ? Carbon::parse($lastSeenAt) : null,
-            'page_url' => is_string($pageUrl) && trim($pageUrl) !== '' ? $pageUrl : null,
+            'status' => 'stale',
+            'label' => 'לא זוהה לאחרונה',
+            'tone' => 'neutral',
+            'installed' => false,
+            'ever_seen' => true,
+            'last_seen_at' => $lastSeenAt,
+            'page_url' => $pageUrl,
         ];
     }
 

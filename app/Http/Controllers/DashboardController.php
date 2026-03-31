@@ -542,6 +542,11 @@ class DashboardController extends Controller
         $planCatalog = SiteSettings::billingCatalog();
         $activeAlerts = collect($auditSnapshot['alerts'] ?? [])->filter(fn (array $alert) => ($alert['state'] ?? 'open') !== 'resolved')->values();
         $currentPlanMeta = $site->billingPlanMeta();
+        $installationSummary = match ($installationSignal['status']) {
+            'installed' => 'הווידג׳ט זוהה בפועל באתר וממשיך לדווח חזרה לפלטפורמה.',
+            'stale' => 'הווידג׳ט זוהה בעבר, אבל לא התקבלה טעינה חדשה לאחרונה. כדאי לבדוק שהוא עדיין מוטמע ונטען.',
+            default => 'הקוד עדיין לא זוהה באתר, ולכן חשוב להשלים הטמעה לפני שמסתמכים על הציון.',
+        };
         $dbSupportTickets = SupportTicket::tableAvailable()
             ? $user->supportTickets()
                 ->with('site')
@@ -578,10 +583,13 @@ class DashboardController extends Controller
             'embedScriptUrl' => url('/widget.js'),
             'embedCode' => sprintf('<script async src="%s" data-a11y-bridge="%s"></script>', url('/widget.js'), $site->public_key),
             'licenseStatus' => $site->licenseStatus(),
-            'installationStatus' => $installationSignal['installed'] ? 'installed' : 'pending',
-            'installationLabel' => $installationSignal['installed'] ? 'הוטמע באתר' : 'ממתין להטמעה',
+            'installationStatus' => $installationSignal['status'],
+            'installationLabel' => $installationSignal['label'],
+            'installationTone' => $installationSignal['tone'],
+            'installationEverSeen' => $installationSignal['ever_seen'],
             'installationSeenLabel' => $installationSignal['last_seen_at']?->diffForHumans() ?? 'עדיין לא זוהתה טעינה מהאתר',
             'installationPageUrl' => $installationSignal['page_url'],
+            'installationSummary' => $installationSummary,
             'billing' => $billing,
             'billingPlans' => $planCatalog,
             'currentPlan' => [
@@ -693,8 +701,9 @@ class DashboardController extends Controller
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
         $clientUsersCount = max($users->count() - $superAdminUsersCount - $adminUsersCount, 0);
-        $installedSitesCount = $sites->filter(fn (Site $site) => $site->installationSignal()['installed'])->count();
-        $pendingInstallSitesCount = max($sites->count() - $installedSitesCount, 0);
+        $installedSitesCount = $sites->filter(fn (Site $site) => $site->installationSignal()['status'] === 'installed')->count();
+        $staleInstallSitesCount = $sites->filter(fn (Site $site) => $site->installationSignal()['status'] === 'stale')->count();
+        $pendingInstallSitesCount = $sites->filter(fn (Site $site) => $site->installationSignal()['status'] === 'pending')->count();
         $trackingScriptsActiveCount = AppSetting::activeCount($tracking);
 
         return [
@@ -709,6 +718,7 @@ class DashboardController extends Controller
             'adminUsersCount' => $adminUsersCount,
             'clientUsersCount' => $clientUsersCount,
             'installedSitesCount' => $installedSitesCount,
+            'staleInstallSitesCount' => $staleInstallSitesCount,
             'pendingInstallSitesCount' => $pendingInstallSitesCount,
             'supportCategories' => $this->supportCategories(),
             'supportPriorityLabels' => $this->supportPriorityLabels(),
@@ -869,22 +879,32 @@ class DashboardController extends Controller
         $alerts = [];
 
         $licenseActive = $site->licenseActive();
-        $widgetInstalled = $installationSignal['installed'];
+        $widgetInstalled = $installationSignal['status'] === 'installed';
+        $widgetSeenButStale = $installationSignal['status'] === 'stale';
         $statementConnected = $this->siteHasStatement($site);
         $billingActive = $site->billingActive();
 
         $checks[] = $this->buildCheck(
             'הטמעה באתר',
-            $widgetInstalled ? 'pass' : 'fail',
+            $widgetInstalled ? 'pass' : ($widgetSeenButStale ? 'warn' : 'fail'),
             $widgetInstalled
                 ? 'הווידג׳ט זוהה בפועל באתר והפלטפורמה קיבלה טעינה אמיתית מה־site key הזה.'
-                : 'עדיין לא זוהתה טעינה אמיתית של הווידג׳ט באתר. צריך להטמיע את הקוד ואז לרענן את האתר.'
+                : ($widgetSeenButStale
+                    ? 'הווידג׳ט זוהה בעבר, אבל לא התקבלה טעינה חדשה לאחרונה. כדאי לבדוק שהוא עדיין מוטמע ונטען.'
+                    : 'עדיין לא זוהתה טעינה אמיתית של הווידג׳ט באתר. צריך להטמיע את הקוד ואז לרענן את האתר.')
         );
 
-        $score += $widgetInstalled ? 12 : -26;
+        $score += $widgetInstalled ? 12 : ($widgetSeenButStale ? -8 : -26);
 
         if (! $widgetInstalled) {
-            $alerts[] = $this->buildAlert('install', 'הווידג׳ט עדיין לא הוטמע', 'high', 'לפני שמסתמכים על ציון או על מצב האתר, צריך קודם להדביק את קוד ההטמעה באתר ולוודא שהווידג׳ט נטען בפועל.');
+            $alerts[] = $this->buildAlert(
+                'install',
+                $widgetSeenButStale ? 'הווידג׳ט לא זוהה לאחרונה' : 'הווידג׳ט עדיין לא הוטמע',
+                $widgetSeenButStale ? 'medium' : 'high',
+                $widgetSeenButStale
+                    ? 'הווידג׳ט זוהה בעבר, אבל הפלטפורמה לא ראתה טעינה חדשה לאחרונה. כדאי לבדוק שהקוד עדיין מוטמע ושהאתר נטען כרגיל.'
+                    : 'לפני שמסתמכים על ציון או על מצב האתר, צריך קודם להדביק את קוד ההטמעה באתר ולוודא שהווידג׳ט נטען בפועל.'
+            );
         }
 
         $checks[] = $this->buildCheck(

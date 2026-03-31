@@ -40,7 +40,7 @@
                 <p>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</p>
                 <div class="mini-status-list">
                     <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
-                    <span class="status-pill {{ $installationStatus === 'installed' ? 'is-good' : 'is-warn' }}">{{ $installationLabel }}</span>
+                    <span class="status-pill {{ $installationTone === 'good' ? 'is-good' : ($installationTone === 'neutral' ? 'is-neutral' : 'is-warn') }}">{{ $installationLabel }}</span>
                     <span class="status-pill {{ $statementConnected ? 'is-good' : 'is-neutral' }}">{{ $statementConnected ? 'הצהרה מחוברת' : 'הצהרה חסרה' }}</span>
                 </div>
             </div>
@@ -158,7 +158,7 @@
                                                 <span class="steward-feed-thumb">IN</span>
                                                 <div>
                                                     <strong>הטמעה חיה באתר</strong>
-                                                    <p>{{ $installationStatus === 'installed' ? 'הווידג׳ט כבר זוהה באתר והוא מדווח חזרה לפלטפורמה.' : 'הקוד עדיין לא זוהה באתר, ולכן חשוב להשלים הטמעה לפני שמסתמכים על הציון.' }}</p>
+                                                    <p>{{ $installationSummary }}</p>
                                                 </div>
                                             </a>
 
@@ -231,7 +231,7 @@
                                         <h3>מצב האתר</h3>
                                         <div class="mini-status-list">
                                             <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
-                                            <span class="status-pill {{ $installationStatus === 'installed' ? 'is-good' : 'is-warn' }}">{{ $installationLabel }}</span>
+                                            <span class="status-pill {{ $installationTone === 'good' ? 'is-good' : ($installationTone === 'neutral' ? 'is-neutral' : 'is-warn') }}">{{ $installationLabel }}</span>
                                             <span class="status-pill {{ $statementConnected ? 'is-good' : 'is-neutral' }}">{{ $statementConnected ? 'הצהרה מחוברת' : 'הצהרה חסרה' }}</span>
                                         </div>
                                         <p>{{ $openAlertsCount > 0 ? 'יש כרגע התראות פתוחות שכדאי לבדוק.' : 'כרגע אין התראות פתוחות לאתר הזה.' }}</p>
