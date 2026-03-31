@@ -1318,6 +1318,52 @@ code {
     gap: 14px;
 }
 
+.auth-form-onboarding {
+    gap: 18px;
+}
+
+.signup-stepper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.signup-step {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.14);
+    transition: transform var(--motion-fast) ease, background var(--motion-fast) ease;
+}
+
+.signup-step.is-active {
+    width: 22px;
+    background: var(--accent);
+}
+
+.signup-stage {
+    display: none;
+    gap: 14px;
+}
+
+.signup-stage.is-active {
+    display: grid;
+}
+
+.signup-note {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.signup-actions-row {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
 .auth-submit {
     width: 100%;
     margin-top: 6px;

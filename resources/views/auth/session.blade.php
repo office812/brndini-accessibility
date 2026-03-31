@@ -1,6 +1,7 @@
 @extends('layouts.auth')
 
 @php($isLogin = $mode === 'login')
+@php($signupStep = old('signup_step', '1'))
 
 @section('content')
     <section class="auth-screen">
@@ -41,25 +42,49 @@
                     <a href="{{ route('home') }}">חזרה לאתר</a>
                 </div>
             @else
-                <form class="stack-form auth-form" method="POST" action="{{ route('register') }}">
+                <form class="stack-form auth-form auth-form-onboarding" method="POST" action="{{ route('register') }}" data-signup-wizard>
                     @csrf
+                    <input type="hidden" name="signup_step" value="{{ $signupStep }}" data-signup-step-input>
 
-                    <label for="company_name">שם החברה</label>
-                    <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}" required>
+                    <div class="signup-stepper" aria-label="Signup progress">
+                        <span class="signup-step {{ $signupStep === '1' ? 'is-active' : '' }}"></span>
+                        <span class="signup-step {{ $signupStep === '2' ? 'is-active' : '' }}"></span>
+                        <span class="signup-step {{ $signupStep === '3' ? 'is-active' : '' }}"></span>
+                    </div>
 
-                    <label for="signup_email">אימייל</label>
-                    <input id="signup_email" name="email" type="email" value="{{ old('email') }}" required>
+                    <div class="signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-signup-stage="1">
+                        <label for="domain">הדומיין של האתר</label>
+                        <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
 
-                    <label for="signup_password">סיסמה</label>
-                    <input id="signup_password" name="password" type="password" minlength="8" required>
+                        <button class="primary-button auth-submit" type="button" data-signup-next>המשך</button>
+                        <p class="signup-note">ניסיון חינם, בלי כרטיס אשראי. בהמשך נוסיף את שאר הפרטים.</p>
+                    </div>
 
-                    <label for="site_name">שם האתר</label>
-                    <input id="site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
+                    <div class="signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-signup-stage="2">
+                        <label for="site_name">שם האתר</label>
+                        <input id="site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
 
-                    <label for="domain">דומיין</label>
-                    <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
+                        <label for="company_name">שם החברה</label>
+                        <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}" required>
 
-                    <button class="primary-button auth-submit" type="submit">ליצור חשבון</button>
+                        <div class="signup-actions-row">
+                            <button class="ghost-button" type="button" data-signup-prev>חזרה</button>
+                            <button class="primary-button" type="button" data-signup-next>המשך</button>
+                        </div>
+                    </div>
+
+                    <div class="signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-signup-stage="3">
+                        <label for="signup_email">אימייל</label>
+                        <input id="signup_email" name="email" type="email" value="{{ old('email') }}" required>
+
+                        <label for="signup_password">סיסמה</label>
+                        <input id="signup_password" name="password" type="password" minlength="8" required>
+
+                        <div class="signup-actions-row">
+                            <button class="ghost-button" type="button" data-signup-prev>חזרה</button>
+                            <button class="primary-button auth-submit" type="submit">ליצור חשבון</button>
+                        </div>
+                    </div>
                 </form>
 
                 <div class="auth-links-row">
@@ -110,4 +135,51 @@
             </div>
         </aside>
     </section>
+
+    @unless($isLogin)
+        <script>
+            (function () {
+                const form = document.querySelector('[data-signup-wizard]');
+
+                if (!form) {
+                    return;
+                }
+
+                const stages = Array.from(form.querySelectorAll('[data-signup-stage]'));
+                const stepInput = form.querySelector('[data-signup-step-input]');
+                const steps = Array.from(form.querySelectorAll('.signup-step'));
+                let current = Number(stepInput?.value || 1);
+
+                function render() {
+                    stages.forEach((stage, index) => {
+                        stage.classList.toggle('is-active', index + 1 === current);
+                    });
+
+                    steps.forEach((step, index) => {
+                        step.classList.toggle('is-active', index + 1 === current);
+                    });
+
+                    if (stepInput) {
+                        stepInput.value = String(current);
+                    }
+                }
+
+                form.querySelectorAll('[data-signup-next]').forEach((button) => {
+                    button.addEventListener('click', function () {
+                        current = Math.min(current + 1, stages.length);
+                        render();
+                    });
+                });
+
+                form.querySelectorAll('[data-signup-prev]').forEach((button) => {
+                    button.addEventListener('click', function () {
+                        current = Math.max(current - 1, 1);
+                        render();
+                    });
+                });
+
+                render();
+            })();
+        </script>
+    @endunless
 @endsection
