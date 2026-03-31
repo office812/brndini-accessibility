@@ -1,16 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
+  function setMenuState(toggle, panel, backdrop, isOpen) {
+    toggle.classList.toggle('is-open', isOpen);
+    panel.classList.toggle('is-open', isOpen);
+    if (backdrop) {
+      backdrop.classList.toggle('is-open', isOpen);
+    }
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    document.body.classList.toggle('header-menu-open', isOpen);
+  }
+
   document.querySelectorAll('[data-header-menu-toggle]').forEach(function (toggle) {
     var key = toggle.getAttribute('data-header-menu-toggle');
     var panel = key ? document.querySelector('[data-header-menu-panel="' + key + '"]') : null;
+    var backdrop = key ? document.querySelector('[data-header-menu-backdrop="' + key + '"]') : null;
 
     if (!panel) {
       return;
     }
 
     toggle.addEventListener('click', function () {
-      var isOpen = toggle.classList.toggle('is-open');
-      panel.classList.toggle('is-open', isOpen);
-      toggle.setAttribute('aria-expanded', String(isOpen));
+      var isOpen = !panel.classList.contains('is-open');
+
+      document.querySelectorAll('[data-header-menu-panel].is-open').forEach(function (openPanel) {
+        var openKey = openPanel.getAttribute('data-header-menu-panel');
+        var openToggle = openKey ? document.querySelector('[data-header-menu-toggle="' + openKey + '"]') : null;
+        var openBackdrop = openKey ? document.querySelector('[data-header-menu-backdrop="' + openKey + '"]') : null;
+
+        if (openToggle) {
+          setMenuState(openToggle, openPanel, openBackdrop, false);
+        }
+      });
+
+      setMenuState(toggle, panel, backdrop, isOpen);
     });
 
     document.addEventListener('click', function (event) {
@@ -19,9 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       if (!toggle.contains(event.target) && !panel.contains(event.target)) {
-        toggle.classList.remove('is-open');
-        panel.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
+        setMenuState(toggle, panel, backdrop, false);
       }
     });
 
@@ -30,9 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      toggle.classList.remove('is-open');
-      panel.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
+      setMenuState(toggle, panel, backdrop, false);
     });
 
     panel.querySelectorAll('a, button').forEach(function (node) {
@@ -41,10 +58,20 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        toggle.classList.remove('is-open');
-        panel.classList.remove('is-open');
-        toggle.setAttribute('aria-expanded', 'false');
+        setMenuState(toggle, panel, backdrop, false);
       });
+    });
+
+    if (backdrop) {
+      backdrop.addEventListener('click', function () {
+        setMenuState(toggle, panel, backdrop, false);
+      });
+    }
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 960) {
+        setMenuState(toggle, panel, backdrop, false);
+      }
     });
   });
 

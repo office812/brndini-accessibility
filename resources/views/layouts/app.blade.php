@@ -32,13 +32,13 @@
                     </a>
                 </div>
 
-                <button class="header-menu-toggle" type="button" aria-expanded="false" aria-label="פתח תפריט" data-header-menu-toggle="app-menu">
+                <button class="header-menu-toggle" type="button" aria-expanded="false" aria-label="פתח תפריט" aria-controls="app-menu-panel" data-header-menu-toggle="app-menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
 
-                <div class="app-header-menu" data-header-menu-panel="app-menu">
+                <div class="app-header-menu" id="app-menu-panel" data-header-menu-panel="app-menu">
                     <div class="app-header-left">
                         <nav class="app-nav" aria-label="ניווט מערכת">
                             <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard', $siteRouteParams) }}">הרישיונות שלי</a>
@@ -62,6 +62,7 @@
                         </form>
                     </div>
                 </div>
+                <button class="header-menu-backdrop" type="button" aria-label="סגור תפריט" data-header-menu-backdrop="app-menu"></button>
             </header>
         @else
             <header class="site-header {{ request()->routeIs('home') ? 'site-header-public' : '' }}">
@@ -73,13 +74,13 @@
                     </span>
                 </a>
 
-                <button class="header-menu-toggle" type="button" aria-expanded="false" aria-label="פתח תפריט" data-header-menu-toggle="site-menu">
+                <button class="header-menu-toggle" type="button" aria-expanded="false" aria-label="פתח תפריט" aria-controls="site-menu-panel" data-header-menu-toggle="site-menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
 
-                <div class="site-header-menu" data-header-menu-panel="site-menu">
+                <div class="site-header-menu" id="site-menu-panel" data-header-menu-panel="site-menu">
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="#solutions">פתרונות</a>
                         <a href="#platform-flow">איך זה עובד</a>
@@ -88,6 +89,7 @@
                         <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון</a>
                     </nav>
                 </div>
+                <button class="header-menu-backdrop" type="button" aria-label="סגור תפריט" data-header-menu-backdrop="site-menu"></button>
             </header>
         @endauth
 

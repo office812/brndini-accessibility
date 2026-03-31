@@ -108,6 +108,7 @@ code {
     position: sticky;
     top: 12px;
     z-index: 50;
+    overflow: visible;
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
@@ -125,6 +126,7 @@ code {
     position: sticky;
     top: 0;
     z-index: 60;
+    overflow: visible;
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
@@ -192,6 +194,18 @@ code {
 
 .site-header-menu {
     display: block;
+}
+
+.header-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    display: none;
+    border: 0;
+    padding: 0;
+    background: rgba(9, 16, 28, 0.36);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
 }
 
 .header-menu-toggle {
@@ -3220,16 +3234,24 @@ code {
 @media (max-width: 960px) {
     .header-menu-toggle {
         display: inline-flex;
+        position: relative;
+        z-index: 45;
     }
 
     .site-header,
     .app-header {
         grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
+        position: sticky;
     }
 
     .site-header-menu,
     .app-header-menu {
+        position: absolute;
+        top: calc(100% + 12px);
+        right: 0;
+        left: 0;
+        z-index: 40;
         grid-column: 1 / -1;
         display: none;
         width: 100%;
@@ -3246,6 +3268,10 @@ code {
     .app-header-menu.is-open {
         display: grid;
         animation: headerMenuIn var(--motion-base) ease;
+    }
+
+    .header-menu-backdrop.is-open {
+        display: block;
     }
 
     .site-nav,
@@ -3300,6 +3326,10 @@ code {
     .app-user-pill {
         padding: 0 14px;
     }
+
+    body.header-menu-open {
+        overflow: hidden;
+    }
 }
 
 @media (max-width: 720px) {
@@ -3325,6 +3355,7 @@ code {
     .site-header-menu {
         padding: 12px;
         border-radius: 22px;
+        top: calc(100% + 10px);
     }
 
     .hero-copy h1,
