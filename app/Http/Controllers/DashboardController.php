@@ -122,7 +122,7 @@ class DashboardController extends Controller
             'contact_email' => strtolower($validated['contact_email']),
         ]);
 
-        $site->update([
+        $this->persistSitePayload($site, [
             'site_name' => $validated['site_name'],
             'domain' => $domain,
             'statement_url' => $statementUrl,
@@ -210,11 +210,7 @@ class DashboardController extends Controller
             'billing_settings' => SiteSettings::sanitizeBilling($billing, ($site->license_status ?? 'active') === 'active'),
         ];
 
-        if ($this->siteColumnsAvailable(['billing_settings'])) {
-            $site->update($payload);
-        } else {
-            $this->storeRuntimeOverrides($site, $payload);
-        }
+        $this->persistSitePayload($site, $payload);
 
         return redirect()
             ->route('dashboard.account', ['site' => $site->id])
@@ -239,20 +235,14 @@ class DashboardController extends Controller
             'license_expires_at' => $this->calculateExpiry($billing['cycle']),
         ];
 
-        $persistedLicensePayload = $this->filterSitePayload($licensePayload);
-
-        if ($persistedLicensePayload !== []) {
-            $site->update($persistedLicensePayload);
-        }
-
-        $this->storeRuntimeOverrides($site, $licensePayload);
+        $this->persistSitePayload($site, $licensePayload);
 
         $site = $this->applySiteRuntimeOverrides($site->fresh());
 
         $snapshot = $this->generateAuditSnapshot($site);
 
         if ($this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at'])) {
-            $site->update([
+            $this->persistSitePayload($site, [
                 'audit_snapshot' => $snapshot,
                 'last_audited_at' => Carbon::now(),
             ]);
@@ -286,7 +276,7 @@ class DashboardController extends Controller
 
         $snapshot = $this->generateAuditSnapshot($site);
 
-        $site->update([
+        $this->persistSitePayload($site, [
             'audit_snapshot' => $snapshot,
             'last_audited_at' => Carbon::now(),
         ]);
@@ -326,13 +316,13 @@ class DashboardController extends Controller
                 ->with('status', 'ההתראות נשמרו במצב זמני עד שעדכון מסד הנתונים יושלם בשרת.');
         }
 
-        $site->update([
+        $this->persistSitePayload($site, [
             'alert_settings' => $incomingAlerts,
         ]);
 
         $snapshot = $this->generateAuditSnapshot($site->fresh());
 
-        $site->update([
+        $this->persistSitePayload($site, [
             'audit_snapshot' => $snapshot,
         ]);
 
@@ -403,15 +393,9 @@ class DashboardController extends Controller
 
         $statementUrl = route('statement.show', $site->public_key);
 
-        if ($this->siteColumnsAvailable(['statement_url'])) {
-            $site->update([
-                'statement_url' => $statementUrl,
-            ]);
-        } else {
-            $this->storeRuntimeOverrides($site, [
-                'statement_url' => $statementUrl,
-            ]);
-        }
+        $this->persistSitePayload($site, [
+            'statement_url' => $statementUrl,
+        ]);
 
         return redirect()
             ->to(route('dashboard.compliance', ['site' => $site->id]) . '#tab-statement-builder')
@@ -1233,6 +1217,19 @@ class DashboardController extends Controller
         return collect($payload)
             ->filter(fn ($_value, $column) => Schema::hasColumn('sites', $column))
             ->all();
+    }
+
+    private function persistSitePayload(Site $site, array $payload): void
+    {
+        $persisted = $this->filterSitePayload($payload);
+
+        if ($persisted !== []) {
+            Site::query()->whereKey($site->id)->update($persisted);
+            $site->forceFill($persisted);
+            $site->syncOriginalAttributes(array_keys($persisted));
+        }
+
+        $this->storeRuntimeOverrides($site, $payload);
     }
 
     private function runtimeOverridesCacheKey(Site $site): string
