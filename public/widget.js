@@ -26,6 +26,7 @@
   var guideOverlay = null;
   var guideMoveHandlerAttached = false;
   var featureLabelMap = {};
+  var updateFeedbackTimer = null;
 
   var defaultPrefs = {
     fontScale: 'normal',
@@ -535,6 +536,7 @@
       if (plan !== 'premium' && lockedPremiumItems.length) {
         sectionsWrap.appendChild(createPremiumShowcaseSection(lockedPremiumItems, purchaseUrl));
       }
+      panelBody.appendChild(createToolbar(sectionsWrap, plan));
       panelBody.appendChild(sectionsWrap);
 
       var footer = document.createElement('div');
@@ -564,6 +566,93 @@
       footer.appendChild(note);
       panelBody.appendChild(footer);
       panel.scrollTop = currentScrollTop;
+    }
+
+    function createToolbar(sectionsWrap, planName) {
+      var toolbar = document.createElement('section');
+      toolbar.className = 'ab-widget-toolbar';
+
+      var shortcuts = document.createElement('div');
+      shortcuts.className = 'ab-widget-shortcuts';
+
+      [
+        { key: 'profiles', label: 'פרופילים' },
+        { key: 'text', label: 'טקסט' },
+        { key: 'display', label: 'צבעים' },
+        { key: 'focus', label: 'מיקוד' },
+        { key: 'premium', label: 'פרימיום' }
+      ].forEach(function (item) {
+        if (item.key === 'premium' && planName === 'premium') {
+          return;
+        }
+
+        var target = sectionsWrap.querySelector('[data-widget-section="' + item.key + '"]');
+        if (!target) {
+          return;
+        }
+
+        var shortcut = document.createElement('button');
+        shortcut.type = 'button';
+        shortcut.className = 'ab-widget-shortcut';
+        shortcut.textContent = item.label;
+        shortcut.addEventListener('click', function () {
+          target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        });
+        shortcuts.appendChild(shortcut);
+      });
+
+      var searchWrap = document.createElement('div');
+      searchWrap.className = 'ab-widget-search';
+
+      var searchIcon = document.createElement('span');
+      searchIcon.className = 'ab-widget-search-icon';
+      searchIcon.innerHTML = getSectionIconSvg('text');
+
+      var searchInput = document.createElement('input');
+      searchInput.type = 'search';
+      searchInput.className = 'ab-widget-search-input';
+      searchInput.placeholder = 'חפש התאמה, פרופיל או יכולת...';
+
+      var searchMeta = document.createElement('span');
+      searchMeta.className = 'ab-widget-search-meta';
+      searchMeta.textContent = 'חיפוש מהיר';
+
+      searchInput.addEventListener('input', function () {
+        var query = searchInput.value.trim().toLowerCase();
+        var cards = sectionsWrap.querySelectorAll('.ab-widget-card, .ab-widget-premium-item');
+        var hits = [];
+
+        cards.forEach(function (card) {
+          var haystack = (card.textContent || '').trim().toLowerCase();
+          var isHit = query.length > 1 && haystack.indexOf(query) !== -1;
+          card.classList.toggle('is-search-hit', isHit);
+          card.classList.toggle('is-search-dim', query.length > 1 && !isHit);
+          if (isHit) {
+            hits.push(card);
+          }
+        });
+
+        if (query.length <= 1) {
+          searchMeta.textContent = 'חיפוש מהיר';
+          return;
+        }
+
+        if (!hits.length) {
+          searchMeta.textContent = 'לא נמצאו התאמות';
+          return;
+        }
+
+        searchMeta.textContent = 'נמצאו ' + hits.length + ' התאמות';
+        hits[0].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+
+      searchWrap.appendChild(searchIcon);
+      searchWrap.appendChild(searchInput);
+      searchWrap.appendChild(searchMeta);
+      toolbar.appendChild(shortcuts);
+      toolbar.appendChild(searchWrap);
+
+      return toolbar;
     }
 
     function createOverviewCard(widgetConfig, planName, currentPrefs) {
@@ -745,6 +834,7 @@
     function createProfileSection(planName, currentPrefs, lockedPremiumItems) {
       var section = document.createElement('section');
       section.className = 'ab-widget-section is-full';
+      section.setAttribute('data-widget-section', 'profiles');
       var unlockedProfiles = profiles.filter(function (profile) {
         return profile.plan !== 'premium' || planName === 'premium';
       });
@@ -821,6 +911,7 @@
     function createFeatureSection(titleText, descriptionText, features, planName, currentPrefs, sectionType, lockedPremiumItems) {
       var section = document.createElement('section');
       section.className = 'ab-widget-section';
+      section.setAttribute('data-widget-section', sectionType || 'text');
       var unlockedFeatures = features.filter(function (feature) {
         return feature.plan !== 'premium' || planName === 'premium';
       });
@@ -943,6 +1034,7 @@
 
       var section = document.createElement('section');
       section.className = 'ab-widget-section is-full';
+      section.setAttribute('data-widget-section', 'premium');
       section.appendChild(createSectionHead('יכולות פרימיום', 'כל ההתאמות המתקדמות מרוכזות כאן בצורה מסודרת, בלי לפזר כרטיסים נעולים לכל אורך הווידג׳ט.', 'focus', String(uniqueItems.length) + ' יכולות מתקדמות'));
 
       var card = document.createElement('article');
@@ -1080,6 +1172,11 @@
       });
 
       savePrefs(nextPrefs);
+      shell.classList.add('ab-is-updating');
+      clearTimeout(updateFeedbackTimer);
+      updateFeedbackTimer = window.setTimeout(function () {
+        shell.classList.remove('ab-is-updating');
+      }, 420);
       refreshPanel();
     }
   }
@@ -1188,6 +1285,16 @@
       .ab-widget-chip.is-chip-muted{background:rgba(15,23,42,.05);color:#0f172a;}
       .ab-widget-chip.is-plan-free{background:rgba(21,128,61,.1);color:#166534;}
       .ab-widget-chip.is-plan-premium{background:rgba(124,58,237,.12);color:#6d28d9;}
+      .ab-widget-toolbar{display:grid;gap:10px;padding:12px 14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(247,250,253,.96));border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
+      .ab-widget-shortcuts{display:flex;flex-wrap:wrap;gap:8px;}
+      .ab-widget-shortcut{min-height:34px;padding:0 12px;border:1px solid rgba(15,23,42,.08);border-radius:999px;background:rgba(255,255,255,.82);color:#334155;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease,color var(--ab-motion-fast) ease;}
+      .ab-widget-shortcut:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(15,23,42,.08);background:rgba(29,109,255,.08);color:#0d3ea7;}
+      .ab-widget-search{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.74);border:1px solid rgba(15,23,42,.06);}
+      .ab-widget-search-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:12px;background:rgba(29,109,255,.08);color:#0d3ea7;}
+      .ab-widget-search-icon svg{width:16px;height:16px;}
+      .ab-widget-search-input{width:100%;min-width:0;border:none;background:transparent;color:#0f172a;font:inherit;font-size:13px;font-weight:700;outline:none;}
+      .ab-widget-search-input::placeholder{color:#94a3b8;font-weight:600;}
+      .ab-widget-search-meta{font-size:11px;color:#64748b;font-weight:800;white-space:nowrap;}
       .ab-widget-body{display:grid;gap:14px;margin-top:14px;}
       .ab-widget-overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
       .ab-widget-overview-card{display:grid;gap:4px;padding:12px 13px;border-radius:16px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
@@ -1214,8 +1321,10 @@
       .ab-widget-section-badge{min-height:30px;padding:0 10px;border-radius:999px;background:rgba(15,23,42,.05);color:#334155;display:inline-flex;align-items:center;font-size:11px;font-weight:800;white-space:nowrap;}
       .ab-widget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;min-width:0;}
       .ab-widget-grid-profiles{grid-template-columns:repeat(2,minmax(0,1fr));}
-      .ab-widget-card{position:relative;display:grid;gap:8px;align-content:start;min-height:auto;min-width:0;padding:14px;border-radius:20px;background:rgba(247,250,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,border-color var(--ab-motion-fast) ease;}
+      .ab-widget-card{position:relative;display:grid;gap:8px;align-content:start;min-height:auto;min-width:0;padding:14px;border-radius:20px;background:rgba(247,250,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,border-color var(--ab-motion-fast) ease,opacity var(--ab-motion-fast) ease,filter var(--ab-motion-fast) ease;}
       .ab-widget-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(15,23,42,.08);}
+      .ab-widget-card.is-search-hit,.ab-widget-premium-item.is-search-hit{border-color:rgba(29,109,255,.22);box-shadow:0 14px 30px rgba(29,109,255,.12);}
+      .ab-widget-card.is-search-dim,.ab-widget-premium-item.is-search-dim{opacity:.42;filter:saturate(.6);}
       .ab-widget-profile-card.is-active{border-color:rgba(29,109,255,.2);box-shadow:0 14px 28px rgba(29,109,255,.12);}
       .ab-widget-upgrade-card{position:relative;display:grid;gap:10px;padding:16px 16px 14px;border-radius:22px;background:linear-gradient(180deg,rgba(250,247,255,.98),rgba(243,238,255,.98));border:1px solid rgba(124,58,237,.12);box-shadow:0 10px 24px rgba(124,58,237,.08);overflow:hidden;}
       .ab-widget-upgrade-card::after{content:"";position:absolute;inset:auto -18% -38% auto;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.14),transparent 68%);pointer-events:none;}
@@ -1249,6 +1358,7 @@
       .ab-widget-footer{display:grid;gap:10px;padding-top:14px;border-top:1px solid rgba(15,23,42,.08);}
       .ab-widget-note{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
       .ab-widget-inactive-note{max-width:230px;padding:10px 14px;border-radius:14px;background:rgba(217,45,32,.1);color:#7a0510;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(122,5,16,.08);}
+      .ab-widget-shell.ab-is-updating .ab-widget-panel{box-shadow:0 32px 96px rgba(29,109,255,.18);border-color:rgba(29,109,255,.16);}
       .ab-reading-guide{position:fixed;left:0;right:0;height:72px;pointer-events:none;z-index:999998;background:linear-gradient(180deg,rgba(29,109,255,.04),rgba(29,109,255,.14),rgba(29,109,255,.04));border-top:1px solid rgba(29,109,255,.18);border-bottom:1px solid rgba(29,109,255,.18);backdrop-filter:blur(2px);display:none;}
       html.ab-theme-bright{filter:brightness(1.06) contrast(1.04);}
       html.ab-theme-dark{filter:brightness(.86) contrast(1.08);}
@@ -1274,6 +1384,8 @@
         .ab-widget-shell{left:auto !important;right:12px !important;align-items:flex-end;bottom:12px;gap:10px;}
         .ab-widget-shell.ab-bottom-left{left:12px !important;right:auto !important;align-items:flex-start;}
         .ab-widget-panel{width:min(520px,calc(100vw - 24px));max-height:min(78vh,760px);padding:16px;}
+        .ab-widget-search{grid-template-columns:1fr;}
+        .ab-widget-search-icon,.ab-widget-search-meta{display:none;}
         .ab-widget-overview,
         .ab-widget-sections,
         .ab-widget-sections.ab-layout-split,
@@ -1290,6 +1402,9 @@
         .ab-widget-shell.ab-bottom-left{left:10px !important;right:auto !important;align-items:flex-start;}
         .ab-widget-button{width:auto;max-width:calc(100vw - 28px);justify-content:flex-start;}
         .ab-widget-panel{width:min(430px,calc(100vw - 28px));}
+        .ab-widget-toolbar{padding:12px;}
+        .ab-widget-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+        .ab-widget-shortcut{justify-content:center;}
         .ab-widget-overview,
         .ab-widget-sections.ab-layout-split,
         .ab-widget-grid,
