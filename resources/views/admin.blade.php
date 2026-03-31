@@ -3,6 +3,16 @@
 @php($title = 'מרכז סופר־אדמין | A11Y Bridge')
 
 @section('content')
+    @php
+        $trackingScripts = $trackingScripts ?? [];
+        $trackingScriptsActiveCount = $trackingScriptsActiveCount ?? collect($trackingScripts)->filter(fn ($script) => filled(trim((string) $script)))->count();
+        $superAdminUsersCount = $superAdminUsersCount ?? $adminUsers->filter(fn ($adminUser) => $adminUser->isSuperAdmin())->count();
+        $adminUsersCount = $adminUsersCount ?? $adminUsers->filter(fn ($adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
+        $clientUsersCount = $clientUsersCount ?? max(($adminSummary['users'] ?? $adminUsers->count()) - $superAdminUsersCount - $adminUsersCount, 0);
+        $installedSitesCount = $installedSitesCount ?? $adminSites->filter(fn ($adminSite) => filled($adminSite->last_seen_at))->count();
+        $pendingInstallSitesCount = $pendingInstallSitesCount ?? max($adminSites->count() - $installedSitesCount, 0);
+    @endphp
+
     <section class="domain-shell super-admin-shell">
         <div class="domain-shell-main super-admin-main">
             <section class="domain-shell-header">
