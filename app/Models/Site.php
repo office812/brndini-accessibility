@@ -134,12 +134,20 @@ class Site extends Model
 
     public function alertConfig(): array
     {
-        return SiteSettings::sanitizeAlertSettings($this->alert_settings ?? []);
+        return SiteSettings::sanitizeAlertSettings($this->runtimeValue(
+            'alert_settings',
+            $this->alertSettingsCacheKey(),
+            $this->alert_settings ?? []
+        ));
     }
 
     public function auditConfig(): array
     {
-        return SiteSettings::sanitizeAuditSnapshot($this->audit_snapshot ?? []);
+        return SiteSettings::sanitizeAuditSnapshot($this->runtimeValue(
+            'audit_snapshot',
+            $this->auditSnapshotCacheKey(),
+            $this->audit_snapshot ?? []
+        ));
     }
 
     public function licenseStatus(): string
@@ -189,6 +197,83 @@ class Site extends Model
             'last_seen_at' => is_string($lastSeenAt) ? Carbon::parse($lastSeenAt) : null,
             'page_url' => is_string($pageUrl) && trim($pageUrl) !== '' ? $pageUrl : null,
         ];
+    }
+
+    public function lastAuditedAt(): ?Carbon
+    {
+        if (static::columnsAvailable(['last_audited_at'])) {
+            return $this->last_audited_at;
+        }
+
+        $cached = RuntimeStore::get($this->runtimeScope(), $this->auditTimestampCacheKey());
+
+        return is_string($cached) && trim($cached) !== '' ? Carbon::parse($cached) : null;
+    }
+
+    public function statementBuilderData(array $defaults = []): array
+    {
+        $cached = RuntimeStore::get($this->runtimeScope(), $this->statementBuilderCacheKey(), []);
+
+        if (! is_array($cached)) {
+            return $defaults;
+        }
+
+        return array_merge($defaults, $cached);
+    }
+
+    public function statementUrlValue(): ?string
+    {
+        if (filled($this->statement_url)) {
+            return $this->statement_url;
+        }
+
+        $statementBuilder = RuntimeStore::get($this->runtimeScope(), $this->statementBuilderCacheKey());
+
+        if (is_array($statementBuilder) && ($statementBuilder['organization_name'] ?? '') !== '') {
+            return route('statement.show', $this->public_key);
+        }
+
+        return null;
+    }
+
+    public function storeAlertConfig(array $alerts): void
+    {
+        $payload = ['alert_settings' => SiteSettings::sanitizeAlertSettings($alerts)];
+
+        if (static::columnsAvailable(['alert_settings'])) {
+            $this->persistPayload($payload);
+
+            return;
+        }
+
+        RuntimeStore::put($this->runtimeScope(), $this->alertSettingsCacheKey(), $payload['alert_settings']);
+        $this->setAttribute('alert_settings', $payload['alert_settings']);
+    }
+
+    public function storeAuditSnapshot(array $snapshot, ?Carbon $auditedAt = null): void
+    {
+        $payload = [
+            'audit_snapshot' => SiteSettings::sanitizeAuditSnapshot($snapshot),
+            'last_audited_at' => $auditedAt ?? now(),
+        ];
+
+        if (static::columnsAvailable(['audit_snapshot', 'last_audited_at'])) {
+            $this->persistPayload($payload);
+
+            return;
+        }
+
+        RuntimeStore::putMany($this->runtimeScope(), [
+            $this->auditSnapshotCacheKey() => $payload['audit_snapshot'],
+            $this->auditTimestampCacheKey() => $payload['last_audited_at']->toIso8601String(),
+        ]);
+        $this->setAttribute('audit_snapshot', $payload['audit_snapshot']);
+        $this->setAttribute('last_audited_at', $payload['last_audited_at']);
+    }
+
+    public function storeStatementBuilder(array $statementData): void
+    {
+        RuntimeStore::put($this->runtimeScope(), $this->statementBuilderCacheKey(), $statementData);
     }
 
     public static function tableAvailable(): bool
@@ -249,6 +334,26 @@ class Site extends Model
         return 'site:' . $this->id . ':runtime_overrides';
     }
 
+    public function auditSnapshotCacheKey(): string
+    {
+        return 'site:' . $this->id . ':audit_snapshot_fallback';
+    }
+
+    public function auditTimestampCacheKey(): string
+    {
+        return 'site:' . $this->id . ':last_audited_fallback';
+    }
+
+    public function alertSettingsCacheKey(): string
+    {
+        return 'site:' . $this->id . ':alert_settings_fallback';
+    }
+
+    public function statementBuilderCacheKey(): string
+    {
+        return 'site:' . $this->id . ':statement_builder';
+    }
+
     public function storeRuntimeOverrides(array $payload): void
     {
         $missingColumnPayload = collect($payload)
@@ -307,5 +412,14 @@ class Site extends Model
         }
 
         return $this;
+    }
+
+    private function runtimeValue(string $column, string $cacheKey, mixed $default = null): mixed
+    {
+        if (static::columnsAvailable([$column])) {
+            return $this->getAttribute($column);
+        }
+
+        return RuntimeStore::get($this->runtimeScope(), $cacheKey, $default);
     }
 }

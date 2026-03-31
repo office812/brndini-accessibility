@@ -221,18 +221,7 @@ class DashboardController extends Controller
         $site = $this->applySiteRuntimeOverrides($site->fresh());
 
         $snapshot = $this->generateAuditSnapshot($site);
-
-        if ($this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at'])) {
-            $this->persistSitePayload($site, [
-                'audit_snapshot' => $snapshot,
-                'last_audited_at' => Carbon::now(),
-            ]);
-        } else {
-            RuntimeStore::putMany($this->siteRuntimeScope($site), [
-                $this->auditSnapshotCacheKey($site) => $snapshot,
-                $this->auditTimestampCacheKey($site) => Carbon::now()->toIso8601String(),
-            ]);
-        }
+        $site->storeAuditSnapshot($snapshot, Carbon::now());
 
         return redirect()
             ->route('dashboard.account', ['site' => $site->id])
@@ -249,10 +238,7 @@ class DashboardController extends Controller
 
         if (! $this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at'])) {
             $snapshot = $this->generateAuditSnapshot($site);
-            RuntimeStore::putMany($this->siteRuntimeScope($site), [
-                $this->auditSnapshotCacheKey($site) => $snapshot,
-                $this->auditTimestampCacheKey($site) => Carbon::now()->toIso8601String(),
-            ]);
+            $site->storeAuditSnapshot($snapshot, Carbon::now());
 
             return redirect()
                 ->route('dashboard.compliance', ['site' => $site->id])
@@ -261,10 +247,7 @@ class DashboardController extends Controller
 
         $snapshot = $this->generateAuditSnapshot($site);
 
-        $this->persistSitePayload($site, [
-            'audit_snapshot' => $snapshot,
-            'last_audited_at' => Carbon::now(),
-        ]);
+        $site->storeAuditSnapshot($snapshot, Carbon::now());
 
         return redirect()
             ->route('dashboard.compliance', ['site' => $site->id])
@@ -290,26 +273,22 @@ class DashboardController extends Controller
         ]);
 
         if (! $this->siteColumnsAvailable(['alert_settings', 'audit_snapshot'])) {
-            RuntimeStore::put($this->siteRuntimeScope($site), $this->alertSettingsCacheKey($site), $incomingAlerts);
+            $site->storeAlertConfig($incomingAlerts);
             $previewSite = clone $site;
             $previewSite->alert_settings = $incomingAlerts;
             $snapshot = $this->generateAuditSnapshot($previewSite);
-            RuntimeStore::put($this->siteRuntimeScope($site), $this->auditSnapshotCacheKey($site), $snapshot);
+            $site->storeAuditSnapshot($snapshot, $site->lastAuditedAt() ?? Carbon::now());
 
             return redirect()
                 ->route('dashboard.compliance', ['site' => $site->id])
                 ->with('status', 'ההתראות נשמרו במצב זמני עד שעדכון מסד הנתונים יושלם בשרת.');
         }
 
-        $this->persistSitePayload($site, [
-            'alert_settings' => $incomingAlerts,
-        ]);
+        $site->storeAlertConfig($incomingAlerts);
 
         $snapshot = $this->generateAuditSnapshot($site->fresh());
 
-        $this->persistSitePayload($site, [
-            'audit_snapshot' => $snapshot,
-        ]);
+        $site->storeAuditSnapshot($snapshot, $site->lastAuditedAt() ?? Carbon::now());
 
         return redirect()
             ->route('dashboard.compliance', ['site' => $site->id])
@@ -374,7 +353,7 @@ class DashboardController extends Controller
             'additional_note' => trim((string) data_get($validated, 'statement.additional_note', '')),
         ];
 
-        RuntimeStore::put($this->siteRuntimeScope($site), $this->statementBuilderCacheKey($site), $statementData);
+        $site->storeStatementBuilder($statementData);
 
         $statementUrl = route('statement.show', $site->public_key);
 
@@ -541,27 +520,14 @@ class DashboardController extends Controller
             ->orderBy('id')
             ->get()
             ->map(fn (Site $candidate) => $this->applySiteRuntimeOverrides($candidate));
-        $cachedAlerts = RuntimeStore::get($this->siteRuntimeScope($site), $this->alertSettingsCacheKey($site));
-        $cachedAudit = RuntimeStore::get($this->siteRuntimeScope($site), $this->auditSnapshotCacheKey($site));
-        $cachedAuditTimestamp = RuntimeStore::get($this->siteRuntimeScope($site), $this->auditTimestampCacheKey($site));
-
-        if (! $this->siteColumnsAvailable(['alert_settings']) && is_array($cachedAlerts)) {
-            $site->alert_settings = $cachedAlerts;
-        }
-
-        if (! $this->siteColumnsAvailable(['audit_snapshot']) && is_array($cachedAudit)) {
-            $site->audit_snapshot = $cachedAudit;
-        }
-
-        if (! $this->siteColumnsAvailable(['last_audited_at']) && is_string($cachedAuditTimestamp)) {
-            $site->last_audited_at = Carbon::parse($cachedAuditTimestamp);
-        }
-
         $installationSignal = $this->installationSignal($site);
         $widget = $site->widgetConfig();
         $billing = $site->billingConfig();
         $alertSettings = $site->alertConfig();
-        $auditSnapshot = $site->audit_snapshot ? $site->auditConfig() : $this->generateAuditSnapshot($site);
+        $auditSnapshot = $site->auditConfig();
+        if (($auditSnapshot['checks'] ?? []) === [] && ($auditSnapshot['alerts'] ?? []) === [] && ($auditSnapshot['score'] ?? null) === 72) {
+            $auditSnapshot = $this->generateAuditSnapshot($site);
+        }
         $statementBuilder = $this->statementBuilderData($site, $user);
         $statementPreview = $this->buildStatementPreview($site, $statementBuilder);
         $statementUrl = $this->statementUrlForSite($site);
@@ -642,7 +608,7 @@ class DashboardController extends Controller
             'auditActionsAvailable' => $this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at']),
             'alertSettingsAvailable' => $this->siteColumnsAvailable(['alert_settings', 'audit_snapshot']),
             'licenseExpiresLabel' => $site->license_expires_at ? $site->license_expires_at->timezone(config('app.timezone'))->format('d.m.Y') : 'טרם הופעל',
-            'lastAuditedLabel' => $site->last_audited_at ? $site->last_audited_at->diffForHumans() : 'עדיין לא הורצה בדיקה',
+            'lastAuditedLabel' => $site->lastAuditedAt() ? $site->lastAuditedAt()->diffForHumans() : 'עדיין לא הורצה בדיקה',
             'siteSwitcherOptions' => $sites->map(function (Site $candidate) {
                 return [
                     'id' => $candidate->id,
@@ -757,21 +723,6 @@ class DashboardController extends Controller
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
-    }
-
-    private function auditSnapshotCacheKey(Site $site): string
-    {
-        return 'site:' . $site->id . ':audit_snapshot_fallback';
-    }
-
-    private function auditTimestampCacheKey(Site $site): string
-    {
-        return 'site:' . $site->id . ':last_audited_fallback';
-    }
-
-    private function alertSettingsCacheKey(Site $site): string
-    {
-        return 'site:' . $site->id . ':alert_settings_fallback';
     }
 
     private function serviceModes(): array
@@ -980,7 +931,8 @@ class DashboardController extends Controller
 
         $score += $billingActive ? 10 : 2;
 
-        $hasRecentAudit = $site->last_audited_at && $site->last_audited_at->gt(Carbon::now()->subDays(21));
+        $lastAuditedAt = $site->lastAuditedAt();
+        $hasRecentAudit = $lastAuditedAt && $lastAuditedAt->gt(Carbon::now()->subDays(21));
 
         $checks[] = $this->buildCheck(
             'בדיקה אחרונה',
@@ -996,7 +948,7 @@ class DashboardController extends Controller
             $alerts[] = $this->buildAlert('audit', 'הבדיקה דורשת רענון', 'medium', 'לא רצה בדיקה עדכנית לאחרונה. הפעל בדיקה חדשה כדי לרענן ציון והתראות.');
         }
 
-        if ($site->last_audited_at && $site->updated_at && $site->updated_at->gt($site->last_audited_at) && $alertSettings['sync']) {
+        if ($lastAuditedAt && $site->updated_at && $site->updated_at->gt($lastAuditedAt) && $alertSettings['sync']) {
             $alerts[] = $this->buildAlert('sync', 'יש שינויים מאז הבדיקה האחרונה', 'low', 'בוצעו עדכוני widget או פרטי אתר אחרי הבדיקה האחרונה. מומלץ לרענן את הדוח.');
         }
 
@@ -1106,36 +1058,14 @@ class DashboardController extends Controller
         ];
     }
 
-    private function statementBuilderCacheKey(Site $site): string
-    {
-        return 'site:' . $site->id . ':statement_builder';
-    }
-
     private function statementBuilderData(Site $site, ?User $user = null): array
     {
-        $defaults = $this->statementBuilderDefaults($site, $user);
-        $cached = RuntimeStore::get($this->siteRuntimeScope($site), $this->statementBuilderCacheKey($site), []);
-
-        if (! is_array($cached)) {
-            return $defaults;
-        }
-
-        return array_merge($defaults, $cached);
+        return $site->statementBuilderData($this->statementBuilderDefaults($site, $user));
     }
 
     private function statementUrlForSite(Site $site): ?string
     {
-        if (filled($site->statement_url)) {
-            return $site->statement_url;
-        }
-
-        $cached = RuntimeStore::get($this->siteRuntimeScope($site), $this->statementBuilderCacheKey($site));
-
-        if (is_array($cached) && ($cached['organization_name'] ?? '') !== '') {
-            return route('statement.show', $site->public_key);
-        }
-
-        return null;
+        return $site->statementUrlValue();
     }
 
     private function siteHasStatement(Site $site): bool
@@ -1226,11 +1156,6 @@ class DashboardController extends Controller
     private function applySiteRuntimeOverrides(Site $site): Site
     {
         return $site->loadRuntimeOverrides();
-    }
-
-    private function siteRuntimeScope(Site $site): string
-    {
-        return $site->runtimeScope();
     }
 
     private function persistUserPayload(User $user, array $payload): void
