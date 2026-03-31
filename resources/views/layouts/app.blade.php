@@ -91,7 +91,7 @@
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="#solutions">פתרונות</a>
                         <a href="#platform-flow">איך זה עובד</a>
-                        <a href="#articles">מאמרים</a>
+                        <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('login.show') }}">התחברות</a>
                         <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון</a>
                     </nav>

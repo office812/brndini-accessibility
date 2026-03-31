@@ -290,28 +290,69 @@
 
     <section class="section-band articles-band" id="articles">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">Resources</p>
-            <h2>מאמרים שמחזקים את ה־SEO ומסבירים את המוצר כמו שצריך.</h2>
+            <p class="eyebrow">Magazine</p>
+            <h2>אזור מאמרים שנראה כמו מגזין, ומחזק גם את ה־SEO וגם את האמון במוצר.</h2>
             <p class="hero-text">
                 אזור התוכן נועד גם לעזור ללקוחות להבין את הפלטפורמה, וגם לענות לחיפושים אורגניים
                 סביב תוסף נגישות לאתר, הצהרת נגישות, workflow ל־WCAG וניהול שכבת נגישות.
             </p>
         </div>
 
-        <div class="article-grid">
-            @forelse ($articles as $article)
-                <article class="article-card">
-                    <p class="meta-label">{{ optional($article->published_at)->format('d.m.Y') }}</p>
-                    <h3><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h3>
-                    <p>{{ $article->excerpt }}</p>
-                    <a class="text-link" href="{{ route('articles.show', $article) }}">לקריאה מלאה</a>
+        @if ($articles->isNotEmpty())
+            @php($featuredArticle = $articles->first())
+            @php($featuredCover = $featuredArticle->coverTheme())
+
+            <div class="magazine-home-grid">
+                <article class="magazine-feature-card article-cover article-cover-{{ $featuredCover['slug'] }}">
+                    <div class="article-cover-art" aria-hidden="true">
+                        <span class="article-cover-orb"></span>
+                        <span class="article-cover-panel"></span>
+                        <span class="article-cover-beam"></span>
+                    </div>
+
+                    <div class="magazine-feature-copy">
+                        <p class="eyebrow">{{ $featuredCover['eyebrow'] }}</p>
+                        <h3><a href="{{ route('articles.show', $featuredArticle) }}">{{ $featuredArticle->title }}</a></h3>
+                        <p>{{ $featuredArticle->excerpt }}</p>
+                        <div class="article-meta">
+                            <span class="preview-pill">{{ optional($featuredArticle->published_at)->format('d.m.Y') }}</span>
+                            <span class="preview-pill">{{ $featuredArticle->readingTimeMinutes() }} דקות קריאה</span>
+                            <span class="preview-pill">{{ $featuredCover['chips'][0] }}</span>
+                        </div>
+                        <a class="text-link" href="{{ route('articles.show', $featuredArticle) }}">לקריאה מלאה</a>
+                    </div>
                 </article>
-            @empty
+
+                <div class="magazine-side-list">
+                    @foreach ($articles->skip(1)->take(3) as $article)
+                        @php($cover = $article->coverTheme())
+                        <article class="magazine-side-card">
+                            <div class="magazine-side-thumb article-cover article-cover-{{ $cover['slug'] }}">
+                                <div class="article-cover-art" aria-hidden="true">
+                                    <span class="article-cover-orb"></span>
+                                    <span class="article-cover-panel"></span>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="meta-label">{{ optional($article->published_at)->format('d.m.Y') }}</p>
+                                <h3><a href="{{ route('articles.show', $article) }}">{{ $article->title }}</a></h3>
+                                <p>{{ $article->excerpt }}</p>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        @else
+            <div class="article-grid">
                 <article class="article-card">
                     <h3>בקרוב יופיעו כאן מאמרים</h3>
                     <p>אחרי הרצת ה־migration החדש יופיעו מאמרי ברירת מחדל, ומשם אפשר יהיה להוסיף עוד תוכן מתוך משתמש מנהל.</p>
                 </article>
-            @endforelse
+            </div>
+        @endif
+
+        <div class="magazine-actions">
+            <a class="primary-button button-link" href="{{ route('articles.index') }}">לכל המאמרים</a>
         </div>
 
         @auth

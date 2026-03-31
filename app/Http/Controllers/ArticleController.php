@@ -10,6 +10,18 @@ use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
+    public function index(): View
+    {
+        $articles = Article::published()->latest('published_at')->get();
+
+        return view('articles.index', [
+            'articles' => $articles,
+            'featuredArticle' => $articles->first(),
+            'metaDescription' => 'מאמרים על נגישות אתרים, וידג׳ט נגישות, הצהרת נגישות, בדיקות אתר, WCAG וניהול נגישות בפלטפורמה אחת.',
+            'canonicalUrl' => route('articles.index'),
+        ]);
+    }
+
     public function show(Article $article): View
     {
         abort_unless($article->published_at, 404);
