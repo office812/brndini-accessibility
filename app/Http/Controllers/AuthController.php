@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Site;
 use App\Support\SiteSettings;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -71,7 +72,7 @@ class AuthController extends Controller
 
                 $user = User::create($userPayload);
 
-                $sitePayload = collect([
+                $sitePayload = [
                     'site_name' => $validated['site_name'],
                     'domain' => $domain,
                     'public_key' => SiteSettings::generatePublicKey(),
@@ -82,11 +83,9 @@ class AuthController extends Controller
                     'audit_snapshot' => SiteSettings::defaultAuditSnapshot(),
                     'alert_settings' => SiteSettings::defaultAlertSettings(),
                     'license_expires_at' => Carbon::now()->addYear(),
-                ])->filter(function ($_value, string $column) {
-                    return Schema::hasColumn('sites', $column);
-                })->all();
+                ];
 
-                $site = $user->sites()->create($sitePayload);
+                $site = Site::createForUser($user, $sitePayload);
 
                 $user->setRelation('sites', collect([$site]));
 

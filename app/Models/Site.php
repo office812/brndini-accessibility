@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Support\RuntimeStore;
 use App\Support\SiteSettings;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Schema;
 
 class Site extends Model
 {
@@ -72,6 +74,102 @@ class Site extends Model
     public function auditConfig(): array
     {
         return SiteSettings::sanitizeAuditSnapshot($this->audit_snapshot ?? []);
+    }
+
+    public static function tableAvailable(): bool
+    {
+        return Schema::hasTable('sites');
+    }
+
+    public static function columnsAvailable(array $columns): bool
+    {
+        foreach ($columns as $column) {
+            if (! Schema::hasColumn('sites', $column)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static function filterPersistablePayload(array $payload): array
+    {
+        if (! static::tableAvailable()) {
+            return [];
+        }
+
+        return collect($payload)
+            ->filter(fn ($_value, $column) => Schema::hasColumn('sites', $column))
+            ->all();
+    }
+
+    public static function createForUser(User $user, array $payload): static
+    {
+        $site = $user->sites()->create(static::filterPersistablePayload($payload));
+        $site->storeRuntimeOverrides($payload);
+
+        return $site->loadRuntimeOverrides();
+    }
+
+    public function persistPayload(array $payload): void
+    {
+        $persisted = static::filterPersistablePayload($payload);
+
+        if ($persisted !== []) {
+            static::query()->whereKey($this->id)->update($persisted);
+            $this->forceFill($persisted);
+            $this->syncOriginalAttributes(array_keys($persisted));
+        }
+
+        $this->storeRuntimeOverrides($payload);
+    }
+
+    public function runtimeScope(): string
+    {
+        return 'site-' . $this->id;
+    }
+
+    public function runtimeOverridesCacheKey(): string
+    {
+        return 'site:' . $this->id . ':runtime_overrides';
+    }
+
+    public function storeRuntimeOverrides(array $payload): void
+    {
+        $missingColumnPayload = collect($payload)
+            ->filter(fn ($_value, $column) => ! Schema::hasColumn('sites', $column))
+            ->all();
+
+        if ($missingColumnPayload === []) {
+            return;
+        }
+
+        $current = RuntimeStore::get($this->runtimeScope(), $this->runtimeOverridesCacheKey(), []);
+
+        RuntimeStore::put(
+            $this->runtimeScope(),
+            $this->runtimeOverridesCacheKey(),
+            array_merge(is_array($current) ? $current : [], $missingColumnPayload)
+        );
+    }
+
+    public function loadRuntimeOverrides(): static
+    {
+        $overrides = RuntimeStore::get($this->runtimeScope(), $this->runtimeOverridesCacheKey(), []);
+
+        if (! is_array($overrides) || $overrides === []) {
+            return $this;
+        }
+
+        $applicable = collect($overrides)
+            ->filter(fn ($_value, $column) => ! Schema::hasColumn('sites', $column))
+            ->all();
+
+        if ($applicable === []) {
+            return $this;
+        }
+
+        return $this->applyRuntimeOverrides($applicable);
     }
 
     public function applyRuntimeOverrides(array $overrides): static

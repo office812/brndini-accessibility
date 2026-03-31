@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 class DashboardController extends Controller
 {
@@ -117,7 +118,7 @@ class DashboardController extends Controller
         $user = $request->user();
         $site = $this->resolveSite($request, $user, (int) $validated['site_id']);
 
-        $user->update([
+        $this->persistUserPayload($user, [
             'name' => $validated['company_name'],
             'contact_email' => strtolower($validated['contact_email']),
         ]);
@@ -182,8 +183,7 @@ class DashboardController extends Controller
             'widget_settings' => SiteSettings::defaultWidget(),
         ];
 
-        $site = $request->user()->sites()->create($this->filterSitePayload($sitePayload));
-        $this->storeRuntimeOverrides($site, $sitePayload);
+        $site = Site::createForUser($request->user(), $sitePayload);
 
         return redirect()
             ->route('dashboard', ['site' => $site->id])
@@ -532,8 +532,7 @@ class DashboardController extends Controller
             'widget_settings' => SiteSettings::defaultWidget(),
         ];
 
-        $site = $user->sites()->create($this->filterSitePayload($sitePayload));
-        $this->storeRuntimeOverrides($site, $sitePayload);
+        $site = Site::createForUser($user, $sitePayload);
 
         return $site;
     }
@@ -807,13 +806,7 @@ class DashboardController extends Controller
 
     private function siteColumnsAvailable(array $columns): bool
     {
-        foreach ($columns as $column) {
-            if (! Schema::hasColumn('sites', $column)) {
-                return false;
-            }
-        }
-
-        return true;
+        return Site::columnsAvailable($columns);
     }
 
     private function ensureSuperAdmin(User $user): void
@@ -823,8 +816,16 @@ class DashboardController extends Controller
 
     private function supportsMultipleSites(): bool
     {
-        if (! Schema::hasTable('migrations')) {
+        if (! Site::tableAvailable() || ! Schema::hasColumn('sites', 'user_id')) {
             return false;
+        }
+
+        if ($this->siteUserUniqueConstraintExists()) {
+            return false;
+        }
+
+        if (! Schema::hasTable('migrations')) {
+            return true;
         }
 
         return DB::table('migrations')
@@ -1260,76 +1261,62 @@ class DashboardController extends Controller
         return $cycle === 'monthly' ? Carbon::now()->addMonth() : Carbon::now()->addYear();
     }
 
-    private function filterSitePayload(array $payload): array
-    {
-        if (! Schema::hasTable('sites')) {
-            return [];
-        }
-
-        return collect($payload)
-            ->filter(fn ($_value, $column) => Schema::hasColumn('sites', $column))
-            ->all();
-    }
-
     private function persistSitePayload(Site $site, array $payload): void
     {
-        $persisted = $this->filterSitePayload($payload);
-
-        if ($persisted !== []) {
-            Site::query()->whereKey($site->id)->update($persisted);
-            $site->forceFill($persisted);
-            $site->syncOriginalAttributes(array_keys($persisted));
-        }
-
-        $this->storeRuntimeOverrides($site, $payload);
-    }
-
-    private function runtimeOverridesCacheKey(Site $site): string
-    {
-        return 'site:' . $site->id . ':runtime_overrides';
-    }
-
-    private function storeRuntimeOverrides(Site $site, array $payload): void
-    {
-        $missingColumnPayload = collect($payload)
-            ->filter(fn ($_value, $column) => ! Schema::hasColumn('sites', $column))
-            ->all();
-
-        if ($missingColumnPayload === []) {
-            return;
-        }
-
-        $current = RuntimeStore::get($this->siteRuntimeScope($site), $this->runtimeOverridesCacheKey($site), []);
-
-        RuntimeStore::put(
-            $this->siteRuntimeScope($site),
-            $this->runtimeOverridesCacheKey($site),
-            array_merge(is_array($current) ? $current : [], $missingColumnPayload)
-        );
+        $site->persistPayload($payload);
     }
 
     private function applySiteRuntimeOverrides(Site $site): Site
     {
-        $overrides = RuntimeStore::get($this->siteRuntimeScope($site), $this->runtimeOverridesCacheKey($site), []);
-
-        if (! is_array($overrides) || $overrides === []) {
-            return $site;
-        }
-
-        $applicable = collect($overrides)
-            ->filter(fn ($_value, $column) => ! Schema::hasColumn('sites', $column))
-            ->all();
-
-        if ($applicable === []) {
-            return $site;
-        }
-
-        return $site->applyRuntimeOverrides($applicable);
+        return $site->loadRuntimeOverrides();
     }
 
     private function siteRuntimeScope(Site $site): string
     {
-        return 'site-' . $site->id;
+        return $site->runtimeScope();
+    }
+
+    private function persistUserPayload(User $user, array $payload): void
+    {
+        if (! Schema::hasTable('users')) {
+            return;
+        }
+
+        $persisted = collect($payload)
+            ->filter(fn ($_value, $column) => Schema::hasColumn('users', $column))
+            ->all();
+
+        if ($persisted === []) {
+            return;
+        }
+
+        User::query()->whereKey($user->id)->update($persisted);
+        $user->forceFill($persisted);
+        $user->syncOriginalAttributes(array_keys($persisted));
+    }
+
+    private function siteUserUniqueConstraintExists(): bool
+    {
+        try {
+            return match (DB::getDriverName()) {
+                'mysql' => ! empty(DB::select(
+                    "SHOW INDEX FROM sites WHERE Key_name = 'sites_user_id_unique'"
+                )),
+                'sqlite' => collect(DB::select("PRAGMA index_list('sites')"))
+                    ->contains(fn ($index) => ($index->name ?? null) === 'sites_user_id_unique'),
+                default => ! Schema::hasTable('migrations')
+                    || ! DB::table('migrations')
+                        ->where('migration', '2026_03_31_000005_allow_multiple_sites_per_user')
+                        ->exists(),
+            };
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return ! Schema::hasTable('migrations')
+                || ! DB::table('migrations')
+                    ->where('migration', '2026_03_31_000005_allow_multiple_sites_per_user')
+                    ->exists();
+        }
     }
 
     private function platformReadiness(): array
