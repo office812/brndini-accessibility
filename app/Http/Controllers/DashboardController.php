@@ -136,13 +136,15 @@ class DashboardController extends Controller
             'site_name' => $validated['site_name'],
             'domain' => $domain,
             'public_key' => SiteSettings::generatePublicKey(),
+            'license_status' => 'inactive',
+            'purchase_url' => route('home') . '#pricing',
             'service_mode' => 'audit_and_fix',
             'widget_settings' => SiteSettings::defaultWidget(),
         ]);
 
         return redirect()
             ->route('dashboard', ['site' => $site->id])
-            ->with('status', 'נוצר רישיון חדש לאתר. האתר הזה קיבל site key וקוד הטמעה משלו.');
+            ->with('status', 'נוצר רישיון חדש לאתר. כרגע הוא לא פעיל עד לרכישת רישיון, ולכן הווידג׳ט שלו יוצג כלא פעיל.');
     }
 
     private function ensureSite(User $user): Site
@@ -157,6 +159,7 @@ class DashboardController extends Controller
             'site_name' => $user->name . ' Site',
             'domain' => 'https://example.com',
             'public_key' => SiteSettings::generatePublicKey(),
+            'license_status' => 'active',
             'service_mode' => 'audit_and_fix',
             'widget_settings' => SiteSettings::defaultWidget(),
         ]);
@@ -205,6 +208,7 @@ class DashboardController extends Controller
                 $embedScriptUrl,
                 $site->public_key
             ),
+            'licenseStatus' => $site->license_status ?? 'active',
             'currentPlan' => [
                 'name' => 'מסלול מנוהל',
                 'price' => 'אונבורדינג מותאם',

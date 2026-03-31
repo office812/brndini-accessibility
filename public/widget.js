@@ -28,6 +28,11 @@
       return response.json();
     })
     .then(function (payload) {
+      if (payload && payload.inactive) {
+        renderInactiveWidget(payload);
+        return;
+      }
+
       if (!payload.success || !payload.data) {
         throw new Error('Missing widget config.');
       }
@@ -35,7 +40,11 @@
       renderWidget(payload.data);
     })
     .catch(function () {
-      window.__A11Y_BRIDGE_WIDGET__ = false;
+      renderInactiveWidget({
+        inactive: true,
+        siteName: 'A11Y Bridge',
+        purchaseUrl: platformOrigin + '/#pricing'
+      });
     });
 
   function getWidgetIconSvg(type) {
@@ -317,6 +326,46 @@
     }
   }
 
+  function renderInactiveWidget(payload) {
+    var shell = document.createElement('div');
+    shell.className = 'ab-widget-shell ab-bottom-right ab-comfortable';
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'ab-widget-button ab-license-inactive ab-mode-icon-label ab-style-midnight';
+    button.setAttribute('aria-label', 'הרישיון לא פעיל');
+
+    var buttonGlow = document.createElement('span');
+    buttonGlow.className = 'ab-widget-button-glow';
+    buttonGlow.setAttribute('aria-hidden', 'true');
+
+    var buttonIcon = document.createElement('span');
+    buttonIcon.className = 'ab-widget-button-icon';
+    buttonIcon.setAttribute('aria-hidden', 'true');
+    buttonIcon.innerHTML = getWidgetIconSvg('shield');
+
+    var buttonLabel = document.createElement('span');
+    buttonLabel.className = 'ab-widget-button-label';
+    buttonLabel.textContent = 'הרישיון לא פעיל';
+
+    button.appendChild(buttonGlow);
+    button.appendChild(buttonIcon);
+    button.appendChild(buttonLabel);
+
+    button.addEventListener('click', function () {
+      var purchaseUrl = payload && payload.purchaseUrl ? payload.purchaseUrl : platformOrigin + '/#pricing';
+      window.location.href = purchaseUrl;
+    });
+
+    var note = document.createElement('div');
+    note.className = 'ab-widget-inactive-note';
+    note.textContent = 'לחץ להפעלת רישיון עבור האתר הזה';
+
+    shell.appendChild(button);
+    shell.appendChild(note);
+    document.body.appendChild(shell);
+  }
+
   function injectStyles() {
     if (document.getElementById('ab-widget-styles')) {
       return;
@@ -343,6 +392,7 @@
       + '.ab-widget-button.ab-style-soft .ab-widget-button-icon,.ab-widget-button.ab-style-glass .ab-widget-button-icon{background:rgba(29,109,255,.08);border-color:rgba(29,109,255,.14);}'
       + '.ab-widget-button.ab-style-glass{background:linear-gradient(180deg,rgba(255,255,255,.56),rgba(255,255,255,.34));color:#10233f;border-color:rgba(255,255,255,.72);box-shadow:0 18px 40px rgba(15,23,42,.12);}'
       + '.ab-widget-button.ab-style-midnight{background:linear-gradient(135deg,#081121,#152d57);color:#f8fafc;border-color:rgba(255,255,255,.08);box-shadow:0 20px 46px rgba(8,17,33,.22);}'
+      + '.ab-widget-button.ab-license-inactive{background:linear-gradient(135deg,#d92d20,#7a0510);color:#fff;border-color:rgba(255,255,255,.08);box-shadow:0 20px 46px rgba(122,5,16,.22);}'
       + '.ab-compact .ab-widget-button{min-height:50px;padding-inline:13px 16px;}'
       + '.ab-compact .ab-widget-button-icon{width:30px;height:30px;font-size:13px;}'
       + '.ab-compact .ab-widget-button-label{font-size:14px;}'
@@ -380,6 +430,7 @@
       + '.ab-widget-link{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 14px;border-radius:14px;background:#fff;color:#1d6dff;font-weight:700;text-decoration:none;border:1px solid rgba(29,109,255,.16);width:max-content;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,border-color var(--ab-motion-fast) ease;}'
       + '.ab-widget-link:hover{transform:translateY(-1px);border-color:rgba(29,109,255,.24);box-shadow:0 10px 18px rgba(15,23,42,.08);}'
       + '.ab-widget-note{margin:0;color:#64748b;font-size:12px;line-height:1.6;}'
+      + '.ab-widget-inactive-note{max-width:230px;padding:10px 14px;border-radius:14px;background:rgba(217,45,32,.1);color:#7a0510;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(122,5,16,.08);}'
       + 'html.ab-pref-contrast{filter:contrast(1.18);}'
       + 'html.ab-pref-underline a{text-decoration:underline !important;}'
       + 'html.ab-pref-reduce-motion *,html.ab-pref-reduce-motion *::before,html.ab-pref-reduce-motion *::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important;}'

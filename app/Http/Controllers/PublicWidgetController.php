@@ -15,8 +15,25 @@ class PublicWidgetController extends Controller
             return response()
                 ->json([
                     'success' => false,
+                    'inactive' => true,
                     'error' => 'Unknown site key.',
+                    'purchaseUrl' => route('home') . '#pricing',
                 ], 404)
+                ->withHeaders([
+                    'Access-Control-Allow-Origin' => '*',
+                    'Cache-Control' => 'no-store',
+                ]);
+        }
+
+        if (($site->license_status ?? 'active') !== 'active') {
+            return response()
+                ->json([
+                    'success' => false,
+                    'inactive' => true,
+                    'message' => 'License inactive.',
+                    'siteName' => $site->site_name,
+                    'purchaseUrl' => $site->purchase_url ?: route('home') . '#pricing',
+                ], 403)
                 ->withHeaders([
                     'Access-Control-Allow-Origin' => '*',
                     'Cache-Control' => 'no-store',
@@ -31,6 +48,8 @@ class PublicWidgetController extends Controller
                     'siteName' => $site->site_name,
                     'domain' => $site->domain,
                     'statementUrl' => $site->statement_url,
+                    'licenseStatus' => $site->license_status ?? 'active',
+                    'purchaseUrl' => $site->purchase_url,
                     'widget' => $site->widgetConfig(),
                     'updatedAt' => optional($site->updated_at)->toIso8601String(),
                 ],

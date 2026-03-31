@@ -62,6 +62,7 @@ class AuthController extends Controller
                 'site_name' => $validated['site_name'],
                 'domain' => $domain,
                 'public_key' => SiteSettings::generatePublicKey(),
+                'license_status' => 'active',
                 'service_mode' => 'audit_and_fix',
                 'widget_settings' => SiteSettings::defaultWidget(),
             ]);

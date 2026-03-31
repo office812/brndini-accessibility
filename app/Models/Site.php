@@ -17,6 +17,8 @@ class Site extends Model
         'domain',
         'statement_url',
         'public_key',
+        'license_status',
+        'purchase_url',
         'service_mode',
         'widget_settings',
     ];

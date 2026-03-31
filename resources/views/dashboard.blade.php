@@ -108,7 +108,11 @@
                                 <tr>
                                     <td>{{ parse_url($licenseSite->domain, PHP_URL_HOST) ?: $licenseSite->domain }}</td>
                                     <td>-</td>
-                                    <td><span class="status-pill is-good">פעיל</span></td>
+                                <td>
+                                    <span class="status-pill {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'is-good' : 'is-warn' }}">
+                                        {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'פעיל' : 'לא פעיל' }}
+                                    </span>
+                                </td>
                                     <td><span class="status-pill is-neutral">{{ $serviceModes[$licenseSite->service_mode] ?? $licenseSite->service_mode }}</span></td>
                                     <td><a class="licenses-manage-link" href="{{ route('dashboard.account', ['site' => $licenseSite->id]) }}">ניהול</a></td>
                                 </tr>
