@@ -6,7 +6,7 @@
     @php($statementConnected = filled($site->statement_url))
     @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'שכבת נגישות מנוהלת')
 
-    <section class="licenses-shell">
+    <section class="licenses-shell" data-dashboard-tabs>
         <aside class="licenses-sidebar">
             <div class="licenses-sidebar-block">
                 <h2>המוצרים שלי</h2>
@@ -51,7 +51,7 @@
                 <h1>{{ $user->name }}, סביבת הניהול שלך מוכנה לעבודה</h1>
             </section>
 
-            <section class="dashboard-workspace dashboard-workspace-inline" data-dashboard-tabs>
+            <section class="dashboard-workspace dashboard-workspace-inline">
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="overview">
                         <section class="licenses-hero-card">
