@@ -38,12 +38,31 @@
         </div>
     </section>
 
+    <section class="command-strip" aria-label="Workspace signals">
+        <article class="command-card">
+            <span class="command-label">Active domain</span>
+            <strong>{{ $site->domain }}</strong>
+            <p>זה הדומיין שמקבל כרגע את ה־configuration מתוך הפלטפורמה.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Service mode</span>
+            <strong>{{ $serviceModes[$site->service_mode] ?? 'Managed accessibility layer' }}</strong>
+            <p>כך המוצר ממסגר את רמת השירות, ה־governance והליווי סביב ה־widget.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Statement status</span>
+            <strong>{{ $site->statement_url ? 'Connected' : 'Needs action' }}</strong>
+            <p>{{ $site->statement_url ? 'הצהרת הנגישות מחוברת כבר ל־widget.' : 'כדאי לחבר statement URL כדי לסגור את החוויה.' }}</p>
+        </article>
+    </section>
+
     <section class="dashboard-grid">
         <form class="panel-card stack-form" method="POST" action="{{ route('dashboard.update') }}">
             @csrf
 
             <p class="eyebrow">Company</p>
             <h2>פרטי מותג ואתר</h2>
+            <p class="panel-intro">מכאן מנהלים את כל מה שהלקוח רואה בפועל: פרטי האתר, מסגור השירות, והגדרות ה־widget עצמו.</p>
 
             <label for="company_name">שם החברה</label>
             <input id="company_name" name="company_name" type="text" value="{{ old('company_name', $user->name) }}" required>
@@ -67,8 +86,10 @@
                 @endforeach
             </select>
 
+            <div class="form-divider"></div>
             <p class="eyebrow">Widget</p>
             <h2>התנהגות ועיצוב ה־widget</h2>
+            <p class="panel-intro">הגדרות אלה נשמרות בפלטפורמה ונמשכות לאתר בכל טעינה, בלי צורך להחליף שוב את קוד ההטמעה.</p>
 
             <label for="widget_position">מיקום</label>
             <select id="widget_position" name="widget[position]" data-preview="position">
@@ -127,6 +148,7 @@
         <aside class="panel-card">
             <p class="eyebrow">Preview</p>
             <h2>איך זה ייראה אצל הלקוח</h2>
+            <p class="panel-intro">הצד הימני כאן מתפקד כמו סביבת preview: הוא מראה את מראה ה־widget ואת ההיגיון שמאחורי ההטמעה.</p>
 
             <div class="preview-stage">
                 <div class="preview-window">
@@ -173,6 +195,13 @@
                 <p>
                     ה־widget נותן העדפות תצוגה, גישה להצהרת נגישות ומסגרת ניהול. ציות מלא עדיין
                     תלוי גם בקוד האתר, בתוכן ובבדיקות ידניות.
+                </p>
+            </div>
+
+            <div class="info-card info-card-tight">
+                <h3>Operator guidance</h3>
+                <p>
+                    נסה לעבוד תמיד בסדר הזה: site details, widget, statement URL, ואז בדיקת live באתר עצמו.
                 </p>
             </div>
         </aside>

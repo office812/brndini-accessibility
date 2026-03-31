@@ -246,6 +246,7 @@ code {
 .dashboard-header,
 .dashboard-grid,
 .dashboard-grid-secondary,
+.command-strip,
 .hero-stat-grid,
 .feature-grid,
 .process-grid,
@@ -488,6 +489,56 @@ code {
     line-height: 1.25;
 }
 
+.command-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0 0 24px;
+}
+
+.command-card {
+    padding: 22px;
+    border-radius: 26px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(242, 247, 252, 0.82));
+    border: 1px solid rgba(255, 255, 255, 0.76);
+    box-shadow: var(--shadow-xs);
+    position: relative;
+    overflow: hidden;
+}
+
+.command-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(29, 109, 255, 0.9), rgba(96, 165, 250, 0.25));
+}
+
+.command-label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--accent);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.command-card strong {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    line-height: 1.1;
+    margin-bottom: 10px;
+}
+
+.command-card p,
+.panel-intro {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.75;
+}
+
 .preview-pill {
     min-height: 34px;
     padding: 0 12px;
@@ -702,6 +753,10 @@ code {
     padding: 28px;
 }
 
+.panel-intro {
+    margin: 2px 0 14px;
+}
+
 .code-card {
     display: grid;
     gap: 12px;
@@ -756,6 +811,13 @@ code {
 .stack-form {
     display: grid;
     gap: 12px;
+}
+
+.form-divider {
+    height: 1px;
+    margin: 8px 0 2px;
+    background: linear-gradient(90deg, rgba(29, 109, 255, 0.18), rgba(29, 109, 255, 0));
+    border-radius: 999px;
 }
 
 .stack-form label,
@@ -1072,6 +1134,7 @@ code {
     .dashboard-grid-secondary,
     .auth-grid,
     .trust-band,
+    .command-strip,
     .feature-grid,
     .process-grid,
     .article-grid,

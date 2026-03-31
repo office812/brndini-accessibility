@@ -6,7 +6,7 @@
     <section class="dashboard-header">
         <div>
             <p class="eyebrow">Install Center</p>
-            <h1>התקנה ברורה, בלי לנחש מה מדביקים ואיפה.</h1>
+            <h1>מרכז הטמעה ברור, כך שכל אתר עולה לאוויר באותה שיטה.</h1>
             <p class="hero-text">
                 הקוד שלך נשאר קבוע. כל שינוי בדשבורד מעדכן את ה־widget מתוך הפלטפורמה, בלי
                 להחליף שוב סקריפט באתר.
@@ -39,10 +39,29 @@
         </div>
     </section>
 
+    <section class="command-strip" aria-label="Install signals">
+        <article class="command-card">
+            <span class="command-label">Deployment model</span>
+            <strong>Hosted snippet</strong>
+            <p>אותו script נשאר באתר וכל שינוי ממשיך לצאת מתוך הפלטפורמה.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Primary domain</span>
+            <strong>{{ $site->domain }}</strong>
+            <p>זה הדומיין שאליו מיועד קוד ההטמעה הנוכחי.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Widget status</span>
+            <strong>Ready to embed</strong>
+            <p>ההגדרות כבר קיימות. נשאר רק להדביק, לרענן, ולוודא שהשינויים נמשכים כמו שצריך.</p>
+        </article>
+    </section>
+
     <section class="dashboard-grid">
         <section class="panel-card">
             <p class="eyebrow">How to install</p>
             <h2>שלבי התקנה</h2>
+            <p class="panel-intro">השלבים נשארים זהים כמעט בכל אתר: copy, paste, refresh, verify.</p>
 
             <ol class="step-list">
                 <li>
@@ -67,6 +86,7 @@
         <aside class="panel-card">
             <p class="eyebrow">Verification</p>
             <h2>מה בודקים אחרי ההתקנה</h2>
+            <p class="panel-intro">המטרה היא לא רק לראות כפתור. המטרה היא לוודא שהפלטפורמה באמת מנהלת את מה שמופיע באתר.</p>
 
             <ul class="check-list">
                 <li>הכפתור מופיע באתר במיקום הנכון.</li>
@@ -81,6 +101,13 @@
                 <p>
                     אם עובדים עם WordPress, אפשר להזין את אותו <code>site key</code> לתוסף שכבר בנינו,
                     או להטמיע את הסקריפט ישירות דרך custom code.
+                </p>
+            </div>
+
+            <div class="info-card info-card-tight">
+                <h3>Agency handoff</h3>
+                <p>
+                    אם הלקוח לא מטמיע לבד, אפשר לשלוח למיישם את ה־snippet ואת הדומיין המאושר, בלי להסביר מחדש את כל הלוגיקה.
                 </p>
             </div>
         </aside>

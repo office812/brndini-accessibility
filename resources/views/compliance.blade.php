@@ -6,7 +6,7 @@
     <section class="dashboard-header">
         <div>
             <p class="eyebrow">Compliance Center</p>
-            <h1>Governance ברור, בלי להבטיח ללקוח מה שהמוצר לא יכול להבטיח.</h1>
+            <h1>Governance ברור, defensible messaging, ומסגור נכון של המוצר.</h1>
             <p class="hero-text">
                 המסך הזה מחבר בין ה־widget, הצהרת הנגישות ומסלול השירות. הוא נועד למסגר את
                 הפלטפורמה נכון: שכבת ניהול, העדפות וגישה למידע, לא "כפתור קסם" שמחליף בדיקות ותיקוני קוד.
@@ -46,10 +46,29 @@
         </div>
     </section>
 
+    <section class="command-strip" aria-label="Compliance signals">
+        <article class="command-card">
+            <span class="command-label">Service mode</span>
+            <strong>{{ $serviceModeLabel }}</strong>
+            <p>המסלול הזה קובע איך לדבר על רמת השירות, הבדיקות והעבודה הידנית מסביב.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Statement</span>
+            <strong>{{ $statementStatus === 'connected' ? 'Connected' : 'Missing' }}</strong>
+            <p>הצהרת נגישות מחוברת משפרת גם clarity ללקוח וגם עקביות במסר.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Enabled controls</span>
+            <strong>{{ $featureCount }}</strong>
+            <p>מספר פעולות ה־widget הפעילות כרגע באתר הזה.</p>
+        </article>
+    </section>
+
     <section class="dashboard-grid">
         <section class="panel-card">
             <p class="eyebrow">Platform message</p>
             <h2>הניסוח הנכון ללקוח</h2>
+            <p class="panel-intro">כאן מנסחים את המוצר כמו פתרון מקצועי: תמיכה ב־compliance, לא claim שמחליף remediation.</p>
 
             <ul class="check-list">
                 <li>ה־widget מספק העדפות תצוגה, גישה להצהרת נגישות ושכבת governance.</li>
@@ -70,6 +89,7 @@
         <aside class="panel-card">
             <p class="eyebrow">Current setup</p>
             <h2>מה חסר כרגע</h2>
+            <p class="panel-intro">החלק הזה הופך את המסר למעשי: מה קיים כבר, ומה עדיין צריך לסגור כדי שהלקוח יקבל חוויה שלמה.</p>
 
             <div class="status-grid">
                 <div class="status-card">
@@ -92,6 +112,30 @@
             </div>
 
             <a class="copy-button cta-link" href="{{ route('dashboard') }}">חזרה להגדרות הראשיות</a>
+        </aside>
+    </section>
+
+    <section class="dashboard-grid dashboard-grid-secondary">
+        <section class="panel-card">
+            <p class="eyebrow">Coverage</p>
+            <h2>מה הפלטפורמה כן מכסה</h2>
+
+            <ul class="check-list">
+                <li>ניהול widget hosted והעדפות תצוגה מתוך dashboard אחד.</li>
+                <li>קישור שקוף להצהרת נגישות ו־service framing ברור.</li>
+                <li>שכבת install, account, content ו־governance שנראית כמו מוצר SaaS אמיתי.</li>
+            </ul>
+        </section>
+
+        <aside class="panel-card">
+            <p class="eyebrow">Remediation</p>
+            <h2>מה עדיין דורש עבודה מחוץ ל־widget</h2>
+
+            <ul class="check-list">
+                <li>תיקוני קוד, semantic HTML, labels, flows וטבלאות.</li>
+                <li>בדיקות ידניות עם מקלדת, קורא מסך ו־real user testing.</li>
+                <li>בקרה שוטפת על תוכן חדש, קבצים והטמעות צד שלישי.</li>
+            </ul>
         </aside>
     </section>
 @endsection

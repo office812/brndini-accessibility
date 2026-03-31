@@ -6,7 +6,7 @@
     <section class="dashboard-header">
         <div>
             <p class="eyebrow">Account & Billing</p>
-            <h1>כל מה שהלקוח צריך כדי להבין מי הוא, מה מחובר, ואיך השירות ממוסגר.</h1>
+            <h1>אזור החשבון שמציג ללקוח מה מחובר, מה פעיל, ואיך השירות בנוי סביבו.</h1>
             <p class="hero-text">
                 המסך הזה מאחד בין פרטי החברה, מצב האתר, plan framing וערוצי support. הוא צריך
                 להרגיש כמו אזור ניהול אמיתי ולא כמו הגדרות זמניות.
@@ -46,10 +46,29 @@
         </div>
     </section>
 
+    <section class="command-strip" aria-label="Account signals">
+        <article class="command-card">
+            <span class="command-label">Workspace</span>
+            <strong>{{ $site->site_name }}</strong>
+            <p>זה ה־workspace הפעיל כרגע במערכת.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Primary contact</span>
+            <strong>{{ $user->contact_email }}</strong>
+            <p>זה איש הקשר שמנהל את הפעילות ואת החיבור השוטף למוצר.</p>
+        </article>
+        <article class="command-card">
+            <span class="command-label">Current plan</span>
+            <strong>{{ $currentPlan['name'] }}</strong>
+            <p>החבילה שממסגרת כרגע את המוצר, השירות והתמיכה סביב החשבון.</p>
+        </article>
+    </section>
+
     <section class="dashboard-grid">
         <section class="panel-card">
             <p class="eyebrow">Profile</p>
             <h2>פרטי חברה ולקוח</h2>
+            <p class="panel-intro">הבלוק הזה מרכז את הזהות העסקית של הלקוח ואת פרטי האתר שמחוברים כרגע למערכת.</p>
 
             <div class="spec-list">
                 <div class="spec-row">
@@ -78,6 +97,7 @@
         <aside class="panel-card">
             <p class="eyebrow">Plan framing</p>
             <h2>מסלול נוכחי והרחבה מומלצת</h2>
+            <p class="panel-intro">כך אפשר להציג ללקוח את השלב הנוכחי שלו ואת שכבת ההרחבה הבאה, בלי להעמיס על הממשק.</p>
 
             <div class="plan-card plan-card-current">
                 <span class="status-pill is-neutral">{{ $currentPlan['price'] }}</span>
@@ -97,6 +117,7 @@
         <section class="panel-card">
             <p class="eyebrow">Support</p>
             <h2>מה הלקוח מקבל מסביב למוצר</h2>
+            <p class="panel-intro">המוצר נראה חזק יותר כשלא מוכרים רק widget, אלא שכבת תמיכה, מסגור ו־next steps.</p>
 
             <ul class="check-list">
                 <li>תמיכה בחיבור widget והטמעה ראשונית.</li>
@@ -109,6 +130,7 @@
         <aside class="panel-card">
             <p class="eyebrow">Next actions</p>
             <h2>מה כדאי לעשות עכשיו</h2>
+            <p class="panel-intro">הרצף הזה נותן ללקוח תחושה שיש לו command center, לא רק אזור הגדרות.</p>
 
             <div class="status-grid">
                 <div class="status-card">
