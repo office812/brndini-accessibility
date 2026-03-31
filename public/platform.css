@@ -69,6 +69,53 @@ body.auth-page {
         linear-gradient(90deg, #ffffff 0%, #ffffff 34%, #eef3f8 34%, #e5ecf5 100%);
 }
 
+body.is-navigating {
+    cursor: progress;
+}
+
+.top-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 120;
+    height: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--motion-fast) ease;
+}
+
+.top-progress.is-active {
+    opacity: 1;
+}
+
+.top-progress-bar {
+    display: block;
+    width: 28%;
+    height: 100%;
+    border-radius: 0 999px 999px 0;
+    background: linear-gradient(90deg, #60a5fa 0%, #1d6dff 48%, #163ea8 100%);
+    box-shadow: 0 0 28px rgba(29, 109, 255, 0.4);
+    transform: translateX(-115%);
+    transition:
+        transform 720ms cubic-bezier(0.22, 1, 0.36, 1),
+        width 360ms ease,
+        opacity 220ms ease;
+}
+
+.top-progress.is-active .top-progress-bar {
+    transform: translateX(58vw);
+}
+
+.top-progress.is-active.is-warm .top-progress-bar {
+    width: 54%;
+    transform: translateX(68vw);
+}
+
+.top-progress.is-active.is-complete .top-progress-bar {
+    width: 100%;
+    transform: translateX(0);
+    border-radius: 0;
+}
+
 a {
     color: inherit;
 }
@@ -98,10 +145,29 @@ code {
     padding: 18px 0 72px;
     position: relative;
     z-index: 1;
+    opacity: 0.01;
+    transform: translateY(14px);
+    transition:
+        opacity 340ms ease,
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .page-shell-app {
     width: min(1380px, calc(100% - 32px));
+}
+
+.auth-shell {
+    opacity: 0.01;
+    transform: translateY(14px);
+    transition:
+        opacity 340ms ease,
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body.page-is-ready .page-shell,
+body.page-is-ready .auth-shell {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .site-header {
@@ -281,13 +347,15 @@ code {
         background var(--motion-fast) ease,
         border-color var(--motion-fast) ease,
         color var(--motion-fast) ease,
-        box-shadow var(--motion-fast) ease;
+        box-shadow var(--motion-fast) ease,
+        opacity var(--motion-fast) ease;
 }
 
 .app-nav a:hover,
 .app-header-cta:hover,
 .app-logout-button:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 28px rgba(15, 23, 42, 0.08);
 }
 
 .app-nav a.is-current {
@@ -312,6 +380,17 @@ code {
     color: #234071;
     text-decoration: none;
     font-weight: 800;
+    transition:
+        transform var(--motion-fast) ease,
+        border-color var(--motion-fast) ease,
+        box-shadow var(--motion-fast) ease,
+        background var(--motion-fast) ease;
+}
+
+.app-header-icon:hover {
+    transform: translateY(-2px) scale(1.03);
+    border-color: rgba(29, 109, 255, 0.18);
+    box-shadow: 0 18px 32px rgba(15, 23, 42, 0.1);
 }
 
 .app-user-pill {
@@ -350,6 +429,14 @@ code {
     align-items: center;
     gap: 14px;
     text-decoration: none;
+    transition:
+        transform var(--motion-fast) ease,
+        opacity var(--motion-fast) ease;
+}
+
+.brand:hover,
+.app-logo:hover {
+    transform: translateY(-1px);
 }
 
 .brand-mark {
@@ -457,6 +544,8 @@ code {
     padding: 16px 18px;
     border-radius: 20px;
     border: 1px solid var(--line);
+    box-shadow: var(--shadow-xs);
+    animation: flash-slide-in 360ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .flash-success {
@@ -663,7 +752,11 @@ code {
         box-shadow var(--motion-fast) ease,
         filter var(--motion-fast) ease,
         background var(--motion-fast) ease,
-        border-color var(--motion-fast) ease;
+        border-color var(--motion-fast) ease,
+        opacity var(--motion-fast) ease;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
 }
 
 .primary-button {
@@ -684,12 +777,32 @@ code {
     color: var(--page-ink);
 }
 
+.primary-button::before,
+.secondary-button::before,
+.ghost-button::before,
+.nav-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 10%, rgba(255, 255, 255, 0.22) 45%, transparent 75%);
+    transform: translateX(-120%);
+    transition: transform 440ms ease;
+    z-index: -1;
+}
+
 .primary-button:hover,
 .secondary-button:hover,
 .ghost-button:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px) scale(1.01);
     filter: saturate(1.02);
     box-shadow: var(--shadow-sm);
+}
+
+.primary-button:hover::before,
+.secondary-button:hover::before,
+.ghost-button:hover::before,
+.nav-button:hover::before {
+    transform: translateX(120%);
 }
 
 .primary-button:disabled,
@@ -700,6 +813,36 @@ code {
     transform: none;
     filter: none;
     box-shadow: none;
+}
+
+.primary-button.is-loading,
+.secondary-button.is-loading,
+.ghost-button.is-loading,
+.nav-button.is-loading {
+    color: rgba(255, 255, 255, 0.96);
+    pointer-events: none;
+    filter: saturate(1);
+    transform: translateY(0) scale(0.995);
+}
+
+.ghost-button.is-loading {
+    color: var(--page-ink);
+}
+
+.primary-button.is-loading::after,
+.secondary-button.is-loading::after,
+.ghost-button.is-loading::after,
+.nav-button.is-loading::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    border: 2px solid currentColor;
+    border-left-color: transparent;
+    position: absolute;
+    inset-inline-start: 14px;
+    top: calc(50% - 8px);
+    animation: button-spin 720ms linear infinite;
 }
 
 .seo-bullets,
@@ -3142,6 +3285,24 @@ code {
 .stack-form textarea:focus-visible {
     outline: 3px solid rgba(37, 99, 235, 0.18);
     outline-offset: 3px;
+}
+
+@keyframes button-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes flash-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 1080px) {

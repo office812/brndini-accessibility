@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="{{ url('/platform.css') }}">
 </head>
 <body>
+    <div class="top-progress" aria-hidden="true" data-top-progress>
+        <span class="top-progress-bar"></span>
+    </div>
     <a class="skip-link" href="#main-content">דלג לתוכן הראשי</a>
     @php($siteRouteParams = isset($site) ? ['site' => $site->id] : [])
 
@@ -88,7 +91,7 @@
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="#solutions">פתרונות</a>
                         <a href="#platform-flow">איך זה עובד</a>
-                        <a href="#articles">משאבים</a>
+                        <a href="#articles">מאמרים</a>
                         <a href="{{ route('login.show') }}">התחברות</a>
                         <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון</a>
                     </nav>

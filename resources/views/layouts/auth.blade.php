@@ -11,8 +11,13 @@
     <link rel="stylesheet" href="{{ url('/platform.css') }}">
 </head>
 <body class="auth-page">
+    <div class="top-progress" aria-hidden="true" data-top-progress>
+        <span class="top-progress-bar"></span>
+    </div>
     <main class="auth-shell">
         @yield('content')
     </main>
+
+    <script src="{{ url('/platform.js') }}" defer></script>
 </body>
 </html>

@@ -1,4 +1,114 @@
 document.addEventListener('DOMContentLoaded', function () {
+  var topProgress = document.querySelector('[data-top-progress]');
+  var progressTimer = null;
+  var progressFinishTimer = null;
+
+  function clearProgressTimers() {
+    if (progressTimer) {
+      window.clearTimeout(progressTimer);
+      progressTimer = null;
+    }
+
+    if (progressFinishTimer) {
+      window.clearTimeout(progressFinishTimer);
+      progressFinishTimer = null;
+    }
+  }
+
+  function startTopProgress() {
+    if (!topProgress) {
+      return;
+    }
+
+    clearProgressTimers();
+    document.body.classList.add('is-navigating');
+    topProgress.classList.add('is-active');
+    topProgress.classList.remove('is-complete');
+
+    progressTimer = window.setTimeout(function () {
+      topProgress.classList.add('is-warm');
+    }, 180);
+  }
+
+  function finishTopProgress() {
+    if (!topProgress) {
+      return;
+    }
+
+    clearProgressTimers();
+    topProgress.classList.add('is-active', 'is-complete');
+
+    progressFinishTimer = window.setTimeout(function () {
+      topProgress.classList.remove('is-active', 'is-complete', 'is-warm');
+      document.body.classList.remove('is-navigating');
+    }, 420);
+  }
+
+  function loadingLabelFor(text) {
+    if (!text) {
+      return 'טוען...';
+    }
+
+    if (text.indexOf('שמור') !== -1) {
+      return 'שומר...';
+    }
+
+    if (text.indexOf('הרץ') !== -1 || text.indexOf('בדיקה') !== -1) {
+      return 'מריץ...';
+    }
+
+    if (text.indexOf('הפעל') !== -1) {
+      return 'מפעיל...';
+    }
+
+    if (text.indexOf('להתחבר') !== -1 || text.indexOf('התחברות') !== -1) {
+      return 'מתחבר...';
+    }
+
+    if (text.indexOf('ליצור') !== -1 || text.indexOf('פתיחת') !== -1 || text.indexOf('צור') !== -1) {
+      return 'יוצר...';
+    }
+
+    if (text.indexOf('פרסם') !== -1) {
+      return 'מפרסם...';
+    }
+
+    return 'טוען...';
+  }
+
+  function setInteractiveLoading(node) {
+    if (!node || node.classList.contains('is-loading')) {
+      return;
+    }
+
+    var rect = node.getBoundingClientRect();
+    var originalText = (node.textContent || '').trim();
+
+    node.dataset.loadingOriginal = originalText;
+    node.style.width = rect.width + 'px';
+    node.classList.add('is-loading');
+    node.setAttribute('aria-busy', 'true');
+
+    if (node.tagName === 'BUTTON') {
+      node.disabled = true;
+    }
+
+    if (originalText) {
+      node.textContent = loadingLabelFor(originalText);
+    }
+  }
+
+  document.documentElement.classList.add('js-ui');
+  window.requestAnimationFrame(function () {
+    document.body.classList.add('page-is-ready');
+    finishTopProgress();
+  });
+
+  window.addEventListener('pageshow', function () {
+    document.body.classList.add('page-is-ready');
+    finishTopProgress();
+  });
+
   function setMenuState(toggle, panel, backdrop, isOpen) {
     toggle.classList.toggle('is-open', isOpen);
     panel.classList.toggle('is-open', isOpen);
@@ -100,10 +210,65 @@ document.addEventListener('DOMContentLoaded', function () {
   if (siteSwitcher) {
     siteSwitcher.addEventListener('change', function () {
       if (siteSwitcher.value) {
+        startTopProgress();
         window.location.href = siteSwitcher.value;
       }
     });
   }
+
+  document.querySelectorAll('a[href]').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      var href = link.getAttribute('href');
+
+      if (!href || href.charAt(0) === '#' || link.hasAttribute('download') || link.getAttribute('target') === '_blank') {
+        return;
+      }
+
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+        return;
+      }
+
+      var url = null;
+
+      try {
+        url = new URL(link.href, window.location.href);
+      } catch (error) {
+        return;
+      }
+
+      if (url.origin !== window.location.origin) {
+        return;
+      }
+
+      if (url.pathname === window.location.pathname && url.search === window.location.search && url.hash) {
+        return;
+      }
+
+      startTopProgress();
+
+      if (
+        link.classList.contains('primary-button') ||
+        link.classList.contains('secondary-button') ||
+        link.classList.contains('ghost-button') ||
+        link.classList.contains('nav-button')
+      ) {
+        setInteractiveLoading(link);
+      }
+    });
+  });
+
+  document.querySelectorAll('form').forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+      var submitter = event.submitter;
+
+      if (!submitter) {
+        submitter = form.querySelector('button[type="submit"], input[type="submit"]');
+      }
+
+      startTopProgress();
+      setInteractiveLoading(submitter);
+    });
+  });
 
   var preview = document.getElementById('widget-preview');
   var previewPanel = document.getElementById('widget-preview-panel');
