@@ -26,23 +26,23 @@
                         <span class="brand-mark brand-mark-app" aria-hidden="true">AB</span>
                         <span class="app-brand-copy">
                             <strong>A11Y Bridge</strong>
-                            <small>Accessibility partner workspace</small>
+                            <small>סביבת ניהול נגישות</small>
                         </span>
                     </a>
                 </div>
 
                 <div class="app-header-left">
                     <nav class="app-nav" aria-label="ניווט מערכת">
-                        <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">My Workspace</a>
-                        <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">My Services</a>
-                        <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">My Audits</a>
-                        <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account') }}">Partners</a>
+                        <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">הרישיונות שלי</a>
+                        <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">השירותים שלי</a>
+                        <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">דוחות ובקרה</a>
+                        <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account') }}">החשבון</a>
                     </nav>
                 </div>
 
                 <div class="app-header-right">
-                    <a class="app-header-cta" href="{{ route('dashboard.install') }}">Contact Sales</a>
-                    <a class="app-header-icon" href="{{ route('dashboard.compliance') }}" aria-label="Support center">?</a>
+                    <a class="app-header-cta" href="{{ route('dashboard.install') }}">יצירת קשר</a>
+                    <a class="app-header-icon" href="{{ route('dashboard.compliance') }}" aria-label="מרכז תמיכה">?</a>
                     <span class="app-header-icon" aria-hidden="true">•</span>
                     <div class="app-user-pill">
                         <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>
@@ -50,7 +50,7 @@
                     </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button class="app-logout-button" type="submit">Logout</button>
+                        <button class="app-logout-button" type="submit">התנתקות</button>
                     </form>
                 </div>
             </header>

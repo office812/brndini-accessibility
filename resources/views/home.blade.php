@@ -40,7 +40,7 @@
 
                 <div class="hero-device-screen">
                     <div class="hero-device-nav">
-                        <span>Dashboard</span>
+                        <span>לוח ניהול</span>
                         <span>Install</span>
                         <span>Compliance</span>
                         <span>Account</span>
@@ -49,7 +49,7 @@
                     <div class="hero-device-grid">
                         <article class="hero-device-card hero-device-card-primary">
                             <span class="hero-device-label">A11Y BRIDGE</span>
-                            <strong>Hosted widget</strong>
+                            <strong>ווידג׳ט מנוהל</strong>
                             <p>site key, brand settings, CTA label, language</p>
                         </article>
                         <article class="hero-device-card">
@@ -74,7 +74,7 @@
     </section>
 
     <section class="trust-bar" aria-label="trust signals">
-        <div class="trust-chip">Hosted widget management</div>
+        <div class="trust-chip">ניהול ווידג׳ט מנוהל</div>
         <div class="trust-chip">Install once, manage remotely</div>
         <div class="trust-chip">Statement and compliance framing</div>
         <div class="trust-chip">Built for agencies and growing teams</div>
@@ -212,11 +212,11 @@
                 <p>הפחתת אנימציות ותנועה עבור חוויה שקטה יותר.</p>
             </article>
             <article class="profile-card">
-                <h3>Language support</h3>
+                <h3>תמיכה בשפות</h3>
                 <p>ממשק עברית/אנגלית ותמיכה בלקוחות מגוונים.</p>
             </article>
             <article class="profile-card">
-                <h3>Statement access</h3>
+                <h3>גישה להצהרת נגישות</h3>
                 <p>גישה שקופה להצהרת נגישות מתוך ה־widget.</p>
             </article>
         </div>
@@ -234,9 +234,9 @@
 
         <div class="compliance-badges">
             <span class="compliance-badge">WCAG workflow</span>
-            <span class="compliance-badge">Accessibility statement</span>
+            <span class="compliance-badge">הצהרת נגישות</span>
             <span class="compliance-badge">Install verification</span>
-            <span class="compliance-badge">Service mode</span>
+            <span class="compliance-badge">מסלול שירות</span>
             <span class="compliance-badge">Governance messaging</span>
         </div>
     </section>
@@ -265,7 +265,7 @@
 
     <section class="section-band section-band-alt">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">Plans</p>
+            <p class="eyebrow">מסלולים</p>
             <h2>חבילות שמסבירות ללקוח איפה הוא מתחיל ואיך הוא גדל.</h2>
         </div>
 

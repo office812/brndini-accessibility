@@ -149,13 +149,13 @@ class DashboardController extends Controller
                 $site->public_key
             ),
             'currentPlan' => [
-                'name' => 'Hosted Standard',
-                'price' => 'Custom onboarding',
-                'description' => 'מתאים ללקוח שמנהל widget hosted, site key קבוע ודשבורד אחד מרכזי.',
+                'name' => 'מסלול מנוהל',
+                'price' => 'אונבורדינג מותאם',
+                'description' => 'מתאים ללקוח שמנהל ווידג׳ט מנוהל, site key קבוע ולוח ניהול מרכזי אחד.',
             ],
             'recommendedPlan' => [
-                'name' => 'Managed Accessibility',
-                'description' => 'מתאים כשמוסיפים audit קבוע, remediation workflow וליווי compliance.',
+                'name' => 'נגישות מנוהלת',
+                'description' => 'מתאים כשמוסיפים audit קבוע, תהליך remediation וליווי compliance.',
             ],
             'statementStatus' => $site->statement_url ? 'connected' : 'missing',
             'featureCount' => $featureCount,
@@ -165,9 +165,9 @@ class DashboardController extends Controller
     private function serviceModes(): array
     {
         return [
-            'audit_only' => 'Audit only',
-            'audit_and_fix' => 'Audit + safe fixes',
-            'managed_service' => 'Managed accessibility service',
+            'audit_only' => 'ביקורת בלבד',
+            'audit_and_fix' => 'ביקורת + תיקונים בטוחים',
+            'managed_service' => 'שירות נגישות מנוהל',
         ];
     }
 }

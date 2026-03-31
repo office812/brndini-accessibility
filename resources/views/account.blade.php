@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php($title = 'Plan and Payments | A11Y Bridge')
+@php($title = 'תוכנית ותשלומים | A11Y Bridge')
 
 @section('content')
     <section class="domain-shell">
@@ -8,7 +8,7 @@
 
         <div class="domain-shell-main">
             <section class="domain-shell-header">
-                <h1>Plan and payments</h1>
+                <h1>תוכנית ותשלומים</h1>
             </section>
 
             <section class="domain-card">
@@ -16,61 +16,61 @@
 
                 <div class="domain-info-list">
                     <div class="domain-info-row">
-                        <span>Plan</span>
-                        <strong>{{ $currentPlan['name'] }} · Yearly</strong>
+                        <span>מסלול</span>
+                        <strong>{{ $currentPlan['name'] }} · שנתי</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Status</span>
-                        <strong><span class="status-pill is-good">Active</span></strong>
+                        <span>סטטוס</span>
+                        <strong><span class="status-pill is-good">פעיל</span></strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Service mode</span>
+                        <span>מסלול שירות</span>
                         <strong>{{ $serviceModeLabel }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Public site key</span>
+                        <span>מפתח אתר ציבורי</span>
                         <strong><code>{{ $site->public_key }}</code></strong>
                     </div>
                 </div>
             </section>
 
             <section class="domain-card">
-                <h2>Advanced features</h2>
+                <h2>יכולות מתקדמות</h2>
 
                 <div class="domain-info-list">
                     <div class="domain-info-row">
                         <span>Google Analytics</span>
-                        <strong>Not available</strong>
+                        <strong>לא זמין</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Managed statement</span>
-                        <strong>{{ $statementStatus === 'connected' ? 'Enabled' : 'Needs setup' }}</strong>
+                        <span>הצהרה מנוהלת</span>
+                        <strong>{{ $statementStatus === 'connected' ? 'פעיל' : 'דורש חיבור' }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Hosted widget sync</span>
-                        <strong>Enabled</strong>
+                        <span>סנכרון ווידג׳ט מנוהל</span>
+                        <strong>פעיל</strong>
                     </div>
                 </div>
             </section>
 
             <section class="domain-card" id="license-owner">
-                <h2>License owner info</h2>
+                <h2>פרטי בעל הרישיון</h2>
 
                 <div class="domain-info-list">
                     <div class="domain-info-row">
-                        <span>Company</span>
+                        <span>חברה</span>
                         <strong>{{ $user->name }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Contact email</span>
+                        <span>אימייל ליצירת קשר</span>
                         <strong>{{ $user->contact_email }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Workspace</span>
+                        <span>סביבת עבודה</span>
                         <strong>{{ $site->site_name }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Primary domain</span>
+                        <span>דומיין ראשי</span>
                         <strong>{{ $site->domain }}</strong>
                     </div>
                 </div>

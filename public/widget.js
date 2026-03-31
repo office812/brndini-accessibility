@@ -62,7 +62,7 @@
 
     var buttonLabel = document.createElement('span');
     buttonLabel.className = 'ab-widget-button-label';
-    buttonLabel.textContent = config.widget.label || 'Accessibility';
+    buttonLabel.textContent = config.widget.label || 'נגישות';
 
     var buttonChevron = document.createElement('span');
     buttonChevron.className = 'ab-widget-button-chevron';
@@ -97,8 +97,7 @@
 
     var title = document.createElement('h2');
     title.className = 'ab-widget-title';
-    title.textContent =
-      config.widget.language === 'en' ? 'Accessibility settings' : 'הגדרות נגישות';
+    title.textContent = 'הגדרות נגישות';
 
     panelBrandText.appendChild(eyebrow);
     panelBrandText.appendChild(title);
@@ -108,7 +107,7 @@
     var closeButton = document.createElement('button');
     closeButton.type = 'button';
     closeButton.className = 'ab-widget-close';
-    closeButton.setAttribute('aria-label', config.widget.language === 'en' ? 'Close panel' : 'סגור פאנל');
+    closeButton.setAttribute('aria-label', 'סגור פאנל');
     closeButton.textContent = '×';
     closeButton.addEventListener('click', closePanel);
 
@@ -118,10 +117,7 @@
 
     var description = document.createElement('p');
     description.className = 'ab-widget-description';
-    description.textContent =
-      config.widget.language === 'en'
-        ? 'Display preferences and direct access to the accessibility statement.'
-        : 'העדפות תצוגה וגישה ישירה להצהרת הנגישות.';
+    description.textContent = 'העדפות תצוגה וגישה ישירה להצהרת הנגישות.';
 
     panel.appendChild(description);
 
@@ -130,11 +126,11 @@
 
     var siteName = document.createElement('span');
     siteName.className = 'ab-widget-chip';
-    siteName.textContent = config.siteName || 'Website';
+    siteName.textContent = config.siteName || 'האתר שלך';
 
     var statusChip = document.createElement('span');
     statusChip.className = 'ab-widget-chip ab-widget-chip-muted';
-    statusChip.textContent = config.widget.language === 'en' ? 'Preferences panel' : 'פאנל העדפות';
+    statusChip.textContent = 'פאנל העדפות';
 
     infoStrip.appendChild(siteName);
     infoStrip.appendChild(statusChip);
@@ -146,10 +142,8 @@
     if (config.widget.showFontScale) {
       controls.appendChild(
         createControlRow(
-          config.widget.language === 'en' ? 'Text size' : 'גודל טקסט',
-          config.widget.language === 'en'
-            ? 'Adjust display density without changing site content.'
-            : 'התאמת גודל הטקסט מבלי לשנות את התוכן באתר.',
+          'גודל טקסט',
+          'התאמת גודל הטקסט מבלי לשנות את התוכן באתר.',
           createActionGroup([
             { label: 'A-', onClick: function () { updatePrefs({ fontScale: 'small' }); } },
             { label: 'A', onClick: function () { updatePrefs({ fontScale: 'normal' }); } },
@@ -162,10 +156,8 @@
     if (config.widget.showContrast) {
       controls.appendChild(
         createControlRow(
-          config.widget.language === 'en' ? 'High contrast' : 'ניגודיות גבוהה',
-          config.widget.language === 'en'
-            ? 'Boost contrast for stronger separation between text and background.'
-            : 'חיזוק הניגודיות להפרדה ברורה יותר בין טקסט לרקע.',
+          'ניגודיות גבוהה',
+          'חיזוק הניגודיות להפרדה ברורה יותר בין טקסט לרקע.',
           createToggle('contrast', Boolean(prefs.contrast))
         )
       );
@@ -174,10 +166,8 @@
     if (config.widget.showUnderlineLinks) {
       controls.appendChild(
         createControlRow(
-          config.widget.language === 'en' ? 'Link highlight' : 'הדגשת קישורים',
-          config.widget.language === 'en'
-            ? 'Underline links to make navigation targets easier to scan.'
-            : 'קו תחתי לקישורים כדי להקל על זיהוי נקודות ניווט.',
+          'הדגשת קישורים',
+          'קו תחתי לקישורים כדי להקל על זיהוי נקודות ניווט.',
           createToggle('underlineLinks', Boolean(prefs.underlineLinks))
         )
       );
@@ -186,10 +176,8 @@
     if (config.widget.showReduceMotion) {
       controls.appendChild(
         createControlRow(
-          config.widget.language === 'en' ? 'Reduce motion' : 'הפחתת תנועה',
-          config.widget.language === 'en'
-            ? 'Reduce animated motion and fast transitions on the page.'
-            : 'הפחתת אנימציות ומעברים מהירים לאורך העמוד.',
+          'הפחתת תנועה',
+          'הפחתת אנימציות ומעברים מהירים לאורך העמוד.',
           createToggle('reduceMotion', Boolean(prefs.reduceMotion))
         )
       );
@@ -206,17 +194,13 @@
       statementLink.href = config.statementUrl;
       statementLink.target = '_blank';
       statementLink.rel = 'noopener noreferrer';
-      statementLink.textContent =
-        config.widget.language === 'en' ? 'Accessibility statement' : 'להצהרת הנגישות';
+      statementLink.textContent = 'להצהרת הנגישות';
       footer.appendChild(statementLink);
     }
 
     var note = document.createElement('p');
     note.className = 'ab-widget-note';
-    note.textContent =
-      config.widget.language === 'en'
-        ? 'Preferences support the experience. Full compliance still depends on site code, content, and testing.'
-        : 'העדפות תצוגה תומכות בחוויה. ציות מלא עדיין תלוי בקוד האתר, בתוכן ובבדיקות.';
+    note.textContent = 'העדפות תצוגה תומכות בחוויה. ציות מלא עדיין תלוי בקוד האתר, בתוכן ובבדיקות.';
 
     footer.appendChild(note);
     panel.appendChild(footer);

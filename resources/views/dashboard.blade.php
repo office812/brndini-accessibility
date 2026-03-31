@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php($title = 'Dashboard | A11Y Bridge')
+@php($title = 'לוח ניהול | A11Y Bridge')
 
 @section('content')
     @php($statementConnected = filled($site->statement_url))
@@ -9,7 +9,7 @@
     <section class="licenses-shell">
         <aside class="licenses-sidebar">
             <div class="licenses-sidebar-block">
-                <h2>My Products</h2>
+                <h2>המוצרים שלי</h2>
                 <nav class="licenses-product-nav" aria-label="Products">
                     <a class="is-current" href="{{ route('dashboard') }}">
                         <span class="licenses-product-icon">◉</span>
@@ -23,29 +23,29 @@
             </div>
 
             <div class="licenses-sidebar-block licenses-sidebar-help">
-                <span class="meta-label">Quick status</span>
-                <h3>{{ $statementConnected ? 'Statement connected' : 'Statement missing' }}</h3>
-                <p>{{ $statementConnected ? 'החשבון מוכן עם statement פעיל.' : 'כדאי לחבר statement כדי לסגור את חוויית ההטמעה.' }}</p>
+                <span class="meta-label">סטטוס מהיר</span>
+                <h3>{{ $statementConnected ? 'הצהרה מחוברת' : 'חסרה הצהרה' }}</h3>
+                <p>{{ $statementConnected ? 'החשבון מוכן עם הצהרת נגישות פעילה.' : 'כדאי לחבר הצהרת נגישות כדי לסגור את חוויית ההטמעה.' }}</p>
             </div>
         </aside>
 
         <div class="licenses-main">
             <section class="licenses-welcome">
-                <p class="eyebrow">My licenses</p>
-                <h1>{{ $user->name }}, Welcome to A11Y Bridge</h1>
+                <p class="eyebrow">הרישיונות שלי</p>
+                <h1>{{ $user->name }}, ברוך הבא ל־A11Y Bridge</h1>
             </section>
 
             <section class="licenses-hero-card">
                 <div class="licenses-hero-copy">
-                    <h2>Automatic web accessibility made simple.</h2>
+                    <h2>נגישות אתרים אוטומטית, פשוטה וברורה.</h2>
                     <p>
                         נהל את ה־widget hosted, את ההטמעה ואת מסגרת ה־compliance מתוך מקום אחד,
                         בלי להחליף שוב את קוד הסקריפט באתר.
                     </p>
 
                     <div class="licenses-hero-actions">
-                        <a class="primary-button" href="{{ route('dashboard.install') }}">Start installation</a>
-                        <a class="secondary-button" href="{{ route('dashboard.compliance') }}">More about compliance</a>
+                        <a class="primary-button" href="{{ route('dashboard.install') }}">התחל התקנה</a>
+                        <a class="secondary-button" href="{{ route('dashboard.compliance') }}">למידע על ציות</a>
                     </div>
                 </div>
 
@@ -72,11 +72,11 @@
 
             <section class="licenses-toolbar">
                 <div>
-                    <h2>accessWidget licenses <small>| 1 total</small></h2>
+                    <h2>רישיונות accessWidget <small>| סך הכול 1</small></h2>
                 </div>
                 <div class="licenses-toolbar-actions">
-                    <a class="secondary-button" href="{{ route('dashboard.install') }}">Batch management</a>
-                    <a class="primary-button" href="{{ route('dashboard.install') }}">Add new website</a>
+                    <a class="secondary-button" href="{{ route('dashboard.install') }}">ניהול מרוכז</a>
+                    <a class="primary-button" href="{{ route('dashboard.install') }}">הוסף אתר חדש</a>
                 </div>
             </section>
 
@@ -86,9 +86,9 @@
                         <span>⌕</span>
                         <input type="text" value="{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}" aria-label="Search domain">
                     </label>
-                    <select aria-label="Status filter">
-                        <option>Active</option>
-                        <option>Pending</option>
+                    <select aria-label="סינון לפי סטטוס">
+                        <option>פעיל</option>
+                        <option>ממתין</option>
                     </select>
                 </div>
 
@@ -96,20 +96,20 @@
                     <table class="licenses-table">
                         <thead>
                             <tr>
-                                <th>Domain</th>
-                                <th>End date</th>
-                                <th>Status</th>
-                                <th>Plan</th>
-                                <th>Action</th>
+                                <th>דומיין</th>
+                                <th>תאריך סיום</th>
+                                <th>סטטוס</th>
+                                <th>מסלול</th>
+                                <th>פעולה</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</td>
                                 <td>-</td>
-                                <td><span class="status-pill is-good">Active</span></td>
+                                <td><span class="status-pill is-good">פעיל</span></td>
                                 <td><span class="status-pill is-neutral">{{ $serviceLabel }}</span></td>
-                                <td><a class="licenses-manage-link" href="{{ route('dashboard.account') }}">Manage</a></td>
+                                <td><a class="licenses-manage-link" href="{{ route('dashboard.account') }}">ניהול</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -119,7 +119,7 @@
             <section class="licenses-lower-grid" id="license-management">
                 <article class="portal-content-card portal-content-card-code">
                     <div>
-                        <p class="eyebrow">License management</p>
+                        <p class="eyebrow">ניהול רישיון</p>
                         <h2>קוד הטמעה וה־site key</h2>
                     </div>
                     <p class="panel-intro">החלק הזה מחליף את מסך ה־manage: הוא מחזיק את ה־site key, את הסקריפט ואת סטטוס החיבור.</p>
@@ -144,7 +144,7 @@
 
                 <div class="portal-card-head">
                     <div>
-                        <p class="eyebrow">Workspace settings</p>
+                        <p class="eyebrow">הגדרות סביבת עבודה</p>
                         <h2>פרטי מותג, אתר ו־widget</h2>
                     </div>
                     <button class="primary-button" type="submit">לשמור הגדרות</button>
@@ -152,7 +152,7 @@
                 <p class="panel-intro">מכאן מנהלים את כל מה שהלקוח רואה בפועל: פרטי האתר, מסגור השירות והגדרות ה־widget עצמו.</p>
 
                 <div class="portal-form-section">
-                    <p class="eyebrow">Company</p>
+                    <p class="eyebrow">חברה</p>
                     <label for="company_name">שם החברה</label>
                     <input id="company_name" name="company_name" type="text" value="{{ old('company_name', $user->name) }}" required>
 
@@ -179,7 +179,7 @@
                 <div class="form-divider"></div>
 
                 <div class="portal-form-section">
-                    <p class="eyebrow">Widget controls</p>
+                    <p class="eyebrow">הגדרות ווידג׳ט</p>
                     <label for="widget_position">מיקום</label>
                     <select id="widget_position" name="widget[position]" data-preview="position">
                         <option value="bottom-right" @selected(old('widget.position', $widget['position']) === 'bottom-right')>ימין למטה</option>
@@ -202,7 +202,7 @@
                     <label for="widget_language">שפה</label>
                     <select id="widget_language" name="widget[language]">
                         <option value="he" @selected(old('widget.language', $widget['language']) === 'he')>עברית</option>
-                        <option value="en" @selected(old('widget.language', $widget['language']) === 'en')>English</option>
+                        <option value="en" @selected(old('widget.language', $widget['language']) === 'en')>אנגלית</option>
                     </select>
 
                     <div class="toggle-grid">
@@ -246,8 +246,8 @@
                                 <p>כך נראה ה־widget באתר. השינויים שתשמור כאן נמשכים מהשרת בזמן טעינה.</p>
 
                                 <div class="preview-details">
-                                    <span class="preview-pill">Hosted configuration</span>
-                                    <span class="preview-pill">{{ $widget['language'] === 'en' ? 'English UI' : 'עברית' }}</span>
+                                    <span class="preview-pill">הגדרה מנוהלת</span>
+                                    <span class="preview-pill">{{ $widget['language'] === 'en' ? 'ממשק באנגלית' : 'עברית' }}</span>
                                 </div>
                             </div>
 
@@ -256,7 +256,7 @@
                                 id="widget-preview"
                             >
                                 <div class="preview-shell">
-                                    <strong>Accessibility settings</strong>
+                                    <strong>הגדרות נגישות</strong>
                                     <p>פאנל קומפקטי, שקט וברור עם פעולות חשובות בלבד ובלי עומס מיותר.</p>
                                 </div>
                                 <button
@@ -274,12 +274,12 @@
 
                 <aside class="portal-side-column">
                     <div class="info-card info-card-tight portal-note-card">
-                        <h3>Widget status</h3>
-                        <p>הסקריפט קבוע וה־widget ממשיך להתעדכן אוטומטית מאותו site key.</p>
+                        <h3>סטטוס הווידג׳ט</h3>
+                        <p>הסקריפט קבוע והווידג׳ט ממשיך להתעדכן אוטומטית מאותו site key.</p>
                     </div>
 
                     <div class="info-card info-card-tight portal-note-card">
-                        <h3>Compliance</h3>
+                        <h3>ציות וניהול</h3>
                         <p>
                             ה־widget נותן העדפות תצוגה, גישה להצהרת נגישות ומסגרת ניהול. ציות מלא עדיין
                             תלוי גם בקוד האתר, בתוכן ובבדיקות ידניות.
@@ -287,7 +287,7 @@
                     </div>
 
                     <div class="info-card info-card-tight portal-note-card">
-                        <h3>Operator guidance</h3>
+                        <h3>הנחיית מפעיל</h3>
                         <p>סדר העבודה המומלץ: site details, widget, statement URL, ואז בדיקת live באתר עצמו.</p>
                     </div>
                 </aside>

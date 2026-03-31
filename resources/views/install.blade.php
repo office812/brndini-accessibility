@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@php($title = 'Install and Customize Widget | A11Y Bridge')
+@php($title = 'התקנה והתאמת הווידג׳ט | A11Y Bridge')
 
 @section('content')
     <section class="domain-shell">
@@ -8,11 +8,11 @@
 
         <div class="domain-shell-main">
             <section class="domain-shell-header">
-                <h1>Install and customize widget</h1>
+                <h1>התקנה והתאמת הווידג׳ט</h1>
             </section>
 
             <section class="domain-card">
-                <h2>Install snippet</h2>
+                <h2>קוד הטמעה</h2>
                 <div class="domain-code-block">
                     <code id="install-embed-code">{{ $embedCode }}</code>
                     <button class="copy-button" type="button" data-copy-target="install-embed-code">העתק קוד הטמעה</button>
@@ -21,45 +21,45 @@
             </section>
 
             <section class="domain-card">
-                <h2>Install checklist</h2>
+                <h2>רשימת התקנה</h2>
                 <div class="domain-info-list">
                     <div class="domain-info-row">
-                        <span>Step 1</span>
-                        <strong>Copy the hosted snippet</strong>
+                        <span>שלב 1</span>
+                        <strong>העתק את קוד ההטמעה המנוהל</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Step 2</span>
-                        <strong>Paste into your global site footer</strong>
+                        <span>שלב 2</span>
+                        <strong>הדבק באזור הסקריפטים או לפני תגית הסגירה של body</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Step 3</span>
-                        <strong>Refresh and verify widget position</strong>
+                        <span>שלב 3</span>
+                        <strong>רענן את האתר וודא שמיקום הווידג׳ט תקין</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Step 4</span>
-                        <strong>Change one setting and confirm live sync</strong>
+                        <span>שלב 4</span>
+                        <strong>שנה הגדרה אחת וודא שהסנכרון חי</strong>
                     </div>
                 </div>
             </section>
 
             <section class="domain-card">
-                <h2>Customize widget</h2>
+                <h2>התאמת הווידג׳ט</h2>
                 <div class="domain-info-list">
                     <div class="domain-info-row">
-                        <span>Position</span>
-                        <strong>{{ $widget['position'] === 'bottom-left' ? 'Bottom left' : 'Bottom right' }}</strong>
+                        <span>מיקום</span>
+                        <strong>{{ $widget['position'] === 'bottom-left' ? 'שמאל למטה' : 'ימין למטה' }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Language</span>
-                        <strong>{{ $widget['language'] === 'en' ? 'English' : 'Hebrew' }}</strong>
+                        <span>שפה</span>
+                        <strong>{{ $widget['language'] === 'en' ? 'אנגלית' : 'עברית' }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Button label</span>
+                        <span>טקסט כפתור</span>
                         <strong>{{ $widget['label'] }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Feature controls</span>
-                        <strong>{{ $featureCount }} enabled</strong>
+                        <span>פקדים פעילים</span>
+                        <strong>{{ $featureCount }} פעילים</strong>
                     </div>
                 </div>
             </section>
