@@ -400,7 +400,7 @@ class DashboardController extends Controller
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
 
         if (! SupportTicket::tableAvailable()) {
-            $this->storeRuntimeSupportTicket($request->user(), $site, $validated);
+            SupportTicket::storeRuntime($request->user(), $site, $validated);
 
             return redirect()
                 ->route('dashboard.support', ['site' => $site->id])
@@ -464,7 +464,7 @@ class DashboardController extends Controller
                 RuntimeStore::put('support-ticket-' . $ticket->id, 'admin_response', $response === '' ? null : $response);
             }
         } else {
-            $this->updateRuntimeSupportTicket($ticketKey, $admin, $validated);
+            SupportTicket::updateRuntime($ticketKey, $admin, $validated);
         }
 
         return redirect()
@@ -585,12 +585,12 @@ class DashboardController extends Controller
                 ->latest('last_activity_at')
                 ->latest('created_at')
                 ->get()
-                ->map(fn (SupportTicket $ticket) => $this->presentSupportTicket($ticket))
+                ->map(fn (SupportTicket $ticket) => $ticket->present())
             : collect();
-        $runtimeSupportTickets = $this->runtimeSupportTickets()
+        $runtimeSupportTickets = SupportTicket::runtimeTickets()
             ->filter(fn (array $ticket) => (int) ($ticket['user_id'] ?? 0) === $user->id)
             ->filter(fn (array $ticket) => (int) ($ticket['site_id'] ?? 0) === $site->id || empty($ticket['site_id']))
-            ->map(fn (array $ticket) => $this->presentRuntimeSupportTicket($ticket));
+            ->map(fn (array $ticket) => SupportTicket::presentRuntime($ticket));
         $supportTickets = $dbSupportTickets
             ->concat($runtimeSupportTickets)
             ->sortByDesc('sort_timestamp')
@@ -689,7 +689,7 @@ class DashboardController extends Controller
         }
 
         $users = $usersQuery->get();
-        $runtimeTickets = $this->runtimeSupportTickets();
+        $runtimeTickets = SupportTicket::runtimeTickets();
         $runtimeTicketCounts = $runtimeTickets->countBy(fn (array $ticket) => (int) ($ticket['user_id'] ?? 0));
 
         $users->each(function (User $adminUser) use ($supportAvailable, $runtimeTicketCounts): void {
@@ -717,10 +717,10 @@ class DashboardController extends Controller
                 ->latest('last_activity_at')
                 ->latest('created_at')
                 ->get()
-                ->map(fn (SupportTicket $ticket) => $this->presentSupportTicket($ticket))
+                ->map(fn (SupportTicket $ticket) => $ticket->present())
             : collect();
         $tickets = $tickets
-            ->concat($runtimeTickets->map(fn (array $ticket) => $this->presentRuntimeSupportTicket($ticket)))
+            ->concat($runtimeTickets->map(fn (array $ticket) => SupportTicket::presentRuntime($ticket)))
             ->sortByDesc('sort_timestamp')
             ->values();
 
@@ -1302,109 +1302,4 @@ class DashboardController extends Controller
         ];
     }
 
-    private function runtimeSupportScope(): string
-    {
-        return 'support-center';
-    }
-
-    private function runtimeSupportTickets(): \Illuminate\Support\Collection
-    {
-        $tickets = RuntimeStore::get($this->runtimeSupportScope(), 'tickets', []);
-
-        return collect(is_array($tickets) ? $tickets : []);
-    }
-
-    private function storeRuntimeSupportTicket(User $user, Site $site, array $validated): void
-    {
-        $scope = $this->runtimeSupportScope();
-        $nextId = (int) RuntimeStore::get($scope, 'next_id', 1);
-        $now = Carbon::now();
-
-        $ticket = [
-            'id' => $nextId,
-            'key' => 'runtime-' . $nextId,
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'user_email' => $user->email,
-            'site_id' => $site->id,
-            'site_name' => $site->site_name,
-            'reference_code' => 'SUP-R' . str_pad((string) $nextId, 5, '0', STR_PAD_LEFT),
-            'subject' => trim((string) $validated['subject']),
-            'category' => $validated['category'],
-            'priority' => $validated['priority'],
-            'status' => 'open',
-            'message' => trim((string) $validated['message']),
-            'admin_response' => null,
-            'assigned_user_id' => null,
-            'assigned_user_name' => null,
-            'created_at' => $now->toIso8601String(),
-            'last_activity_at' => $now->toIso8601String(),
-        ];
-
-        RuntimeStore::putMany($scope, [
-            'next_id' => $nextId + 1,
-            'tickets' => $this->runtimeSupportTickets()->push($ticket)->values()->all(),
-        ]);
-    }
-
-    private function updateRuntimeSupportTicket(string $ticketKey, User $admin, array $validated): void
-    {
-        $scope = $this->runtimeSupportScope();
-        $tickets = $this->runtimeSupportTickets()->map(function (array $ticket) use ($ticketKey, $admin, $validated) {
-            if (($ticket['key'] ?? null) !== $ticketKey) {
-                return $ticket;
-            }
-
-            $ticket['status'] = $validated['status'];
-            $ticket['priority'] = $validated['priority'];
-            $ticket['admin_response'] = trim((string) ($validated['admin_response'] ?? '')) ?: null;
-            $ticket['assigned_user_id'] = $admin->id;
-            $ticket['assigned_user_name'] = $admin->name;
-            $ticket['last_activity_at'] = Carbon::now()->toIso8601String();
-
-            return $ticket;
-        })->values()->all();
-
-        RuntimeStore::put($scope, 'tickets', $tickets);
-    }
-
-    private function presentSupportTicket(SupportTicket $ticket): object
-    {
-        $lastActivity = $ticket->last_activity_at ?? $ticket->created_at;
-
-        return (object) [
-            'update_key' => (string) $ticket->id,
-            'reference_code' => $ticket->reference_code,
-            'subject' => $ticket->subject,
-            'status' => $ticket->status,
-            'priority' => $ticket->priority,
-            'category' => $ticket->category,
-            'message' => $ticket->message,
-            'site_name' => $ticket->site?->site_name,
-            'user_email' => $ticket->user?->email,
-            'admin_response' => $ticket->runtimeAdminResponse(),
-            'last_activity_label' => $lastActivity?->diffForHumans() ?? 'עודכן עכשיו',
-            'sort_timestamp' => $lastActivity?->timestamp ?? 0,
-        ];
-    }
-
-    private function presentRuntimeSupportTicket(array $ticket): object
-    {
-        $lastActivityAt = isset($ticket['last_activity_at']) ? Carbon::parse($ticket['last_activity_at']) : null;
-
-        return (object) [
-            'update_key' => (string) ($ticket['key'] ?? ('runtime-' . ($ticket['id'] ?? 'x'))),
-            'reference_code' => $ticket['reference_code'] ?? 'SUP-RUNTIME',
-            'subject' => $ticket['subject'] ?? 'פנייה ללא כותרת',
-            'status' => $ticket['status'] ?? 'open',
-            'priority' => $ticket['priority'] ?? 'normal',
-            'category' => $ticket['category'] ?? 'general',
-            'message' => $ticket['message'] ?? '',
-            'site_name' => $ticket['site_name'] ?? null,
-            'user_email' => $ticket['user_email'] ?? null,
-            'admin_response' => $ticket['admin_response'] ?? null,
-            'last_activity_label' => $lastActivityAt?->diffForHumans() ?? 'עודכן עכשיו',
-            'sort_timestamp' => $lastActivityAt?->timestamp ?? 0,
-        ];
-    }
 }
