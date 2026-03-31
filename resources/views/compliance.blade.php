@@ -111,7 +111,11 @@
                         </label>
                     </div>
 
-                    <button class="primary-button" type="submit">שמור הגדרות alerts</button>
+                    @unless($alertSettingsAvailable)
+                        <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש, לכן אי אפשר לשמור התראות עד שה־migration יושלם.</p>
+                    @endunless
+
+                    <button class="primary-button" type="submit" @disabled(! $alertSettingsAvailable)>שמור התראות</button>
                 </form>
             </section>
 

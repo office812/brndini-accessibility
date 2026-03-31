@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 
 class DashboardController extends Controller
@@ -233,6 +234,12 @@ class DashboardController extends Controller
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
 
+        if (! $this->siteColumnsAvailable(['alert_settings', 'audit_snapshot'])) {
+            return redirect()
+                ->route('dashboard.compliance', ['site' => $site->id])
+                ->withErrors(['alerts' => 'שמירת התראות עדיין לא זמינה בשרת הזה. צריך להשלים את עדכון מסד הנתונים, ואז הכפתור יעבוד רגיל.']);
+        }
+
         $site->update([
             'alert_settings' => SiteSettings::sanitizeAlertSettings([
                 'license' => $request->boolean('alerts.license'),
@@ -337,6 +344,7 @@ class DashboardController extends Controller
             'openAlerts' => $activeAlerts,
             'openAlertsCount' => $activeAlerts->count(),
             'alertSettings' => $alertSettings,
+            'alertSettingsAvailable' => $this->siteColumnsAvailable(['alert_settings', 'audit_snapshot']),
             'licenseExpiresLabel' => $site->license_expires_at ? $site->license_expires_at->timezone(config('app.timezone'))->format('d.m.Y') : 'טרם הופעל',
             'lastAuditedLabel' => $site->last_audited_at ? $site->last_audited_at->diffForHumans() : 'עדיין לא הורץ audit',
             'siteSwitcherOptions' => $sites->map(function (Site $candidate) {
@@ -356,6 +364,17 @@ class DashboardController extends Controller
             'audit_and_fix' => 'ביקורת + תיקונים בטוחים',
             'managed_service' => 'שירות נגישות מנוהל',
         ];
+    }
+
+    private function siteColumnsAvailable(array $columns): bool
+    {
+        foreach ($columns as $column) {
+            if (! Schema::hasColumn('sites', $column)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function widgetPresetLabels(): array
