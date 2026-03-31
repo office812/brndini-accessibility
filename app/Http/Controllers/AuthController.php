@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Carbon;
 
 class AuthController extends Controller
@@ -35,7 +36,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'company_name' => ['required', 'string', 'max:160'],
             'email' => ['required', 'email', 'max:190', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'max:120'],
+            'password' => ['required', 'string', 'min:8', 'max:120', 'confirmed'],
             'site_name' => ['required', 'string', 'max:160'],
             'domain' => ['required', 'string', 'max:190'],
         ]);
@@ -45,32 +46,57 @@ class AuthController extends Controller
         if (! filter_var($domain, FILTER_VALIDATE_URL)) {
             return back()
                 ->withErrors(['domain' => 'צריך להזין דומיין תקין.'])
-                ->withInput($request->except('password'));
+                ->withInput($request->except('password', 'password_confirmation'));
         }
 
         $user = DB::transaction(function () use ($validated, $domain) {
             $isFirstUser = User::query()->count() === 0;
 
-            $user = User::create([
+            $userPayload = [
                 'name' => $validated['company_name'],
                 'email' => strtolower($validated['email']),
-                'contact_email' => strtolower($validated['email']),
-                'is_admin' => $isFirstUser,
                 'password' => Hash::make($validated['password']),
-            ]);
+            ];
 
-            $site = $user->sites()->create([
+            if (Schema::hasColumn('users', 'contact_email')) {
+                $userPayload['contact_email'] = strtolower($validated['email']);
+            }
+
+            if (Schema::hasColumn('users', 'is_admin')) {
+                $userPayload['is_admin'] = $isFirstUser;
+            }
+
+            $user = User::create($userPayload);
+
+            $sitePayload = [
                 'site_name' => $validated['site_name'],
                 'domain' => $domain,
                 'public_key' => SiteSettings::generatePublicKey(),
-                'license_status' => 'active',
-                'billing_settings' => SiteSettings::defaultBilling(true),
-                'audit_snapshot' => SiteSettings::defaultAuditSnapshot(),
-                'alert_settings' => SiteSettings::defaultAlertSettings(),
-                'license_expires_at' => Carbon::now()->addYear(),
                 'service_mode' => 'audit_and_fix',
                 'widget_settings' => SiteSettings::defaultWidget(),
-            ]);
+            ];
+
+            if (Schema::hasColumn('sites', 'license_status')) {
+                $sitePayload['license_status'] = 'active';
+            }
+
+            if (Schema::hasColumn('sites', 'billing_settings')) {
+                $sitePayload['billing_settings'] = SiteSettings::defaultBilling(true);
+            }
+
+            if (Schema::hasColumn('sites', 'audit_snapshot')) {
+                $sitePayload['audit_snapshot'] = SiteSettings::defaultAuditSnapshot();
+            }
+
+            if (Schema::hasColumn('sites', 'alert_settings')) {
+                $sitePayload['alert_settings'] = SiteSettings::defaultAlertSettings();
+            }
+
+            if (Schema::hasColumn('sites', 'license_expires_at')) {
+                $sitePayload['license_expires_at'] = Carbon::now()->addYear();
+            }
+
+            $site = $user->sites()->create($sitePayload);
 
             $user->setRelation('sites', collect([$site]));
 

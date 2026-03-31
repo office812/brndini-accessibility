@@ -270,6 +270,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  document.querySelectorAll('[data-password-toggle]').forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+      var targetId = toggle.getAttribute('data-password-toggle');
+      var input = targetId ? document.getElementById(targetId) : null;
+
+      if (!input) {
+        return;
+      }
+
+      var isPassword = input.getAttribute('type') === 'password';
+      input.setAttribute('type', isPassword ? 'text' : 'password');
+      toggle.classList.toggle('is-active', isPassword);
+      toggle.setAttribute('aria-label', isPassword ? 'הסתר סיסמה' : 'הצג או הסתר סיסמה');
+    });
+  });
+
   var preview = document.getElementById('widget-preview');
   var previewPanel = document.getElementById('widget-preview-panel');
   var previewButton = document.getElementById('widget-preview-button');

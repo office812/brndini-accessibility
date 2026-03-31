@@ -34,7 +34,10 @@
                     <input id="login_email" name="email" type="email" value="{{ old('email') }}" required>
 
                     <label for="login_password">סיסמה</label>
-                    <input id="login_password" name="password" type="password" required>
+                    <div class="password-field">
+                        <input id="login_password" name="password" type="password" required>
+                        <button class="password-toggle" type="button" data-password-toggle="login_password" aria-label="הצג או הסתר סיסמה">👁</button>
+                    </div>
 
                     <button class="primary-button auth-submit" type="submit">להתחבר</button>
                 </form>
@@ -80,7 +83,16 @@
                         <input id="signup_email" name="email" type="email" value="{{ old('email') }}" required>
 
                         <label for="signup_password">סיסמה</label>
-                        <input id="signup_password" name="password" type="password" minlength="8" required>
+                        <div class="password-field">
+                            <input id="signup_password" name="password" type="password" minlength="8" required>
+                            <button class="password-toggle" type="button" data-password-toggle="signup_password" aria-label="הצג או הסתר סיסמה">👁</button>
+                        </div>
+
+                        <label for="signup_password_confirmation">אימות סיסמה</label>
+                        <div class="password-field">
+                            <input id="signup_password_confirmation" name="password_confirmation" type="password" minlength="8" required>
+                            <button class="password-toggle" type="button" data-password-toggle="signup_password_confirmation" aria-label="הצג או הסתר סיסמה">👁</button>
+                        </div>
 
                         <div class="signup-actions-row">
                             <button class="ghost-button" type="button" data-signup-prev>חזרה</button>
@@ -152,6 +164,44 @@
                 const steps = Array.from(form.querySelectorAll('.signup-step'));
                 let current = Number(stepInput?.value || 1);
 
+                function validateStage(stageNumber) {
+                    const stage = form.querySelector('[data-signup-stage="' + stageNumber + '"]');
+
+                    if (!stage) {
+                        return true;
+                    }
+
+                    const fields = Array.from(stage.querySelectorAll('input[required], select[required], textarea[required]'));
+                    let isValid = true;
+
+                    fields.forEach((field) => {
+                        if (!field.reportValidity()) {
+                            isValid = false;
+                        }
+                    });
+
+                    if (!isValid) {
+                        return false;
+                    }
+
+                    if (stageNumber === 3) {
+                        const password = form.querySelector('#signup_password');
+                        const confirmation = form.querySelector('#signup_password_confirmation');
+
+                        if (password && confirmation && password.value !== confirmation.value) {
+                            confirmation.setCustomValidity('הסיסמאות חייבות להיות זהות.');
+                            confirmation.reportValidity();
+                            return false;
+                        }
+
+                        if (confirmation) {
+                            confirmation.setCustomValidity('');
+                        }
+                    }
+
+                    return true;
+                }
+
                 function render() {
                     stages.forEach((stage, index) => {
                         stage.classList.toggle('is-active', index + 1 === current);
@@ -168,6 +218,10 @@
 
                 form.querySelectorAll('[data-signup-next]').forEach((button) => {
                     button.addEventListener('click', function () {
+                        if (!validateStage(current)) {
+                            return;
+                        }
+
                         current = Math.min(current + 1, stages.length);
                         render();
                     });
