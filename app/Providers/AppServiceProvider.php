@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Site;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,10 +23,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(['layouts.app', 'layouts.auth'], function ($view) {
-            $platformSite = Site::query()
-                ->where('license_status', 'active')
-                ->orderByDesc('id')
-                ->first();
+            if (! Schema::hasTable('sites')) {
+                $view->with('platformWidgetSiteKey', null);
+
+                return;
+            }
+
+            $platformSiteQuery = Site::query()->orderByDesc('id');
+
+            if (Schema::hasColumn('sites', 'license_status')) {
+                $platformSiteQuery->where('license_status', 'active');
+            }
+
+            $platformSite = $platformSiteQuery->first();
 
             $view->with('platformWidgetSiteKey', $platformSite?->public_key);
         });
