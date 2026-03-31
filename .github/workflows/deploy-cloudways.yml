@@ -23,16 +23,7 @@ jobs:
           if [ -n "$CW_SSH_PRIVATE_KEY" ] && printf "%s" "$CW_SSH_PRIVATE_KEY" | grep -q "BEGIN OPENSSH PRIVATE KEY"; then
             printf "%s" "$CW_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           elif [ -n "$CW_SSH_PRIVATE_KEY" ]; then
-            python3 - <<'PY'
-import base64
-import os
-from pathlib import Path
-
-raw = os.environ["CW_SSH_PRIVATE_KEY"]
-clean = "".join(raw.split())
-decoded = base64.b64decode(clean)
-Path(os.path.expanduser("~/.ssh/id_ed25519")).write_bytes(decoded)
-PY
+            printf "%s" "$CW_SSH_PRIVATE_KEY" | tr -d '\r\n\t ' | base64 --decode > ~/.ssh/id_ed25519
           fi
           ssh-keyscan -H "$CW_HOST" >> ~/.ssh/known_hosts
           if [ -f ~/.ssh/id_ed25519 ]; then
