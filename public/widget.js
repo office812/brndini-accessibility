@@ -310,6 +310,50 @@
     }
   }
 
+  function getSectionIconSvg(type) {
+    switch (type) {
+      case 'profiles':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a3.2 3.2 0 1 1 0 6.4A3.2 3.2 0 0 1 12 4Zm0 8.6c4.1 0 7.4 2.2 7.4 4.9V20H4.6v-2.5c0-2.7 3.3-4.9 7.4-4.9Z" fill="currentColor"/></svg>';
+      case 'display':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v7A2.5 2.5 0 0 1 17.5 17h-11A2.5 2.5 0 0 1 4 14.5v-7Zm4 11.5h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      case 'focus':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v4m0 6v4M5 12h4m6 0h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
+      default:
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M8 11h8M5 15h14M8 19h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    }
+  }
+
+  function getFeatureIconSvg(type) {
+    switch (type) {
+      case 'contrastMode':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4a8 8 0 1 0 0 16V4Z" fill="currentColor"/><path d="M12 4a8 8 0 0 1 0 16" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+      case 'fontScale':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 18 4.2-12h1.7L16 18m-7.5-3h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      case 'lineSpacing':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8h10M7 12h10M7 16h10M4.5 5.5 3 7l1.5 1.5M19.5 18.5 21 17l-1.5-1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      case 'underlineLinks':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 9.5 8.2 11.3a3 3 0 1 0 4.2 4.2l1.8-1.8M14 14.5l1.8-1.8a3 3 0 1 0-4.2-4.2L9.8 10.3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      case 'highlightTitles':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 6v12M17 6v12M7 12h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      case 'readableFont':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 10.2 6h1.6L16 18m-7.4-3h4.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 8.5h2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+      case 'reduceMotion':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h5l2-4 3 8 2-4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      case 'cursorMode':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 4 9 9-4 1 2 5-2 1-2-5-3 3V4Z" fill="currentColor"/></svg>';
+      case 'hideImages':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7.5A2.5 2.5 0 0 1 7.5 5h9A2.5 2.5 0 0 1 19 7.5v9A2.5 2.5 0 0 1 16.5 19h-9A2.5 2.5 0 0 1 5 16.5v-9Zm3 7 2-2 3 3 2-2 2 2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="m4 4 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+      case 'letterSpacing':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 9.8 6h1.4L15 18m-6-3h3.6M17.5 9 20 12l-2.5 3M3.5 9 1 12l2.5 3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      case 'textAlign':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M8 11h8M5 15h14M8 19h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      case 'readingGuide':
+        return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M7 8h10M7 16h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      default:
+        return getSectionIconSvg('text');
+    }
+  }
+
   function reportWidgetSeen(config) {
     if (!config || !config.siteKey) {
       return;
@@ -336,11 +380,12 @@
     var purchaseUrl = config.purchaseUrl || purchaseFallbackUrl;
     var preset = config.widget.preset || 'classic';
     var position = forcedPosition || config.widget.position || 'bottom-right';
+    var panelLayout = config.widget.panelLayout || 'stacked';
 
     applyPrefs(prefs);
 
     var shell = document.createElement('div');
-    shell.className = 'ab-widget-shell ab-' + position + ' ab-' + config.widget.size + ' ab-preset-' + preset;
+    shell.className = 'ab-widget-shell ab-' + position + ' ab-' + config.widget.size + ' ab-preset-' + preset + ' ab-layout-' + panelLayout;
 
     var button = document.createElement('button');
     button.type = 'button';
@@ -362,6 +407,11 @@
     buttonLabel.className = 'ab-widget-button-label';
     buttonLabel.textContent = config.widget.label || 'נגישות';
 
+    var buttonMeta = document.createElement('span');
+    buttonMeta.className = 'ab-widget-button-meta';
+    buttonMeta.setAttribute('aria-hidden', 'true');
+    buttonMeta.textContent = plan === 'premium' ? 'פרימיום' : 'נגישות';
+
     var buttonChevron = document.createElement('span');
     buttonChevron.className = 'ab-widget-button-chevron';
     buttonChevron.setAttribute('aria-hidden', 'true');
@@ -370,10 +420,11 @@
     button.appendChild(buttonGlow);
     button.appendChild(buttonIcon);
     button.appendChild(buttonLabel);
+    button.appendChild(buttonMeta);
     button.appendChild(buttonChevron);
 
     var panel = document.createElement('section');
-    panel.className = 'ab-widget-panel ab-preset-' + preset;
+    panel.className = 'ab-widget-panel ab-preset-' + preset + ' ab-layout-' + panelLayout;
     panel.setAttribute('aria-hidden', 'true');
 
     var panelHeader = document.createElement('div');
@@ -425,24 +476,33 @@
     panel.appendChild(infoStrip);
 
     var panelBody = document.createElement('div');
-    panelBody.className = 'ab-widget-body';
+    panelBody.className = 'ab-widget-body ab-layout-' + panelLayout;
     panel.appendChild(panelBody);
 
     function refreshPanel() {
       prefs = loadPrefs();
       applyPrefs(prefs);
       panelBody.innerHTML = '';
+      shell.className = 'ab-widget-shell ab-' + position + ' ab-' + config.widget.size + ' ab-preset-' + preset + ' ab-layout-' + panelLayout + (shell.classList.contains('ab-open') ? ' ab-open' : '');
+      panel.className = 'ab-widget-panel ab-preset-' + preset + ' ab-layout-' + panelLayout;
+      panelBody.className = 'ab-widget-body ab-layout-' + panelLayout;
 
-      panelBody.appendChild(createProfileSection(plan, purchaseUrl, prefs));
-      panelBody.appendChild(createFeatureSection('התאמות טקסט ותוכן', 'כלים לקריאה, מרווחים ויישור טקסט.', featureCatalog.filter(function (feature) {
+      panelBody.appendChild(createOverviewCard(config, plan));
+
+      var sectionsWrap = document.createElement('div');
+      sectionsWrap.className = 'ab-widget-sections ab-layout-' + panelLayout;
+
+      sectionsWrap.appendChild(createProfileSection(plan, purchaseUrl, prefs));
+      sectionsWrap.appendChild(createFeatureSection('התאמות טקסט ותוכן', 'כלים לקריאה, מרווחים ויישור טקסט.', featureCatalog.filter(function (feature) {
         return feature.section === 'text';
-      }), plan, purchaseUrl, prefs));
-      panelBody.appendChild(createFeatureSection('התאמות צבעים ותצוגה', 'ניגודיות, בהירות ונראות כללית של האתר.', featureCatalog.filter(function (feature) {
+      }), plan, purchaseUrl, prefs, 'text'));
+      sectionsWrap.appendChild(createFeatureSection('התאמות צבעים ותצוגה', 'ניגודיות, בהירות ונראות כללית של האתר.', featureCatalog.filter(function (feature) {
         return feature.section === 'display';
-      }), plan, purchaseUrl, prefs));
-      panelBody.appendChild(createFeatureSection('ניווט, מיקוד ונוחות', 'הפחתת תנועה, סמן גדול וכלי ריכוז.', featureCatalog.filter(function (feature) {
+      }), plan, purchaseUrl, prefs, 'display'));
+      sectionsWrap.appendChild(createFeatureSection('ניווט, מיקוד ונוחות', 'הפחתת תנועה, סמן גדול וכלי ריכוז.', featureCatalog.filter(function (feature) {
         return feature.section === 'focus';
-      }), plan, purchaseUrl, prefs));
+      }), plan, purchaseUrl, prefs, 'focus'));
+      panelBody.appendChild(sectionsWrap);
 
       var footer = document.createElement('div');
       footer.className = 'ab-widget-footer';
@@ -470,6 +530,34 @@
       note.textContent = 'מסלול חינם פותח כ־70% מהיכולות. פרימיום מוסיף את ההתאמות המתקדמות והפרופילים הייעודיים.';
       footer.appendChild(note);
       panelBody.appendChild(footer);
+    }
+
+    function createOverviewCard(widgetConfig, planName) {
+      var overview = document.createElement('section');
+      overview.className = 'ab-widget-overview';
+
+      [
+        { label: 'מסלול', value: planName === 'premium' ? 'פרימיום' : 'חינם' },
+        { label: 'ציון', value: widgetConfig.audit && widgetConfig.audit.score ? String(widgetConfig.audit.score) : '—' },
+        { label: 'הצהרה', value: widgetConfig.statementUrl ? 'מחוברת' : 'חסרה' }
+      ].forEach(function (fact) {
+        var card = document.createElement('article');
+        card.className = 'ab-widget-overview-card';
+
+        var labelNode = document.createElement('span');
+        labelNode.className = 'ab-widget-overview-label';
+        labelNode.textContent = fact.label;
+
+        var valueNode = document.createElement('strong');
+        valueNode.className = 'ab-widget-overview-value';
+        valueNode.textContent = fact.value;
+
+        card.appendChild(labelNode);
+        card.appendChild(valueNode);
+        overview.appendChild(card);
+      });
+
+      return overview;
     }
 
     button.addEventListener('click', function () {
@@ -514,9 +602,9 @@
 
     function createProfileSection(planName, premiumUrl, currentPrefs) {
       var section = document.createElement('section');
-      section.className = 'ab-widget-section';
+      section.className = 'ab-widget-section is-full';
 
-      section.appendChild(createSectionHead('בחרו פרופיל נגישות', 'הפעלת תצורה מהירה של התאמות מוכנות מראש.'));
+      section.appendChild(createSectionHead('בחרו פרופיל נגישות', 'הפעלת תצורה מהירה של התאמות מוכנות מראש.', 'profiles', String(profiles.length) + ' מצבים'));
 
       var profileGrid = document.createElement('div');
       profileGrid.className = 'ab-widget-grid ab-widget-grid-profiles';
@@ -526,6 +614,10 @@
         var isLocked = isPremium && planName !== 'premium';
         var card = document.createElement('article');
         card.className = 'ab-widget-card ab-widget-profile-card' + (currentPrefs.profile === profile.key ? ' is-active' : '');
+
+        var iconNode = document.createElement('span');
+        iconNode.className = 'ab-widget-card-icon';
+        iconNode.innerHTML = getFeatureIconSvg(profile.key === 'vision' ? 'contrastMode' : profile.key === 'epilepsy' ? 'reduceMotion' : profile.key === 'adhd' ? 'readingGuide' : profile.key === 'cognitive' ? 'letterSpacing' : profile.key === 'dyslexia' ? 'readableFont' : 'fontScale');
 
         var titleNode = document.createElement('strong');
         titleNode.className = 'ab-widget-card-title';
@@ -555,6 +647,7 @@
           card.appendChild(createMiniBadge('פרימיום'));
         }
 
+        card.appendChild(iconNode);
         card.appendChild(titleNode);
         card.appendChild(descNode);
         card.appendChild(actionWrap);
@@ -565,10 +658,10 @@
       return section;
     }
 
-    function createFeatureSection(titleText, descriptionText, features, planName, premiumUrl, currentPrefs) {
+    function createFeatureSection(titleText, descriptionText, features, planName, premiumUrl, currentPrefs, sectionType) {
       var section = document.createElement('section');
       section.className = 'ab-widget-section';
-      section.appendChild(createSectionHead(titleText, descriptionText));
+      section.appendChild(createSectionHead(titleText, descriptionText, sectionType, String(features.length) + ' פקדים'));
 
       var grid = document.createElement('div');
       grid.className = 'ab-widget-grid';
@@ -577,6 +670,10 @@
         var isLocked = feature.plan === 'premium' && planName !== 'premium';
         var card = document.createElement('article');
         card.className = 'ab-widget-card' + (isLocked ? ' is-locked' : '');
+
+        var iconNode = document.createElement('span');
+        iconNode.className = 'ab-widget-card-icon';
+        iconNode.innerHTML = getFeatureIconSvg(feature.key);
 
         var titleNode = document.createElement('strong');
         titleNode.className = 'ab-widget-card-title';
@@ -598,6 +695,7 @@
           actionWrap.appendChild(createChoiceGroup(feature, currentPrefs[feature.key]));
         }
 
+        card.appendChild(iconNode);
         card.appendChild(titleNode);
         card.appendChild(descNode);
         card.appendChild(actionWrap);
@@ -608,9 +706,16 @@
       return section;
     }
 
-    function createSectionHead(titleText, descriptionText) {
+    function createSectionHead(titleText, descriptionText, sectionType, badgeText) {
       var head = document.createElement('div');
       head.className = 'ab-widget-section-head';
+
+      var iconNode = document.createElement('span');
+      iconNode.className = 'ab-widget-section-icon';
+      iconNode.innerHTML = getSectionIconSvg(sectionType || 'text');
+
+      var copyWrap = document.createElement('div');
+      copyWrap.className = 'ab-widget-section-copywrap';
 
       var titleNode = document.createElement('h3');
       titleNode.className = 'ab-widget-section-title';
@@ -620,8 +725,18 @@
       descNode.className = 'ab-widget-section-copy';
       descNode.textContent = descriptionText;
 
-      head.appendChild(titleNode);
-      head.appendChild(descNode);
+      copyWrap.appendChild(titleNode);
+      copyWrap.appendChild(descNode);
+      head.appendChild(iconNode);
+      head.appendChild(copyWrap);
+
+      if (badgeText) {
+        var badgeNode = document.createElement('span');
+        badgeNode.className = 'ab-widget-section-badge';
+        badgeNode.textContent = badgeText;
+        head.appendChild(badgeNode);
+      }
+
       return head;
     }
 
@@ -751,15 +866,18 @@
       .ab-widget-shell.ab-bottom-left{left:20px;right:auto;align-items:flex-start;}
       .ab-widget-button{--ab-widget-color:#1d6dff;position:relative;display:inline-flex;align-items:center;gap:12px;min-height:60px;padding:0 18px 0 14px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:linear-gradient(135deg,var(--ab-widget-color),#081121 92%);color:#fff;font-weight:800;box-shadow:0 18px 44px rgba(15,23,42,.18);cursor:pointer;overflow:hidden;transition:transform var(--ab-motion-base) ease,box-shadow var(--ab-motion-base) ease,filter var(--ab-motion-base) ease;}
       .ab-widget-button:hover{transform:translateY(-1px);box-shadow:0 24px 56px rgba(15,23,42,.22);}
+      .ab-widget-button::after{content:"";position:absolute;inset:-8px;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at center,rgba(96,165,250,.25),transparent 55%);opacity:0;transform:scale(.9);transition:opacity var(--ab-motion-base) ease,transform var(--ab-motion-base) ease;}
+      .ab-widget-button:hover::after,.ab-widget-shell.ab-open .ab-widget-button::after{opacity:1;transform:scale(1);}
       .ab-widget-button-glow{position:absolute;inset:-1px;background:radial-gradient(circle at top right,rgba(255,255,255,.28),transparent 34%);pointer-events:none;}
       .ab-widget-button-icon{position:relative;width:34px;height:34px;display:inline-grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);}
       .ab-widget-button-icon svg{width:18px;height:18px;}
-      .ab-widget-button-label,.ab-widget-button-chevron{position:relative;}
+      .ab-widget-button-label,.ab-widget-button-chevron,.ab-widget-button-meta{position:relative;}
+      .ab-widget-button-meta{font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;}
       .ab-widget-button-chevron{font-size:22px;line-height:1;opacity:.78;transition:transform var(--ab-motion-base) ease;}
       .ab-widget-shell.ab-open .ab-widget-button-chevron{transform:rotate(90deg);}
-      .ab-widget-button.ab-mode-label-only .ab-widget-button-icon{display:none;}
+      .ab-widget-button.ab-mode-label-only .ab-widget-button-icon,.ab-widget-button.ab-mode-label-only .ab-widget-button-meta{display:none;}
       .ab-widget-button.ab-mode-icon-only{min-width:60px;justify-content:center;padding-inline:0;}
-      .ab-widget-button.ab-mode-icon-only .ab-widget-button-label,.ab-widget-button.ab-mode-icon-only .ab-widget-button-chevron{display:none;}
+      .ab-widget-button.ab-mode-icon-only .ab-widget-button-label,.ab-widget-button.ab-mode-icon-only .ab-widget-button-chevron,.ab-widget-button.ab-mode-icon-only .ab-widget-button-meta{display:none;}
       .ab-widget-button.ab-style-soft{background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(237,244,255,.95));color:#13325b;border-color:rgba(29,109,255,.16);}
       .ab-widget-button.ab-style-glass{background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.34));color:#10233f;border-color:rgba(255,255,255,.72);}
       .ab-widget-button.ab-style-midnight{background:linear-gradient(135deg,#081121,#152d57);color:#f8fafc;border-color:rgba(255,255,255,.08);}
@@ -767,11 +885,13 @@
       .ab-widget-button.ab-preset-elegant{background:linear-gradient(135deg,#1f2937,#67553d 88%);}
       .ab-widget-button.ab-preset-bold{background:linear-gradient(135deg,#7c3aed,#ec4899 88%);}
       .ab-widget-button.ab-license-inactive{background:linear-gradient(135deg,#d92d20,#7a0510);}
-      .ab-widget-panel{width:min(430px,calc(100vw - 28px));max-height:min(82vh,760px);overflow:auto;border-radius:var(--ab-radius);background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(244,248,252,.96));color:#0f172a;border:1px solid rgba(255,255,255,.76);box-shadow:0 30px 90px rgba(15,23,42,.16);padding:18px;position:relative;opacity:0;transform:translateY(12px) scale(.985);visibility:hidden;pointer-events:none;backdrop-filter:blur(22px);}
+      .ab-widget-panel{width:min(440px,calc(100vw - 28px));max-height:min(82vh,760px);overflow:auto;border-radius:var(--ab-radius);background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(244,248,252,.96));color:#0f172a;border:1px solid rgba(255,255,255,.76);box-shadow:0 30px 90px rgba(15,23,42,.16);padding:18px;position:relative;opacity:0;transform:translateY(12px) scale(.985);visibility:hidden;pointer-events:none;backdrop-filter:blur(22px);}
       .ab-widget-panel.ab-preset-high-tech{background:linear-gradient(180deg,rgba(245,249,255,.96),rgba(231,239,252,.98));}
       .ab-widget-panel.ab-preset-elegant{background:linear-gradient(180deg,rgba(255,252,247,.96),rgba(245,239,231,.98));}
       .ab-widget-panel.ab-preset-bold{background:linear-gradient(180deg,rgba(253,245,255,.96),rgba(239,230,255,.98));}
       .ab-widget-shell.ab-open .ab-widget-panel{opacity:1;transform:translateY(0) scale(1);visibility:visible;pointer-events:auto;}
+      .ab-widget-panel::-webkit-scrollbar{width:10px;}
+      .ab-widget-panel::-webkit-scrollbar-thumb{background:rgba(15,23,42,.12);border-radius:999px;}
       .ab-widget-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
       .ab-widget-brand{display:flex;align-items:center;gap:12px;}
       .ab-widget-brand-badge{width:42px;height:42px;display:inline-grid;place-items:center;padding:6px;border-radius:16px;background:rgba(255,255,255,.96);box-shadow:0 10px 24px rgba(29,109,255,.14);overflow:hidden;}
@@ -786,15 +906,28 @@
       .ab-widget-chip.is-plan-free{background:rgba(21,128,61,.1);color:#166534;}
       .ab-widget-chip.is-plan-premium{background:rgba(124,58,237,.12);color:#6d28d9;}
       .ab-widget-body{display:grid;gap:18px;margin-top:16px;}
+      .ab-widget-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+      .ab-widget-overview-card{display:grid;gap:4px;padding:13px 14px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
+      .ab-widget-overview-label{font-size:11px;color:#64748b;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+      .ab-widget-overview-value{font-size:15px;font-weight:800;}
+      .ab-widget-sections{display:grid;gap:18px;}
+      .ab-widget-sections.ab-layout-split{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;}
       .ab-widget-section{display:grid;gap:12px;}
-      .ab-widget-section-head{display:grid;gap:4px;}
+      .ab-widget-section.is-full{grid-column:1 / -1;}
+      .ab-widget-section-head{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;}
+      .ab-widget-section-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:14px;background:rgba(29,109,255,.08);color:#0d3ea7;box-shadow:inset 0 1px 0 rgba(255,255,255,.75);}
+      .ab-widget-section-icon svg{width:18px;height:18px;}
+      .ab-widget-section-copywrap{display:grid;gap:4px;}
       .ab-widget-section-title{margin:0;font-size:1rem;font-weight:800;}
       .ab-widget-section-copy{margin:0;color:#64748b;font-size:13px;line-height:1.6;}
+      .ab-widget-section-badge{min-height:30px;padding:0 10px;border-radius:999px;background:rgba(15,23,42,.05);color:#334155;display:inline-flex;align-items:center;font-size:11px;font-weight:800;white-space:nowrap;}
       .ab-widget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
       .ab-widget-grid-profiles{grid-template-columns:1fr;}
       .ab-widget-card{position:relative;display:grid;gap:10px;align-content:start;min-height:156px;padding:16px;border-radius:22px;background:rgba(247,250,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
       .ab-widget-card.is-locked{background:linear-gradient(180deg,rgba(250,252,255,.98),rgba(241,245,252,.98));}
       .ab-widget-profile-card.is-active{border-color:rgba(29,109,255,.2);box-shadow:0 14px 28px rgba(29,109,255,.12);}
+      .ab-widget-card-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(180deg,rgba(29,109,255,.1),rgba(29,109,255,.04));color:#0d3ea7;border:1px solid rgba(29,109,255,.1);}
+      .ab-widget-card-icon svg{width:20px;height:20px;}
       .ab-widget-card-title{font-size:14px;font-weight:800;}
       .ab-widget-card-copy{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
       .ab-widget-card-actions{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;}
@@ -834,7 +967,11 @@
         .ab-widget-shell.ab-bottom-left{left:14px !important;right:auto !important;align-items:flex-start;}
         .ab-widget-button{width:auto;max-width:calc(100vw - 28px);justify-content:flex-start;}
         .ab-widget-panel{width:min(430px,calc(100vw - 28px));}
+        .ab-widget-overview,
+        .ab-widget-sections.ab-layout-split,
         .ab-widget-grid{grid-template-columns:1fr;}
+        .ab-widget-section-head{grid-template-columns:auto 1fr;}
+        .ab-widget-section-badge{grid-column:1 / -1;justify-self:start;}
       }
     `;
 
