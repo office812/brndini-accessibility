@@ -196,15 +196,13 @@
 
     <script src="{{ url('/platform.js') }}" defer></script>
 
-    @guest
-        @if (!empty($platformWidgetSiteKey))
-            <script
-                async
-                src="{{ url('/widget.js') }}"
-                data-a11y-bridge="{{ $platformWidgetSiteKey }}"
-                data-a11y-position="bottom-left"
-            ></script>
-        @endif
-    @endguest
+    @if (!empty($platformWidgetSiteKey))
+        <script
+            async
+            src="{{ url('/widget.js') }}"
+            data-a11y-bridge="{{ $platformWidgetSiteKey }}"
+            data-a11y-position="bottom-left"
+        ></script>
+    @endif
 </body>
 </html>
