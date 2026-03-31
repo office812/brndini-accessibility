@@ -5,43 +5,58 @@
 @section('content')
     <section class="home-hero" id="top">
         <div class="hero-copy hero-copy-wide">
-            <p class="eyebrow">Website accessibility platform</p>
-            <h1>נגישות אתרים ברמת enterprise, עם widget hosted וניהול מרכזי.</h1>
+            <p class="eyebrow">Accessibility platform</p>
+            <h1>פתרון נגישות אתרים שמחבר widget hosted, compliance וניהול שוטף.</h1>
             <p class="hero-text hero-text-lead">
-                A11Y Bridge משלבת widget hosted, דשבורד ניהול, guidance להתקנה, חיבור להצהרת נגישות
-                ומסגור compliance ברור. הקוד נשאר קבוע באתר, והשליטה נשארת אצלך בפלטפורמה.
+                A11Y Bridge נבנתה לעסקים, סוכנויות ואתרי enterprise שרוצים לנהל שכבת נגישות אחת
+                ממקום מרכזי: install קבוע, הגדרות widget דינמיות, statement, governance ו־content.
             </p>
 
             <div class="hero-action-row">
                 <a class="primary-button button-link" href="#signup-form">התחל ניסיון</a>
-                <a class="ghost-button button-link" href="#solutions">ראה פתרונות</a>
+                <a class="ghost-button button-link" href="#platform-flow">איך זה עובד</a>
             </div>
 
             <ul class="hero-proof-list">
                 <li>קוד הטמעה קבוע ועדכון אוטומטי לפי site key</li>
-                <li>workflow ברור ל־WCAG, הצהרת נגישות ו־governance</li>
-                <li>פתרון שמתאים לעסקים, סוכנויות ולקוחות enterprise</li>
+                <li>חיבור מהיר להצהרת נגישות, install center ו־compliance center</li>
+                <li>מוכן למכירה לעסקים, סוכנויות ולקוחות enterprise</li>
             </ul>
         </div>
 
         <aside class="hero-visual">
-            <div class="hero-panel">
-                <span class="eyebrow">A11Y stack</span>
-                <strong>קוד אחד באתר. שלוש שכבות של שליטה.</strong>
-                <p>הטמעה קבועה, הגדרות widget דינמיות, וחיבור ברור למסכי install, compliance ו־account.</p>
+            <div class="hero-panel hero-showcase">
+                <span class="eyebrow">Product snapshot</span>
+                <strong>שליטה ברמת מוצר, לא רק תוסף צף.</strong>
+                <p>מעל ה־widget יושבים dashboard, install flow, compliance framing ו־account layer.</p>
 
-                <div class="hero-stat-grid">
-                    <div class="metric-card">
-                        <strong>Hosted widget</strong>
-                        <span>script אחד עם config שמתעדכן מהפלטפורמה</span>
+                <div class="showcase-window">
+                    <div class="showcase-topbar">
+                        <span></span>
+                        <span></span>
+                        <span></span>
                     </div>
-                    <div class="metric-card">
-                        <strong>Accessibility ops</strong>
-                        <span>הגדרות, הטמעה, statement ו־compliance במקום אחד</span>
-                    </div>
-                    <div class="metric-card">
-                        <strong>Agency ready</strong>
-                        <span>מוכן למכירה, ללקוחות מרובים ול־SEO תוכני</span>
+                    <div class="showcase-grid">
+                        <article class="showcase-card showcase-card-primary">
+                            <span class="showcase-label">accessibility workspace</span>
+                            <strong>Hosted widget</strong>
+                            <p>הגדרות מותג, site key וקוד הטמעה קבוע.</p>
+                        </article>
+                        <article class="showcase-card">
+                            <span class="showcase-label">compliance</span>
+                            <strong>Statement + service mode</strong>
+                            <p>מסר ברור ו־governance defensible.</p>
+                        </article>
+                        <article class="showcase-card">
+                            <span class="showcase-label">installation</span>
+                            <strong>Install once</strong>
+                            <p>copy, paste, verify, and manage remotely.</p>
+                        </article>
+                        <article class="showcase-card">
+                            <span class="showcase-label">content</span>
+                            <strong>SEO articles</strong>
+                            <p>עמודי תוכן לצמיחה אורגנית בקטגוריה.</p>
+                        </article>
                     </div>
                 </div>
             </div>
@@ -50,74 +65,90 @@
 
     <section class="trust-band" aria-label="signals">
         <div class="trust-item">
-            <span class="trust-label">WCAG workflow</span>
-            <strong>Hosted remediation layer</strong>
+            <span class="trust-label">Hosted setup</span>
+            <strong>Install once, manage centrally</strong>
         </div>
         <div class="trust-item">
             <span class="trust-label">Built for agencies</span>
-            <strong>לקוחות, מאמרים, והטמעה בקנה מידה</strong>
+            <strong>לקוחות, מאמרים ופריסה בקנה מידה</strong>
         </div>
         <div class="trust-item">
-            <span class="trust-label">Always on</span>
-            <strong>שינויים מתעדכנים בלי להחליף snippet</strong>
+            <span class="trust-label">Accessibility ops</span>
+            <strong>widget, statement ו־compliance במקום אחד</strong>
         </div>
     </section>
 
-    <section class="section-band" id="solutions">
-        <div class="section-heading">
-            <p class="eyebrow">Solutions</p>
-            <h2>פתרונות נגישות שמותאמים למבנה העסק שלך.</h2>
-            <p class="hero-text">
-                לא רק כפתור באתר. שכבת המוצר נבנית סביב hosted widget, מסכי ניהול, תוכן,
-                ותהליך ברור שמחבר בין UX, compliance ותפעול שוטף.
-            </p>
-        </div>
-
-        <div class="feature-grid">
-            <article class="feature-card">
-                <h3>Automated hosted widget</h3>
-                <p>אותו snippet נשאר באתר, וכל שינוי בצבע, שפה, מיקום ויכולות נמשך אוטומטית מהפלטפורמה.</p>
-            </article>
-            <article class="feature-card">
-                <h3>Expert-facing dashboard</h3>
-                <p>שליטה ב־install, statement, service mode, branding, account framing ותמיכה בלקוחות מתוך אזור אחד.</p>
-            </article>
-            <article class="feature-card">
-                <h3>Content and compliance growth</h3>
-                <p>אזור מאמרים מובנה, מסר משפטי אחראי, ובסיס טוב למכירה אורגנית של פתרונות נגישות.</p>
-            </article>
-        </div>
-    </section>
-
-    <section class="section-band section-band-alt" id="how-it-works">
+    <section class="section-band section-band-alt" id="platform-flow">
         <div class="section-heading">
             <p class="eyebrow">How it works</p>
-            <h2>אתה בוחר את שכבת העבודה. הפלטפורמה עושה את השאר.</h2>
+            <h2>כך A11Y Bridge מפעילה את שכבת הנגישות שלך.</h2>
+            <p class="hero-text">
+                אנחנו לוקחים את האתר ממקטע התקנה יחיד אל שכבת ניהול שוטפת, עם תהליך ברור
+                שמכסה setup, חוויית משתמש, statement, guidance ועדכונים שוטפים.
+            </p>
         </div>
 
         <div class="process-grid">
             <article class="process-card">
                 <span class="process-index">01</span>
-                <h3>פותחים workspace</h3>
-                <p>יוצרים חשבון, מוסיפים אתר ודומיין, ומקבלים site key ציבורי וקוד הטמעה.</p>
+                <h3>Connect</h3>
+                <p>פותחים workspace, מוסיפים אתר ודומיין, ומקבלים site key וקוד הטמעה קבוע.</p>
             </article>
             <article class="process-card">
                 <span class="process-index">02</span>
-                <h3>מפעילים שכבת נגישות</h3>
-                <p>מגדירים widget, מסלול שירות, הצהרת נגישות והעדפות תצוגה ממסך אחד.</p>
+                <h3>Configure</h3>
+                <p>מגדירים widget, statement, service mode, צבע, שפה ופרטי מותג מתוך dashboard אחד.</p>
             </article>
             <article class="process-card">
                 <span class="process-index">03</span>
-                <h3>ממשיכים לנהל מרחוק</h3>
-                <p>השינויים נשמרים מהדשבורד, נמשכים באתר בזמן טעינה, ונשארים קלים לתחזוקה.</p>
+                <h3>Monitor</h3>
+                <p>השינויים נמשכים באתר, הלקוח רואה widget מעודכן, ואתה ממשיך לנהל הכול מהפלטפורמה.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-band" id="solutions">
+        <div class="section-heading">
+            <p class="eyebrow">Core capabilities</p>
+            <h2>Accessibility operations, simplified.</h2>
+            <p class="hero-text">
+                כל שכבה במוצר נועדה לחסוך friction: install קל, widget ברור, governance נכון,
+                ו־SEO/content שמחזק את המכירה והאמון.
+            </p>
+        </div>
+
+        <div class="feature-grid feature-grid-wide">
+            <article class="feature-card">
+                <h3>Hosted widget management</h3>
+                <p>אותו snippet נשאר באתר, וכל שינוי בצבע, שפה, מיקום ויכולות נמשך אוטומטית מהפלטפורמה.</p>
+            </article>
+            <article class="feature-card">
+                <h3>Install center</h3>
+                <p>workflow התקנה ברור עם snippet, verification ו־handoff קל למיישם או לצוות של הלקוח.</p>
+            </article>
+            <article class="feature-card">
+                <h3>Compliance center</h3>
+                <p>statement, service mode ו־platform messaging כדי למסגר נכון מה הפלטפורמה עושה ומה לא.</p>
+            </article>
+            <article class="feature-card">
+                <h3>Account & billing framing</h3>
+                <p>אזור חשבון שמרגיש כמו מוצר SaaS אמיתי, עם plan framing, support ו־next actions.</p>
+            </article>
+            <article class="feature-card">
+                <h3>Agency-ready publishing</h3>
+                <p>אזור מאמרים עם יצירת תוכן מתוך משתמש מנהל, לחיזוק SEO והסבר שוק מתמשך.</p>
+            </article>
+            <article class="feature-card">
+                <h3>Brand-consistent experience</h3>
+                <p>ה־widget והפלטפורמה נראים כמו אותו מוצר, עם אותה שפה ויזואלית והיררכיה ברורה.</p>
             </article>
         </div>
     </section>
 
     <section class="section-band">
         <div class="section-heading">
-            <p class="eyebrow">More than compliance</p>
-            <h2>נגישות טובה היא גם תפעול טוב יותר, גם מכירה טובה יותר.</h2>
+            <p class="eyebrow">Why this matters</p>
+            <h2>לא רק compliance. גם תפעול טוב יותר, גם מסר שיווקי חזק יותר.</h2>
             <p class="hero-text">
                 כשבונים שכבת נגישות כמו מוצר ולא כמו patch, מקבלים חוויה יותר חזקה ללקוח,
                 מסר מקצועי יותר בשוק, ובסיס יציב להתרחבות.
@@ -136,6 +167,72 @@
             <article class="feature-card">
                 <h3>Grow the business</h3>
                 <p>עמוד בית, מסכי מוצר, SEO תוכני ו־dashboard שנראים כמו פתרון SaaS בוגר יותר.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-band section-band-dark">
+        <div class="section-heading section-heading-light">
+            <p class="eyebrow">Built to support compliance</p>
+            <h2>הפלטפורמה נבנית סביב מסר defensible ו־WCAG workflow ברור.</h2>
+            <p class="hero-text">
+                במקום להבטיח "ציות בלחיצה", המערכת שלך נראית כמו פתרון אחראי: hosted widget, statement,
+                install guidance, governance ו־service framing.
+            </p>
+        </div>
+
+        <div class="compliance-badges">
+            <span class="compliance-badge">WCAG workflow</span>
+            <span class="compliance-badge">Accessibility statement</span>
+            <span class="compliance-badge">Install verification</span>
+            <span class="compliance-badge">Governance messaging</span>
+            <span class="compliance-badge">Agency delivery</span>
+        </div>
+    </section>
+
+    <section class="section-band">
+        <div class="section-heading">
+            <p class="eyebrow">Social proof</p>
+            <h2>נבנה כדי להרגיש כמו פתרון SaaS שחברות רוצות לקנות.</h2>
+        </div>
+
+        <div class="testimonial-grid">
+            <article class="testimonial-card">
+                <p>“הטמעה אחת, שליטה מלאה, ופחות friction בכל שינוי קטן שאנחנו עושים ללקוחות.”</p>
+                <strong>בעל סוכנות דיגיטל</strong>
+            </article>
+            <article class="testimonial-card">
+                <p>“הערך האמיתי הוא לא רק ה־widget, אלא ה־dashboard, ה־statement והמסגור המקצועי מסביב.”</p>
+                <strong>יועץ נגישות</strong>
+            </article>
+            <article class="testimonial-card">
+                <p>“הפלטפורמה נראית כמו מוצר accessibility גדול, וזה משנה לגמרי איך הלקוח תופס את ההצעה.”</p>
+                <strong>Partner / Reseller</strong>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-band section-band-alt">
+        <div class="section-heading">
+            <p class="eyebrow">Plans</p>
+            <h2>חבילות שמסבירות ללקוח איפה הוא מתחיל ואיך הוא גדל.</h2>
+        </div>
+
+        <div class="pricing-grid">
+            <article class="plan-card">
+                <span class="status-pill is-neutral">Starter</span>
+                <strong>לעסקים קטנים</strong>
+                <p>widget hosted, install center, statement link ו־dashboard בסיסי.</p>
+            </article>
+            <article class="plan-card plan-card-current">
+                <span class="status-pill is-good">Recommended</span>
+                <strong>Growth</strong>
+                <p>יותר governance, יותר תוכן, יותר framing ללקוחות ולסוכנויות.</p>
+            </article>
+            <article class="plan-card">
+                <span class="status-pill is-neutral">Enterprise</span>
+                <strong>מותאם לארגונים</strong>
+                <p>delivery רחב יותר, מסכי account ו־compliance חזקים יותר ותפעול בקנה מידה.</p>
             </article>
         </div>
     </section>

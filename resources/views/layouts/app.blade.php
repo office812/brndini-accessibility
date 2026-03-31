@@ -40,10 +40,11 @@
                         <button class="nav-button" type="submit">התנתקות</button>
                     </form>
                 @else
-                    <a href="#why-a11y-bridge">למה A11Y Bridge</a>
-                    <a href="#how-it-works">איך זה עובד</a>
-                    <a href="#articles">מאמרים</a>
-                    <a class="nav-button nav-button-primary" href="#signup-form">פתח חשבון</a>
+                    <a href="#solutions">פתרונות</a>
+                    <a href="#platform-flow">איך זה עובד</a>
+                    <a href="#articles">משאבים</a>
+                    <a href="#signup-form">Login</a>
+                    <a class="nav-button nav-button-primary" href="#signup-form">Start free trial</a>
                 @endauth
             </nav>
         </header>
