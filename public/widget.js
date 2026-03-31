@@ -14,6 +14,7 @@
   }
 
   var siteKey = currentScript.getAttribute('data-a11y-bridge');
+  var forcedPosition = currentScript.getAttribute('data-a11y-position');
   if (!siteKey) {
     return;
   }
@@ -79,9 +80,10 @@
     applyPrefs(prefs);
     var preset = config.widget.preset || 'classic';
     var panelLayout = config.widget.panelLayout || 'stacked';
+    var position = forcedPosition || config.widget.position || 'bottom-right';
 
     var shell = document.createElement('div');
-    shell.className = 'ab-widget-shell ab-' + config.widget.position + ' ab-' + config.widget.size + ' ab-preset-' + preset;
+    shell.className = 'ab-widget-shell ab-' + position + ' ab-' + config.widget.size + ' ab-preset-' + preset;
 
     var button = document.createElement('button');
     button.type = 'button';
