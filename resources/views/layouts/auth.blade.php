@@ -21,6 +21,21 @@
         <span class="top-progress-bar"></span>
     </div>
     <main class="auth-shell">
+        @if (session('status'))
+            <div class="flash flash-success" role="status">{{ session('status') }}</div>
+        @endif
+
+        @if ($errors->any())
+            <div class="flash flash-error" role="alert">
+                <strong>יש כמה שדות שצריך לתקן:</strong>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         @yield('content')
     </main>
 

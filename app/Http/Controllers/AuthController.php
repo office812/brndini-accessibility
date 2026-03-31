@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Carbon;
+use Throwable;
 
 class AuthController extends Controller
 {
@@ -49,60 +50,57 @@ class AuthController extends Controller
                 ->withInput($request->except('password', 'password_confirmation'));
         }
 
-        $user = DB::transaction(function () use ($validated, $domain) {
-            $isFirstUser = User::query()->count() === 0;
-            $isSuperAdmin = strtolower($validated['email']) === strtolower((string) config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il'));
+        try {
+            $user = DB::transaction(function () use ($validated, $domain) {
+                $isFirstUser = User::query()->count() === 0;
+                $isSuperAdmin = strtolower($validated['email']) === strtolower((string) config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il'));
 
-            $userPayload = [
-                'name' => $validated['company_name'],
-                'email' => strtolower($validated['email']),
-                'password' => Hash::make($validated['password']),
-            ];
+                $userPayload = [
+                    'name' => $validated['company_name'],
+                    'email' => strtolower($validated['email']),
+                    'password' => Hash::make($validated['password']),
+                ];
 
-            if (Schema::hasColumn('users', 'contact_email')) {
-                $userPayload['contact_email'] = strtolower($validated['email']);
-            }
+                if (Schema::hasColumn('users', 'contact_email')) {
+                    $userPayload['contact_email'] = strtolower($validated['email']);
+                }
 
-            if (Schema::hasColumn('users', 'is_admin')) {
-                $userPayload['is_admin'] = $isFirstUser || $isSuperAdmin;
-            }
+                if (Schema::hasColumn('users', 'is_admin')) {
+                    $userPayload['is_admin'] = $isFirstUser || $isSuperAdmin;
+                }
 
-            $user = User::create($userPayload);
+                $user = User::create($userPayload);
 
-            $sitePayload = [
-                'site_name' => $validated['site_name'],
-                'domain' => $domain,
-                'public_key' => SiteSettings::generatePublicKey(),
-                'service_mode' => 'audit_and_fix',
-                'widget_settings' => SiteSettings::defaultWidget(),
-            ];
+                $sitePayload = collect([
+                    'site_name' => $validated['site_name'],
+                    'domain' => $domain,
+                    'public_key' => SiteSettings::generatePublicKey(),
+                    'service_mode' => 'audit_and_fix',
+                    'widget_settings' => SiteSettings::defaultWidget(),
+                    'license_status' => 'active',
+                    'billing_settings' => SiteSettings::defaultBilling(true),
+                    'audit_snapshot' => SiteSettings::defaultAuditSnapshot(),
+                    'alert_settings' => SiteSettings::defaultAlertSettings(),
+                    'license_expires_at' => Carbon::now()->addYear(),
+                ])->filter(function ($_value, string $column) {
+                    return Schema::hasColumn('sites', $column);
+                })->all();
 
-            if (Schema::hasColumn('sites', 'license_status')) {
-                $sitePayload['license_status'] = 'active';
-            }
+                $site = $user->sites()->create($sitePayload);
 
-            if (Schema::hasColumn('sites', 'billing_settings')) {
-                $sitePayload['billing_settings'] = SiteSettings::defaultBilling(true);
-            }
+                $user->setRelation('sites', collect([$site]));
 
-            if (Schema::hasColumn('sites', 'audit_snapshot')) {
-                $sitePayload['audit_snapshot'] = SiteSettings::defaultAuditSnapshot();
-            }
+                return $user;
+            });
+        } catch (Throwable $exception) {
+            report($exception);
 
-            if (Schema::hasColumn('sites', 'alert_settings')) {
-                $sitePayload['alert_settings'] = SiteSettings::defaultAlertSettings();
-            }
-
-            if (Schema::hasColumn('sites', 'license_expires_at')) {
-                $sitePayload['license_expires_at'] = Carbon::now()->addYear();
-            }
-
-            $site = $user->sites()->create($sitePayload);
-
-            $user->setRelation('sites', collect([$site]));
-
-            return $user;
-        });
+            return back()
+                ->withErrors([
+                    'register' => 'לא הצלחנו ליצור את החשבון כרגע. בדוק שהשדות תקינים ונסה שוב בעוד רגע.',
+                ])
+                ->withInput($request->except('password', 'password_confirmation'));
+        }
 
         Auth::login($user);
         $request->session()->regenerate();
