@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@php($title = 'מרכז סופר־אדמין | A11Y Bridge')
-
 @section('content')
     @php
         $adminUsers = $adminUsers ?? collect();
