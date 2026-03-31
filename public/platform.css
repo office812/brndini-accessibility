@@ -2210,6 +2210,10 @@ body.page-is-ready .auth-shell {
     gap: 20px;
 }
 
+.domain-inline-tab-nav {
+    margin-bottom: 6px;
+}
+
 .licenses-lower-grid-single {
     grid-template-columns: minmax(0, 1fr);
 }

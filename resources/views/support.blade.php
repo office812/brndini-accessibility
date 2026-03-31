@@ -26,142 +26,167 @@
                 </div>
             </section>
 
-            <section class="support-grid">
-                <section class="domain-card support-form-card">
-                    <div class="domain-card-head">
-                        <div>
-                            <h2>פתח פנייה חדשה</h2>
-                            <p class="panel-intro">ככל שתתאר את הבעיה בצורה מדויקת יותר, נוכל לקשר אותה מהר יותר להתקנה, לרישיון או להגדרות של הווידג׳ט.</p>
-                        </div>
+            <section class="dashboard-workspace dashboard-workspace-inline domain-tab-workspace" data-dashboard-tabs>
+                <div class="dashboard-tab-content">
+                    <div class="dashboard-tab-nav domain-inline-tab-nav" aria-label="לשוניות מרכז התמיכה">
+                        <button class="dashboard-tab-button is-active" type="button" data-dashboard-tab-button="new-ticket">פנייה חדשה</button>
+                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="tickets">הפניות שלי</button>
+                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="guide">מה לצרף</button>
                     </div>
 
-                    @if (! $supportAvailable)
-                        <div class="support-empty-state">
-                            <strong>מרכז התמיכה עדיין לא פעיל בשרת</strong>
-                            <p>כדי שפתיחת טיקטים תשמור נתונים באמת, צריך להשלים את עדכון מסד הנתונים של הטבלה החדשה.</p>
-                        </div>
-                    @else
-                        <form class="stack-form" method="POST" action="{{ route('dashboard.support.store', ['site' => $site->id]) }}">
-                            @csrf
-                            <input type="hidden" name="site_id" value="{{ old('site_id', $site->id) }}">
-
-                            <label for="support_subject">נושא הפנייה</label>
-                            <input id="support_subject" name="subject" type="text" value="{{ old('subject') }}" placeholder="למשל: הווידג׳ט לא נטען באתר במובייל">
-
-                            <div class="support-form-row">
-                                <div>
-                                    <label for="support_category">סוג הפנייה</label>
-                                    <select id="support_category" name="category">
-                                        @foreach ($supportCategories as $categoryKey => $categoryLabel)
-                                            <option value="{{ $categoryKey }}" @selected(old('category') === $categoryKey)>{{ $categoryLabel }}</option>
-                                        @endforeach
-                                    </select>
+                    <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="new-ticket">
+                        <section class="support-grid">
+                            <section class="domain-card support-form-card">
+                                <div class="domain-card-head">
+                                    <div>
+                                        <h2>פתח פנייה חדשה</h2>
+                                        <p class="panel-intro">ככל שתתאר את הבעיה בצורה מדויקת יותר, נוכל לקשר אותה מהר יותר להתקנה, לרישיון או להגדרות של הווידג׳ט.</p>
+                                    </div>
                                 </div>
 
+                                @if (! $supportAvailable)
+                                    <div class="support-empty-state">
+                                        <strong>מרכז התמיכה עדיין לא פעיל בשרת</strong>
+                                        <p>כדי שפתיחת טיקטים תשמור נתונים באמת, צריך להשלים את עדכון מסד הנתונים של הטבלה החדשה.</p>
+                                    </div>
+                                @else
+                                    <form class="stack-form" method="POST" action="{{ route('dashboard.support.store', ['site' => $site->id]) }}">
+                                        @csrf
+                                        <input type="hidden" name="site_id" value="{{ old('site_id', $site->id) }}">
+
+                                        <label for="support_subject">נושא הפנייה</label>
+                                        <input id="support_subject" name="subject" type="text" value="{{ old('subject') }}" placeholder="למשל: הווידג׳ט לא נטען באתר במובייל">
+
+                                        <div class="support-form-row">
+                                            <div>
+                                                <label for="support_category">סוג הפנייה</label>
+                                                <select id="support_category" name="category">
+                                                    @foreach ($supportCategories as $categoryKey => $categoryLabel)
+                                                        <option value="{{ $categoryKey }}" @selected(old('category') === $categoryKey)>{{ $categoryLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label for="support_priority">עדיפות</label>
+                                                <select id="support_priority" name="priority">
+                                                    @foreach ($supportPriorityLabels as $priorityKey => $priorityLabel)
+                                                        <option value="{{ $priorityKey }}" @selected(old('priority', 'normal') === $priorityKey)>{{ $priorityLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <label for="support_message">תיאור מלא</label>
+                                        <textarea id="support_message" name="message" rows="7" placeholder="מה בדיוק קרה, באיזה דף, מה ציפית לראות, ומה הופיע בפועל?">{{ old('message') }}</textarea>
+
+                                        <div class="support-form-actions">
+                                            <button class="primary-button" type="submit">פתח פנייה</button>
+                                            <span class="meta-note">הפנייה תישמר על האתר {{ $domainLabel }} כדי שיהיה אפשר לעקוב אחריה בצורה מדויקת.</span>
+                                        </div>
+                                    </form>
+                                @endif
+                            </section>
+
+                            <aside class="support-side-stack">
+                                <section class="domain-card">
+                                    <h2>מצב התמיכה</h2>
+                                    <div class="domain-info-list">
+                                        <div class="domain-info-row">
+                                            <span>פניות פתוחות</span>
+                                            <strong>{{ $supportSummary['open'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>פניות שנסגרו</span>
+                                            <strong>{{ $supportSummary['resolved'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>פעילות אחרונה</span>
+                                            <strong>{{ $supportSummary['lastActivity'] }}</strong>
+                                        </div>
+                                    </div>
+                                </section>
+                            </aside>
+                        </section>
+                    </div>
+
+                    <div class="dashboard-tab-panel" data-dashboard-tab-panel="tickets">
+                        <section class="domain-card">
+                            <div class="domain-card-head">
                                 <div>
-                                    <label for="support_priority">עדיפות</label>
-                                    <select id="support_priority" name="priority">
-                                        @foreach ($supportPriorityLabels as $priorityKey => $priorityLabel)
-                                            <option value="{{ $priorityKey }}" @selected(old('priority', 'normal') === $priorityKey)>{{ $priorityLabel }}</option>
-                                        @endforeach
-                                    </select>
+                                    <h2>הפניות של האתר הזה</h2>
+                                    <p class="panel-intro">רשימת כל הטיקטים שנפתחו עבור {{ $domainLabel }}. אם תעבור לאתר אחר דרך הסוויצ׳ר, תראה את הפניות של אותו אתר.</p>
                                 </div>
                             </div>
 
-                            <label for="support_message">תיאור מלא</label>
-                            <textarea id="support_message" name="message" rows="7" placeholder="מה בדיוק קרה, באיזה דף, מה ציפית לראות, ומה הופיע בפועל?">{{ old('message') }}</textarea>
+                            @if ($supportTickets->isEmpty())
+                                <div class="support-empty-state">
+                                    <strong>עדיין אין פניות פעילות</strong>
+                                    <p>ברגע שתפתח פנייה ראשונה, היא תופיע כאן עם סטטוס, עדיפות, ומספר טיקט מסודר.</p>
+                                </div>
+                            @else
+                                <div class="support-ticket-list">
+                                    @foreach ($supportTickets as $ticket)
+                                        <article class="support-ticket-card">
+                                            <div class="support-ticket-head">
+                                                <div>
+                                                    <p class="support-ticket-code">{{ $ticket->reference_code }}</p>
+                                                    <h3>{{ $ticket->subject }}</h3>
+                                                </div>
 
-                            <div class="support-form-actions">
-                                <button class="primary-button" type="submit">פתח פנייה</button>
-                                <span class="meta-note">הפנייה תישמר על האתר {{ $domainLabel }} כדי שיהיה אפשר לעקוב אחריה בצורה מדויקת.</span>
-                            </div>
-                        </form>
-                    @endif
-                </section>
+                                                <div class="support-ticket-pills">
+                                                    <span class="status-pill {{ in_array($ticket->status, ['resolved', 'answered'], true) ? 'is-good' : 'is-neutral' }}">
+                                                        {{ $supportStatusLabels[$ticket->status] ?? $ticket->status }}
+                                                    </span>
+                                                    <span class="status-pill {{ in_array($ticket->priority, ['high', 'urgent'], true) ? 'is-warn' : 'is-neutral' }}">
+                                                        {{ $supportPriorityLabels[$ticket->priority] ?? $ticket->priority }}
+                                                    </span>
+                                                </div>
+                                            </div>
 
-                <aside class="support-side-stack">
-                    <section class="domain-card">
-                        <h2>מה חשוב לצרף</h2>
-                        <div class="domain-info-list">
-                            <div class="domain-info-row">
-                                <span>דף</span>
-                                <strong>URL מדויק שבו רואים את הבעיה</strong>
-                            </div>
-                            <div class="domain-info-row">
-                                <span>מכשיר</span>
-                                <strong>דסקטופ, מובייל, דפדפן או מערכת</strong>
-                            </div>
-                            <div class="domain-info-row">
-                                <span>הקשר</span>
-                                <strong>רישיון, הטמעה, עיצוב widget או בדיקה</strong>
-                            </div>
-                        </div>
-                    </section>
+                                            <p class="support-ticket-meta">
+                                                {{ $supportCategories[$ticket->category] ?? $ticket->category }} ·
+                                                {{ $ticket->last_activity_at?->diffForHumans() ?? $ticket->created_at->diffForHumans() }} ·
+                                                {{ $ticket->site?->site_name ?? $site->site_name }}
+                                            </p>
 
-                    <section class="domain-card">
-                        <h2>מצב התמיכה</h2>
-                        <div class="domain-info-list">
-                            <div class="domain-info-row">
-                                <span>פניות פתוחות</span>
-                                <strong>{{ $supportSummary['open'] }}</strong>
-                            </div>
-                            <div class="domain-info-row">
-                                <span>פניות שנסגרו</span>
-                                <strong>{{ $supportSummary['resolved'] }}</strong>
-                            </div>
-                            <div class="domain-info-row">
-                                <span>פעילות אחרונה</span>
-                                <strong>{{ $supportSummary['lastActivity'] }}</strong>
-                            </div>
-                        </div>
-                    </section>
-                </aside>
-            </section>
+                                            <p class="support-ticket-message">{{ $ticket->message }}</p>
+                                        </article>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </section>
+                    </div>
 
-            <section class="domain-card">
-                <div class="domain-card-head">
-                    <div>
-                        <h2>הפניות של האתר הזה</h2>
-                        <p class="panel-intro">רשימת כל הטיקטים שנפתחו עבור {{ $domainLabel }}. אם תעבור לאתר אחר דרך הסוויצ׳ר, תראה את הפניות של אותו אתר.</p>
+                    <div class="dashboard-tab-panel" data-dashboard-tab-panel="guide">
+                        <section class="support-grid">
+                            <section class="domain-card">
+                                <h2>מה חשוב לצרף</h2>
+                                <div class="domain-info-list">
+                                    <div class="domain-info-row">
+                                        <span>דף</span>
+                                        <strong>URL מדויק שבו רואים את הבעיה</strong>
+                                    </div>
+                                    <div class="domain-info-row">
+                                        <span>מכשיר</span>
+                                        <strong>דסקטופ, מובייל, דפדפן או מערכת</strong>
+                                    </div>
+                                    <div class="domain-info-row">
+                                        <span>הקשר</span>
+                                        <strong>רישיון, הטמעה, עיצוב widget או בדיקה</strong>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <aside class="support-side-stack">
+                                <section class="domain-card">
+                                    <h2>טיפ לפתיחה מהירה</h2>
+                                    <p class="panel-intro">צילום מסך, כתובת מדויקת ותיאור קצר של מה ציפית לראות יאפשרו לנו לקשר את הפנייה להתקנה או להגדרה הרלוונטית הרבה יותר מהר.</p>
+                                </section>
+                            </aside>
+                        </section>
                     </div>
                 </div>
-
-                @if ($supportTickets->isEmpty())
-                    <div class="support-empty-state">
-                        <strong>עדיין אין פניות פעילות</strong>
-                        <p>ברגע שתפתח פנייה ראשונה, היא תופיע כאן עם סטטוס, עדיפות, ומספר טיקט מסודר.</p>
-                    </div>
-                @else
-                    <div class="support-ticket-list">
-                        @foreach ($supportTickets as $ticket)
-                            <article class="support-ticket-card">
-                                <div class="support-ticket-head">
-                                    <div>
-                                        <p class="support-ticket-code">{{ $ticket->reference_code }}</p>
-                                        <h3>{{ $ticket->subject }}</h3>
-                                    </div>
-
-                                    <div class="support-ticket-pills">
-                                        <span class="status-pill {{ in_array($ticket->status, ['resolved', 'answered'], true) ? 'is-good' : 'is-neutral' }}">
-                                            {{ $supportStatusLabels[$ticket->status] ?? $ticket->status }}
-                                        </span>
-                                        <span class="status-pill {{ in_array($ticket->priority, ['high', 'urgent'], true) ? 'is-warn' : 'is-neutral' }}">
-                                            {{ $supportPriorityLabels[$ticket->priority] ?? $ticket->priority }}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <p class="support-ticket-meta">
-                                    {{ $supportCategories[$ticket->category] ?? $ticket->category }} ·
-                                    {{ $ticket->last_activity_at?->diffForHumans() ?? $ticket->created_at->diffForHumans() }} ·
-                                    {{ $ticket->site?->site_name ?? $site->site_name }}
-                                </p>
-
-                                <p class="support-ticket-message">{{ $ticket->message }}</p>
-                            </article>
-                        @endforeach
-                    </div>
-                @endif
             </section>
         </div>
     </section>
