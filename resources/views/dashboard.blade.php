@@ -144,15 +144,15 @@
                                 @php($licenseBilling = $licenseSite->billingConfig())
                                 @php($licenseAudit = $licenseSite->auditConfig())
                                 <tr>
-                                    <td>{{ parse_url($licenseSite->domain, PHP_URL_HOST) ?: $licenseSite->domain }}</td>
-                                    <td>
+                                    <td data-label="דומיין">{{ parse_url($licenseSite->domain, PHP_URL_HOST) ?: $licenseSite->domain }}</td>
+                                    <td data-label="רישיון">
                                         <span class="status-pill {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'is-good' : 'is-warn' }}">
                                             {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'פעיל' : 'לא פעיל' }}
                                         </span>
                                     </td>
-                                    <td><span class="status-pill is-neutral">{{ $billingPlans[$licenseBilling['plan']]['label'] ?? $licenseBilling['plan'] }}</span></td>
-                                    <td>{{ $licenseAudit['score'] ?? 0 }}</td>
-                                    <td class="table-actions-cell">
+                                    <td data-label="מסלול"><span class="status-pill is-neutral">{{ $billingPlans[$licenseBilling['plan']]['label'] ?? $licenseBilling['plan'] }}</span></td>
+                                    <td data-label="ציון">{{ $licenseAudit['score'] ?? 0 }}</td>
+                                    <td class="table-actions-cell" data-label="פעולה">
                                         <a class="licenses-manage-link" href="{{ route('dashboard.account', ['site' => $licenseSite->id]) }}">ניהול</a>
                                         @if (($licenseSite->license_status ?? 'active') !== 'active')
                                             <form method="POST" action="{{ route('dashboard.account.activate', ['site' => $licenseSite->id]) }}">

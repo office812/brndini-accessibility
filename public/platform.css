@@ -3338,6 +3338,10 @@ code {
         padding-top: 12px;
     }
 
+    .page-shell-app {
+        width: min(100% - 20px, 1240px);
+    }
+
     .site-header {
         top: 8px;
         padding: 14px;
@@ -3349,6 +3353,7 @@ code {
         position: static;
         background: transparent;
         backdrop-filter: none;
+        margin-bottom: 18px;
     }
 
     .app-header-menu,
@@ -3431,6 +3436,132 @@ code {
         grid-template-columns: 1fr;
         gap: 6px;
         padding: 14px 0;
+    }
+
+    .licenses-sidebar,
+    .licenses-main {
+        gap: 16px;
+    }
+
+    .licenses-sidebar-block,
+    .licenses-sidebar-help,
+    .licenses-table-card,
+    .portal-content-card,
+    .portal-form-card,
+    .portal-preview-card,
+    .portal-note-card,
+    .domain-card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .licenses-welcome h1,
+    .licenses-hero-copy h2,
+    .licenses-toolbar h2,
+    .portal-card-head h2 {
+        max-width: 100%;
+        word-break: break-word;
+    }
+
+    .licenses-welcome h1 {
+        font-size: clamp(1.75rem, 8vw, 2.4rem);
+    }
+
+    .licenses-hero-copy h2 {
+        max-width: 100%;
+        font-size: clamp(1.9rem, 9vw, 2.6rem);
+    }
+
+    .licenses-hero-card {
+        min-height: auto;
+        padding: 18px;
+    }
+
+    .licenses-hero-visual {
+        min-height: 150px;
+    }
+
+    .licenses-device-screen-back {
+        left: 18px;
+        right: 76px;
+    }
+
+    .licenses-device-screen-front {
+        left: 96px;
+        right: 8px;
+    }
+
+    .licenses-widget-orb {
+        inset: 50% auto auto 24px;
+        width: 70px;
+        height: 70px;
+    }
+
+    .portal-stat-strip,
+    .licenses-lower-grid,
+    .widget-builder-grid,
+    .portal-code-grid {
+        gap: 14px;
+    }
+
+    .licenses-table-card {
+        overflow: hidden;
+    }
+
+    .licenses-table-wrap {
+        overflow: visible;
+    }
+
+    .licenses-table,
+    .licenses-table thead,
+    .licenses-table tbody,
+    .licenses-table tr,
+    .licenses-table th,
+    .licenses-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .licenses-table thead {
+        display: none;
+    }
+
+    .licenses-table tbody {
+        display: grid;
+        gap: 12px;
+    }
+
+    .licenses-table tr {
+        padding: 14px;
+        border-radius: 16px;
+        background: rgba(248, 251, 255, 0.92);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .licenses-table td {
+        padding: 0;
+        border-bottom: 0;
+    }
+
+    .licenses-table td + td {
+        margin-top: 10px;
+    }
+
+    .licenses-table td::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 6px;
+        color: #667b94;
+        font-size: 0.82rem;
+        font-weight: 800;
+    }
+
+    .table-actions-cell {
+        gap: 8px;
+    }
+
+    .table-actions-cell::before {
+        margin-bottom: 2px;
     }
 }
 
