@@ -47,6 +47,42 @@ class SiteSettings
         'pulse',
     ];
 
+    public const PRESETS = [
+        'classic',
+        'high-tech',
+        'elegant',
+        'bold',
+    ];
+
+    public const PANEL_LAYOUTS = [
+        'stacked',
+        'split',
+    ];
+
+    public const BILLING_PLANS = [
+        'starter',
+        'growth',
+        'agency',
+    ];
+
+    public const BILLING_CYCLES = [
+        'monthly',
+        'yearly',
+    ];
+
+    public const BILLING_STATUSES = [
+        'active',
+        'inactive',
+        'past_due',
+        'trial',
+    ];
+
+    public const AUDIT_STATUSES = [
+        'healthy',
+        'monitoring',
+        'action_required',
+    ];
+
     public static function defaultWidget(): array
     {
         return [
@@ -58,6 +94,8 @@ class SiteSettings
             'buttonMode' => 'icon-label',
             'buttonStyle' => 'solid',
             'icon' => 'figure',
+            'preset' => 'classic',
+            'panelLayout' => 'stacked',
             'showContrast' => true,
             'showFontScale' => true,
             'showUnderlineLinks' => true,
@@ -80,10 +118,83 @@ class SiteSettings
             'buttonMode' => in_array($widget['buttonMode'] ?? null, self::BUTTON_MODES, true) ? $widget['buttonMode'] : $defaults['buttonMode'],
             'buttonStyle' => in_array($widget['buttonStyle'] ?? null, self::BUTTON_STYLES, true) ? $widget['buttonStyle'] : $defaults['buttonStyle'],
             'icon' => in_array($widget['icon'] ?? null, self::ICONS, true) ? $widget['icon'] : $defaults['icon'],
+            'preset' => in_array($widget['preset'] ?? null, self::PRESETS, true) ? $widget['preset'] : $defaults['preset'],
+            'panelLayout' => in_array($widget['panelLayout'] ?? null, self::PANEL_LAYOUTS, true) ? $widget['panelLayout'] : $defaults['panelLayout'],
             'showContrast' => filter_var($widget['showContrast'] ?? $defaults['showContrast'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['showContrast'],
             'showFontScale' => filter_var($widget['showFontScale'] ?? $defaults['showFontScale'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['showFontScale'],
             'showUnderlineLinks' => filter_var($widget['showUnderlineLinks'] ?? $defaults['showUnderlineLinks'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['showUnderlineLinks'],
             'showReduceMotion' => filter_var($widget['showReduceMotion'] ?? $defaults['showReduceMotion'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['showReduceMotion'],
+        ];
+    }
+
+    public static function defaultBilling(bool $isActive = true): array
+    {
+        return [
+            'plan' => $isActive ? 'starter' : 'growth',
+            'cycle' => 'yearly',
+            'status' => $isActive ? 'active' : 'inactive',
+            'amount' => $isActive ? 149 : 249,
+            'currency' => 'USD',
+        ];
+    }
+
+    public static function sanitizeBilling(array $billing, bool $isActiveLicense = true): array
+    {
+        $defaults = self::defaultBilling($isActiveLicense);
+
+        return [
+            'plan' => in_array($billing['plan'] ?? null, self::BILLING_PLANS, true) ? $billing['plan'] : $defaults['plan'],
+            'cycle' => in_array($billing['cycle'] ?? null, self::BILLING_CYCLES, true) ? $billing['cycle'] : $defaults['cycle'],
+            'status' => in_array($billing['status'] ?? null, self::BILLING_STATUSES, true) ? $billing['status'] : $defaults['status'],
+            'amount' => is_numeric($billing['amount'] ?? null) ? max(0, (int) $billing['amount']) : $defaults['amount'],
+            'currency' => is_string($billing['currency'] ?? null) && trim($billing['currency']) !== '' ? strtoupper(trim($billing['currency'])) : $defaults['currency'],
+        ];
+    }
+
+    public static function defaultAlertSettings(): array
+    {
+        return [
+            'license' => true,
+            'statement' => true,
+            'audit' => true,
+            'sync' => true,
+        ];
+    }
+
+    public static function sanitizeAlertSettings(array $alerts): array
+    {
+        $defaults = self::defaultAlertSettings();
+
+        return [
+            'license' => filter_var($alerts['license'] ?? $defaults['license'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['license'],
+            'statement' => filter_var($alerts['statement'] ?? $defaults['statement'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['statement'],
+            'audit' => filter_var($alerts['audit'] ?? $defaults['audit'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['audit'],
+            'sync' => filter_var($alerts['sync'] ?? $defaults['sync'], FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE) ?? $defaults['sync'],
+        ];
+    }
+
+    public static function defaultAuditSnapshot(): array
+    {
+        return [
+            'score' => 72,
+            'status' => 'monitoring',
+            'summary' => 'יש בסיס טוב, אבל עדיין יש כמה פעולות פתוחות כדי לסגור תמונת ציות בריאה.',
+            'checks' => [],
+            'alerts' => [],
+        ];
+    }
+
+    public static function sanitizeAuditSnapshot(array $audit): array
+    {
+        $defaults = self::defaultAuditSnapshot();
+        $score = is_numeric($audit['score'] ?? null) ? (int) $audit['score'] : $defaults['score'];
+
+        return [
+            'score' => max(0, min(100, $score)),
+            'status' => in_array($audit['status'] ?? null, self::AUDIT_STATUSES, true) ? $audit['status'] : $defaults['status'],
+            'summary' => is_string($audit['summary'] ?? null) && trim($audit['summary']) !== '' ? trim($audit['summary']) : $defaults['summary'],
+            'checks' => is_array($audit['checks'] ?? null) ? array_values($audit['checks']) : $defaults['checks'],
+            'alerts' => is_array($audit['alerts'] ?? null) ? array_values($audit['alerts']) : $defaults['alerts'],
         ];
     }
 

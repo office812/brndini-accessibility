@@ -11,13 +11,27 @@
                 <h1>התקנה והתאמת הווידג׳ט</h1>
             </section>
 
+            <section class="domain-card domain-hero-card">
+                <div>
+                    <p class="eyebrow">מרכז התקנה</p>
+                    <h2>{{ $site->site_name }}</h2>
+                    <p class="panel-intro">הקוד הזה שייך רק לאתר הזה. אם מוסיפים אתר נוסף, צריך לפתוח עבורו רישיון חדש ולהטמיע קוד חדש שמתאים ל־site key שלו.</p>
+                </div>
+
+                <div class="billing-hero-meta">
+                    <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'מוכן להטמעה' : 'דורש הפעלת רישיון' }}</span>
+                    <span class="status-pill is-neutral">{{ $widgetPresetLabels[$widget['preset']] ?? $widget['preset'] }}</span>
+                    <span class="status-pill is-neutral">{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</span>
+                </div>
+            </section>
+
             <section class="domain-card">
                 <h2>קוד הטמעה</h2>
                 <div class="domain-code-block">
                     <code id="install-embed-code">{{ $embedCode }}</code>
                     <button class="copy-button" type="button" data-copy-target="install-embed-code">העתק קוד הטמעה</button>
                 </div>
-                <p class="panel-intro">הטמע פעם אחת לפני <code>&lt;/body&gt;</code>. מכאן כל שינוי בעיצוב או בהגדרות נמשך מרחוק.</p>
+                <p class="panel-intro">מטמיעים פעם אחת לפני <code>&lt;/body&gt;</code>. אם האתר לא פעיל, הכפתור יוצג באדום ויפנה לעמוד רכישה במקום לפתוח את הווידג׳ט.</p>
             </section>
 
             <section class="domain-card">
@@ -25,33 +39,37 @@
                 <div class="domain-info-list">
                     <div class="domain-info-row">
                         <span>שלב 1</span>
-                        <strong>העתק את קוד ההטמעה המנוהל</strong>
+                        <strong>ודא שאתה עובד על האתר הנכון ועל ה־site key הנכון</strong>
                     </div>
                     <div class="domain-info-row">
                         <span>שלב 2</span>
-                        <strong>הדבק באזור הסקריפטים או לפני תגית הסגירה של body</strong>
+                        <strong>העתק את קוד ההטמעה הייחודי של האתר הזה</strong>
                     </div>
                     <div class="domain-info-row">
                         <span>שלב 3</span>
-                        <strong>רענן את האתר וודא שמיקום הווידג׳ט תקין</strong>
+                        <strong>הדבק לפני תגית הסגירה של body או באזור scripts של המערכת</strong>
                     </div>
                     <div class="domain-info-row">
                         <span>שלב 4</span>
-                        <strong>שנה הגדרה אחת וודא שהסנכרון חי</strong>
+                        <strong>שנה preset או צבע בדשבורד וודא שהעדכון נמשך אוטומטית באתר</strong>
                     </div>
                 </div>
             </section>
 
             <section class="domain-card">
-                <h2>התאמת הווידג׳ט</h2>
+                <h2>תצורת הווידג׳ט של האתר</h2>
                 <div class="domain-info-list">
                     <div class="domain-info-row">
                         <span>מיקום</span>
                         <strong>{{ $widget['position'] === 'bottom-left' ? 'שמאל למטה' : 'ימין למטה' }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>שפה</span>
-                        <strong>עברית</strong>
+                        <span>פריסט</span>
+                        <strong>{{ $widgetPresetLabels[$widget['preset']] ?? $widget['preset'] }}</strong>
+                    </div>
+                    <div class="domain-info-row">
+                        <span>Layout</span>
+                        <strong>{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</strong>
                     </div>
                     <div class="domain-info-row">
                         <span>טקסט כפתור</span>
@@ -63,6 +81,18 @@
                     </div>
                 </div>
             </section>
+
+            @if ($licenseStatus !== 'active')
+                <section class="domain-card">
+                    <h2>הפעלת הרישיון</h2>
+                    <p class="panel-intro">כרגע זה אתר שנוצר כרישיון חדש ועדיין לא הופעל. לפני שהווידג׳ט יעבוד באמת באתר, צריך להפעיל את הרישיון הזה.</p>
+                    <form method="POST" action="{{ route('dashboard.account.activate', ['site' => $site->id]) }}">
+                        @csrf
+                        <input type="hidden" name="site_id" value="{{ $site->id }}">
+                        <button class="primary-button" type="submit">הפעל רישיון לאתר הזה</button>
+                    </form>
+                </section>
+            @endif
         </div>
     </section>
 @endsection

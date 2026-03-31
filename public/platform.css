@@ -1407,6 +1407,13 @@ code {
     line-height: 1.65;
 }
 
+.mini-status-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
 .licenses-main {
     display: grid;
     gap: 22px;
@@ -1548,6 +1555,19 @@ code {
     gap: 12px;
 }
 
+.alert-strip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    min-height: 64px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 245, 230, 0.92);
+    border: 1px solid rgba(180, 83, 9, 0.12);
+    color: #7c4a10;
+}
+
 .licenses-table-card {
     padding: 18px;
     border-radius: 22px;
@@ -1624,6 +1644,25 @@ code {
     font-weight: 800;
 }
 
+.table-actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.table-inline-button {
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(29, 109, 255, 0.14);
+    background: rgba(29, 109, 255, 0.08);
+    color: var(--accent-deep);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
 .licenses-lower-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1650,6 +1689,22 @@ code {
     gap: 14px;
     align-content: start;
     padding-top: 8px;
+}
+
+.domain-switcher-wrap {
+    display: grid;
+    gap: 8px;
+}
+
+.domain-switcher-select {
+    min-height: 50px;
+    padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: #fff;
+    color: #334960;
+    font: inherit;
+    font-weight: 700;
 }
 
 .domain-back-link {
@@ -1725,6 +1780,100 @@ code {
 .domain-card h2 {
     margin: 0 0 18px;
     font-size: 1.2rem;
+}
+
+.domain-hero-card,
+.domain-card-head,
+.billing-hero-meta,
+.inline-form-actions,
+.plan-choice-prices {
+    display: flex;
+    gap: 14px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.plan-card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.plan-choice-card {
+    display: grid;
+    gap: 14px;
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(246, 249, 253, 0.92));
+}
+
+.plan-choice-card.is-current {
+    border-color: rgba(29, 109, 255, 0.24);
+    box-shadow: 0 18px 42px rgba(29, 109, 255, 0.1);
+}
+
+.plan-choice-card strong {
+    font-size: 1.1rem;
+}
+
+.plan-choice-card p,
+.plan-choice-prices {
+    margin: 0;
+    color: var(--page-muted);
+}
+
+.compact-form {
+    gap: 10px;
+}
+
+.audit-check-list,
+.alert-list {
+    display: grid;
+    gap: 14px;
+}
+
+.audit-check-card,
+.alert-card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.audit-check-card strong,
+.alert-card strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.audit-check-card p,
+.alert-card p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.7;
+}
+
+.audit-check-pass {
+    border-color: rgba(21, 128, 61, 0.14);
+}
+
+.audit-check-warn,
+.alert-medium {
+    border-color: rgba(180, 83, 9, 0.14);
+    background: rgba(255, 250, 235, 0.95);
+}
+
+.audit-check-fail,
+.alert-high,
+.alert-critical {
+    border-color: rgba(217, 45, 32, 0.16);
+    background: rgba(254, 242, 242, 0.96);
 }
 
 .domain-info-list {
@@ -1944,6 +2093,10 @@ code {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
     margin-bottom: 20px;
+}
+
+.status-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .portal-stat-card {
@@ -2558,6 +2711,64 @@ code {
     line-height: 1.6;
 }
 
+.preview-shell-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.preview-shell-chip {
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.76rem;
+    font-weight: 800;
+}
+
+.preview-shell-grid {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.preview-shell-grid article {
+    display: grid;
+    gap: 6px;
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.preview-shell-grid span {
+    font-weight: 800;
+    color: #fff;
+}
+
+.preview-shell-grid small {
+    color: rgba(239, 245, 244, 0.7);
+}
+
+.preview-shell.preview-layout-split .preview-shell-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.preview-shell.preview-preset-high-tech {
+    background: linear-gradient(180deg, #081121, #102b53);
+}
+
+.preview-shell.preview-preset-elegant {
+    background: linear-gradient(180deg, #2d241b, #564634);
+}
+
+.preview-shell.preview-preset-bold {
+    background: linear-gradient(180deg, #3d1a78, #7c3aed);
+}
+
 .preview-badge {
     --preview-widget-color: #1d6dff;
     width: fit-content;
@@ -2630,6 +2841,18 @@ code {
     color: #f8fafc;
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 20px 44px rgba(8, 17, 33, 0.22);
+}
+
+.preview-badge.preview-preset-high-tech {
+    box-shadow: 0 20px 44px rgba(29, 109, 255, 0.24);
+}
+
+.preview-badge.preview-preset-elegant {
+    background: linear-gradient(135deg, #3f3427, #8a6c49);
+}
+
+.preview-badge.preview-preset-bold {
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
 }
 
 .preview-size-compact .preview-badge {
@@ -3028,6 +3251,22 @@ code {
     .portal-card-head,
     .portal-hero-actions,
     .licenses-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .plan-card-grid,
+    .preview-shell.preview-layout-split .preview-shell-grid,
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .domain-hero-card,
+    .domain-card-head,
+    .audit-check-card,
+    .alert-card,
+    .alert-strip,
+    .table-actions-cell {
         flex-direction: column;
         align-items: stretch;
     }

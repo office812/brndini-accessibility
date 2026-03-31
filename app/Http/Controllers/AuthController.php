@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
 
 class AuthController extends Controller
 {
@@ -58,14 +59,20 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-            $user->sites()->create([
+            $site = $user->sites()->create([
                 'site_name' => $validated['site_name'],
                 'domain' => $domain,
                 'public_key' => SiteSettings::generatePublicKey(),
                 'license_status' => 'active',
+                'billing_settings' => SiteSettings::defaultBilling(true),
+                'audit_snapshot' => SiteSettings::defaultAuditSnapshot(),
+                'alert_settings' => SiteSettings::defaultAlertSettings(),
+                'license_expires_at' => Carbon::now()->addYear(),
                 'service_mode' => 'audit_and_fix',
                 'widget_settings' => SiteSettings::defaultWidget(),
             ]);
+
+            $user->setRelation('sites', collect([$site]));
 
             return $user;
         });
@@ -74,7 +81,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect()
-            ->route('dashboard')
+            ->route('dashboard', ['site' => optional($user->sites->first())->id])
             ->with('status', 'החשבון נוצר. עכשיו אפשר להגדיר את ה-widget ולקבל קוד הטמעה.');
     }
 

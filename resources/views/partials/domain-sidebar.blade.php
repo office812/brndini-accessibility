@@ -3,9 +3,18 @@
 <aside class="domain-shell-sidebar">
     <a class="domain-back-link" href="{{ route('dashboard', ['site' => $site->id]) }}">כל הרישיונות</a>
 
+    <label class="domain-switcher-wrap">
+        <span class="meta-label">האתר הפעיל</span>
+        <select class="domain-switcher-select" data-site-switcher>
+            @foreach ($siteSwitcherOptions as $option)
+                <option value="{{ $option['url'] }}" @selected($option['id'] === $site->id)>{{ $option['label'] }}</option>
+            @endforeach
+        </select>
+    </label>
+
     <div class="domain-select-pill">
         <span>דומיין: {{ $domainLabel }}</span>
-        <span aria-hidden="true">⌄</span>
+        <span aria-hidden="true">{{ $licenseStatus === 'active' ? '✓' : '!' }}</span>
     </div>
 
     <nav class="domain-side-nav" aria-label="ניהול דומיין">
@@ -15,7 +24,7 @@
         </a>
         <a class="{{ ($activeSection ?? '') === 'compliance' ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">
             <span>◎</span>
-            <span>הצהרת נגישות</span>
+            <span>ביקורות והתראות</span>
         </a>
         <a class="{{ ($activeSection ?? '') === 'install' ? 'is-current' : '' }}" href="{{ route('dashboard.install', ['site' => $site->id]) }}">
             <span>✎</span>
@@ -23,15 +32,15 @@
         </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#remediation-report">
             <span>▣</span>
-            <span>דוח תיקונים</span>
+            <span>התראות פעילות</span>
         </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#impact-report">
             <span>◫</span>
-            <span>דוח השפעה</span>
+            <span>הגדרות alerts</span>
         </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#audit-report">
             <span>⟡</span>
-            <span>דוח ביקורת</span>
+            <span>בדיקות audit</span>
         </a>
         <a href="{{ route('dashboard.account', ['site' => $site->id]) }}#license-owner">
             <span>◌</span>

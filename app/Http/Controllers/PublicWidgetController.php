@@ -50,6 +50,8 @@ class PublicWidgetController extends Controller
                     'statementUrl' => $site->statement_url,
                     'licenseStatus' => $site->license_status ?? 'active',
                     'purchaseUrl' => $site->purchase_url,
+                    'billing' => $site->billingConfig(),
+                    'audit' => $site->auditConfig(),
                     'widget' => $site->widgetConfig(),
                     'updatedAt' => optional($site->updated_at)->toIso8601String(),
                 ],

@@ -5,6 +5,7 @@
 @section('content')
     @php($statementConnected = filled($site->statement_url))
     @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'Managed accessibility layer')
+    @php($activeSitesCount = $sites->where('license_status', 'active')->count())
 
     <section class="licenses-shell">
         <aside class="licenses-sidebar">
@@ -23,29 +24,33 @@
             </div>
 
             <div class="licenses-sidebar-block licenses-sidebar-help">
-                <span class="meta-label">סטטוס מהיר</span>
-                <h3>{{ $statementConnected ? 'הצהרה מחוברת' : 'חסרה הצהרה' }}</h3>
-                <p>{{ $statementConnected ? 'החשבון מוכן עם הצהרת נגישות פעילה.' : 'כדאי לחבר הצהרת נגישות כדי לסגור את חוויית ההטמעה.' }}</p>
+                <span class="meta-label">אתר פעיל</span>
+                <h3>{{ $site->site_name }}</h3>
+                <p>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</p>
+                <div class="mini-status-list">
+                    <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
+                    <span class="status-pill {{ $statementConnected ? 'is-good' : 'is-neutral' }}">{{ $statementConnected ? 'הצהרה מחוברת' : 'הצהרה חסרה' }}</span>
+                </div>
             </div>
         </aside>
 
         <div class="licenses-main">
             <section class="licenses-welcome">
-                <p class="eyebrow">הרישיונות שלי</p>
-                <h1>{{ $user->name }}, ברוך הבא ל־A11Y Bridge</h1>
+                <p class="eyebrow">ניהול רישיונות ונגישות</p>
+                <h1>{{ $user->name }}, סביבת הניהול שלך מוכנה לעבודה</h1>
             </section>
 
             <section class="licenses-hero-card">
                 <div class="licenses-hero-copy">
-                    <h2>נגישות אתרים אוטומטית, פשוטה וברורה.</h2>
+                    <h2>ניהול הווידג׳ט, הרישוי, החיוב והביקורות מכל מקום אחד.</h2>
                     <p>
-                        נהל את ה־widget hosted, את ההטמעה ואת מסגרת ה־compliance מתוך מקום אחד,
-                        בלי להחליף שוב את קוד הסקריפט באתר.
+                        לכל אתר יש עכשיו רישיון נפרד, מסלול נפרד, site key ייחודי, ציון ביקורת והתראות משלו.
+                        לא עובדים יותר ברמה רוחבית לכל החשבון, אלא פר אתר, פר רישיון ופר התקנה.
                     </p>
 
                     <div class="licenses-hero-actions">
-                        <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">התחל התקנה</a>
-                        <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">למידע על ציות</a>
+                        <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">התקנה לאתר הזה</a>
+                        <a class="secondary-button" href="{{ route('dashboard.account', ['site' => $site->id]) }}">חיוב ורישוי</a>
                     </div>
                 </div>
 
@@ -70,12 +75,43 @@
                 </div>
             </section>
 
+            <section class="portal-stat-strip">
+                <article class="portal-stat-card">
+                    <span class="meta-label">אתרים פעילים</span>
+                    <strong>{{ $activeSitesCount }}</strong>
+                    <p>מתוך {{ $sites->count() }} רישיונות במערכת</p>
+                </article>
+                <article class="portal-stat-card">
+                    <span class="meta-label">מסלול נוכחי</span>
+                    <strong>{{ $currentPlan['name'] }}</strong>
+                    <p>{{ $currentPlan['price'] }}</p>
+                </article>
+                <article class="portal-stat-card">
+                    <span class="meta-label">ציון ביקורת</span>
+                    <strong>{{ $auditSnapshot['score'] }}</strong>
+                    <p>{{ $lastAuditedLabel }}</p>
+                </article>
+                <article class="portal-stat-card">
+                    <span class="meta-label">התראות פתוחות</span>
+                    <strong>{{ $openAlertsCount }}</strong>
+                    <p>{{ $openAlertsCount > 0 ? 'דורש מעבר על מרכז הציות' : 'כרגע הכול שקט' }}</p>
+                </article>
+            </section>
+
+            @if ($openAlertsCount > 0)
+                <section class="alert-strip">
+                    <strong>יש {{ $openAlertsCount }} התראות פתוחות לאתר הזה.</strong>
+                    <span>{{ $auditSnapshot['summary'] }}</span>
+                    <a class="text-link" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">למרכז הציות</a>
+                </section>
+            @endif
+
             <section class="licenses-toolbar">
                 <div>
-                    <h2>רישיונות accessWidget <small>| סך הכול {{ $sites->count() }}</small></h2>
+                    <h2>רישיונות הווידג׳ט <small>| סך הכול {{ $sites->count() }}</small></h2>
                 </div>
                 <div class="licenses-toolbar-actions">
-                    <a class="secondary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">ניהול מרוכז</a>
+                    <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">ביקורות והתראות</a>
                     <a class="primary-button" href="#new-license-form">הוסף אתר חדש</a>
                 </div>
             </section>
@@ -87,8 +123,8 @@
                         <input type="text" value="{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}" aria-label="Search domain" readonly>
                     </label>
                     <select aria-label="סינון לפי סטטוס">
-                        <option>פעיל</option>
-                        <option>ממתין</option>
+                        <option>{{ $licenseStatus === 'active' ? 'פעיל' : 'לא פעיל' }}</option>
+                        <option>כל הרישיונות</option>
                     </select>
                 </div>
 
@@ -97,24 +133,35 @@
                         <thead>
                             <tr>
                                 <th>דומיין</th>
-                                <th>תאריך סיום</th>
-                                <th>סטטוס</th>
+                                <th>רישיון</th>
                                 <th>מסלול</th>
+                                <th>ציון</th>
                                 <th>פעולה</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($sites as $licenseSite)
+                                @php($licenseBilling = $licenseSite->billingConfig())
+                                @php($licenseAudit = $licenseSite->auditConfig())
                                 <tr>
                                     <td>{{ parse_url($licenseSite->domain, PHP_URL_HOST) ?: $licenseSite->domain }}</td>
-                                    <td>-</td>
-                                <td>
-                                    <span class="status-pill {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'is-good' : 'is-warn' }}">
-                                        {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'פעיל' : 'לא פעיל' }}
-                                    </span>
-                                </td>
-                                    <td><span class="status-pill is-neutral">{{ $serviceModes[$licenseSite->service_mode] ?? $licenseSite->service_mode }}</span></td>
-                                    <td><a class="licenses-manage-link" href="{{ route('dashboard.account', ['site' => $licenseSite->id]) }}">ניהול</a></td>
+                                    <td>
+                                        <span class="status-pill {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'is-good' : 'is-warn' }}">
+                                            {{ ($licenseSite->license_status ?? 'active') === 'active' ? 'פעיל' : 'לא פעיל' }}
+                                        </span>
+                                    </td>
+                                    <td><span class="status-pill is-neutral">{{ $billingPlans[$licenseBilling['plan']]['label'] ?? $licenseBilling['plan'] }}</span></td>
+                                    <td>{{ $licenseAudit['score'] ?? 0 }}</td>
+                                    <td class="table-actions-cell">
+                                        <a class="licenses-manage-link" href="{{ route('dashboard.account', ['site' => $licenseSite->id]) }}">ניהול</a>
+                                        @if (($licenseSite->license_status ?? 'active') !== 'active')
+                                            <form method="POST" action="{{ route('dashboard.account.activate', ['site' => $licenseSite->id]) }}">
+                                                @csrf
+                                                <input type="hidden" name="site_id" value="{{ $licenseSite->id }}">
+                                                <button class="table-inline-button" type="submit">הפעל עכשיו</button>
+                                            </form>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -126,9 +173,9 @@
                 <article class="portal-content-card">
                     <div>
                         <p class="eyebrow">רישיון חדש</p>
-                        <h2>פתיחת רישיון נפרד לאתר נוסף</h2>
+                        <h2>פתיחת אתר חדש כרישיון נפרד</h2>
                     </div>
-                    <p class="panel-intro">כל אתר חדש מקבל רישיון נפרד, site key משלו וקוד הטמעה ייחודי. לא משתפים את אותו קוד בין אתרים שונים.</p>
+                    <p class="panel-intro">כל אתר חדש מקבל site key משלו, חיוב משלו, audit משלו, alerts משלו וקוד הטמעה עצמאי. אין יותר קוד אחד שמכסה את כל החשבון.</p>
 
                     <form class="stack-form" method="POST" action="{{ route('dashboard.sites.store') }}">
                         @csrf
@@ -141,19 +188,17 @@
                         <button class="primary-button" type="submit">צור רישיון לאתר חדש</button>
                     </form>
                 </article>
-            </section>
 
-            <section class="licenses-lower-grid" id="license-management">
                 <article class="portal-content-card portal-content-card-code">
                     <div>
-                        <p class="eyebrow">ניהול רישיון</p>
+                        <p class="eyebrow">הרישיון הפעיל</p>
                         <h2>קוד הטמעה וה־site key</h2>
                     </div>
-                    <p class="panel-intro">החלק הזה מחליף את מסך ה־manage: הוא מחזיק את ה־site key, את הסקריפט ואת סטטוס החיבור.</p>
+                    <p class="panel-intro">הסקריפט תמיד נשאר קבוע עבור האתר הזה בלבד. כל שינוי בהגדרות או בפריסט נמשך אוטומטית מהפלטפורמה.</p>
 
                     <div class="portal-code-grid">
                         <div class="portal-code-block">
-                            <span class="meta-label">Site key</span>
+                            <span class="meta-label">מזהה אתר</span>
                             <strong>{{ $site->site_name }}</strong>
                             <p class="inline-note">המזהה הציבורי של האתר: <code>{{ $site->public_key }}</code></p>
                         </div>
@@ -163,6 +208,14 @@
                             <button class="copy-button" type="button" data-copy-target="embed-code">העתק קוד הטמעה</button>
                         </div>
                     </div>
+
+                    @if ($licenseStatus !== 'active')
+                        <form class="inline-form-actions" method="POST" action="{{ route('dashboard.account.activate', ['site' => $site->id]) }}">
+                            @csrf
+                            <input type="hidden" name="site_id" value="{{ $site->id }}">
+                            <button class="primary-button" type="submit">הפעל את הרישיון של האתר הזה</button>
+                        </form>
+                    @endif
                 </article>
             </section>
 
@@ -173,15 +226,15 @@
 
                     <div class="portal-card-head">
                         <div>
-                            <p class="eyebrow">הגדרות סביבת עבודה</p>
-                            <h2>פרטי מותג, אתר ו־widget</h2>
+                            <p class="eyebrow">סביבת עבודה</p>
+                            <h2>מותג, אתר והווידג׳ט של האתר הזה</h2>
                         </div>
                         <button class="primary-button" type="submit">לשמור הגדרות</button>
                     </div>
-                    <p class="panel-intro">מכאן מנהלים את כל מה שהלקוח רואה בפועל: פרטי האתר, מסגור השירות והגדרות ה־widget עצמו.</p>
+                    <p class="panel-intro">מכאן מגדירים פריסטים, לייאאוטים, צבעים, פקדים ומידע עסקי עבור אתר אחד בלבד. ה־preview משמאל נשאר מול העיניים לאורך כל העריכה.</p>
 
                     <div class="portal-form-section">
-                        <p class="eyebrow">חברה</p>
+                        <p class="eyebrow">חברה ואתר</p>
                         <label for="company_name">שם החברה</label>
                         <input id="company_name" name="company_name" type="text" value="{{ old('company_name', $user->name) }}" required>
 
@@ -208,7 +261,28 @@
                     <div class="form-divider"></div>
 
                     <div class="portal-form-section">
-                        <p class="eyebrow">הגדרות ווידג׳ט</p>
+                        <p class="eyebrow">פריסט + לייאאוט</p>
+
+                        <label for="widget_preset">פריסט מוכן</label>
+                        <select id="widget_preset" name="widget[preset]" data-preview="preset">
+                            <option value="classic" @selected(old('widget.preset', $widget['preset']) === 'classic')>{{ $widgetPresetLabels['classic'] }}</option>
+                            <option value="high-tech" @selected(old('widget.preset', $widget['preset']) === 'high-tech')>{{ $widgetPresetLabels['high-tech'] }}</option>
+                            <option value="elegant" @selected(old('widget.preset', $widget['preset']) === 'elegant')>{{ $widgetPresetLabels['elegant'] }}</option>
+                            <option value="bold" @selected(old('widget.preset', $widget['preset']) === 'bold')>{{ $widgetPresetLabels['bold'] }}</option>
+                        </select>
+
+                        <label for="widget_panel_layout">לייאאוט פאנל</label>
+                        <select id="widget_panel_layout" name="widget[panelLayout]" data-preview="panel-layout">
+                            <option value="stacked" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'stacked')>{{ $widgetLayoutLabels['stacked'] }}</option>
+                            <option value="split" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'split')>{{ $widgetLayoutLabels['split'] }}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <div class="portal-form-section">
+                        <p class="eyebrow">עיצוב הכפתור</p>
+
                         <label for="widget_position">מיקום</label>
                         <select id="widget_position" name="widget[position]" data-preview="position">
                             <option value="bottom-right" @selected(old('widget.position', $widget['position']) === 'bottom-right')>ימין למטה</option>
@@ -255,6 +329,12 @@
                         <select id="widget_language" name="widget[language]">
                             <option value="he" @selected(old('widget.language', $widget['language']) === 'he')>עברית</option>
                         </select>
+                    </div>
+
+                    <div class="form-divider"></div>
+
+                    <div class="portal-form-section">
+                        <p class="eyebrow">פקדים פעילים</p>
 
                         <div class="toggle-grid">
                             <label class="toggle-row">
@@ -286,31 +366,50 @@
 
                 <article class="panel-card portal-preview-card widget-builder-preview">
                     <p class="eyebrow">Preview</p>
-                    <h2>איך זה ייראה אצל הלקוח</h2>
-                    <p class="panel-intro">תצוגה מקדימה חיה של ה־widget לפי ההגדרות הנוכחיות.</p>
+                    <h2>כך זה ייראה באתר של הלקוח</h2>
+                    <p class="panel-intro">שינוי כאן משתקף מיד בצד שמאל: פריסט, לייאאוט, צבע, אייקון, מצב כפתור ופקדים פעילים.</p>
 
                     <div class="preview-stage">
                         <div class="preview-window">
                             <div class="preview-content">
                                 <strong>{{ $site->site_name }}</strong>
-                                <p>כך נראה ה־widget באתר. השינויים שתשמור כאן נמשכים מהשרת בזמן טעינה.</p>
+                                    <p>האתר הזה עובד עם רישיון עצמאי, חיוב עצמאי וציון ביקורת עצמאי.</p>
 
                                 <div class="preview-details">
-                                    <span class="preview-pill">הגדרה מנוהלת</span>
-                                    <span class="preview-pill">ממשק בעברית</span>
+                                    <span class="preview-pill">{{ $currentPlan['name'] }}</span>
+                                    <span class="preview-pill">ציון {{ $auditSnapshot['score'] }}</span>
                                 </div>
                             </div>
 
-                            <div
-                                class="preview-widget preview-{{ $widget['position'] }} preview-size-{{ $widget['size'] }}"
-                                id="widget-preview"
-                            >
-                                <div class="preview-shell">
-                                    <strong>הגדרות נגישות</strong>
-                                    <p>פאנל קומפקטי, שקט וברור עם פעולות חשובות בלבד ובלי עומס מיותר.</p>
+                            <div class="preview-widget preview-{{ $widget['position'] }} preview-size-{{ $widget['size'] }}" id="widget-preview">
+                                <div class="preview-shell preview-preset-{{ $widget['preset'] }} preview-layout-{{ $widget['panelLayout'] }}" id="widget-preview-panel">
+                                    <div class="preview-shell-head">
+                                        <strong>הגדרות נגישות</strong>
+                                        <span class="preview-shell-chip">{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</span>
+                                    </div>
+                                    <p>פאנל מדגים פריסטים שונים ושני לייאאוטים שונים, עם אותו site key ואותן הגדרות שנשמרות לשרת.</p>
+                                    <div class="preview-shell-grid">
+                                        <article>
+                                            <span>ניגודיות</span>
+                                            <small>פעיל</small>
+                                        </article>
+                                        <article>
+                                            <span>טקסט</span>
+                                            <small>{{ $widget['size'] === 'large' ? 'גדול' : 'רגיל' }}</small>
+                                        </article>
+                                        <article>
+                                            <span>הצהרה</span>
+                                            <small>{{ $statementConnected ? 'מחוברת' : 'חסרה' }}</small>
+                                        </article>
+                                        <article>
+                                            <span>חיוב</span>
+                                            <small>{{ $billingPlans[$billing['plan']]['label'] ?? $billing['plan'] }}</small>
+                                        </article>
+                                    </div>
                                 </div>
+
                                 <button
-                                    class="preview-badge preview-mode-{{ $widget['buttonMode'] }} preview-style-{{ $widget['buttonStyle'] }}"
+                                    class="preview-badge preview-mode-{{ $widget['buttonMode'] }} preview-style-{{ $widget['buttonStyle'] }} preview-preset-{{ $widget['preset'] }}"
                                     id="widget-preview-button"
                                     type="button"
                                     style="--preview-widget-color: {{ $widget['color'] }}"

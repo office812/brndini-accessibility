@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @php($title = 'תוכנית ותשלומים | A11Y Bridge')
+@php($domainLabel = parse_url($site->domain, PHP_URL_HOST) ?: $site->domain)
 
 @section('content')
     <section class="domain-shell">
@@ -11,21 +12,56 @@
                 <h1>תוכנית ותשלומים</h1>
             </section>
 
+            <section class="domain-card domain-hero-card">
+                <div>
+                    <p class="eyebrow">חיוב לכל אתר</p>
+                    <h2>{{ $domainLabel }}</h2>
+                    <p class="panel-intro">לכל אתר בחשבון יש billing עצמאי, רישיון עצמאי ותאריך חידוש עצמאי. כאן מנהלים את המסלול הספציפי של האתר הפעיל.</p>
+                </div>
+
+                <div class="billing-hero-meta">
+                    <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
+                    <span class="status-pill is-neutral">{{ $currentPlan['name'] }}</span>
+                    <span class="status-pill is-neutral">חידוש: {{ $licenseExpiresLabel }}</span>
+                </div>
+            </section>
+
             <section class="domain-card">
-                <h2>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</h2>
+                <div class="domain-card-head">
+                    <div>
+                        <h2>מצב הרישיון</h2>
+                        <p class="panel-intro">אפשר לעבור בין חבילות, לבחור מחזור חיוב, ולהפעיל רישיון עבור אתרים חדשים שנוצרו במצב לא פעיל.</p>
+                    </div>
+
+                    @if ($licenseStatus !== 'active')
+                        <form method="POST" action="{{ route('dashboard.account.activate', ['site' => $site->id]) }}">
+                            @csrf
+                            <input type="hidden" name="site_id" value="{{ $site->id }}">
+                            <button class="primary-button" type="submit">הפעל רישיון</button>
+                        </form>
+                    @endif
+                </div>
 
                 <div class="domain-info-list">
                     <div class="domain-info-row">
-                        <span>מסלול</span>
-                        <strong>{{ $currentPlan['name'] }} · שנתי</strong>
-                    </div>
-                    <div class="domain-info-row">
                         <span>סטטוס</span>
-                        <strong><span class="status-pill is-good">פעיל</span></strong>
+                        <strong><span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'פעיל' : 'לא פעיל' }}</span></strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>מסלול שירות</span>
-                        <strong>{{ $serviceModeLabel }}</strong>
+                        <span>מסלול</span>
+                        <strong>{{ $currentPlan['name'] }}</strong>
+                    </div>
+                    <div class="domain-info-row">
+                        <span>מחזור חיוב</span>
+                        <strong>{{ $billing['cycle'] === 'yearly' ? 'שנתי' : 'חודשי' }}</strong>
+                    </div>
+                    <div class="domain-info-row">
+                        <span>עלות</span>
+                        <strong>{{ $currentPlan['price'] }}</strong>
+                    </div>
+                    <div class="domain-info-row">
+                        <span>תוקף</span>
+                        <strong>{{ $licenseExpiresLabel }}</strong>
                     </div>
                     <div class="domain-info-row">
                         <span>מפתח אתר ציבורי</span>
@@ -35,20 +71,53 @@
             </section>
 
             <section class="domain-card">
-                <h2>יכולות מתקדמות</h2>
+                <h2>בחירת חבילה</h2>
+                <div class="plan-card-grid">
+                    @foreach ($billingPlans as $planKey => $plan)
+                        <article class="plan-choice-card {{ $billing['plan'] === $planKey ? 'is-current' : '' }}">
+                            <strong>{{ $plan['label'] }}</strong>
+                            <p>{{ $plan['description'] }}</p>
+                            <div class="plan-choice-prices">
+                                <span>${{ $plan['prices']['monthly'] }} / חודש</span>
+                                <span>${{ $plan['prices']['yearly'] }} / שנה</span>
+                            </div>
 
+                            <form class="stack-form compact-form" method="POST" action="{{ route('dashboard.account.billing', ['site' => $site->id]) }}">
+                                @csrf
+                                <input type="hidden" name="site_id" value="{{ $site->id }}">
+                                <input type="hidden" name="billing_plan" value="{{ $planKey }}">
+                                <label for="billing_cycle_{{ $planKey }}">מחזור חיוב</label>
+                                <select id="billing_cycle_{{ $planKey }}" name="billing_cycle">
+                                    <option value="monthly" @selected($billing['plan'] === $planKey && $billing['cycle'] === 'monthly')>חודשי</option>
+                                    <option value="yearly" @selected(($billing['plan'] !== $planKey && $billing['cycle'] === 'yearly') || ($billing['plan'] === $planKey && $billing['cycle'] === 'yearly'))>שנתי</option>
+                                </select>
+                                <button class="{{ $billing['plan'] === $planKey ? 'secondary-button' : 'primary-button' }}" type="submit">
+                                    {{ $billing['plan'] === $planKey ? 'עדכן מחזור' : 'בחר מסלול' }}
+                                </button>
+                            </form>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+
+            <section class="domain-card">
+                <h2>יכולות Billing וחיווי עסקי</h2>
                 <div class="domain-info-list">
                     <div class="domain-info-row">
-                        <span>Google Analytics</span>
-                        <strong>לא זמין</strong>
+                        <span>קישור רכישה</span>
+                        <strong>{{ $site->purchase_url ?: 'הרישיון כבר פעיל' }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>הצהרה מנוהלת</span>
-                        <strong>{{ $statementStatus === 'connected' ? 'פעיל' : 'דורש חיבור' }}</strong>
+                        <span>מסלול שירות</span>
+                        <strong>{{ $serviceModeLabel }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>סנכרון ווידג׳ט מנוהל</span>
-                        <strong>פעיל</strong>
+                        <span>ציון ביקורת נוכחי</span>
+                        <strong>{{ $auditSnapshot['score'] }}</strong>
+                    </div>
+                    <div class="domain-info-row">
+                        <span>התראות פתוחות</span>
+                        <strong>{{ $openAlertsCount }}</strong>
                     </div>
                 </div>
             </section>

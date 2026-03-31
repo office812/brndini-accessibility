@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  var copyButton = document.querySelector('[data-copy-target]');
-
-  if (copyButton) {
+  document.querySelectorAll('[data-copy-target]').forEach(function (copyButton) {
     copyButton.addEventListener('click', function () {
       var targetId = copyButton.getAttribute('data-copy-target');
       var target = targetId ? document.getElementById(targetId) : null;
@@ -11,21 +9,33 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       navigator.clipboard.writeText(target.textContent || '').then(function () {
+        var originalText = copyButton.textContent;
         copyButton.textContent = 'הועתק';
 
         window.setTimeout(function () {
-          copyButton.textContent = 'העתק קוד הטמעה';
+          copyButton.textContent = originalText;
         }, 1500);
       });
+    });
+  });
+
+  var siteSwitcher = document.querySelector('[data-site-switcher]');
+
+  if (siteSwitcher) {
+    siteSwitcher.addEventListener('change', function () {
+      if (siteSwitcher.value) {
+        window.location.href = siteSwitcher.value;
+      }
     });
   }
 
   var preview = document.getElementById('widget-preview');
+  var previewPanel = document.getElementById('widget-preview-panel');
   var previewButton = document.getElementById('widget-preview-button');
   var previewIcon = document.getElementById('widget-preview-icon');
   var previewLabel = document.getElementById('widget-preview-label');
 
-  if (!preview || !previewButton) {
+  if (!preview || !previewButton || !previewPanel) {
     return;
   }
 
@@ -36,6 +46,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var buttonModeInput = document.querySelector('[data-preview="button-mode"]');
   var buttonStyleInput = document.querySelector('[data-preview="button-style"]');
   var iconInput = document.querySelector('[data-preview="icon"]');
+  var presetInput = document.querySelector('[data-preview="preset"]');
+  var panelLayoutInput = document.querySelector('[data-preview="panel-layout"]');
+  var previewShellChip = document.querySelector('.preview-shell-chip');
+
+  function getLayoutLabel(type) {
+    return type === 'split' ? 'מפוצל' : 'מדורג';
+  }
 
   function getPreviewIcon(type) {
     switch (type) {
@@ -50,6 +67,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function swapClasses(element, list, prefix, value) {
+    if (!element) {
+      return;
+    }
+
+    list.forEach(function (item) {
+      element.classList.remove(prefix + item);
+    });
+    element.classList.add(prefix + value);
+  }
+
   function syncPreview() {
     if (colorInput) {
       previewButton.style.setProperty('--preview-widget-color', colorInput.value);
@@ -60,23 +88,32 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (positionInput) {
-      preview.classList.remove('preview-bottom-right', 'preview-bottom-left');
-      preview.classList.add('preview-' + positionInput.value);
+      swapClasses(preview, ['bottom-right', 'bottom-left'], 'preview-', positionInput.value);
     }
 
     if (sizeInput) {
-      preview.classList.remove('preview-size-compact', 'preview-size-comfortable', 'preview-size-large');
-      preview.classList.add('preview-size-' + sizeInput.value);
+      swapClasses(preview, ['size-compact', 'size-comfortable', 'size-large'], 'preview-', 'size-' + sizeInput.value);
     }
 
     if (buttonModeInput) {
-      previewButton.classList.remove('preview-mode-icon-label', 'preview-mode-label-only', 'preview-mode-icon-only');
-      previewButton.classList.add('preview-mode-' + buttonModeInput.value);
+      swapClasses(previewButton, ['icon-label', 'label-only', 'icon-only'], 'preview-mode-', buttonModeInput.value);
     }
 
     if (buttonStyleInput) {
-      previewButton.classList.remove('preview-style-solid', 'preview-style-soft', 'preview-style-glass', 'preview-style-midnight');
-      previewButton.classList.add('preview-style-' + buttonStyleInput.value);
+      swapClasses(previewButton, ['solid', 'soft', 'glass', 'midnight'], 'preview-style-', buttonStyleInput.value);
+    }
+
+    if (presetInput) {
+      swapClasses(previewButton, ['classic', 'high-tech', 'elegant', 'bold'], 'preview-preset-', presetInput.value);
+      swapClasses(previewPanel, ['classic', 'high-tech', 'elegant', 'bold'], 'preview-preset-', presetInput.value);
+    }
+
+    if (panelLayoutInput) {
+      swapClasses(previewPanel, ['stacked', 'split'], 'preview-layout-', panelLayoutInput.value);
+
+      if (previewShellChip) {
+        previewShellChip.textContent = getLayoutLabel(panelLayoutInput.value);
+      }
     }
 
     if (iconInput && previewIcon) {
@@ -85,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  [colorInput, labelInput, positionInput, sizeInput, buttonModeInput, buttonStyleInput, iconInput].forEach(function (field) {
+  [colorInput, labelInput, positionInput, sizeInput, buttonModeInput, buttonStyleInput, iconInput, presetInput, panelLayoutInput].forEach(function (field) {
     if (field) {
       field.addEventListener('input', syncPreview);
       field.addEventListener('change', syncPreview);
