@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@php($title = 'פלטפורמת נגישות לאתרים | Widget Hosted, דשבורד ניהול והצהרת נגישות | A11Y Bridge')
+@php($title = 'פלטפורמת נגישות לאתרים | וידג׳ט מנוהל, דשבורד והצהרת נגישות | A11Y Bridge')
 
 @section('content')
     <section class="landing-hero" id="top">
         <div class="landing-hero-copy">
             <p class="eyebrow">פלטפורמת נגישות</p>
-            <h1>פתרון נגישות אתרים עם widget hosted, ניהול מרכזי והטמעה קבועה.</h1>
+            <h1>פתרון נגישות אתרים עם וידג׳ט מנוהל, ניהול מרכזי והטמעה קבועה.</h1>
             <p class="hero-text hero-text-lead">
                 A11Y Bridge מאפשרת לעסקים, סוכנויות ואתרים גדולים לנהל שכבת נגישות ממקום אחד:
-                hosted widget, install center, statement, compliance ומסכי ניהול שנראים כמו מוצר אמיתי.
+                וידג׳ט מנוהל, מרכז התקנה, הצהרה, ציות ומסכי ניהול שנראים כמו מוצר אמיתי.
             </p>
 
             <div class="hero-action-row hero-action-row-center">
@@ -22,7 +22,7 @@
             <div class="hero-product-float hero-float-right">
                 <span class="hero-float-label">הטמעה מנוהלת</span>
                 <strong>קוד אחד באתר</strong>
-                <p>snippet קבוע עם config דינמי.</p>
+                <p>קוד הטמעה קבוע עם הגדרות דינמיות.</p>
             </div>
 
             <div class="hero-product-float hero-float-left">
@@ -50,7 +50,7 @@
                         <article class="hero-device-card hero-device-card-primary">
                             <span class="hero-device-label">A11Y BRIDGE</span>
                             <strong>ווידג׳ט מנוהל</strong>
-                            <p>site key, הגדרות מותג, טקסט כפתור ושפה</p>
+                            <p>מפתח אתר, הגדרות מותג, טקסט כפתור ושפה</p>
                         </article>
                         <article class="hero-device-card">
                             <span class="hero-device-label">התקנה</span>
@@ -60,11 +60,11 @@
                         <article class="hero-device-card">
                             <span class="hero-device-label">ציות</span>
                             <strong>מרכז הצהרה</strong>
-                            <p>קישור להצהרה, governance ומסלול שירות</p>
+                            <p>קישור להצהרה, מסגור שירות ומסלול עבודה</p>
                         </article>
                         <article class="hero-device-card">
                             <span class="hero-device-label">תוכן</span>
-                            <strong>מאמרי SEO</strong>
+                <strong>מאמרים אורגניים</strong>
                             <p>צמיחה אורגנית וחינוך שוק</p>
                         </article>
                     </div>
@@ -82,7 +82,7 @@
 
     <section class="section-band section-band-plain" id="how-a11y-bridge-works">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">How A11Y Bridge works</p>
+            <p class="eyebrow">איך A11Y Bridge עובדת</p>
             <h2>שלושה שלבים פשוטים להפעלת שכבת נגישות מנוהלת.</h2>
         </div>
 
@@ -90,34 +90,34 @@
             <div class="flow-steps">
                 <article class="flow-step-card">
                     <span class="process-index">01</span>
-                    <h3>Audit your setup</h3>
-                    <p>פותחים workspace, מוסיפים אתר, ומקבלים site key וקוד הטמעה קבוע.</p>
+                    <h3>פותחים אתר חדש</h3>
+                    <p>פותחים סביבת עבודה, מוסיפים אתר, ומקבלים מפתח אתר וקוד הטמעה קבוע.</p>
                 </article>
                 <article class="flow-step-card">
                     <span class="process-index">02</span>
-                    <h3>Configure the platform</h3>
+                    <h3>מגדירים את הפלטפורמה</h3>
                     <p>מגדירים widget, statement, שפה, מיקום, צבע ומסלול שירות.</p>
                 </article>
                 <article class="flow-step-card">
                     <span class="process-index">03</span>
-                    <h3>Monitor and update</h3>
-                    <p>האתר מושך את ההגדרות החדשות אוטומטית בלי להחליף שוב snippet.</p>
+                    <h3>מעדכנים ומנהלים</h3>
+                    <p>האתר מושך את ההגדרות החדשות אוטומטית בלי להחליף שוב קוד.</p>
                 </article>
             </div>
 
             <div class="flow-stage">
                 <div class="flow-stage-card">
-                    <span class="eyebrow">SEAMLESS ACCESSIBILITY</span>
-                    <h3>מוצר אחד שמחבר widget, install, statement ו־dashboard.</h3>
+                    <span class="eyebrow">נגישות זורמת</span>
+                    <h3>מוצר אחד שמחבר וידג׳ט, התקנה, הצהרה ולוח ניהול.</h3>
                     <p>
-                        במקום כמה שכבות מפוזרות, A11Y Bridge נותנת flow אחד ברור ללקוח, למיישם
+                        במקום כמה שכבות מפוזרות, A11Y Bridge נותנת תהליך אחד ברור ללקוח, למיישם
                         ולמי שמנהל את החשבון לאורך זמן.
                     </p>
                     <div class="flow-stage-pills">
-                        <span class="preview-pill">Widget</span>
-                        <span class="preview-pill">Install</span>
-                        <span class="preview-pill">Compliance</span>
-                        <span class="preview-pill">Account</span>
+                        <span class="preview-pill">ווידג׳ט</span>
+                        <span class="preview-pill">התקנה</span>
+                        <span class="preview-pill">ציות</span>
+                        <span class="preview-pill">חשבון</span>
                     </div>
                 </div>
             </div>
@@ -126,7 +126,7 @@
 
     <section class="cta-banner">
         <div>
-            <p class="eyebrow">Find out now if your website is accessible</p>
+            <p class="eyebrow">בדוק עכשיו אם האתר שלך נגיש</p>
             <h2>קבל שליטה מלאה על שכבת הנגישות של האתר שלך.</h2>
         </div>
         <a class="primary-button button-link" href="{{ route('register.show') }}">פתח חשבון</a>
@@ -134,46 +134,46 @@
 
     <section class="section-band" id="solutions">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">Technology that works</p>
-            <h2>AI-driven accessibility, simplified.</h2>
+            <p class="eyebrow">טכנולוגיה שעובדת</p>
+            <h2>נגישות מנוהלת, פשוטה יותר להפעלה.</h2>
             <p class="hero-text">
-                שכבת המוצר שלך לא צריכה להיות רק widget. היא צריכה לכלול install, governance,
-                account framing, statement ו־content growth.
+                שכבת המוצר שלך לא צריכה להיות רק כפתור. היא צריכה לכלול התקנה, מסגור שירות,
+                חשבון, הצהרה וצמיחת תוכן.
             </p>
         </div>
 
         <div class="capability-grid">
             <article class="capability-card">
-                <h3>Automatic hosted delivery</h3>
-                <p>האתר נשאר עם אותו snippet, וההגדרות נמשכות בזמן טעינה מתוך הפלטפורמה.</p>
+                <h3>טעינה אוטומטית מהפלטפורמה</h3>
+                <p>האתר נשאר עם אותו קוד הטמעה, וההגדרות נמשכות בזמן טעינה מתוך הפלטפורמה.</p>
             </article>
             <article class="capability-card">
-                <h3>Easy setup, immediate control</h3>
-                <p>הלקוח רואה install ברור, copy-paste flow, ו־verification מיידי.</p>
+                <h3>הטמעה פשוטה ושליטה מיידית</h3>
+                <p>הלקוח רואה מסך התקנה ברור, העתקה והדבקה, ואימות מיידי.</p>
             </article>
             <article class="capability-card">
-                <h3>Compatible with any website</h3>
+                <h3>מתאים כמעט לכל אתר</h3>
                 <p>Custom code, WordPress, או builder אחר. העיקרון נשאר זהה.</p>
             </article>
             <article class="capability-card">
-                <h3>Brand-consistent widget</h3>
-                <p>מיקום, צבע, טקסט, שפה והעדפות תצוגה מתוך dashboard אחד.</p>
+                <h3>ווידג׳ט עקבי עם המותג</h3>
+                <p>מיקום, צבע, טקסט, שפה והעדפות תצוגה מתוך לוח ניהול אחד.</p>
             </article>
             <article class="capability-card">
-                <h3>Compliance messaging</h3>
-                <p>Statement, service mode ו־governance בלי להבטיח מה שהמוצר לא יכול להבטיח.</p>
+                <h3>מסגור ציות ברור</h3>
+                <p>הצהרה, מסלול שירות ומסגרת עבודה בלי להבטיח מה שהמוצר לא יכול להבטיח.</p>
             </article>
             <article class="capability-card">
-                <h3>Content-led growth</h3>
-                <p>אזור מאמרים מובנה שעוזר גם ל־SEO וגם להסברת הקטגוריה.</p>
+                <h3>צמיחה דרך תוכן</h3>
+                <p>אזור מאמרים מובנה שעוזר גם לקידום אורגני וגם להסברת הקטגוריה.</p>
             </article>
         </div>
     </section>
 
     <section class="section-band section-band-alt">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">The solution for every website</p>
-            <h2>מתאים לכל אתר, עם אותו flow ברור של ניהול והטמעה.</h2>
+            <p class="eyebrow">הפתרון לכל אתר</p>
+            <h2>מתאים לכל אתר, עם אותו תהליך ברור של ניהול והטמעה.</h2>
         </div>
 
         <div class="integration-cloud">
@@ -183,32 +183,32 @@
             <span class="integration-pill">Webflow</span>
             <span class="integration-pill">Wix</span>
             <span class="integration-pill">Custom code</span>
-            <span class="integration-pill">Agency delivery</span>
-            <span class="integration-pill">Hosted snippet</span>
+            <span class="integration-pill">שירות לסוכנויות</span>
+            <span class="integration-pill">קוד הטמעה מנוהל</span>
         </div>
     </section>
 
     <section class="section-band">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">Welcome all visitors</p>
+            <p class="eyebrow">ברוכים הבאים לכל מבקר</p>
             <h2>חוויית widget ברורה, מותאמת ומבוססת העדפות משתמש.</h2>
         </div>
 
         <div class="profile-grid">
             <article class="profile-card">
-                <h3>Screen readers</h3>
+                <h3>קוראי מסך</h3>
                 <p>גישה ישירה לכלי נגישות והצהרת נגישות מתוך ממשק ברור.</p>
             </article>
             <article class="profile-card">
-                <h3>Keyboard navigation</h3>
+                <h3>ניווט מקלדת</h3>
                 <p>גישה נוחה לניווט ולעבודה בלי עכבר.</p>
             </article>
             <article class="profile-card">
-                <h3>Vision support</h3>
+                <h3>תמיכה חזותית</h3>
                 <p>גודל טקסט, ניגודיות, והדגשת קישורים.</p>
             </article>
             <article class="profile-card">
-                <h3>Reduce motion</h3>
+                <h3>הפחתת תנועה</h3>
                 <p>הפחתת אנימציות ותנועה עבור חוויה שקטה יותר.</p>
             </article>
             <article class="profile-card">
@@ -224,27 +224,27 @@
 
     <section class="section-band section-band-dark">
         <div class="section-heading section-heading-light section-heading-center">
-            <p class="eyebrow">Built to support compliance</p>
+            <p class="eyebrow">נבנה כדי לתמוך בציות</p>
             <h2>המערכת ממסגרת נגישות כמו פתרון רציני, לא כמו תוסף בודד.</h2>
             <p class="hero-text">
-                hosted widget, install verification, statement, governance ו־service mode
+                וידג׳ט מנוהל, אימות התקנה, הצהרה, מסגור שירות ומסלול עבודה
                 יוצרים יחד מוצר שנראה מקצועי יותר גם ללקוח וגם לשוק.
             </p>
         </div>
 
         <div class="compliance-badges">
-            <span class="compliance-badge">WCAG workflow</span>
+            <span class="compliance-badge">תהליך עבודה ל־WCAG</span>
             <span class="compliance-badge">הצהרת נגישות</span>
-            <span class="compliance-badge">Install verification</span>
+            <span class="compliance-badge">אימות הטמעה</span>
             <span class="compliance-badge">מסלול שירות</span>
-            <span class="compliance-badge">Governance messaging</span>
+            <span class="compliance-badge">מסגור שירות ושקיפות</span>
         </div>
     </section>
 
     <section class="section-band">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">Customer proof</p>
-            <h2>נראה כמו פתרון accessibility גדול, גם ברמה המוצרית וגם ברמה השיווקית.</h2>
+            <p class="eyebrow">אמון והוכחת ערך</p>
+            <h2>נראה כמו פתרון נגישות גדול, גם ברמה המוצרית וגם ברמה השיווקית.</h2>
         </div>
 
         <div class="testimonial-grid">
@@ -257,8 +257,8 @@
                 <strong>יועץ נגישות</strong>
             </article>
             <article class="testimonial-card">
-                <p>“זה כבר נראה כמו SaaS accessibility אמיתי ולא כמו תוסף זמני.”</p>
-                <strong>Partner / Reseller</strong>
+                <p>“זה כבר נראה כמו מוצר נגישות אמיתי ולא כמו תוסף זמני.”</p>
+                <strong>שותף / משווק</strong>
             </article>
         </div>
     </section>
@@ -271,30 +271,30 @@
 
         <div class="pricing-grid">
             <article class="plan-card">
-                <span class="status-pill is-neutral">Starter</span>
+                <span class="status-pill is-neutral">התחלה</span>
                 <strong>לעסקים קטנים</strong>
-                <p>widget hosted, install center, statement link ו־dashboard בסיסי.</p>
+                <p>וידג׳ט מנוהל, מרכז התקנה, קישור להצהרה ולוח ניהול בסיסי.</p>
             </article>
             <article class="plan-card plan-card-current">
-                <span class="status-pill is-good">Recommended</span>
-                <strong>Growth</strong>
-                <p>יותר governance, יותר תוכן, יותר framing ללקוחות ולסוכנויות.</p>
+                <span class="status-pill is-good">מומלץ</span>
+                <strong>צמיחה</strong>
+                <p>יותר מסגור שירות, יותר תוכן, ויותר כלים ללקוחות ולסוכנויות.</p>
             </article>
             <article class="plan-card">
-                <span class="status-pill is-neutral">Enterprise</span>
+                <span class="status-pill is-neutral">ארגוני</span>
                 <strong>מותאם לארגונים</strong>
-                <p>delivery רחב יותר, מסכי account ו־compliance חזקים יותר ותפעול בקנה מידה.</p>
+                <p>פריסה רחבה יותר, מסכי חשבון וציות חזקים יותר ותפעול בקנה מידה.</p>
             </article>
         </div>
     </section>
 
     <section class="section-band articles-band" id="articles">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">Magazine</p>
-            <h2>אזור מאמרים שנראה כמו מגזין, ומחזק גם את ה־SEO וגם את האמון במוצר.</h2>
+            <p class="eyebrow">מאמרים</p>
+            <h2>אזור מאמרים שנראה כמו מגזין, ומחזק גם את הקידום האורגני וגם את האמון במוצר.</h2>
             <p class="hero-text">
                 אזור התוכן נועד גם לעזור ללקוחות להבין את הפלטפורמה, וגם לענות לחיפושים אורגניים
-                סביב תוסף נגישות לאתר, הצהרת נגישות, workflow ל־WCAG וניהול שכבת נגישות.
+                סביב תוסף נגישות לאתר, הצהרת נגישות, תהליך עבודה ל־WCAG וניהול שכבת נגישות.
             </p>
         </div>
 
@@ -358,7 +358,7 @@
         @auth
             @if (auth()->user()->is_admin)
                 <section class="panel-card article-admin-card" aria-labelledby="article-admin-title">
-                    <p class="eyebrow">Admin publishing</p>
+                    <p class="eyebrow">ניהול תוכן</p>
                     <h2 id="article-admin-title">פרסום מאמר חדש</h2>
 
                     <form class="stack-form" method="POST" action="{{ route('articles.store') }}">
@@ -370,7 +370,7 @@
                         <label for="article_excerpt">תקציר קצר</label>
                         <textarea id="article_excerpt" name="excerpt" rows="3" required>{{ old('excerpt') }}</textarea>
 
-                        <label for="article_meta_description">Meta description</label>
+                        <label for="article_meta_description">תיאור לעמוד</label>
                         <input id="article_meta_description" name="meta_description" type="text" value="{{ old('meta_description') }}" maxlength="160">
 
                         <label for="article_body">תוכן המאמר</label>
@@ -392,19 +392,19 @@
     <section class="section-band section-band-cta" id="signup-form">
         <div class="auth-cta-grid">
             <section class="panel-card auth-cta-card">
-                <p class="eyebrow">Start free trial</p>
+                <p class="eyebrow">פתיחת ניסיון</p>
                 <h2>פתיחת חשבון חדש</h2>
                 <p class="hero-text">
-                    מתחילים עם dashboard, hosted widget, install center, compliance center וקוד הטמעה קבוע.
+                    מתחילים עם לוח ניהול, וידג׳ט מנוהל, מרכז התקנה, מרכז ציות וקוד הטמעה קבוע.
                 </p>
                 <a class="primary-button button-link" href="{{ route('register.show') }}">למסך פתיחת חשבון</a>
             </section>
 
             <section class="panel-card auth-cta-card">
-                <p class="eyebrow">Login</p>
+                <p class="eyebrow">התחברות</p>
                 <h2>כניסה למשתמש קיים</h2>
                 <p class="hero-text">
-                    כניסה מהירה להגדרות ה־widget, למסך ההתקנה, למסגור ה־compliance ולאזור החשבון.
+                    כניסה מהירה להגדרות הווידג׳ט, למסך ההתקנה, למרכז הציות ולאזור החשבון.
                 </p>
                 <a class="ghost-button button-link" href="{{ route('login.show') }}">למסך התחברות</a>
             </section>

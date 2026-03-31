@@ -6,17 +6,17 @@
     <section class="magazine-page">
         <header class="magazine-page-hero panel-card">
             <div class="magazine-page-copy">
-                <p class="eyebrow">A11Y Bridge magazine</p>
+                <p class="eyebrow">מגזין A11Y Bridge</p>
                 <h1>מאמרים, מדריכים ותוכן שמסביר נגישות כמו מוצר רציני.</h1>
                 <p class="hero-text hero-text-lead">
                     כאן מרוכזים המאמרים של A11Y Bridge סביב וידג׳ט נגישות, הצהרת נגישות, בדיקות אתר,
-                    הטמעה, WCAG, SEO וסביבת ניהול נגישות מלאה.
+                    הטמעה, WCAG, קידום אורגני וסביבת ניהול נגישות מלאה.
                 </p>
             </div>
 
             <div class="magazine-page-summary">
                 <span class="preview-pill">{{ $articles->count() }} מאמרים</span>
-                <span class="preview-pill">תוכן SEO</span>
+                <span class="preview-pill">תוכן אורגני</span>
                 <span class="preview-pill">מדריכי הטמעה</span>
             </div>
         </header>
@@ -81,7 +81,7 @@
         @auth
             @if (auth()->user()->is_admin)
                 <section class="panel-card article-admin-card">
-                    <p class="eyebrow">Admin publishing</p>
+                    <p class="eyebrow">ניהול תוכן</p>
                     <h2>פרסום מאמר חדש</h2>
 
                     <form class="stack-form" method="POST" action="{{ route('articles.store') }}">
@@ -93,7 +93,7 @@
                         <label for="article_excerpt">תקציר קצר</label>
                         <textarea id="article_excerpt" name="excerpt" rows="3" required>{{ old('excerpt') }}</textarea>
 
-                        <label for="article_meta_description">Meta description</label>
+                        <label for="article_meta_description">תיאור לעמוד</label>
                         <input id="article_meta_description" name="meta_description" type="text" value="{{ old('meta_description') }}" maxlength="160">
 
                         <label for="article_body">תוכן המאמר</label>

@@ -16,7 +16,7 @@
                 <div>
                     <p class="eyebrow">חיוב לכל אתר</p>
                     <h2>{{ $domainLabel }}</h2>
-                    <p class="panel-intro">לכל אתר בחשבון יש billing עצמאי, רישיון עצמאי ותאריך חידוש עצמאי. כאן מנהלים את המסלול הספציפי של האתר הפעיל.</p>
+                    <p class="panel-intro">לכל אתר בחשבון יש חיוב עצמאי, רישיון עצמאי ותאריך חידוש עצמאי. כאן מנהלים את המסלול הספציפי של האתר הפעיל.</p>
                 </div>
 
                 <div class="billing-hero-meta">
@@ -101,7 +101,7 @@
             </section>
 
             <section class="domain-card">
-                <h2>יכולות Billing וחיווי עסקי</h2>
+                <h2>חיוב וחיווי עסקי</h2>
                 <div class="domain-info-list">
                     <div class="domain-info-row">
                         <span>קישור רכישה</span>

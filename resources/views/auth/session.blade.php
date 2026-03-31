@@ -12,17 +12,17 @@
                 </span>
                 <span>
                     <strong>A11Y Bridge</strong>
-                    <small>Hosted accessibility management platform</small>
+                    <small>פלטפורמה לניהול נגישות מנוהלת</small>
                 </span>
             </a>
 
             <div class="auth-screen-copy">
-                <p class="eyebrow">{{ $isLogin ? 'Login' : 'Start free trial' }}</p>
+                <p class="eyebrow">{{ $isLogin ? 'התחברות' : 'פתיחת חשבון' }}</p>
                 <h1>{{ $isLogin ? 'התחברות לחשבון שלך' : 'פתיחת חשבון חדש' }}</h1>
                 <p class="hero-text">
                     {{ $isLogin
-                        ? 'כניסה מהירה ל־dashboard, למסך ההתקנה, למסגור ה־compliance ולאזור החשבון.'
-                        : 'פתיחת workspace חדש עם hosted widget, install center, statement management וקוד הטמעה קבוע.' }}
+                        ? 'כניסה מהירה ללוח הניהול, למסך ההתקנה, למרכז הציות ולאזור החשבון.'
+                        : 'פתיחת סביבת עבודה חדשה עם וידג׳ט מנוהל, מרכז התקנה, ניהול הצהרה וקוד הטמעה קבוע.' }}
                 </p>
             </div>
 
@@ -51,7 +51,7 @@
                     @csrf
                     <input type="hidden" name="signup_step" value="{{ $signupStep }}" data-signup-step-input>
 
-                    <div class="signup-stepper" aria-label="Signup progress">
+                    <div class="signup-stepper" aria-label="התקדמות בהרשמה">
                         <span class="signup-step {{ $signupStep === '1' ? 'is-active' : '' }}"></span>
                         <span class="signup-step {{ $signupStep === '2' ? 'is-active' : '' }}"></span>
                         <span class="signup-step {{ $signupStep === '3' ? 'is-active' : '' }}"></span>
@@ -122,12 +122,12 @@
                         <div class="auth-showcase-stat">
                             <span class="auth-showcase-label">ווידג׳ט מנוהל</span>
                             <strong>מתקינים פעם אחת</strong>
-                            <p>snippet קבוע עם configuration שנמשך מהפלטפורמה.</p>
+                            <p>קוד הטמעה קבוע עם הגדרות שנמשכות מהפלטפורמה.</p>
                         </div>
                         <div class="auth-showcase-stat">
-                            <span class="auth-showcase-label">Compliance</span>
-                            <strong>Statement + governance</strong>
-                            <p>statement URL, service mode ומסגור ברור לשירות.</p>
+                            <span class="auth-showcase-label">ציות</span>
+                            <strong>הצהרה + מסגור שירות</strong>
+                            <p>קישור להצהרה, מסלול שירות ומסגרת ברורה ללקוח.</p>
                         </div>
                     </div>
                 </div>
@@ -135,16 +135,16 @@
 
             <div class="auth-showcase-footer">
                 <div class="auth-showcase-quote">
-                    <h2>Build a stronger accessibility experience.</h2>
+                    <h2>בנה חוויית נגישות ברורה, יציבה ומנוהלת.</h2>
                     <p>
                         A11Y Bridge נבנתה כדי לתת ללקוחות, לסוכנויות ולמיישמים חוויה שנראית
-                        כמו מוצר accessibility רציני כבר מהרגע הראשון.
+                        כמו מוצר נגישות רציני כבר מהרגע הראשון.
                     </p>
                 </div>
 
                 <div class="auth-showcase-testimonial">
                     <strong>“הדבר החזק פה הוא לא רק ה־widget, אלא כל שכבת הניהול שמסביב.”</strong>
-                    <span>Agency partner</span>
+                    <span>שותף סוכנות</span>
                 </div>
             </div>
         </aside>

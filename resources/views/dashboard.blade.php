@@ -4,20 +4,20 @@
 
 @section('content')
     @php($statementConnected = filled($site->statement_url))
-    @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'Managed accessibility layer')
+    @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'שכבת נגישות מנוהלת')
 
     <section class="licenses-shell">
         <aside class="licenses-sidebar">
             <div class="licenses-sidebar-block">
                 <h2>המוצרים שלי</h2>
-                <nav class="licenses-product-nav" aria-label="Products">
+                <nav class="licenses-product-nav" aria-label="מוצרים">
                     <a class="is-current" href="{{ route('dashboard', ['site' => $site->id]) }}">
                         <span class="licenses-product-icon">◉</span>
-                        <span>accessWidget</span>
+                        <span>ווידג׳ט נגישות</span>
                     </a>
                     <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">
                         <span class="licenses-product-icon">◇</span>
-                        <span>accessFlow</span>
+                        <span>ציות ובקרה</span>
                     </a>
                 </nav>
             </div>
@@ -44,7 +44,7 @@
                 <div class="licenses-hero-copy">
                     <h2>ניהול הווידג׳ט, הרישוי, החיוב והביקורות מכל מקום אחד.</h2>
                     <p>
-                        לכל אתר יש עכשיו רישיון נפרד, מסלול נפרד, site key ייחודי, ציון ביקורת והתראות משלו.
+                        לכל אתר יש עכשיו רישיון נפרד, מסלול נפרד, מפתח אתר ייחודי, ציון ביקורת והתראות משלו.
                         לא עובדים יותר ברמה רוחבית לכל החשבון, אלא פר אתר, פר רישיון ופר התקנה.
                     </p>
 
@@ -78,7 +78,7 @@
             @if ($installationStatus !== 'installed')
                 <section class="alert-strip">
                     <strong>הווידג׳ט עדיין לא זוהה באתר.</strong>
-                    <span>הרישיון פעיל, אבל עדיין לא התקבלה טעינה אמיתית מהקוד באתר. צריך להטמיע את ה־snippet ואז לרענן את הדף באתר הלקוח.</span>
+                    <span>הרישיון פעיל, אבל עדיין לא התקבלה טעינה אמיתית מהקוד באתר. צריך להטמיע את קוד האתר ואז לרענן את הדף באתר הלקוח.</span>
                     <a class="text-link" href="{{ route('dashboard.install', ['site' => $site->id]) }}">למסך ההתקנה</a>
                 </section>
             @endif
@@ -128,7 +128,7 @@
                 <div class="licenses-filters">
                     <label class="licenses-search">
                         <span>⌕</span>
-                        <input type="text" value="{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}" aria-label="Search domain" readonly>
+                        <input type="text" value="{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}" aria-label="חיפוש דומיין" readonly>
                     </label>
                     <select aria-label="סינון לפי סטטוס">
                         <option>{{ $licenseStatus === 'active' ? 'פעיל' : 'לא פעיל' }}</option>
@@ -183,7 +183,7 @@
                         <p class="eyebrow">רישיון חדש</p>
                         <h2>פתיחת אתר חדש כרישיון נפרד</h2>
                     </div>
-                    <p class="panel-intro">כל אתר חדש מקבל site key משלו, חיוב משלו, audit משלו, alerts משלו וקוד הטמעה עצמאי. אין יותר קוד אחד שמכסה את כל החשבון.</p>
+                    <p class="panel-intro">כל אתר חדש מקבל מפתח אתר משלו, חיוב משלו, בדיקה משלו, התראות משלו וקוד הטמעה עצמאי. אין יותר קוד אחד שמכסה את כל החשבון.</p>
 
                     <form class="stack-form" method="POST" action="{{ route('dashboard.sites.store') }}">
                         @csrf
@@ -200,7 +200,7 @@
                 <article class="portal-content-card portal-content-card-code">
                     <div>
                         <p class="eyebrow">הרישיון הפעיל</p>
-                        <h2>קוד הטמעה וה־site key</h2>
+                        <h2>קוד הטמעה ומפתח האתר</h2>
                     </div>
                     <p class="panel-intro">הסקריפט תמיד נשאר קבוע עבור האתר הזה בלבד. כל שינוי בהגדרות או בפריסט נמשך אוטומטית מהפלטפורמה.</p>
 
@@ -211,7 +211,7 @@
                             <p class="inline-note">המזהה הציבורי של האתר: <code>{{ $site->public_key }}</code></p>
                         </div>
                         <div class="portal-code-block portal-code-block-dark">
-                            <span class="meta-label">Embed script</span>
+                            <span class="meta-label">קוד הטמעה</span>
                             <code id="embed-code">{{ $embedCode }}</code>
                             <button class="copy-button" type="button" data-copy-target="embed-code">העתק קוד הטמעה</button>
                         </div>
@@ -239,7 +239,7 @@
                         </div>
                         <button class="primary-button" type="submit">לשמור הגדרות</button>
                     </div>
-                    <p class="panel-intro">מכאן מגדירים פריסטים, לייאאוטים, צבעים, פקדים ומידע עסקי עבור אתר אחד בלבד. ה־preview משמאל נשאר מול העיניים לאורך כל העריכה.</p>
+                    <p class="panel-intro">מכאן מגדירים פריסטים, מבני פאנל, צבעים, פקדים ומידע עסקי עבור אתר אחד בלבד. התצוגה המקדימה משמאל נשארת מול העיניים לאורך כל העריכה.</p>
 
                     <div class="portal-form-section">
                         <p class="eyebrow">חברה ואתר</p>
@@ -279,7 +279,7 @@
                             <option value="bold" @selected(old('widget.preset', $widget['preset']) === 'bold')>{{ $widgetPresetLabels['bold'] }}</option>
                         </select>
 
-                        <label for="widget_panel_layout">לייאאוט פאנל</label>
+                        <label for="widget_panel_layout">מבנה פאנל</label>
                         <select id="widget_panel_layout" name="widget[panelLayout]" data-preview="panel-layout">
                             <option value="stacked" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'stacked')>{{ $widgetLayoutLabels['stacked'] }}</option>
                             <option value="split" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'split')>{{ $widgetLayoutLabels['split'] }}</option>
@@ -373,7 +373,7 @@
                 </form>
 
                 <article class="panel-card portal-preview-card widget-builder-preview">
-                    <p class="eyebrow">Preview</p>
+                    <p class="eyebrow">תצוגה מקדימה</p>
                     <h2>כך זה ייראה באתר של הלקוח</h2>
                     <p class="panel-intro">שינוי כאן משתקף מיד בצד שמאל: פריסט, לייאאוט, צבע, אייקון, מצב כפתור ופקדים פעילים.</p>
 
@@ -395,7 +395,7 @@
                                         <strong>הגדרות נגישות</strong>
                                         <span class="preview-shell-chip">{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</span>
                                     </div>
-                                    <p>פאנל מדגים פריסטים שונים ושני לייאאוטים שונים, עם אותו site key ואותן הגדרות שנשמרות לשרת.</p>
+                                    <p>פאנל שמדגים פריסטים שונים ושני מבנים שונים, עם אותו מפתח אתר ואותן הגדרות שנשמרות לשרת.</p>
                                     <div class="preview-shell-grid">
                                         <article>
                                             <span>ניגודיות</span>
