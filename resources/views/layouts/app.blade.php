@@ -54,8 +54,8 @@
                     </div>
 
                     <div class="app-header-right">
-                        <a class="app-header-cta" href="{{ route('dashboard.install', $siteRouteParams) }}">יצירת קשר</a>
-                        <a class="app-header-icon" href="{{ route('dashboard.compliance', $siteRouteParams) }}" aria-label="מרכז תמיכה">?</a>
+                        <a class="app-header-cta" href="{{ route('dashboard.support', $siteRouteParams) }}">פנייה לתמיכה</a>
+                        <a class="app-header-icon" href="{{ route('dashboard.support', $siteRouteParams) }}" aria-label="מרכז תמיכה">?</a>
                         <span class="app-header-icon" aria-hidden="true">•</span>
                         <div class="app-user-pill">
                             <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>

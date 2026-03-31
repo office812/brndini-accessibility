@@ -30,6 +30,10 @@
             <span>✎</span>
             <span>התקנה והתאמת הווידג׳ט</span>
         </a>
+        <a class="{{ ($activeSection ?? '') === 'support' ? 'is-current' : '' }}" href="{{ route('dashboard.support', ['site' => $site->id]) }}">
+            <span>✦</span>
+            <span>מרכז תמיכה ופניות</span>
+        </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#remediation-report">
             <span>▣</span>
             <span>התראות פעילות</span>

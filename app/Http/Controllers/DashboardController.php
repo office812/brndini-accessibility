@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Site;
+use App\Models\SupportTicket;
 use App\Models\User;
 use App\Support\SiteSettings;
 use Illuminate\Contracts\View\View;
@@ -42,6 +43,11 @@ class DashboardController extends Controller
     public function account(Request $request): View
     {
         return view('account', $this->buildDashboardData($request->user()));
+    }
+
+    public function support(Request $request): View
+    {
+        return view('support', $this->buildDashboardData($request->user()));
     }
 
     public function update(Request $request): RedirectResponse
@@ -267,6 +273,45 @@ class DashboardController extends Controller
             ->with('status', 'התראות האתר עודכנו. המסך ימשיך להבליט רק את מה שבאמת חשוב לעקוב אחריו.');
     }
 
+    public function storeSupportTicket(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'site_id' => ['required', 'integer'],
+            'category' => ['required', Rule::in(array_keys($this->supportCategories()))],
+            'priority' => ['required', Rule::in(array_keys($this->supportPriorityLabels()))],
+            'subject' => ['required', 'string', 'max:180'],
+            'message' => ['required', 'string', 'min:20', 'max:4000'],
+        ]);
+
+        $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
+
+        if (! Schema::hasTable('support_tickets')) {
+            return redirect()
+                ->route('dashboard.support', ['site' => $site->id])
+                ->withErrors(['support' => 'אזור התמיכה עוד לא זמין בשרת הזה. צריך להשלים את עדכון מסד הנתונים, ואז פתיחת פנייה תעבוד רגיל.']);
+        }
+
+        $ticket = SupportTicket::create([
+            'user_id' => $request->user()->id,
+            'site_id' => $site->id,
+            'reference_code' => 'TMP-' . uniqid(),
+            'subject' => trim($validated['subject']),
+            'category' => $validated['category'],
+            'priority' => $validated['priority'],
+            'status' => 'open',
+            'message' => trim($validated['message']),
+            'last_activity_at' => Carbon::now(),
+        ]);
+
+        $ticket->update([
+            'reference_code' => 'SUP-' . str_pad((string) $ticket->id, 5, '0', STR_PAD_LEFT),
+        ]);
+
+        return redirect()
+            ->route('dashboard.support', ['site' => $site->id])
+            ->with('status', 'הפנייה נפתחה בהצלחה. צוות התמיכה יוכל לחזור אליך מתוך סביבת הניהול של האתר הזה.');
+    }
+
     private function ensureSite(User $user): Site
     {
         $site = $user->sites()->orderBy('id')->first();
@@ -323,6 +368,19 @@ class DashboardController extends Controller
         $planCatalog = $this->planCatalog();
         $activeAlerts = collect($auditSnapshot['alerts'] ?? [])->filter(fn (array $alert) => ($alert['state'] ?? 'open') !== 'resolved')->values();
         $currentPlanMeta = $planCatalog[$billing['plan']] ?? $planCatalog['starter'];
+        $supportAvailable = Schema::hasTable('support_tickets');
+        $supportTickets = $supportAvailable
+            ? $user->supportTickets()
+                ->with('site')
+                ->where(function ($query) use ($site) {
+                    $query->where('site_id', $site->id)->orWhereNull('site_id');
+                })
+                ->latest('last_activity_at')
+                ->latest('created_at')
+                ->get()
+            : collect();
+        $openTickets = $supportTickets->whereIn('status', ['open', 'pending']);
+        $urgentTickets = $supportTickets->where('priority', 'urgent');
 
         return [
             'user' => $user,
@@ -362,6 +420,17 @@ class DashboardController extends Controller
                     'url' => route(request()->route()?->getName() ?: 'dashboard', ['site' => $candidate->id]),
                 ];
             })->all(),
+            'supportAvailable' => $supportAvailable,
+            'supportTickets' => $supportTickets,
+            'supportCategories' => $this->supportCategories(),
+            'supportPriorityLabels' => $this->supportPriorityLabels(),
+            'supportStatusLabels' => $this->supportStatusLabels(),
+            'supportSummary' => [
+                'open' => $openTickets->count(),
+                'urgent' => $urgentTickets->count(),
+                'resolved' => $supportTickets->where('status', 'resolved')->count(),
+                'lastActivity' => $supportTickets->first()?->last_activity_at?->diffForHumans() ?? 'עדיין לא נפתחה פנייה',
+            ],
         ];
     }
 
@@ -400,6 +469,38 @@ class DashboardController extends Controller
         return [
             'stacked' => 'מדורג',
             'split' => 'מפוצל',
+        ];
+    }
+
+    private function supportCategories(): array
+    {
+        return [
+            'general' => 'שאלה כללית',
+            'billing' => 'חיוב ורישיון',
+            'install' => 'הטמעה באתר',
+            'widget' => 'עיצוב והתנהגות הווידג׳ט',
+            'compliance' => 'בדיקות, הצהרה וציות',
+            'technical' => 'בעיה טכנית',
+        ];
+    }
+
+    private function supportPriorityLabels(): array
+    {
+        return [
+            'low' => 'נמוכה',
+            'normal' => 'רגילה',
+            'high' => 'גבוהה',
+            'urgent' => 'דחופה',
+        ];
+    }
+
+    private function supportStatusLabels(): array
+    {
+        return [
+            'open' => 'פתוחה',
+            'pending' => 'ממתינה למענה',
+            'answered' => 'נענתה',
+            'resolved' => 'נסגרה',
         ];
     }
 

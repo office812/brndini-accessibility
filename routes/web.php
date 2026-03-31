@@ -19,11 +19,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/install', [DashboardController::class, 'install'])->name('dashboard.install');
     Route::get('/dashboard/compliance', [DashboardController::class, 'compliance'])->name('dashboard.compliance');
     Route::get('/dashboard/account', [DashboardController::class, 'account'])->name('dashboard.account');
+    Route::get('/dashboard/support', [DashboardController::class, 'support'])->name('dashboard.support');
     Route::post('/dashboard/sites', [DashboardController::class, 'storeSite'])->name('dashboard.sites.store');
     Route::post('/dashboard/account/billing', [DashboardController::class, 'updateBilling'])->name('dashboard.account.billing');
     Route::post('/dashboard/account/activate', [DashboardController::class, 'activateLicense'])->name('dashboard.account.activate');
     Route::post('/dashboard/compliance/audit', [DashboardController::class, 'runAudit'])->name('dashboard.compliance.audit');
     Route::post('/dashboard/compliance/alerts', [DashboardController::class, 'updateAlerts'])->name('dashboard.compliance.alerts');
+    Route::post('/dashboard/support/tickets', [DashboardController::class, 'storeSupportTicket'])->name('dashboard.support.store');
     Route::post('/dashboard', [DashboardController::class, 'update'])->name('dashboard.update');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
