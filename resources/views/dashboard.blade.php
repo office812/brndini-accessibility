@@ -196,6 +196,29 @@
                         <option value="large" @selected(old('widget.size', $widget['size']) === 'large')>גדול</option>
                     </select>
 
+                    <label for="widget_button_mode">תצוגת כפתור</label>
+                    <select id="widget_button_mode" name="widget[buttonMode]" data-preview="button-mode">
+                        <option value="icon-label" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'icon-label')>אייקון וטקסט</option>
+                        <option value="label-only" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'label-only')>טקסט בלבד</option>
+                        <option value="icon-only" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'icon-only')>אייקון בלבד</option>
+                    </select>
+
+                    <label for="widget_icon">סוג אייקון</label>
+                    <select id="widget_icon" name="widget[icon]" data-preview="icon">
+                        <option value="figure" @selected(old('widget.icon', $widget['icon']) === 'figure')>דמות נגישות</option>
+                        <option value="spark" @selected(old('widget.icon', $widget['icon']) === 'spark')>ניצוץ</option>
+                        <option value="shield" @selected(old('widget.icon', $widget['icon']) === 'shield')>מגן</option>
+                        <option value="pulse" @selected(old('widget.icon', $widget['icon']) === 'pulse')>פולס</option>
+                    </select>
+
+                    <label for="widget_button_style">סגנון כפתור</label>
+                    <select id="widget_button_style" name="widget[buttonStyle]" data-preview="button-style">
+                        <option value="solid" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'solid')>מודגש</option>
+                        <option value="soft" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'soft')>רך ובהיר</option>
+                        <option value="glass" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'glass')>זכוכית</option>
+                        <option value="midnight" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'midnight')>כהה יוקרתי</option>
+                    </select>
+
                     <label for="widget_label">טקסט על הכפתור</label>
                     <input id="widget_label" name="widget[label]" type="text" value="{{ old('widget.label', $widget['label']) }}" data-preview="label" required>
 
@@ -258,16 +281,17 @@
                                     <strong>הגדרות נגישות</strong>
                                     <p>פאנל קומפקטי, שקט וברור עם פעולות חשובות בלבד ובלי עומס מיותר.</p>
                                 </div>
-                                <button
-                                    class="preview-badge"
-                                    id="widget-preview-button"
-                                    type="button"
-                                    style="background-color: {{ $widget['color'] }}"
-                                >
-                                    {{ $widget['label'] }}
-                                </button>
-                            </div>
+                            <button
+                                class="preview-badge preview-mode-{{ $widget['buttonMode'] }} preview-style-{{ $widget['buttonStyle'] }}"
+                                id="widget-preview-button"
+                                type="button"
+                                style="--preview-widget-color: {{ $widget['color'] }}"
+                            >
+                                <span class="preview-badge-icon" id="widget-preview-icon" data-icon="{{ $widget['icon'] }}"></span>
+                                <span class="preview-badge-label" id="widget-preview-label">{{ $widget['label'] }}</span>
+                            </button>
                         </div>
+                    </div>
                     </div>
                 </article>
 

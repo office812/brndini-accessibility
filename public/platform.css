@@ -2543,15 +2543,77 @@ code {
 }
 
 .preview-badge {
+    --preview-widget-color: #1d6dff;
     width: fit-content;
     min-height: 58px;
-    padding-inline: 20px;
-    border: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding-inline: 18px 20px;
+    border: 1px solid transparent;
     border-radius: var(--radius-pill);
+    background: linear-gradient(135deg, var(--preview-widget-color), #081121 92%);
     color: #fff;
     font: inherit;
     font-weight: 800;
     box-shadow: 0 18px 36px rgba(29, 109, 255, 0.18);
+}
+
+.preview-badge-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.preview-badge-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.preview-badge.preview-mode-label-only .preview-badge-icon {
+    display: none;
+}
+
+.preview-badge.preview-mode-icon-only {
+    min-width: 58px;
+    justify-content: center;
+    padding-inline: 0;
+}
+
+.preview-badge.preview-mode-icon-only .preview-badge-label {
+    display: none;
+}
+
+.preview-badge.preview-style-soft {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(236, 244, 255, 0.96));
+    color: #13325b;
+    border-color: rgba(29, 109, 255, 0.14);
+    box-shadow: 0 14px 30px rgba(29, 109, 255, 0.08);
+}
+
+.preview-badge.preview-style-soft .preview-badge-icon,
+.preview-badge.preview-style-glass .preview-badge-icon {
+    background: rgba(29, 109, 255, 0.08);
+    border-color: rgba(29, 109, 255, 0.12);
+}
+
+.preview-badge.preview-style-glass {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.34));
+    color: #10233f;
+    border-color: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}
+
+.preview-badge.preview-style-midnight {
+    background: linear-gradient(135deg, #081121, #152d57);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 44px rgba(8, 17, 33, 0.22);
 }
 
 .preview-size-compact .preview-badge {
@@ -2563,6 +2625,10 @@ code {
     min-height: 68px;
     padding-inline: 24px;
     font-size: 1.04rem;
+}
+
+.preview-size-large .preview-badge.preview-mode-icon-only {
+    min-width: 68px;
 }
 
 .info-card {
