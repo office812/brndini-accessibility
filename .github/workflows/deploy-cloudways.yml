@@ -18,14 +18,22 @@ jobs:
         env:
           CW_SSH_PRIVATE_KEY: ${{ secrets.CW_SSH_PRIVATE_KEY }}
           CW_HOST: ${{ secrets.CW_HOST }}
+          CW_PASSWORD: ${{ secrets.CW_PASSWORD }}
         run: |
           mkdir -p ~/.ssh
+          if [ -n "$CW_PASSWORD" ]; then
+            ssh-keyscan -H "$CW_HOST" >> ~/.ssh/known_hosts || true
+            exit 0
+          fi
           if [ -n "$CW_SSH_PRIVATE_KEY" ] && printf "%s" "$CW_SSH_PRIVATE_KEY" | grep -q "BEGIN OPENSSH PRIVATE KEY"; then
             printf "%s" "$CW_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           elif [ -n "$CW_SSH_PRIVATE_KEY" ]; then
             printf "%s" "$CW_SSH_PRIVATE_KEY" | tr -d '\r\n\t ' | base64 --decode > ~/.ssh/id_ed25519
+          else
+            echo "Missing CW_PASSWORD or CW_SSH_PRIVATE_KEY secret"
+            exit 1
           fi
-          ssh-keyscan -H "$CW_HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$CW_HOST" >> ~/.ssh/known_hosts || true
           if [ -f ~/.ssh/id_ed25519 ]; then
             chmod 600 ~/.ssh/id_ed25519
           fi
