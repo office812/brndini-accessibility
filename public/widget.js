@@ -299,10 +299,7 @@
 
     function syncToggle(toggle, active) {
       toggle.setAttribute('aria-pressed', String(active));
-      toggle.textContent =
-        active
-          ? (config.widget.language === 'en' ? 'On' : 'פעיל')
-          : (config.widget.language === 'en' ? 'Off' : 'כבוי');
+      toggle.textContent = active ? 'פעיל' : 'כבוי';
     }
   }
 

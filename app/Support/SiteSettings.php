@@ -25,7 +25,6 @@ class SiteSettings
 
     public const LANGUAGES = [
         'he',
-        'en',
     ];
 
     public static function defaultWidget(): array

@@ -41,31 +41,31 @@
                 <div class="hero-device-screen">
                     <div class="hero-device-nav">
                         <span>לוח ניהול</span>
-                        <span>Install</span>
-                        <span>Compliance</span>
-                        <span>Account</span>
+                        <span>התקנה</span>
+                        <span>ציות</span>
+                        <span>חשבון</span>
                     </div>
 
                     <div class="hero-device-grid">
                         <article class="hero-device-card hero-device-card-primary">
                             <span class="hero-device-label">A11Y BRIDGE</span>
                             <strong>ווידג׳ט מנוהל</strong>
-                            <p>site key, brand settings, CTA label, language</p>
+                            <p>site key, הגדרות מותג, טקסט כפתור ושפה</p>
                         </article>
                         <article class="hero-device-card">
-                            <span class="hero-device-label">INSTALL</span>
-                            <strong>Install once</strong>
-                            <p>Copy, paste, refresh, verify</p>
+                            <span class="hero-device-label">התקנה</span>
+                            <strong>מתקינים פעם אחת</strong>
+                            <p>העתקה, הדבקה, רענון ואימות</p>
                         </article>
                         <article class="hero-device-card">
-                            <span class="hero-device-label">COMPLIANCE</span>
-                            <strong>Statement center</strong>
-                            <p>statement URL, governance, service mode</p>
+                            <span class="hero-device-label">ציות</span>
+                            <strong>מרכז הצהרה</strong>
+                            <p>קישור להצהרה, governance ומסלול שירות</p>
                         </article>
                         <article class="hero-device-card">
-                            <span class="hero-device-label">CONTENT</span>
-                            <strong>SEO articles</strong>
-                            <p>organic growth and category education</p>
+                            <span class="hero-device-label">תוכן</span>
+                            <strong>מאמרי SEO</strong>
+                            <p>צמיחה אורגנית וחינוך שוק</p>
                         </article>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
 
     <section class="trust-bar" aria-label="trust signals">
         <div class="trust-chip">ניהול ווידג׳ט מנוהל</div>
-        <div class="trust-chip">Install once, manage remotely</div>
+        <div class="trust-chip">הטמעה אחת, ניהול מרחוק</div>
         <div class="trust-chip">Statement and compliance framing</div>
         <div class="trust-chip">Built for agencies and growing teams</div>
     </section>

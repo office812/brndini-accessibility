@@ -202,7 +202,6 @@
                     <label for="widget_language">שפה</label>
                     <select id="widget_language" name="widget[language]">
                         <option value="he" @selected(old('widget.language', $widget['language']) === 'he')>עברית</option>
-                        <option value="en" @selected(old('widget.language', $widget['language']) === 'en')>אנגלית</option>
                     </select>
 
                     <div class="toggle-grid">
@@ -247,7 +246,7 @@
 
                                 <div class="preview-details">
                                     <span class="preview-pill">הגדרה מנוהלת</span>
-                                    <span class="preview-pill">{{ $widget['language'] === 'en' ? 'ממשק באנגלית' : 'עברית' }}</span>
+                                    <span class="preview-pill">ממשק בעברית</span>
                                 </div>
                             </div>
 

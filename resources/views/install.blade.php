@@ -51,7 +51,7 @@
                     </div>
                     <div class="domain-info-row">
                         <span>שפה</span>
-                        <strong>{{ $widget['language'] === 'en' ? 'אנגלית' : 'עברית' }}</strong>
+                        <strong>עברית</strong>
                     </div>
                     <div class="domain-info-row">
                         <span>טקסט כפתור</span>

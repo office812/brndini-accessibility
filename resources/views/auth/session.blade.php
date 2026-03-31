@@ -107,7 +107,7 @@
                     <div class="auth-showcase-body">
                         <div class="auth-showcase-stat">
                             <span class="auth-showcase-label">ווידג׳ט מנוהל</span>
-                            <strong>Install once</strong>
+                            <strong>מתקינים פעם אחת</strong>
                             <p>snippet קבוע עם configuration שנמשך מהפלטפורמה.</p>
                         </div>
                         <div class="auth-showcase-stat">
