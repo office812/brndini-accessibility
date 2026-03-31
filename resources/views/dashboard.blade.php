@@ -6,146 +6,141 @@
     @php($statementConnected = filled($site->statement_url))
     @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'Managed accessibility layer')
 
-    <section class="portal-welcome">
-        <div>
-            <p class="eyebrow">Partner workspace</p>
-            <h1>{{ $user->name }}, ברוך הבא ל־A11Y Bridge</h1>
-            <p class="hero-text">
-                מכאן מנהלים את ה־widget, ההטמעה וה־compliance messaging של הלקוח שלך במקום אחד,
-                עם אותו <code>site key</code> קבוע שמתעדכן מרחוק.
-            </p>
-        </div>
-    </section>
-
-    <section class="portal-hero-grid">
-        <article class="portal-hero-card">
-            <div class="portal-hero-copy">
-                <p class="portal-hero-kicker">Hosted accessibility workspace</p>
-                <h2>נהל את שכבת הנגישות של האתר, בלי להחליף שוב קוד.</h2>
-                <p>
-                    כל שינוי בצבע, מיקום, שפה, statement או framing שירות נשמר בפלטפורמה ונמשך
-                    מיידית לאתר דרך הסקריפט הקבוע שכבר הוטמע.
-                </p>
-
-                <div class="portal-hero-actions">
-                    <a class="primary-button" href="{{ route('dashboard.install') }}">Open install center</a>
-                    <a class="secondary-button" href="{{ route('dashboard.compliance') }}">Review compliance</a>
-                </div>
+    <section class="licenses-shell">
+        <aside class="licenses-sidebar">
+            <div class="licenses-sidebar-block">
+                <h2>My Products</h2>
+                <nav class="licenses-product-nav" aria-label="Products">
+                    <a class="is-current" href="{{ route('dashboard') }}">
+                        <span class="licenses-product-icon">◉</span>
+                        <span>accessWidget</span>
+                    </a>
+                    <a href="{{ route('dashboard.compliance') }}">
+                        <span class="licenses-product-icon">◇</span>
+                        <span>accessFlow</span>
+                    </a>
+                </nav>
             </div>
 
-            <div class="portal-hero-visual" aria-hidden="true">
-                <div class="portal-window">
-                    <div class="portal-window-bar">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <div class="portal-window-grid">
-                        <article>
-                            <span>Site key</span>
-                            <strong>{{ $site->public_key }}</strong>
-                            <small>public id for remote sync</small>
-                        </article>
-                        <article>
-                            <span>Mode</span>
-                            <strong>{{ $serviceLabel }}</strong>
-                            <small>service framing</small>
-                        </article>
-                        <article>
-                            <span>Domain</span>
-                            <strong>{{ $site->domain }}</strong>
-                            <small>active production destination</small>
-                        </article>
-                        <article>
-                            <span>Statement</span>
-                            <strong>{{ $statementConnected ? 'Connected' : 'Needs action' }}</strong>
-                            <small>{{ $statementConnected ? 'linked to widget panel' : 'add URL to complete flow' }}</small>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <aside class="portal-side-rail">
-            <div class="portal-side-card portal-side-card-support">
-                <span class="meta-label">We are here for you</span>
-                <h3>יש שאלות על ההטמעה?</h3>
-                <p>פתח את מסך ההתקנה או את אזור ה־compliance כדי להשלים את החיבור ללקוח.</p>
-                <a class="text-link" href="{{ route('dashboard.install') }}">Go to installation</a>
-            </div>
-
-            <div class="portal-side-card">
-                <span class="meta-label">Statement</span>
-                <h3>{{ $statementConnected ? 'הצהרת הנגישות מחוברת' : 'צריך לחבר statement' }}</h3>
-                <p>{{ $statementConnected ? 'יש כבר URL פעיל בתוך ה־widget.' : 'כדאי להוסיף URL כדי לסגור חוויית משתמש ומסגור שירות.' }}</p>
-            </div>
-
-            <div class="portal-side-card portal-side-card-dark">
-                <span class="meta-label">Account mode</span>
-                <h3>{{ $serviceLabel }}</h3>
-                <p>המסלול הזה שולט על framing השירות, ה־governance והצגת השכבה ללקוח.</p>
+            <div class="licenses-sidebar-block licenses-sidebar-help">
+                <span class="meta-label">Quick status</span>
+                <h3>{{ $statementConnected ? 'Statement connected' : 'Statement missing' }}</h3>
+                <p>{{ $statementConnected ? 'החשבון מוכן עם statement פעיל.' : 'כדאי לחבר statement כדי לסגור את חוויית ההטמעה.' }}</p>
             </div>
         </aside>
-    </section>
 
-    <section class="portal-stat-strip" aria-label="Workspace summary">
-        <article class="portal-stat-card">
-            <span class="portal-stat-icon">◎</span>
-            <div>
-                <strong>1</strong>
-                <p>Active hosted widget</p>
-            </div>
-        </article>
-        <article class="portal-stat-card">
-            <span class="portal-stat-icon">⌘</span>
-            <div>
-                <strong>{{ $statementConnected ? 'Ready' : 'Pending' }}</strong>
-                <p>Statement connection</p>
-            </div>
-        </article>
-        <article class="portal-stat-card">
-            <span class="portal-stat-icon">◔</span>
-            <div>
-                <strong>{{ $site->domain }}</strong>
-                <p>Production domain</p>
-            </div>
-        </article>
-        <article class="portal-stat-card">
-            <span class="portal-stat-icon">✦</span>
-            <div>
-                <strong>{{ $widget['language'] === 'en' ? 'English' : 'עברית' }}</strong>
-                <p>Widget interface language</p>
-            </div>
-        </article>
-    </section>
+        <div class="licenses-main">
+            <section class="licenses-welcome">
+                <p class="eyebrow">My licenses</p>
+                <h1>{{ $user->name }}, Welcome to A11Y Bridge</h1>
+            </section>
 
-    <section class="portal-content-grid">
-        <div class="portal-main-column">
-            <article class="portal-content-card portal-content-card-code">
-                <div class="portal-card-head">
+            <section class="licenses-hero-card">
+                <div class="licenses-hero-copy">
+                    <h2>Automatic web accessibility made simple.</h2>
+                    <p>
+                        נהל את ה־widget hosted, את ההטמעה ואת מסגרת ה־compliance מתוך מקום אחד,
+                        בלי להחליף שוב את קוד הסקריפט באתר.
+                    </p>
+
+                    <div class="licenses-hero-actions">
+                        <a class="primary-button" href="{{ route('dashboard.install') }}">Start installation</a>
+                        <a class="secondary-button" href="{{ route('dashboard.compliance') }}">More about compliance</a>
+                    </div>
+                </div>
+
+                <div class="licenses-hero-visual" aria-hidden="true">
+                    <div class="licenses-widget-orb"></div>
+                    <div class="licenses-device-stage">
+                        <div class="licenses-device-screen licenses-device-screen-back"></div>
+                        <div class="licenses-device-screen licenses-device-screen-front">
+                            <div class="licenses-device-topbar">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="licenses-device-list">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="licenses-toolbar">
+                <div>
+                    <h2>accessWidget licenses <small>| 1 total</small></h2>
+                </div>
+                <div class="licenses-toolbar-actions">
+                    <a class="secondary-button" href="{{ route('dashboard.install') }}">Batch management</a>
+                    <a class="primary-button" href="{{ route('dashboard.install') }}">Add new website</a>
+                </div>
+            </section>
+
+            <section class="licenses-table-card">
+                <div class="licenses-filters">
+                    <label class="licenses-search">
+                        <span>⌕</span>
+                        <input type="text" value="{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}" aria-label="Search domain">
+                    </label>
+                    <select aria-label="Status filter">
+                        <option>Active</option>
+                        <option>Pending</option>
+                    </select>
+                </div>
+
+                <div class="licenses-table-wrap">
+                    <table class="licenses-table">
+                        <thead>
+                            <tr>
+                                <th>Domain</th>
+                                <th>End date</th>
+                                <th>Status</th>
+                                <th>Plan</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</td>
+                                <td>-</td>
+                                <td><span class="status-pill is-good">Active</span></td>
+                                <td><span class="status-pill is-neutral">{{ $serviceLabel }}</span></td>
+                                <td><a class="licenses-manage-link" href="#license-management">Manage</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="licenses-lower-grid" id="license-management">
+                <article class="portal-content-card portal-content-card-code">
                     <div>
-                        <p class="eyebrow">Embed</p>
+                        <p class="eyebrow">License management</p>
                         <h2>קוד הטמעה וה־site key</h2>
                     </div>
-                    <a class="secondary-button" href="{{ route('dashboard.install') }}">Install guide</a>
-                </div>
+                    <p class="panel-intro">החלק הזה מחליף את מסך ה־manage: הוא מחזיק את ה־site key, את הסקריפט ואת סטטוס החיבור.</p>
 
-                <div class="portal-code-grid">
-                    <div class="portal-code-block">
-                        <span class="meta-label">Site key</span>
-                        <strong>{{ $site->site_name }}</strong>
-                        <p class="inline-note">המזהה הציבורי של האתר: <code>{{ $site->public_key }}</code></p>
+                    <div class="portal-code-grid">
+                        <div class="portal-code-block">
+                            <span class="meta-label">Site key</span>
+                            <strong>{{ $site->site_name }}</strong>
+                            <p class="inline-note">המזהה הציבורי של האתר: <code>{{ $site->public_key }}</code></p>
+                        </div>
+                        <div class="portal-code-block portal-code-block-dark">
+                            <span class="meta-label">Embed script</span>
+                            <code id="embed-code">{{ $embedCode }}</code>
+                            <button class="copy-button" type="button" data-copy-target="embed-code">העתק קוד הטמעה</button>
+                        </div>
                     </div>
-                    <div class="portal-code-block portal-code-block-dark">
-                        <span class="meta-label">Embed script</span>
-                        <code id="embed-code">{{ $embedCode }}</code>
-                        <button class="copy-button" type="button" data-copy-target="embed-code">העתק קוד הטמעה</button>
-                    </div>
-                </div>
-            </article>
+                </article>
+            </section>
 
             <form class="panel-card stack-form portal-form-card" method="POST" action="{{ route('dashboard.update') }}">
-            @csrf
+                @csrf
 
                 <div class="portal-card-head">
                     <div>
@@ -237,69 +232,66 @@
                     </div>
                 </div>
             </form>
-        </div>
 
-        <aside class="portal-side-column">
-            <article class="panel-card portal-preview-card">
-                <p class="eyebrow">Preview</p>
-                <h2>איך זה ייראה אצל הלקוח</h2>
-                <p class="panel-intro">תצוגה מקדימה חיה של ה־widget לפי ההגדרות הנוכחיות.</p>
+            <section class="licenses-lower-grid">
+                <article class="panel-card portal-preview-card">
+                    <p class="eyebrow">Preview</p>
+                    <h2>איך זה ייראה אצל הלקוח</h2>
+                    <p class="panel-intro">תצוגה מקדימה חיה של ה־widget לפי ההגדרות הנוכחיות.</p>
 
-                <div class="preview-stage">
-                    <div class="preview-window">
-                        <div class="preview-content">
-                            <strong>{{ $site->site_name }}</strong>
-                            <p>כך נראה ה־widget באתר. השינויים שתשמור כאן נמשכים מהשרת בזמן טעינה.</p>
+                    <div class="preview-stage">
+                        <div class="preview-window">
+                            <div class="preview-content">
+                                <strong>{{ $site->site_name }}</strong>
+                                <p>כך נראה ה־widget באתר. השינויים שתשמור כאן נמשכים מהשרת בזמן טעינה.</p>
 
-                            <div class="preview-details">
-                                <span class="preview-pill">Hosted configuration</span>
-                                <span class="preview-pill">{{ $widget['language'] === 'en' ? 'English UI' : 'עברית' }}</span>
+                                <div class="preview-details">
+                                    <span class="preview-pill">Hosted configuration</span>
+                                    <span class="preview-pill">{{ $widget['language'] === 'en' ? 'English UI' : 'עברית' }}</span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div
-                            class="preview-widget preview-{{ $widget['position'] }} preview-size-{{ $widget['size'] }}"
-                            id="widget-preview"
-                        >
-                            <div class="preview-shell">
-                                <strong>Accessibility settings</strong>
-                                <p>פאנל קומפקטי, שקט וברור עם פעולות חשובות בלבד ובלי עומס מיותר.</p>
-                            </div>
-                            <button
-                                class="preview-badge"
-                                id="widget-preview-button"
-                                type="button"
-                                style="background-color: {{ $widget['color'] }}"
+                            <div
+                                class="preview-widget preview-{{ $widget['position'] }} preview-size-{{ $widget['size'] }}"
+                                id="widget-preview"
                             >
-                                {{ $widget['label'] }}
-                            </button>
+                                <div class="preview-shell">
+                                    <strong>Accessibility settings</strong>
+                                    <p>פאנל קומפקטי, שקט וברור עם פעולות חשובות בלבד ובלי עומס מיותר.</p>
+                                </div>
+                                <button
+                                    class="preview-badge"
+                                    id="widget-preview-button"
+                                    type="button"
+                                    style="background-color: {{ $widget['color'] }}"
+                                >
+                                    {{ $widget['label'] }}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </article>
+                </article>
 
-            <div class="info-card info-card-tight portal-note-card">
-                <h3>מה הלקוח מדביק באתר</h3>
-                <p>
-                    שורת הסקריפט נשארת קבועה. כל שינוי בדשבורד הזה מעדכן את אותו widget בלי
-                    צורך להחליף קוד שוב.
-                </p>
-            </div>
+                <aside class="portal-side-column">
+                    <div class="info-card info-card-tight portal-note-card">
+                        <h3>Widget status</h3>
+                        <p>הסקריפט קבוע וה־widget ממשיך להתעדכן אוטומטית מאותו site key.</p>
+                    </div>
 
-            <div class="info-card info-card-tight portal-note-card">
-                <h3>הערת compliance</h3>
-                <p>
-                    ה־widget נותן העדפות תצוגה, גישה להצהרת נגישות ומסגרת ניהול. ציות מלא עדיין
-                    תלוי גם בקוד האתר, בתוכן ובבדיקות ידניות.
-                </p>
-            </div>
+                    <div class="info-card info-card-tight portal-note-card">
+                        <h3>Compliance</h3>
+                        <p>
+                            ה־widget נותן העדפות תצוגה, גישה להצהרת נגישות ומסגרת ניהול. ציות מלא עדיין
+                            תלוי גם בקוד האתר, בתוכן ובבדיקות ידניות.
+                        </p>
+                    </div>
 
-            <div class="info-card info-card-tight portal-note-card">
-                <h3>Operator guidance</h3>
-                <p>
-                    נסה לעבוד תמיד בסדר הזה: site details, widget, statement URL, ואז בדיקת live באתר עצמו.
-                </p>
-            </div>
-        </aside>
+                    <div class="info-card info-card-tight portal-note-card">
+                        <h3>Operator guidance</h3>
+                        <p>סדר העבודה המומלץ: site details, widget, statement URL, ואז בדיקת live באתר עצמו.</p>
+                    </div>
+                </aside>
+            </section>
+        </div>
     </section>
 @endsection
