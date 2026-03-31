@@ -357,6 +357,22 @@
                                 </div>
                             </div>
 
+                            <div class="super-admin-toolbar" data-filter-root>
+                                <div class="super-admin-toolbar-field">
+                                    <label for="super_admin_users_search">חיפוש משתמש</label>
+                                    <input id="super_admin_users_search" type="search" placeholder="חפש לפי שם או אימייל" data-filter-search>
+                                </div>
+                                <div class="super-admin-toolbar-field">
+                                    <label for="super_admin_users_role">סינון לפי הרשאה</label>
+                                    <select id="super_admin_users_role" data-filter-field="role">
+                                        <option value="">כל ההרשאות</option>
+                                        <option value="super">סופר־אדמין</option>
+                                        <option value="admin">אדמין</option>
+                                        <option value="client">לקוח</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="licenses-table-wrap">
                                 <table class="licenses-table">
                                     <thead>
@@ -370,7 +386,10 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($adminUsers as $adminUser)
-                                            <tr>
+                                            @php
+                                                $roleKey = $adminUser->isSuperAdmin() ? 'super' : ($adminUser->is_admin ? 'admin' : 'client');
+                                            @endphp
+                                            <tr data-filter-item data-filter-search-text="{{ Str::lower($adminUser->name . ' ' . $adminUser->email) }}" data-filter-role="{{ $roleKey }}">
                                                 <td data-label="משתמש">{{ $adminUser->name }}</td>
                                                 <td data-label="אימייל">{{ $adminUser->email }}</td>
                                                 <td data-label="אתרים">{{ $adminUser->sites_count }}</td>
@@ -424,6 +443,29 @@
                                 </div>
                             </div>
 
+                            <div class="super-admin-toolbar" data-filter-root>
+                                <div class="super-admin-toolbar-field">
+                                    <label for="super_admin_sites_search">חיפוש אתר</label>
+                                    <input id="super_admin_sites_search" type="search" placeholder="חפש לפי שם אתר, דומיין או בעלים" data-filter-search>
+                                </div>
+                                <div class="super-admin-toolbar-field">
+                                    <label for="super_admin_sites_license">סינון רישיון</label>
+                                    <select id="super_admin_sites_license" data-filter-field="license">
+                                        <option value="">כל הרישיונות</option>
+                                        <option value="active">פעיל</option>
+                                        <option value="inactive">לא פעיל</option>
+                                    </select>
+                                </div>
+                                <div class="super-admin-toolbar-field">
+                                    <label for="super_admin_sites_install">סינון התקנה</label>
+                                    <select id="super_admin_sites_install" data-filter-field="install">
+                                        <option value="">כל מצבי ההתקנה</option>
+                                        <option value="installed">זוהתה טעינה</option>
+                                        <option value="pending">ממתין להטמעה</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="licenses-table-wrap">
                                 <table class="licenses-table">
                                     <thead>
@@ -437,7 +479,17 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($adminSites as $adminSite)
-                                            <tr>
+                                            @php
+                                                $licenseKey = ($adminSite->license_status ?? 'active') === 'active' ? 'active' : 'inactive';
+                                                $installKey = filled($adminSite->last_seen_at) ? 'installed' : 'pending';
+                                                $ownerEmail = $adminSite->user?->email ?? 'לא ידוע';
+                                            @endphp
+                                            <tr
+                                                data-filter-item
+                                                data-filter-search-text="{{ Str::lower($adminSite->site_name . ' ' . $adminSite->domain . ' ' . $ownerEmail) }}"
+                                                data-filter-license="{{ $licenseKey }}"
+                                                data-filter-install="{{ $installKey }}"
+                                            >
                                                 <td data-label="אתר">{{ $adminSite->site_name }}</td>
                                                 <td data-label="דומיין">{{ parse_url($adminSite->domain, PHP_URL_HOST) ?: $adminSite->domain }}</td>
                                                 <td data-label="בעלים">{{ $adminSite->user?->email ?? 'לא ידוע' }}</td>
@@ -487,6 +539,31 @@
                                     </div>
                                 </div>
 
+                                <div class="super-admin-toolbar" data-filter-root>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_tickets_search">חיפוש פנייה</label>
+                                        <input id="super_admin_tickets_search" type="search" placeholder="חפש לפי נושא, אתר או אימייל" data-filter-search>
+                                    </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_tickets_status">סינון סטטוס</label>
+                                        <select id="super_admin_tickets_status" data-filter-field="status">
+                                            <option value="">כל הסטטוסים</option>
+                                            @foreach ($supportStatusLabels as $statusKey => $statusLabel)
+                                                <option value="{{ $statusKey }}">{{ $statusLabel }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_tickets_priority">סינון עדיפות</label>
+                                        <select id="super_admin_tickets_priority" data-filter-field="priority">
+                                            <option value="">כל העדיפויות</option>
+                                            @foreach ($supportPriorityLabels as $priorityKey => $priorityLabel)
+                                                <option value="{{ $priorityKey }}">{{ $priorityLabel }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                                 @if (($supportUsesRuntimeFallback ?? false) === true)
                                     <div class="support-empty-state">
                                         <strong>מרכז התמיכה פועל כרגע במצב גיבוי</strong>
@@ -502,7 +579,13 @@
                                 @else
                                     <div class="support-ticket-list">
                                         @foreach ($adminSupportTickets as $ticket)
-                                            <article class="support-ticket-card">
+                                            <article
+                                                class="support-ticket-card"
+                                                data-filter-item
+                                                data-filter-search-text="{{ Str::lower(($ticket->subject ?? '') . ' ' . ($ticket->user_email ?? '') . ' ' . ($ticket->site_name ?? '') . ' ' . ($ticket->message ?? '')) }}"
+                                                data-filter-status="{{ $ticket->status }}"
+                                                data-filter-priority="{{ $ticket->priority }}"
+                                            >
                                                 <div class="support-ticket-head">
                                                     <div>
                                                         <p class="support-ticket-code">{{ $ticket->reference_code }}</p>

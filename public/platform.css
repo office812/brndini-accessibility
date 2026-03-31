@@ -3160,6 +3160,35 @@ body.page-is-ready .auth-shell {
     flex-wrap: wrap;
 }
 
+.super-admin-toolbar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.super-admin-toolbar-field {
+    display: grid;
+    gap: 8px;
+}
+
+.super-admin-toolbar-field label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #21354f;
+}
+
+.super-admin-toolbar-field input,
+.super-admin-toolbar-field select {
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    background: rgba(255, 255, 255, 0.98);
+    color: #10233f;
+    font: inherit;
+}
+
 .super-admin-table-card {
     gap: 16px;
 }
@@ -5025,7 +5054,8 @@ body.page-is-ready .auth-shell {
     }
 
     .super-admin-content-grid-wide,
-    .super-admin-form-grid {
+    .super-admin-form-grid,
+    .super-admin-toolbar {
         grid-template-columns: 1fr;
     }
 

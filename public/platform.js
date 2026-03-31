@@ -273,6 +273,61 @@ document.addEventListener('DOMContentLoaded', function () {
     setActiveTab(initialHash || buttons[0].getAttribute('data-dashboard-tab-button'), false);
   });
 
+  document.querySelectorAll('[data-filter-root]').forEach(function (filterRoot) {
+    var searchInput = filterRoot.querySelector('[data-filter-search]');
+    var fieldInputs = Array.prototype.slice.call(filterRoot.querySelectorAll('[data-filter-field]'));
+    var scope = filterRoot.parentElement;
+    var items = scope ? Array.prototype.slice.call(scope.querySelectorAll('[data-filter-item]')) : [];
+
+    if (!items.length) {
+      return;
+    }
+
+    function applyFilters() {
+      var searchTerm = searchInput ? (searchInput.value || '').trim().toLowerCase() : '';
+
+      items.forEach(function (item) {
+        var matchesSearch = true;
+        var matchesFields = true;
+
+        if (searchTerm) {
+          var haystack = (item.getAttribute('data-filter-search-text') || '').toLowerCase();
+          matchesSearch = haystack.indexOf(searchTerm) !== -1;
+        }
+
+        fieldInputs.forEach(function (fieldInput) {
+          if (!matchesFields) {
+            return;
+          }
+
+          var fieldName = fieldInput.getAttribute('data-filter-field');
+          var expectedValue = (fieldInput.value || '').trim();
+
+          if (!fieldName || !expectedValue) {
+            return;
+          }
+
+          var actualValue = item.getAttribute('data-filter-' + fieldName) || '';
+          if (actualValue !== expectedValue) {
+            matchesFields = false;
+          }
+        });
+
+        item.hidden = !(matchesSearch && matchesFields);
+      });
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', applyFilters);
+    }
+
+    fieldInputs.forEach(function (fieldInput) {
+      fieldInput.addEventListener('change', applyFilters);
+    });
+
+    applyFilters();
+  });
+
   document.querySelectorAll('[data-widget-pane-root]').forEach(function (root) {
     var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-widget-pane-button]'));
     var panes = Array.prototype.slice.call(root.querySelectorAll('[data-widget-pane]'));
