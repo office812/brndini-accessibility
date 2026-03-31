@@ -295,6 +295,13 @@
     return 'free';
   }
 
+  function resolvePanelLayout(requestedLayout) {
+    // The hosted widget panel is intentionally narrow.
+    // Split sections inside a floating panel create overly narrow cards in real sites,
+    // so we flatten the public widget to a stable stacked layout.
+    return requestedLayout === 'split' ? 'stacked' : 'stacked';
+  }
+
   function getWidgetIconSvg(type) {
     switch (type) {
       case 'spark':
@@ -378,7 +385,7 @@
     var purchaseUrl = config.purchaseUrl || purchaseFallbackUrl;
     var preset = config.widget.preset || 'classic';
     var position = forcedPosition || config.widget.position || 'bottom-right';
-    var panelLayout = config.widget.panelLayout || 'stacked';
+    var panelLayout = resolvePanelLayout(config.widget.panelLayout || 'stacked');
 
     applyPrefs(prefs);
 
@@ -610,15 +617,19 @@
     function createProfileSection(planName, premiumUrl, currentPrefs) {
       var section = document.createElement('section');
       section.className = 'ab-widget-section is-full';
+      var unlockedProfiles = profiles.filter(function (profile) {
+        return profile.plan !== 'premium' || planName === 'premium';
+      });
+      var lockedProfiles = profiles.filter(function (profile) {
+        return profile.plan === 'premium' && planName !== 'premium';
+      });
 
-      section.appendChild(createSectionHead('בחרו פרופיל נגישות', 'הפעלת תצורה מהירה של התאמות מוכנות מראש.', 'profiles', String(profiles.length) + ' מצבים'));
+      section.appendChild(createSectionHead('בחרו פרופיל נגישות', 'הפעלת תצורה מהירה של התאמות מוכנות מראש.', 'profiles', String(unlockedProfiles.length) + ' מצבים זמינים'));
 
       var profileGrid = document.createElement('div');
       profileGrid.className = 'ab-widget-grid ab-widget-grid-profiles';
 
-      profiles.forEach(function (profile) {
-        var isPremium = profile.plan === 'premium';
-        var isLocked = isPremium && planName !== 'premium';
+      unlockedProfiles.forEach(function (profile) {
         var card = document.createElement('article');
         card.className = 'ab-widget-card ab-widget-profile-card' + (currentPrefs.profile === profile.key ? ' is-active' : '');
 
@@ -636,34 +647,25 @@
 
         var actionWrap = document.createElement('div');
         actionWrap.className = 'ab-widget-card-actions';
-
-        if (isLocked) {
-          actionWrap.appendChild(createLockButton(premiumUrl));
+        var profileButton = document.createElement('button');
+        profileButton.type = 'button';
+        profileButton.className = 'ab-widget-choice-button' + (currentPrefs.profile === profile.key ? ' is-active' : '');
+        if (profile.key === 'none') {
+          profileButton.textContent = 'איפוס';
+        } else if (currentPrefs.profile === profile.key) {
+          profileButton.textContent = 'בטל פרופיל';
         } else {
-          var profileButton = document.createElement('button');
-          profileButton.type = 'button';
-          profileButton.className = 'ab-widget-choice-button' + (currentPrefs.profile === profile.key ? ' is-active' : '');
-          if (profile.key === 'none') {
-            profileButton.textContent = 'איפוס';
-          } else if (currentPrefs.profile === profile.key) {
-            profileButton.textContent = 'בטל פרופיל';
-          } else {
-            profileButton.textContent = 'הפעל';
+          profileButton.textContent = 'הפעל';
+        }
+        profileButton.addEventListener('click', function () {
+          if (profile.key !== 'none' && currentPrefs.profile === profile.key) {
+            updatePrefs(Object.assign({}, defaultPrefs));
+            return;
           }
-          profileButton.addEventListener('click', function () {
-            if (profile.key !== 'none' && currentPrefs.profile === profile.key) {
-              updatePrefs(Object.assign({}, defaultPrefs));
-              return;
-            }
 
-            updatePrefs(profile.prefs());
-          });
-          actionWrap.appendChild(profileButton);
-        }
-
-        if (isPremium) {
-          card.appendChild(createMiniBadge('פרימיום'));
-        }
+          updatePrefs(profile.prefs());
+        });
+        actionWrap.appendChild(profileButton);
 
         card.appendChild(iconNode);
         card.appendChild(titleNode);
@@ -673,21 +675,39 @@
       });
 
       section.appendChild(profileGrid);
+
+      if (lockedProfiles.length) {
+        section.appendChild(createPremiumSummaryCard(
+          'פרופילים מתקדמים בפרימיום',
+          'פתחו פרופילים ייעודיים לדיסלקסיה, ADHD ומיקוד קוגניטיבי.',
+          lockedProfiles.map(function (profile) {
+            return profile.title;
+          }),
+          premiumUrl
+        ));
+      }
+
       return section;
     }
 
     function createFeatureSection(titleText, descriptionText, features, planName, premiumUrl, currentPrefs, sectionType) {
       var section = document.createElement('section');
       section.className = 'ab-widget-section';
-      section.appendChild(createSectionHead(titleText, descriptionText, sectionType, String(features.length) + ' פקדים'));
+      var unlockedFeatures = features.filter(function (feature) {
+        return feature.plan !== 'premium' || planName === 'premium';
+      });
+      var lockedFeatures = features.filter(function (feature) {
+        return feature.plan === 'premium' && planName !== 'premium';
+      });
+
+      section.appendChild(createSectionHead(titleText, descriptionText, sectionType, String(unlockedFeatures.length) + ' פקדים זמינים'));
 
       var grid = document.createElement('div');
       grid.className = 'ab-widget-grid';
 
-      features.forEach(function (feature) {
-        var isLocked = feature.plan === 'premium' && planName !== 'premium';
+      unlockedFeatures.forEach(function (feature) {
         var card = document.createElement('article');
-        card.className = 'ab-widget-card' + (isLocked ? ' is-locked' : '');
+        card.className = 'ab-widget-card';
 
         var iconNode = document.createElement('span');
         iconNode.className = 'ab-widget-card-icon';
@@ -704,10 +724,7 @@
         var actionWrap = document.createElement('div');
         actionWrap.className = 'ab-widget-card-actions';
 
-        if (isLocked) {
-          card.appendChild(createMiniBadge('פרימיום'));
-          actionWrap.appendChild(createLockButton(premiumUrl));
-        } else if (feature.type === 'toggle') {
+        if (feature.type === 'toggle') {
           actionWrap.appendChild(createToggle(feature, currentPrefs[feature.key]));
         } else {
           actionWrap.appendChild(createChoiceGroup(feature, currentPrefs[feature.key]));
@@ -721,6 +738,18 @@
       });
 
       section.appendChild(grid);
+
+      if (lockedFeatures.length) {
+        section.appendChild(createPremiumSummaryCard(
+          'אפשרויות נוספות בפרימיום',
+          'התאמות מתקדמות יותר שזמינות רק במסלול פרימיום.',
+          lockedFeatures.map(function (feature) {
+            return feature.title;
+          }),
+          premiumUrl
+        ));
+      }
+
       return section;
     }
 
@@ -770,6 +799,42 @@
       badge.className = 'ab-widget-mini-badge';
       badge.textContent = label;
       return badge;
+    }
+
+    function createPremiumSummaryCard(titleText, descriptionText, items, premiumUrl) {
+      var card = document.createElement('article');
+      card.className = 'ab-widget-upgrade-card';
+
+      var badge = createMiniBadge('פרימיום');
+      card.appendChild(badge);
+
+      var titleNode = document.createElement('strong');
+      titleNode.className = 'ab-widget-card-title';
+      titleNode.textContent = titleText;
+
+      var descNode = document.createElement('p');
+      descNode.className = 'ab-widget-card-copy';
+      descNode.textContent = descriptionText;
+
+      var list = document.createElement('ul');
+      list.className = 'ab-widget-upgrade-list';
+
+      items.forEach(function (item) {
+        var li = document.createElement('li');
+        li.textContent = item;
+        list.appendChild(li);
+      });
+
+      var actionWrap = document.createElement('div');
+      actionWrap.className = 'ab-widget-card-actions';
+      actionWrap.appendChild(createLockButton(premiumUrl));
+
+      card.appendChild(titleNode);
+      card.appendChild(descNode);
+      card.appendChild(list);
+      card.appendChild(actionWrap);
+
+      return card;
     }
 
     function createLockButton(url) {
@@ -940,8 +1005,8 @@
       .ab-widget-overview-card{display:grid;gap:4px;padding:13px 14px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
       .ab-widget-overview-label{font-size:11px;color:#64748b;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
       .ab-widget-overview-value{font-size:15px;font-weight:800;}
-      .ab-widget-sections{display:grid;gap:18px;}
-      .ab-widget-sections.ab-layout-split{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;}
+      .ab-widget-sections{display:grid;gap:18px;min-width:0;grid-template-columns:1fr;}
+      .ab-widget-sections.ab-layout-split{grid-template-columns:1fr;align-items:start;}
       .ab-widget-section{display:grid;gap:12px;}
       .ab-widget-section.is-full{grid-column:1 / -1;}
       .ab-widget-section-head{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;}
@@ -951,22 +1016,27 @@
       .ab-widget-section-title{margin:0;font-size:1rem;font-weight:800;}
       .ab-widget-section-copy{margin:0;color:#64748b;font-size:13px;line-height:1.6;}
       .ab-widget-section-badge{min-height:30px;padding:0 10px;border-radius:999px;background:rgba(15,23,42,.05);color:#334155;display:inline-flex;align-items:center;font-size:11px;font-weight:800;white-space:nowrap;}
-      .ab-widget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+      .ab-widget-grid{display:grid;grid-template-columns:1fr;gap:12px;min-width:0;}
       .ab-widget-grid-profiles{grid-template-columns:1fr;}
-      .ab-widget-card{position:relative;display:grid;gap:10px;align-content:start;min-height:156px;padding:16px;border-radius:22px;background:rgba(247,250,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
-      .ab-widget-card.is-locked{background:linear-gradient(180deg,rgba(250,252,255,.98),rgba(241,245,252,.98));}
+      .ab-widget-card{position:relative;display:grid;gap:10px;align-content:start;min-height:auto;min-width:0;padding:16px;border-radius:22px;background:rgba(247,250,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
       .ab-widget-profile-card.is-active{border-color:rgba(29,109,255,.2);box-shadow:0 14px 28px rgba(29,109,255,.12);}
+      .ab-widget-upgrade-card{position:relative;display:grid;gap:10px;padding:16px 16px 14px;border-radius:22px;background:linear-gradient(180deg,rgba(250,247,255,.98),rgba(243,238,255,.98));border:1px solid rgba(124,58,237,.12);box-shadow:0 10px 24px rgba(124,58,237,.08);}
       .ab-widget-card-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(180deg,rgba(29,109,255,.1),rgba(29,109,255,.04));color:#0d3ea7;border:1px solid rgba(29,109,255,.1);}
       .ab-widget-card-icon svg{width:20px;height:20px;}
-      .ab-widget-card-title{font-size:14px;font-weight:800;}
-      .ab-widget-card-copy{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
-      .ab-widget-card-actions{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;}
+      .ab-widget-card-title{font-size:14px;font-weight:800;line-height:1.45;}
+      .ab-widget-card-copy{margin:0;color:#64748b;font-size:12px;line-height:1.7;}
+      .ab-widget-card-actions{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;min-width:0;}
       .ab-widget-mini-badge{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:rgba(124,58,237,.1);color:#6d28d9;font-size:11px;font-weight:800;}
-      .ab-widget-choice-group{display:flex;flex-wrap:wrap;gap:8px;}
-      .ab-widget-choice-button,.ab-widget-toggle-button,.ab-widget-lock-button,.ab-widget-link{min-height:40px;padding:0 12px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#fff;color:#0f172a;display:inline-flex;align-items:center;justify-content:center;font:inherit;font-size:12px;font-weight:800;text-decoration:none;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease,color var(--ab-motion-fast) ease;}
+      .ab-widget-upgrade-list{margin:0;padding:0;list-style:none;display:grid;gap:6px;color:#4c1d95;font-size:12px;font-weight:700;}
+      .ab-widget-upgrade-list li{position:relative;padding-right:16px;line-height:1.6;}
+      .ab-widget-upgrade-list li::before{content:"";position:absolute;right:0;top:.55em;width:7px;height:7px;border-radius:50%;background:rgba(124,58,237,.55);}
+      .ab-widget-choice-group{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;width:100%;}
+      .ab-widget-choice-group > .ab-widget-choice-button:last-child:nth-child(odd){grid-column:1 / -1;}
+      .ab-widget-choice-button,.ab-widget-toggle-button,.ab-widget-lock-button,.ab-widget-link{min-height:42px;min-width:0;padding:0 12px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#fff;color:#0f172a;display:inline-flex;align-items:center;justify-content:center;font:inherit;font-size:12px;font-weight:800;text-decoration:none;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease,color var(--ab-motion-fast) ease;text-align:center;white-space:normal;line-height:1.35;}
       .ab-widget-choice-button:hover,.ab-widget-toggle-button:hover,.ab-widget-lock-button:hover,.ab-widget-link:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(15,23,42,.08);}
       .ab-widget-choice-button.is-active,.ab-widget-toggle-button.is-active{background:linear-gradient(135deg,#1d6dff,#0d3ea7);color:#fff;border-color:transparent;}
       .ab-widget-lock-button{background:rgba(124,58,237,.08);color:#6d28d9;border-color:rgba(124,58,237,.16);}
+      .ab-widget-toggle-button,.ab-widget-lock-button{width:100%;}
       .ab-widget-link-premium{background:linear-gradient(135deg,#7c3aed,#ec4899 88%);color:#fff;border-color:transparent;}
       .ab-widget-footer{display:grid;gap:10px;padding-top:14px;border-top:1px solid rgba(15,23,42,.08);}
       .ab-widget-note{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
@@ -992,6 +1062,18 @@
       html.ab-cursor-light,html.ab-cursor-light *{cursor:url("data:image/svg+xml,${lightCursor}") 12 12, auto !important;}
       html.ab-cursor-dark,html.ab-cursor-dark *{cursor:url("data:image/svg+xml,${darkCursor}") 12 12, auto !important;}
       .ab-widget-close:focus-visible,.ab-widget-choice-button:focus-visible,.ab-widget-toggle-button:focus-visible,.ab-widget-lock-button:focus-visible,.ab-widget-link:focus-visible,.ab-widget-button:focus-visible{outline:3px solid rgba(29,109,255,.22);outline-offset:3px;}
+      @media (max-width:920px){
+        .ab-widget-shell{left:auto !important;right:12px !important;align-items:flex-end;bottom:12px;gap:10px;}
+        .ab-widget-shell.ab-bottom-left{left:12px !important;right:auto !important;align-items:flex-start;}
+        .ab-widget-panel{width:min(520px,calc(100vw - 24px));max-height:min(78vh,760px);padding:16px;}
+        .ab-widget-overview,
+        .ab-widget-sections,
+        .ab-widget-sections.ab-layout-split,
+        .ab-widget-grid,
+        .ab-widget-choice-group{grid-template-columns:1fr;}
+        .ab-widget-section-head{grid-template-columns:auto 1fr;}
+        .ab-widget-section-badge{grid-column:1 / -1;justify-self:start;}
+      }
       @media (max-width:560px){
         .ab-widget-shell{left:auto !important;right:10px !important;align-items:flex-end;bottom:10px;gap:10px;}
         .ab-widget-shell.ab-bottom-left{left:10px !important;right:auto !important;align-items:flex-start;}
