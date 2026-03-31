@@ -419,9 +419,11 @@ class DashboardController extends Controller
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
 
         if (! Schema::hasTable('support_tickets')) {
+            $this->storeRuntimeSupportTicket($request->user(), $site, $validated);
+
             return redirect()
                 ->route('dashboard.support', ['site' => $site->id])
-                ->withErrors(['support' => 'אזור התמיכה עוד לא זמין בשרת הזה. צריך להשלים את עדכון מסד הנתונים, ואז פתיחת פנייה תעבוד רגיל.']);
+                ->with('status', 'הפנייה נפתחה ונשמרה במצב גיבוי עד שהשרת ישלים את מיגרציות מרכז התמיכה.');
         }
 
         $ticket = SupportTicket::create([
@@ -445,7 +447,7 @@ class DashboardController extends Controller
             ->with('status', 'הפנייה נפתחה בהצלחה. צוות התמיכה יוכל לחזור אליך מתוך סביבת הניהול של האתר הזה.');
     }
 
-    public function updateSupportTicketAdmin(Request $request, SupportTicket $ticket): RedirectResponse
+    public function updateSupportTicketAdmin(Request $request, string $ticketKey): RedirectResponse
     {
         $admin = $request->user();
         $this->ensureSuperAdmin($admin);
@@ -456,26 +458,32 @@ class DashboardController extends Controller
             'admin_response' => ['nullable', 'string', 'max:4000'],
         ]);
 
-        $ticket->update([
-            'status' => $validated['status'],
-            'priority' => $validated['priority'],
-            'last_activity_at' => Carbon::now(),
-        ]);
+        if (Schema::hasTable('support_tickets') && ctype_digit($ticketKey)) {
+            $ticket = SupportTicket::query()->findOrFail((int) $ticketKey);
 
-        if (Schema::hasColumn('support_tickets', 'assigned_user_id')) {
             $ticket->update([
-                'assigned_user_id' => $admin->id,
+                'status' => $validated['status'],
+                'priority' => $validated['priority'],
+                'last_activity_at' => Carbon::now(),
             ]);
-        }
 
-        $response = trim((string) ($validated['admin_response'] ?? ''));
+            if (Schema::hasColumn('support_tickets', 'assigned_user_id')) {
+                $ticket->update([
+                    'assigned_user_id' => $admin->id,
+                ]);
+            }
 
-        if (Schema::hasColumn('support_tickets', 'admin_response')) {
-            $ticket->update([
-                'admin_response' => $response === '' ? null : $response,
-            ]);
+            $response = trim((string) ($validated['admin_response'] ?? ''));
+
+            if (Schema::hasColumn('support_tickets', 'admin_response')) {
+                $ticket->update([
+                    'admin_response' => $response === '' ? null : $response,
+                ]);
+            } else {
+                RuntimeStore::put('support-ticket-' . $ticket->id, 'admin_response', $response === '' ? null : $response);
+            }
         } else {
-            RuntimeStore::put('support-ticket-' . $ticket->id, 'admin_response', $response === '' ? null : $response);
+            $this->updateRuntimeSupportTicket($ticketKey, $admin, $validated);
         }
 
         return redirect()
@@ -588,8 +596,7 @@ class DashboardController extends Controller
         $planCatalog = $this->planCatalog();
         $activeAlerts = collect($auditSnapshot['alerts'] ?? [])->filter(fn (array $alert) => ($alert['state'] ?? 'open') !== 'resolved')->values();
         $currentPlanMeta = $planCatalog[$billing['plan']] ?? $planCatalog['free'];
-        $supportAvailable = Schema::hasTable('support_tickets');
-        $supportTickets = $supportAvailable
+        $dbSupportTickets = Schema::hasTable('support_tickets')
             ? $user->supportTickets()
                 ->with('site')
                 ->where(function ($query) use ($site) {
@@ -598,7 +605,16 @@ class DashboardController extends Controller
                 ->latest('last_activity_at')
                 ->latest('created_at')
                 ->get()
+                ->map(fn (SupportTicket $ticket) => $this->presentSupportTicket($ticket))
             : collect();
+        $runtimeSupportTickets = $this->runtimeSupportTickets()
+            ->filter(fn (array $ticket) => (int) ($ticket['user_id'] ?? 0) === $user->id)
+            ->filter(fn (array $ticket) => (int) ($ticket['site_id'] ?? 0) === $site->id || empty($ticket['site_id']))
+            ->map(fn (array $ticket) => $this->presentRuntimeSupportTicket($ticket));
+        $supportTickets = $dbSupportTickets
+            ->concat($runtimeSupportTickets)
+            ->sortByDesc('sort_timestamp')
+            ->values();
         $openTickets = $supportTickets->whereIn('status', ['open', 'pending']);
         $urgentTickets = $supportTickets->where('priority', 'urgent');
         $activeSitesCount = $sites->filter(function (Site $candidate) {
@@ -657,7 +673,8 @@ class DashboardController extends Controller
                 ];
             })->all(),
             'activeSitesCount' => $activeSitesCount,
-            'supportAvailable' => $supportAvailable,
+            'supportAvailable' => true,
+            'supportUsesRuntimeFallback' => ! Schema::hasTable('support_tickets'),
             'supportTickets' => $supportTickets,
             'supportCategories' => $this->supportCategories(),
             'supportPriorityLabels' => $this->supportPriorityLabels(),
@@ -666,7 +683,7 @@ class DashboardController extends Controller
                 'open' => $openTickets->count(),
                 'urgent' => $urgentTickets->count(),
                 'resolved' => $supportTickets->where('status', 'resolved')->count(),
-                'lastActivity' => $supportTickets->first()?->last_activity_at?->diffForHumans() ?? 'עדיין לא נפתחה פנייה',
+                'lastActivity' => $supportTickets->first()?->last_activity_label ?? 'עדיין לא נפתחה פנייה',
             ],
             'platformReadiness' => $platformReadiness,
         ];
@@ -694,18 +711,27 @@ class DashboardController extends Controller
         }
 
         $users = $usersQuery->get();
+        $runtimeTickets = $this->runtimeSupportTickets();
+        $runtimeTicketCounts = $runtimeTickets->countBy(fn (array $ticket) => (int) ($ticket['user_id'] ?? 0));
 
-        if (! $supportAvailable) {
-            $users->each(function (User $adminUser): void {
-                $adminUser->setAttribute('support_tickets_count', 0);
-            });
-        }
+        $users->each(function (User $adminUser) use ($supportAvailable, $runtimeTicketCounts): void {
+            $baseCount = $supportAvailable ? (int) $adminUser->support_tickets_count : 0;
+            $adminUser->setAttribute('support_tickets_count', $baseCount + (int) ($runtimeTicketCounts[$adminUser->id] ?? 0));
+        });
 
         $sites = Site::query()
             ->with('user')
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
-            ->get();
+            ->get()
+            ->map(function (Site $site) {
+                $site = $this->applySiteRuntimeOverrides($site);
+                $signal = $this->installationSignal($site);
+                $site->setAttribute('last_seen_at', $signal['last_seen_at']);
+                $site->setAttribute('last_seen_url', $signal['page_url']);
+
+                return $site;
+            });
 
         $tickets = $supportAvailable
             ? SupportTicket::query()
@@ -713,7 +739,12 @@ class DashboardController extends Controller
                 ->latest('last_activity_at')
                 ->latest('created_at')
                 ->get()
+                ->map(fn (SupportTicket $ticket) => $this->presentSupportTicket($ticket))
             : collect();
+        $tickets = $tickets
+            ->concat($runtimeTickets->map(fn (array $ticket) => $this->presentRuntimeSupportTicket($ticket)))
+            ->sortByDesc('sort_timestamp')
+            ->values();
 
         return [
             'title' => 'מרכז סופר־אדמין | A11Y Bridge',
@@ -725,7 +756,8 @@ class DashboardController extends Controller
             'supportCategories' => $this->supportCategories(),
             'supportPriorityLabels' => $this->supportPriorityLabels(),
             'supportStatusLabels' => $this->supportStatusLabels(),
-            'supportAvailable' => $supportAvailable,
+            'supportAvailable' => true,
+            'supportUsesRuntimeFallback' => ! $supportAvailable,
             'adminSummary' => [
                 'users' => $users->count(),
                 'sites' => $sites->count(),
@@ -1310,6 +1342,112 @@ class DashboardController extends Controller
             'summary' => $missing === []
                 ? 'כל רכיבי הליבה של הפלטפורמה זמינים ושומרים למסד כרגיל.'
                 : 'יש עדיין רכיבים שרצים במצב גיבוי עד שהשרת ישלים מיגרציות: ' . implode(' · ', $missing),
+        ];
+    }
+
+    private function runtimeSupportScope(): string
+    {
+        return 'support-center';
+    }
+
+    private function runtimeSupportTickets(): \Illuminate\Support\Collection
+    {
+        $tickets = RuntimeStore::get($this->runtimeSupportScope(), 'tickets', []);
+
+        return collect(is_array($tickets) ? $tickets : []);
+    }
+
+    private function storeRuntimeSupportTicket(User $user, Site $site, array $validated): void
+    {
+        $scope = $this->runtimeSupportScope();
+        $nextId = (int) RuntimeStore::get($scope, 'next_id', 1);
+        $now = Carbon::now();
+
+        $ticket = [
+            'id' => $nextId,
+            'key' => 'runtime-' . $nextId,
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'user_email' => $user->email,
+            'site_id' => $site->id,
+            'site_name' => $site->site_name,
+            'reference_code' => 'SUP-R' . str_pad((string) $nextId, 5, '0', STR_PAD_LEFT),
+            'subject' => trim((string) $validated['subject']),
+            'category' => $validated['category'],
+            'priority' => $validated['priority'],
+            'status' => 'open',
+            'message' => trim((string) $validated['message']),
+            'admin_response' => null,
+            'assigned_user_id' => null,
+            'assigned_user_name' => null,
+            'created_at' => $now->toIso8601String(),
+            'last_activity_at' => $now->toIso8601String(),
+        ];
+
+        RuntimeStore::putMany($scope, [
+            'next_id' => $nextId + 1,
+            'tickets' => $this->runtimeSupportTickets()->push($ticket)->values()->all(),
+        ]);
+    }
+
+    private function updateRuntimeSupportTicket(string $ticketKey, User $admin, array $validated): void
+    {
+        $scope = $this->runtimeSupportScope();
+        $tickets = $this->runtimeSupportTickets()->map(function (array $ticket) use ($ticketKey, $admin, $validated) {
+            if (($ticket['key'] ?? null) !== $ticketKey) {
+                return $ticket;
+            }
+
+            $ticket['status'] = $validated['status'];
+            $ticket['priority'] = $validated['priority'];
+            $ticket['admin_response'] = trim((string) ($validated['admin_response'] ?? '')) ?: null;
+            $ticket['assigned_user_id'] = $admin->id;
+            $ticket['assigned_user_name'] = $admin->name;
+            $ticket['last_activity_at'] = Carbon::now()->toIso8601String();
+
+            return $ticket;
+        })->values()->all();
+
+        RuntimeStore::put($scope, 'tickets', $tickets);
+    }
+
+    private function presentSupportTicket(SupportTicket $ticket): object
+    {
+        $lastActivity = $ticket->last_activity_at ?? $ticket->created_at;
+
+        return (object) [
+            'update_key' => (string) $ticket->id,
+            'reference_code' => $ticket->reference_code,
+            'subject' => $ticket->subject,
+            'status' => $ticket->status,
+            'priority' => $ticket->priority,
+            'category' => $ticket->category,
+            'message' => $ticket->message,
+            'site_name' => $ticket->site?->site_name,
+            'user_email' => $ticket->user?->email,
+            'admin_response' => $ticket->runtimeAdminResponse(),
+            'last_activity_label' => $lastActivity?->diffForHumans() ?? 'עודכן עכשיו',
+            'sort_timestamp' => $lastActivity?->timestamp ?? 0,
+        ];
+    }
+
+    private function presentRuntimeSupportTicket(array $ticket): object
+    {
+        $lastActivityAt = isset($ticket['last_activity_at']) ? Carbon::parse($ticket['last_activity_at']) : null;
+
+        return (object) [
+            'update_key' => (string) ($ticket['key'] ?? ('runtime-' . ($ticket['id'] ?? 'x'))),
+            'reference_code' => $ticket['reference_code'] ?? 'SUP-RUNTIME',
+            'subject' => $ticket['subject'] ?? 'פנייה ללא כותרת',
+            'status' => $ticket['status'] ?? 'open',
+            'priority' => $ticket['priority'] ?? 'normal',
+            'category' => $ticket['category'] ?? 'general',
+            'message' => $ticket['message'] ?? '',
+            'site_name' => $ticket['site_name'] ?? null,
+            'user_email' => $ticket['user_email'] ?? null,
+            'admin_response' => $ticket['admin_response'] ?? null,
+            'last_activity_label' => $lastActivityAt?->diffForHumans() ?? 'עודכן עכשיו',
+            'sort_timestamp' => $lastActivityAt?->timestamp ?? 0,
         ];
     }
 }

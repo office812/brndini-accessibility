@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/dashboard/super-admin', [DashboardController::class, 'superAdmin'])->name('dashboard.super-admin');
     Route::post('/dashboard/super-admin/tracking', [DashboardController::class, 'updateGlobalTracking'])->name('dashboard.super-admin.tracking');
-    Route::post('/dashboard/super-admin/tickets/{ticket}', [DashboardController::class, 'updateSupportTicketAdmin'])->name('dashboard.super-admin.tickets.update');
+    Route::post('/dashboard/super-admin/tickets/{ticketKey}', [DashboardController::class, 'updateSupportTicketAdmin'])->name('dashboard.super-admin.tickets.update');
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
     Route::get('/dashboard/install', [DashboardController::class, 'install'])->name('dashboard.install');
     Route::get('/dashboard/compliance', [DashboardController::class, 'compliance'])->name('dashboard.compliance');

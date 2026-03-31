@@ -243,12 +243,14 @@
                                 </div>
                             </div>
 
-                            @if (! $supportAvailable)
+                            @if (($supportUsesRuntimeFallback ?? false) === true)
                                 <div class="support-empty-state">
-                                    <strong>טבלת הפניות עוד לא פעילה בשרת</strong>
-                                    <p>אחרי הרצת המיגרציות יופיעו כאן כל הפניות בצורה מלאה, כולל מענה ושיוך למשתמש מטפל.</p>
+                                    <strong>מרכז התמיכה פועל כרגע במצב גיבוי</strong>
+                                    <p>הפניות עדיין מוצגות, ניתנות לעדכון, ונשמרות בצורה יציבה עד שהשרת ישלים את מיגרציית טבלת התמיכה.</p>
                                 </div>
-                            @elseif ($adminSupportTickets->isEmpty())
+                            @endif
+
+                            @if ($adminSupportTickets->isEmpty())
                                 <div class="support-empty-state">
                                     <strong>עדיין אין פניות במערכת</strong>
                                     <p>ברגע שמשתמש יפתח פנייה, היא תופיע כאן עם כל הפרטים הדרושים לטיפול.</p>
@@ -274,27 +276,27 @@
                                             </div>
 
                                             <p class="support-ticket-meta">
-                                                {{ $ticket->user?->email ?? 'משתמש לא ידוע' }} ·
-                                                {{ $ticket->site?->site_name ?? 'ללא אתר' }} ·
+                                                {{ $ticket->user_email ?? 'משתמש לא ידוע' }} ·
+                                                {{ $ticket->site_name ?? 'ללא אתר' }} ·
                                                 {{ $supportCategories[$ticket->category] ?? $ticket->category }}
                                             </p>
 
                                             <p class="support-ticket-message">{{ $ticket->message }}</p>
 
-                                            @if ($ticket->runtimeAdminResponse())
+                                            @if (! empty($ticket->admin_response))
                                                 <div class="support-admin-response">
                                                     <strong>מענה פנימי</strong>
-                                                    <p>{{ $ticket->runtimeAdminResponse() }}</p>
+                                                    <p>{{ $ticket->admin_response }}</p>
                                                 </div>
                                             @endif
 
-                                            <form class="stack-form compact-form" method="POST" action="{{ route('dashboard.super-admin.tickets.update', ['ticket' => $ticket->id]) }}">
+                                            <form class="stack-form compact-form" method="POST" action="{{ route('dashboard.super-admin.tickets.update', ['ticketKey' => $ticket->update_key]) }}">
                                                 @csrf
 
                                                 <div class="support-form-row">
                                                     <div>
-                                                        <label for="ticket_status_{{ $ticket->id }}">סטטוס</label>
-                                                        <select id="ticket_status_{{ $ticket->id }}" name="status">
+                                                        <label for="ticket_status_{{ $ticket->update_key }}">סטטוס</label>
+                                                        <select id="ticket_status_{{ $ticket->update_key }}" name="status">
                                                             @foreach ($supportStatusLabels as $statusKey => $statusLabel)
                                                                 <option value="{{ $statusKey }}" @selected($ticket->status === $statusKey)>{{ $statusLabel }}</option>
                                                             @endforeach
@@ -302,8 +304,8 @@
                                                     </div>
 
                                                     <div>
-                                                        <label for="ticket_priority_{{ $ticket->id }}">עדיפות</label>
-                                                        <select id="ticket_priority_{{ $ticket->id }}" name="priority">
+                                                        <label for="ticket_priority_{{ $ticket->update_key }}">עדיפות</label>
+                                                        <select id="ticket_priority_{{ $ticket->update_key }}" name="priority">
                                                             @foreach ($supportPriorityLabels as $priorityKey => $priorityLabel)
                                                                 <option value="{{ $priorityKey }}" @selected($ticket->priority === $priorityKey)>{{ $priorityLabel }}</option>
                                                             @endforeach
@@ -311,8 +313,8 @@
                                                     </div>
                                                 </div>
 
-                                                <label for="ticket_response_{{ $ticket->id }}">תגובה פנימית / מענה ללקוח</label>
-                                                <textarea id="ticket_response_{{ $ticket->id }}" name="admin_response" rows="4">{{ old('admin_response', $ticket->runtimeAdminResponse()) }}</textarea>
+                                                <label for="ticket_response_{{ $ticket->update_key }}">תגובה פנימית / מענה ללקוח</label>
+                                                <textarea id="ticket_response_{{ $ticket->update_key }}" name="admin_response" rows="4">{{ old('admin_response', $ticket->admin_response) }}</textarea>
 
                                                 <button class="primary-button" type="submit">עדכן פנייה</button>
                                             </form>

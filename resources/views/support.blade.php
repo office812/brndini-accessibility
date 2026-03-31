@@ -44,48 +44,48 @@
                                     </div>
                                 </div>
 
-                                @if (! $supportAvailable)
+                                @if ($supportUsesRuntimeFallback ?? false)
                                     <div class="support-empty-state">
-                                        <strong>מרכז התמיכה עדיין לא פעיל בשרת</strong>
-                                        <p>כדי שפתיחת טיקטים תשמור נתונים באמת, צריך להשלים את עדכון מסד הנתונים של הטבלה החדשה.</p>
+                                        <strong>מרכז התמיכה פועל כרגע במצב גיבוי</strong>
+                                        <p>הפניות יישמרו ויהיו זמינות גם בלי מיגרציית הטבלה, ובחזרה למסד הן כבר יעברו לשמירה מלאה.</p>
                                     </div>
-                                @else
-                                    <form class="stack-form" method="POST" action="{{ route('dashboard.support.store', ['site' => $site->id]) }}">
-                                        @csrf
-                                        <input type="hidden" name="site_id" value="{{ old('site_id', $site->id) }}">
-
-                                        <label for="support_subject">נושא הפנייה</label>
-                                        <input id="support_subject" name="subject" type="text" value="{{ old('subject') }}" placeholder="למשל: הווידג׳ט לא נטען באתר במובייל">
-
-                                        <div class="support-form-row">
-                                            <div>
-                                                <label for="support_category">סוג הפנייה</label>
-                                                <select id="support_category" name="category">
-                                                    @foreach ($supportCategories as $categoryKey => $categoryLabel)
-                                                        <option value="{{ $categoryKey }}" @selected(old('category') === $categoryKey)>{{ $categoryLabel }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div>
-                                                <label for="support_priority">עדיפות</label>
-                                                <select id="support_priority" name="priority">
-                                                    @foreach ($supportPriorityLabels as $priorityKey => $priorityLabel)
-                                                        <option value="{{ $priorityKey }}" @selected(old('priority', 'normal') === $priorityKey)>{{ $priorityLabel }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <label for="support_message">תיאור מלא</label>
-                                        <textarea id="support_message" name="message" rows="7" placeholder="מה בדיוק קרה, באיזה דף, מה ציפית לראות, ומה הופיע בפועל?">{{ old('message') }}</textarea>
-
-                                        <div class="support-form-actions">
-                                            <button class="primary-button" type="submit">פתח פנייה</button>
-                                            <span class="meta-note">הפנייה תישמר על האתר {{ $domainLabel }} כדי שיהיה אפשר לעקוב אחריה בצורה מדויקת.</span>
-                                        </div>
-                                    </form>
                                 @endif
+
+                                <form class="stack-form" method="POST" action="{{ route('dashboard.support.store', ['site' => $site->id]) }}">
+                                    @csrf
+                                    <input type="hidden" name="site_id" value="{{ old('site_id', $site->id) }}">
+
+                                    <label for="support_subject">נושא הפנייה</label>
+                                    <input id="support_subject" name="subject" type="text" value="{{ old('subject') }}" placeholder="למשל: הווידג׳ט לא נטען באתר במובייל">
+
+                                    <div class="support-form-row">
+                                        <div>
+                                            <label for="support_category">סוג הפנייה</label>
+                                            <select id="support_category" name="category">
+                                                @foreach ($supportCategories as $categoryKey => $categoryLabel)
+                                                    <option value="{{ $categoryKey }}" @selected(old('category') === $categoryKey)>{{ $categoryLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label for="support_priority">עדיפות</label>
+                                            <select id="support_priority" name="priority">
+                                                @foreach ($supportPriorityLabels as $priorityKey => $priorityLabel)
+                                                    <option value="{{ $priorityKey }}" @selected(old('priority', 'normal') === $priorityKey)>{{ $priorityLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <label for="support_message">תיאור מלא</label>
+                                    <textarea id="support_message" name="message" rows="7" placeholder="מה בדיוק קרה, באיזה דף, מה ציפית לראות, ומה הופיע בפועל?">{{ old('message') }}</textarea>
+
+                                    <div class="support-form-actions">
+                                        <button class="primary-button" type="submit">פתח פנייה</button>
+                                        <span class="meta-note">הפנייה תישמר על האתר {{ $domainLabel }} כדי שיהיה אפשר לעקוב אחריה בצורה מדויקת.</span>
+                                    </div>
+                                </form>
                             </section>
 
                             <aside class="support-side-stack">
@@ -146,8 +146,8 @@
 
                                             <p class="support-ticket-meta">
                                                 {{ $supportCategories[$ticket->category] ?? $ticket->category }} ·
-                                                {{ $ticket->last_activity_at?->diffForHumans() ?? $ticket->created_at->diffForHumans() }} ·
-                                                {{ $ticket->site?->site_name ?? $site->site_name }}
+                                                {{ $ticket->last_activity_label }} ·
+                                                {{ $ticket->site_name ?? $site->site_name }}
                                             </p>
 
                                             <p class="support-ticket-message">{{ $ticket->message }}</p>
