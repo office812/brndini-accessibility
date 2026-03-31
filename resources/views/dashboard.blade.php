@@ -5,6 +5,7 @@
 @section('content')
     @php($statementConnected = $statementStatus === 'connected')
     @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'שכבת נגישות מנוהלת')
+    @php($isPremiumPlan = ($currentPlan['name'] ?? '') === 'פרימיום')
 
     <section class="licenses-shell" data-dashboard-tabs>
         <aside class="licenses-sidebar">
@@ -54,79 +55,193 @@
             <section class="dashboard-workspace dashboard-workspace-inline">
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="overview">
-                        <section class="licenses-hero-card">
-                            <div class="licenses-hero-copy">
-                                <h2>ניהול הווידג׳ט, הרישוי, החיוב והביקורות מכל מקום אחד.</h2>
-                                <p>
-                                    לכל אתר יש עכשיו רישיון נפרד, מסלול נפרד, מפתח אתר ייחודי, ציון ביקורת והתראות משלו.
-                                    לא עובדים יותר ברמה רוחבית לכל החשבון, אלא פר אתר, פר רישיון ופר התקנה.
-                                </p>
+                        <section class="steward-overview-grid">
+                            <div class="steward-main-stack">
+                                <section class="steward-hero-card">
+                                    <div class="steward-hero-copy">
+                                        <span class="portal-hero-kicker">לוח בקרה מרכזי</span>
+                                        <h2>הופכים את האתר לנגיש, מנוהל ומוכן לעבודה.</h2>
+                                        <p>
+                                            כל מה שחשוב באמת נמצא כאן: הטמעה, רישיון, בדיקות, הצהרת נגישות ותמיכה.
+                                            פחות גלילה, יותר שליטה, ובמבט אחד על סטטוס האתר הפעיל.
+                                        </p>
 
-                                <div class="licenses-hero-actions">
-                                    <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">התקנה לאתר הזה</a>
-                                    <a class="secondary-button" href="{{ route('dashboard.account', ['site' => $site->id]) }}">חיוב ורישוי</a>
-                                </div>
-                            </div>
-
-                            <div class="licenses-hero-visual" aria-hidden="true">
-                                <div class="licenses-widget-orb"></div>
-                                <div class="licenses-device-stage">
-                                    <div class="licenses-device-screen licenses-device-screen-back"></div>
-                                    <div class="licenses-device-screen licenses-device-screen-front">
-                                        <div class="licenses-device-topbar">
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
-                                        </div>
-                                        <div class="licenses-device-list">
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
-                                            <div></div>
+                                        <div class="steward-hero-actions">
+                                            <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">התקנה והטמעה</a>
+                                            <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">מרכז ציות</a>
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div class="steward-hero-visual" aria-hidden="true">
+                                        <div class="steward-window">
+                                            <div class="steward-window-bar">
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
+                                            <div class="steward-window-grid">
+                                                <article>
+                                                    <small>הטמעה</small>
+                                                    <strong>{{ $installationLabel }}</strong>
+                                                </article>
+                                                <article>
+                                                    <small>מסלול</small>
+                                                    <strong>{{ $currentPlan['name'] }}</strong>
+                                                </article>
+                                                <article>
+                                                    <small>ציון</small>
+                                                    <strong>{{ $auditSnapshot['score'] }}</strong>
+                                                </article>
+                                                <article>
+                                                    <small>הצהרה</small>
+                                                    <strong>{{ $statementConnected ? 'מחוברת' : 'חסרה' }}</strong>
+                                                </article>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section class="steward-stat-grid">
+                                    <article class="steward-stat-card">
+                                        <span class="portal-stat-icon">◎</span>
+                                        <div>
+                                            <span class="meta-label">רישיונות פעילים</span>
+                                            <strong>{{ $activeSitesCount }}</strong>
+                                            <p>מתוך {{ $sites->count() }} אתרים במערכת</p>
+                                        </div>
+                                    </article>
+
+                                    <article class="steward-stat-card">
+                                        <span class="portal-stat-icon">↺</span>
+                                        <div>
+                                            <span class="meta-label">סטטוס התקנה</span>
+                                            <strong>{{ $installationLabel }}</strong>
+                                            <p>{{ $installationSeenLabel }}</p>
+                                        </div>
+                                    </article>
+
+                                    <article class="steward-stat-card">
+                                        <span class="portal-stat-icon">₪</span>
+                                        <div>
+                                            <span class="meta-label">חבילה נוכחית</span>
+                                            <strong>{{ $currentPlan['name'] }}</strong>
+                                            <p>{{ $currentPlan['price'] }}</p>
+                                        </div>
+                                    </article>
+
+                                    <article class="steward-stat-card">
+                                        <span class="portal-stat-icon">✓</span>
+                                        <div>
+                                            <span class="meta-label">בדיקה אחרונה</span>
+                                            <strong>{{ $auditSnapshot['score'] }}</strong>
+                                            <p>{{ $lastAuditedLabel }}</p>
+                                        </div>
+                                    </article>
+                                </section>
+
+                                <section class="steward-content-grid">
+                                    <article class="steward-feed-card">
+                                        <div class="steward-feed-head">
+                                            <h3>מה חשוב לדעת</h3>
+                                            <a class="text-link" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">למרכז הציות</a>
+                                        </div>
+
+                                        <div class="steward-feed-list">
+                                            <a class="steward-feed-item" href="{{ route('dashboard.install', ['site' => $site->id]) }}">
+                                                <span class="steward-feed-thumb">IN</span>
+                                                <div>
+                                                    <strong>הטמעה חיה באתר</strong>
+                                                    <p>{{ $installationStatus === 'installed' ? 'הווידג׳ט כבר זוהה באתר והוא מדווח חזרה לפלטפורמה.' : 'הקוד עדיין לא זוהה באתר, ולכן חשוב להשלים הטמעה לפני שמסתמכים על הציון.' }}</p>
+                                                </div>
+                                            </a>
+
+                                            <a class="steward-feed-item" href="{{ route('dashboard.account', ['site' => $site->id]) }}">
+                                                <span class="steward-feed-thumb">PL</span>
+                                                <div>
+                                                    <strong>מסלול ורישוי</strong>
+                                                    <p>האתר הזה נמצא כרגע במסלול {{ $currentPlan['name'] }}. אפשר לעדכן מסלול, חיוב או סטטוס רישיון מתוך החשבון.</p>
+                                                </div>
+                                            </a>
+
+                                            <a class="steward-feed-item" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">
+                                                <span class="steward-feed-thumb">WC</span>
+                                                <div>
+                                                    <strong>בדיקות והצהרה</strong>
+                                                    <p>{{ $statementConnected ? 'הצהרת הנגישות כבר מחוברת וניתן להמשיך ללטש אותה.' : 'עדיין חסרה הצהרת נגישות מחוברת, וכדאי להשלים אותה מהיוצר המובנה.' }}</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </article>
+
+                                    <article class="steward-feed-card">
+                                        <div class="steward-feed-head">
+                                            <h3>מה כדאי לעשות עכשיו</h3>
+                                            <span class="meta-label">צעדים מומלצים</span>
+                                        </div>
+
+                                        <div class="steward-feed-list">
+                                            <a class="steward-feed-item" href="{{ route('dashboard.install', ['site' => $site->id]) }}">
+                                                <span class="steward-feed-thumb">01</span>
+                                                <div>
+                                                    <strong>בדוק שהקוד באמת מותקן</strong>
+                                                    <p>פתח את מסך ההטמעה, העתק את הקוד הייעודי לאתר הזה וודא שהווידג׳ט נטען בפועל.</p>
+                                                </div>
+                                            </a>
+
+                                            <a class="steward-feed-item" href="{{ route('dashboard', ['site' => $site->id]) }}#tab-widget">
+                                                <span class="steward-feed-thumb">02</span>
+                                                <div>
+                                                    <strong>לטש את עיצוב הווידג׳ט</strong>
+                                                    <p>בחר פריסט, מבנה פאנל, אייקון וצבע כדי להתאים את הווידג׳ט למותג של הלקוח.</p>
+                                                </div>
+                                            </a>
+
+                                            <a class="steward-feed-item" href="{{ route('dashboard.support', ['site' => $site->id]) }}">
+                                                <span class="steward-feed-thumb">03</span>
+                                                <div>
+                                                    <strong>פתח פנייה אם צריך</strong>
+                                                    <p>אם משהו לא נטען או לא נשמר, מרכז התמיכה זמין עם מעקב מסודר אחר כל פנייה.</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </article>
+                                </section>
                             </div>
+
+                            <aside class="steward-side-stack">
+                                <article class="steward-side-card">
+                                    <span class="steward-side-icon">?</span>
+                                    <div>
+                                        <h3>יש שאלות?</h3>
+                                        <p>צוות התמיכה עוזר בהטמעה, חיבור הצהרה, תקלות רישוי והגדרת ווידג׳ט.</p>
+                                        <a class="secondary-button" href="{{ route('dashboard.support', ['site' => $site->id]) }}">פתח פנייה</a>
+                                    </div>
+                                </article>
+
+                                <article class="steward-side-card">
+                                    <span class="steward-side-icon">!</span>
+                                    <div>
+                                        <h3>מצב האתר</h3>
+                                        <div class="mini-status-list">
+                                            <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
+                                            <span class="status-pill {{ $installationStatus === 'installed' ? 'is-good' : 'is-warn' }}">{{ $installationLabel }}</span>
+                                            <span class="status-pill {{ $statementConnected ? 'is-good' : 'is-neutral' }}">{{ $statementConnected ? 'הצהרה מחוברת' : 'הצהרה חסרה' }}</span>
+                                        </div>
+                                        <p>{{ $openAlertsCount > 0 ? 'יש כרגע התראות פתוחות שכדאי לבדוק.' : 'כרגע אין התראות פתוחות לאתר הזה.' }}</p>
+                                    </div>
+                                </article>
+
+                                <article class="steward-side-card steward-side-card-accent">
+                                    <span class="steward-side-icon">★</span>
+                                    <div>
+                                        <p class="eyebrow">{{ $isPremiumPlan ? 'מסלול פעיל' : 'גישה מתקדמת' }}</p>
+                                        <h3>{{ $isPremiumPlan ? 'פרימיום כבר פעיל באתר הזה' : 'שדרוג לפרימיום' }}</h3>
+                                        <p>{{ $isPremiumPlan ? 'כל הפיצ׳רים המתקדמים פתוחים: פרופילים, מדריך קריאה, שליטה רחבה יותר ועיצוב מורחב.' : ($recommendedPlan['description'] ?? 'פתח את היכולות המתקדמות ביותר של הווידג׳ט והצג חוויה מלאה יותר למבקרים.') }}</p>
+                                        <a class="primary-button" href="{{ route('dashboard.account', ['site' => $site->id]) }}">{{ $isPremiumPlan ? 'לניהול המסלול' : 'לשדרוג לפרימיום' }}</a>
+                                    </div>
+                                </article>
+                            </aside>
                         </section>
-
-                        @if ($installationStatus !== 'installed')
-                            <section class="alert-strip">
-                                <strong>הווידג׳ט עדיין לא זוהה באתר.</strong>
-                                <span>הרישיון פעיל, אבל עדיין לא התקבלה טעינה אמיתית מהקוד באתר. צריך להטמיע את קוד האתר ואז לרענן את הדף באתר הלקוח.</span>
-                                <a class="text-link" href="{{ route('dashboard.install', ['site' => $site->id]) }}">למסך ההתקנה</a>
-                            </section>
-                        @endif
-
-                        <section class="portal-stat-strip">
-                            <article class="portal-stat-card">
-                                <span class="meta-label">אתרים פעילים</span>
-                                <strong>{{ $activeSitesCount }}</strong>
-                                <p>מתוך {{ $sites->count() }} רישיונות במערכת</p>
-                            </article>
-                            <article class="portal-stat-card">
-                                <span class="meta-label">סטטוס התקנה</span>
-                                <strong>{{ $installationLabel }}</strong>
-                                <p>{{ $installationSeenLabel }}</p>
-                            </article>
-                            <article class="portal-stat-card">
-                                <span class="meta-label">מסלול נוכחי</span>
-                                <strong>{{ $currentPlan['name'] }}</strong>
-                                <p>{{ $currentPlan['price'] }}</p>
-                            </article>
-                            <article class="portal-stat-card">
-                                <span class="meta-label">ציון בדיקה</span>
-                                <strong>{{ $auditSnapshot['score'] }}</strong>
-                                <p>{{ $lastAuditedLabel }}</p>
-                            </article>
-                        </section>
-
-                        @if ($openAlertsCount > 0)
-                            <section class="alert-strip">
-                                <strong>יש {{ $openAlertsCount }} התראות פתוחות לאתר הזה.</strong>
-                                <span>{{ $auditSnapshot['summary'] }}</span>
-                                <a class="text-link" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">למרכז הציות</a>
-                            </section>
-                        @endif
                     </div>
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="licenses">
