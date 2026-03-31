@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class PublicWidgetController extends Controller
 {
@@ -61,5 +63,42 @@ class PublicWidgetController extends Controller
                 'Access-Control-Allow-Origin' => '*',
                 'Cache-Control' => 'no-store',
             ]);
+    }
+
+    public function track(string $publicKey, Request $request): JsonResponse
+    {
+        $site = Site::where('public_key', $publicKey)->first();
+
+        if (! $site) {
+            return response()->json(['ok' => false], 404)->withHeaders([
+                'Access-Control-Allow-Origin' => '*',
+                'Cache-Control' => 'no-store',
+            ]);
+        }
+
+        $pageUrl = (string) $request->input('pageUrl', '');
+        $siteHost = $this->normalizeHost(parse_url($site->domain, PHP_URL_HOST) ?: $site->domain);
+        $pageHost = $this->normalizeHost(parse_url($pageUrl, PHP_URL_HOST) ?: '');
+
+        if ($siteHost !== '' && $pageHost !== '' && $siteHost === $pageHost) {
+            Cache::put('site:' . $site->id . ':widget_seen_at', now()->toIso8601String(), now()->addDays(30));
+            Cache::put('site:' . $site->id . ':widget_seen_url', $pageUrl, now()->addDays(30));
+        }
+
+        return response()->json(['ok' => true])->withHeaders([
+            'Access-Control-Allow-Origin' => '*',
+            'Cache-Control' => 'no-store',
+        ]);
+    }
+
+    private function normalizeHost(string $host): string
+    {
+        $normalized = strtolower(trim($host));
+
+        if (str_starts_with($normalized, 'www.')) {
+            return substr($normalized, 4);
+        }
+
+        return $normalized;
     }
 }

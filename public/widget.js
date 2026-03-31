@@ -39,6 +39,7 @@
         throw new Error('Missing widget config.');
       }
 
+      reportWidgetSeen(payload.data);
       renderWidget(payload.data);
     })
     .catch(function () {
@@ -60,6 +61,26 @@
       default:
         return '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5.3" r="2.2" fill="currentColor"/><path d="M12 9v5m0 0l-3.6 6m3.6-6l3.6 6m-7.2-3.2H6m12 0h-2.4M9.2 10.7 6.4 14m8.4-3.3 2.8 3.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     }
+  }
+
+  function reportWidgetSeen(config) {
+    if (!config || !config.siteKey) {
+      return;
+    }
+
+    fetch(platformOrigin + '/api/public/widget-seen/' + encodeURIComponent(config.siteKey), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        pageUrl: window.location.href,
+        referrer: document.referrer || ''
+      }),
+      keepalive: true
+    }).catch(function () {
+      return null;
+    });
   }
 
   function getPresetLabel(type) {

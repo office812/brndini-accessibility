@@ -20,8 +20,27 @@
 
                 <div class="billing-hero-meta">
                     <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'מוכן להטמעה' : 'דורש הפעלת רישיון' }}</span>
+                    <span class="status-pill {{ $installationStatus === 'installed' ? 'is-good' : 'is-warn' }}">{{ $installationLabel }}</span>
                     <span class="status-pill is-neutral">{{ $widgetPresetLabels[$widget['preset']] ?? $widget['preset'] }}</span>
                     <span class="status-pill is-neutral">{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</span>
+                </div>
+            </section>
+
+            <section class="domain-card">
+                <h2>סטטוס ההטמעה</h2>
+                <div class="domain-info-list">
+                    <div class="domain-info-row">
+                        <span>מצב נוכחי</span>
+                        <strong>{{ $installationLabel }}</strong>
+                    </div>
+                    <div class="domain-info-row">
+                        <span>זיהוי אחרון</span>
+                        <strong>{{ $installationSeenLabel }}</strong>
+                    </div>
+                    <div class="domain-info-row">
+                        <span>עמוד שזוהה</span>
+                        <strong>{{ $installationPageUrl ?: 'עדיין לא זוהתה טעינה מהאתר' }}</strong>
+                    </div>
                 </div>
             </section>
 

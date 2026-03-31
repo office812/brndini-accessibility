@@ -28,6 +28,7 @@
                 <p>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</p>
                 <div class="mini-status-list">
                     <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
+                    <span class="status-pill {{ $installationStatus === 'installed' ? 'is-good' : 'is-warn' }}">{{ $installationLabel }}</span>
                     <span class="status-pill {{ $statementConnected ? 'is-good' : 'is-neutral' }}">{{ $statementConnected ? 'הצהרה מחוברת' : 'הצהרה חסרה' }}</span>
                 </div>
             </div>
@@ -74,6 +75,14 @@
                 </div>
             </section>
 
+            @if ($installationStatus !== 'installed')
+                <section class="alert-strip">
+                    <strong>הווידג׳ט עדיין לא זוהה באתר.</strong>
+                    <span>הרישיון פעיל, אבל עדיין לא התקבלה טעינה אמיתית מהקוד באתר. צריך להטמיע את ה־snippet ואז לרענן את הדף באתר הלקוח.</span>
+                    <a class="text-link" href="{{ route('dashboard.install', ['site' => $site->id]) }}">למסך ההתקנה</a>
+                </section>
+            @endif
+
             <section class="portal-stat-strip">
                 <article class="portal-stat-card">
                     <span class="meta-label">אתרים פעילים</span>
@@ -81,19 +90,19 @@
                     <p>מתוך {{ $sites->count() }} רישיונות במערכת</p>
                 </article>
                 <article class="portal-stat-card">
+                    <span class="meta-label">סטטוס התקנה</span>
+                    <strong>{{ $installationLabel }}</strong>
+                    <p>{{ $installationSeenLabel }}</p>
+                </article>
+                <article class="portal-stat-card">
                     <span class="meta-label">מסלול נוכחי</span>
                     <strong>{{ $currentPlan['name'] }}</strong>
                     <p>{{ $currentPlan['price'] }}</p>
                 </article>
                 <article class="portal-stat-card">
-                    <span class="meta-label">ציון ביקורת</span>
+                    <span class="meta-label">ציון בדיקה</span>
                     <strong>{{ $auditSnapshot['score'] }}</strong>
                     <p>{{ $lastAuditedLabel }}</p>
-                </article>
-                <article class="portal-stat-card">
-                    <span class="meta-label">התראות פתוחות</span>
-                    <strong>{{ $openAlertsCount }}</strong>
-                    <p>{{ $openAlertsCount > 0 ? 'דורש מעבר על מרכז הציות' : 'כרגע הכול שקט' }}</p>
                 </article>
             </section>
 

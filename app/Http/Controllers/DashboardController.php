@@ -382,6 +382,7 @@ class DashboardController extends Controller
             $site->last_audited_at = Carbon::parse($cachedAuditTimestamp);
         }
 
+        $installationSignal = $this->installationSignal($site);
         $widget = $site->widgetConfig();
         $billing = $site->billingConfig();
         $alertSettings = $site->alertConfig();
@@ -425,6 +426,10 @@ class DashboardController extends Controller
             'embedScriptUrl' => url('/widget.js'),
             'embedCode' => sprintf('<script async src="%s" data-a11y-bridge="%s"></script>', url('/widget.js'), $site->public_key),
             'licenseStatus' => $site->license_status ?? 'active',
+            'installationStatus' => $installationSignal['installed'] ? 'installed' : 'pending',
+            'installationLabel' => $installationSignal['installed'] ? 'הוטמע באתר' : 'ממתין להטמעה',
+            'installationSeenLabel' => $installationSignal['last_seen_at']?->diffForHumans() ?? 'עדיין לא זוהתה טעינה מהאתר',
+            'installationPageUrl' => $installationSignal['page_url'],
             'billing' => $billing,
             'billingPlans' => $planCatalog,
             'currentPlan' => [
@@ -551,6 +556,18 @@ class DashboardController extends Controller
         ];
     }
 
+    private function installationSignal(Site $site): array
+    {
+        $lastSeenAt = Cache::get('site:' . $site->id . ':widget_seen_at');
+        $pageUrl = Cache::get('site:' . $site->id . ':widget_seen_url');
+
+        return [
+            'installed' => is_string($lastSeenAt) && trim($lastSeenAt) !== '',
+            'last_seen_at' => is_string($lastSeenAt) ? Carbon::parse($lastSeenAt) : null,
+            'page_url' => is_string($pageUrl) && trim($pageUrl) !== '' ? $pageUrl : null,
+        ];
+    }
+
     private function planCatalog(): array
     {
         return [
@@ -593,6 +610,7 @@ class DashboardController extends Controller
 
     private function generateAuditSnapshot(Site $site): array
     {
+        $installationSignal = $this->installationSignal($site);
         $widget = $site->widgetConfig();
         $billing = $site->billingConfig();
         $alertSettings = $site->alertConfig();
@@ -608,8 +626,23 @@ class DashboardController extends Controller
         $alerts = [];
 
         $licenseActive = ($site->license_status ?? 'active') === 'active';
+        $widgetInstalled = $installationSignal['installed'];
         $statementConnected = filled($site->statement_url);
         $billingActive = ($billing['status'] ?? 'inactive') === 'active';
+
+        $checks[] = $this->buildCheck(
+            'הטמעה באתר',
+            $widgetInstalled ? 'pass' : 'fail',
+            $widgetInstalled
+                ? 'הווידג׳ט זוהה בפועל באתר והפלטפורמה קיבלה טעינה אמיתית מה־site key הזה.'
+                : 'עדיין לא זוהתה טעינה אמיתית של הווידג׳ט באתר. צריך להטמיע את הקוד ואז לרענן את האתר.'
+        );
+
+        $score += $widgetInstalled ? 12 : -26;
+
+        if (! $widgetInstalled) {
+            $alerts[] = $this->buildAlert('install', 'הווידג׳ט עדיין לא הוטמע', 'high', 'לפני שמסתמכים על ציון או על מצב האתר, צריך קודם להדביק את קוד ההטמעה באתר ולוודא שהווידג׳ט נטען בפועל.');
+        }
 
         $checks[] = $this->buildCheck(
             'רישיון והטמעה',
@@ -682,7 +715,9 @@ class DashboardController extends Controller
         }
 
         $score = max(0, min(100, $score));
-        $status = $score >= 85 ? 'healthy' : ($score >= 70 ? 'monitoring' : 'action_required');
+        $status = ! $widgetInstalled
+            ? 'action_required'
+            : ($score >= 85 ? 'healthy' : ($score >= 70 ? 'monitoring' : 'action_required'));
 
         return SiteSettings::sanitizeAuditSnapshot([
             'score' => $score,
@@ -718,7 +753,7 @@ class DashboardController extends Controller
         return match ($status) {
             'healthy' => 'האתר הזה נראה במצב טוב. נשאר רק להמשיך לעקוב אחרי שינויים ולעדכן audits לפי הצורך.',
             'monitoring' => 'הבסיס חזק, אבל עדיין יש ' . $alertCount . ' נקודות שכדאי לעקוב אחריהן כדי לשמור על סביבת נגישות יציבה.',
-            default => 'יש פעולות פתוחות שדורשות טיפול לפני שאפשר להציג את האתר הזה כסט אפ בריא ומנוהל היטב.',
+            default => 'יש פעולות פתוחות שדורשות טיפול לפני שאפשר להציג את האתר הזה כסט אפ בריא ומנוהל היטב. ברוב המקרים זה מתחיל מהשלמת ההטמעה באתר עצמו.',
         };
     }
 
