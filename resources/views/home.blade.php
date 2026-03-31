@@ -6,14 +6,14 @@
     <section class="home-hero" id="top">
         <div class="hero-copy hero-copy-wide">
             <p class="eyebrow">Accessibility platform</p>
-            <h1>פתרון נגישות אתרים שמחבר widget hosted, compliance וניהול שוטף.</h1>
+            <h1>פלטפורמת נגישות לאתרים עם הטמעה קבועה, widget hosted וניהול מרכזי.</h1>
             <p class="hero-text hero-text-lead">
-                A11Y Bridge נבנתה לעסקים, סוכנויות ואתרי enterprise שרוצים לנהל שכבת נגישות אחת
-                ממקום מרכזי: install קבוע, הגדרות widget דינמיות, statement, governance ו־content.
+                A11Y Bridge נבנתה לעסקים, סוכנויות ואתרים שרוצים לנהל שכבת נגישות ממקום אחד:
+                קוד הטמעה קבוע, הגדרות widget דינמיות, install center, statement ו־compliance ברור.
             </p>
 
             <div class="hero-action-row">
-                <a class="primary-button button-link" href="#signup-form">התחל ניסיון</a>
+                <a class="primary-button button-link" href="#signup-form">פתח חשבון</a>
                 <a class="ghost-button button-link" href="#platform-flow">איך זה עובד</a>
             </div>
 
@@ -27,8 +27,8 @@
         <aside class="hero-visual">
             <div class="hero-panel hero-showcase">
                 <span class="eyebrow">Product snapshot</span>
-                <strong>שליטה ברמת מוצר, לא רק תוסף צף.</strong>
-                <p>מעל ה־widget יושבים dashboard, install flow, compliance framing ו־account layer.</p>
+                <strong>שכבת מוצר מלאה, לא רק כפתור באתר.</strong>
+                <p>מעל ה־widget יושבים dashboard, install flow, statement, compliance ו־account layer.</p>
 
                 <div class="showcase-window">
                     <div class="showcase-topbar">
@@ -40,22 +40,22 @@
                         <article class="showcase-card showcase-card-primary">
                             <span class="showcase-label">accessibility workspace</span>
                             <strong>Hosted widget</strong>
-                            <p>הגדרות מותג, site key וקוד הטמעה קבוע.</p>
+                            <p>הגדרות מותג, site key, כפתור נגישות וקוד הטמעה קבוע.</p>
                         </article>
                         <article class="showcase-card">
                             <span class="showcase-label">compliance</span>
                             <strong>Statement + service mode</strong>
-                            <p>מסר ברור ו־governance defensible.</p>
+                            <p>מסר ברור, statement URL ומסגרת שירות מקצועית.</p>
                         </article>
                         <article class="showcase-card">
                             <span class="showcase-label">installation</span>
                             <strong>Install once</strong>
-                            <p>copy, paste, verify, and manage remotely.</p>
+                            <p>copy, paste, verify, ואז ממשיכים לנהל מרחוק.</p>
                         </article>
                         <article class="showcase-card">
                             <span class="showcase-label">content</span>
                             <strong>SEO articles</strong>
-                            <p>עמודי תוכן לצמיחה אורגנית בקטגוריה.</p>
+                            <p>עמודי תוכן לצמיחה אורגנית והסבר שוק בקטגוריה.</p>
                         </article>
                     </div>
                 </div>
