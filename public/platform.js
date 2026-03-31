@@ -216,6 +216,63 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  document.querySelectorAll('[data-dashboard-tabs]').forEach(function (tabsRoot) {
+    var buttons = Array.prototype.slice.call(tabsRoot.querySelectorAll('[data-dashboard-tab-button]'));
+    var panels = Array.prototype.slice.call(tabsRoot.querySelectorAll('[data-dashboard-tab-panel]'));
+    var links = Array.prototype.slice.call(tabsRoot.querySelectorAll('[data-dashboard-tab-link]'));
+
+    if (!buttons.length || !panels.length) {
+      return;
+    }
+
+    function setActiveTab(tabName, shouldUpdateHash) {
+      var activeName = tabName;
+
+      if (!panels.some(function (panel) { return panel.getAttribute('data-dashboard-tab-panel') === activeName; })) {
+        activeName = buttons[0].getAttribute('data-dashboard-tab-button');
+      }
+
+      buttons.forEach(function (button) {
+        var isActive = button.getAttribute('data-dashboard-tab-button') === activeName;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+
+      panels.forEach(function (panel) {
+        var isActive = panel.getAttribute('data-dashboard-tab-panel') === activeName;
+        panel.classList.toggle('is-active', isActive);
+        panel.hidden = !isActive;
+      });
+
+      if (shouldUpdateHash) {
+        var nextHash = '#tab-' + activeName;
+        if (window.location.hash !== nextHash) {
+          history.replaceState(null, '', nextHash);
+        }
+      }
+    }
+
+    buttons.forEach(function (button) {
+      button.setAttribute('role', 'tab');
+      button.addEventListener('click', function () {
+        setActiveTab(button.getAttribute('data-dashboard-tab-button'), true);
+      });
+    });
+
+    panels.forEach(function (panel) {
+      panel.setAttribute('role', 'tabpanel');
+    });
+
+    links.forEach(function (link) {
+      link.addEventListener('click', function () {
+        setActiveTab(link.getAttribute('data-dashboard-tab-link'), true);
+      });
+    });
+
+    var initialHash = (window.location.hash || '').replace('#tab-', '');
+    setActiveTab(initialHash || buttons[0].getAttribute('data-dashboard-tab-button'), false);
+  });
+
   document.querySelectorAll('a[href]').forEach(function (link) {
     link.addEventListener('click', function (event) {
       var href = link.getAttribute('href');

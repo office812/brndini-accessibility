@@ -1903,6 +1903,108 @@ body.page-is-ready .auth-shell {
     gap: 22px;
 }
 
+.dashboard-workspace {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.dashboard-tab-rail {
+    position: sticky;
+    top: 104px;
+    display: grid;
+    gap: 14px;
+    align-content: start;
+}
+
+.dashboard-tab-rail-card {
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: var(--shadow-xs);
+}
+
+.dashboard-tab-rail-card h2 {
+    margin: 10px 0 8px;
+    font-size: 1.12rem;
+}
+
+.dashboard-tab-nav {
+    display: grid;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow-xs);
+}
+
+.dashboard-tab-button {
+    min-height: 54px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background: transparent;
+    color: #26405c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        transform var(--motion-fast) ease,
+        background var(--motion-fast) ease,
+        border-color var(--motion-fast) ease,
+        color var(--motion-fast) ease,
+        box-shadow var(--motion-fast) ease;
+}
+
+.dashboard-tab-button:hover {
+    transform: translateY(-1px);
+    background: rgba(29, 109, 255, 0.06);
+    border-color: rgba(29, 109, 255, 0.08);
+}
+
+.dashboard-tab-button.is-active {
+    color: #0d3ea7;
+    background: linear-gradient(180deg, rgba(232, 241, 255, 0.98), rgba(218, 231, 253, 0.96));
+    border-color: rgba(29, 109, 255, 0.14);
+    box-shadow: 0 14px 28px rgba(29, 109, 255, 0.12);
+}
+
+.dashboard-tab-content {
+    min-width: 0;
+}
+
+.dashboard-tab-panel {
+    display: none;
+    animation: dashboard-panel-enter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard-tab-panel.is-active {
+    display: grid;
+    gap: 20px;
+}
+
+.licenses-lower-grid-single {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+@keyframes dashboard-panel-enter {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .licenses-welcome h1 {
     margin: 6px 0 0;
     font-size: clamp(2rem, 3vw, 3rem);
@@ -3761,6 +3863,7 @@ body.page-is-ready .auth-shell {
     .portal-content-grid,
     .portal-stat-strip,
     .licenses-shell,
+    .dashboard-workspace,
     .licenses-lower-grid,
     .domain-shell,
     .support-grid,
@@ -3779,6 +3882,14 @@ body.page-is-ready .auth-shell {
 
     .licenses-sidebar {
         padding-top: 0;
+    }
+
+    .dashboard-tab-rail {
+        position: static;
+    }
+
+    .dashboard-tab-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .domain-shell-sidebar {
@@ -3960,6 +4071,7 @@ body.page-is-ready .auth-shell {
     }
 
     .licenses-sidebar,
+    .dashboard-tab-rail,
     .domain-shell-sidebar,
     .portal-side-column,
     .portal-side-rail,
@@ -3970,6 +4082,10 @@ body.page-is-ready .auth-shell {
 
     .domain-shell-sidebar {
         gap: 12px;
+    }
+
+    .dashboard-tab-nav {
+        grid-template-columns: 1fr;
     }
 
     .domain-select-pill {
@@ -4170,6 +4286,7 @@ body.page-is-ready .auth-shell {
     }
 
     .licenses-sidebar,
+    .dashboard-tab-rail,
     .licenses-main {
         gap: 16px;
     }
@@ -4269,6 +4386,17 @@ body.page-is-ready .auth-shell {
     .alert-card {
         padding: 16px;
         border-radius: 18px;
+    }
+
+    .dashboard-tab-rail-card,
+    .dashboard-tab-nav {
+        padding: 12px;
+        border-radius: 18px;
+    }
+
+    .dashboard-tab-button {
+        min-height: 50px;
+        border-radius: 14px;
     }
 
     .domain-side-nav a,
