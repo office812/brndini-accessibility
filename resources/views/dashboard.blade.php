@@ -11,11 +11,11 @@
             <div class="licenses-sidebar-block">
                 <h2>המוצרים שלי</h2>
                 <nav class="licenses-product-nav" aria-label="Products">
-                    <a class="is-current" href="{{ route('dashboard') }}">
+                    <a class="is-current" href="{{ route('dashboard', ['site' => $site->id]) }}">
                         <span class="licenses-product-icon">◉</span>
                         <span>accessWidget</span>
                     </a>
-                    <a href="{{ route('dashboard.compliance') }}">
+                    <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">
                         <span class="licenses-product-icon">◇</span>
                         <span>accessFlow</span>
                     </a>
@@ -44,8 +44,8 @@
                     </p>
 
                     <div class="licenses-hero-actions">
-                        <a class="primary-button" href="{{ route('dashboard.install') }}">התחל התקנה</a>
-                        <a class="secondary-button" href="{{ route('dashboard.compliance') }}">למידע על ציות</a>
+                        <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">התחל התקנה</a>
+                        <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">למידע על ציות</a>
                     </div>
                 </div>
 
@@ -72,11 +72,11 @@
 
             <section class="licenses-toolbar">
                 <div>
-                    <h2>רישיונות accessWidget <small>| סך הכול 1</small></h2>
+                    <h2>רישיונות accessWidget <small>| סך הכול {{ $sites->count() }}</small></h2>
                 </div>
                 <div class="licenses-toolbar-actions">
-                    <a class="secondary-button" href="{{ route('dashboard.install') }}">ניהול מרוכז</a>
-                    <a class="primary-button" href="{{ route('dashboard.install') }}">הוסף אתר חדש</a>
+                    <a class="secondary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">ניהול מרוכז</a>
+                    <a class="primary-button" href="#new-license-form">הוסף אתר חדש</a>
                 </div>
             </section>
 
@@ -84,7 +84,7 @@
                 <div class="licenses-filters">
                     <label class="licenses-search">
                         <span>⌕</span>
-                        <input type="text" value="{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}" aria-label="Search domain">
+                        <input type="text" value="{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}" aria-label="Search domain" readonly>
                     </label>
                     <select aria-label="סינון לפי סטטוס">
                         <option>פעיל</option>
@@ -104,16 +104,39 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</td>
-                                <td>-</td>
-                                <td><span class="status-pill is-good">פעיל</span></td>
-                                <td><span class="status-pill is-neutral">{{ $serviceLabel }}</span></td>
-                                <td><a class="licenses-manage-link" href="{{ route('dashboard.account') }}">ניהול</a></td>
-                            </tr>
+                            @foreach ($sites as $licenseSite)
+                                <tr>
+                                    <td>{{ parse_url($licenseSite->domain, PHP_URL_HOST) ?: $licenseSite->domain }}</td>
+                                    <td>-</td>
+                                    <td><span class="status-pill is-good">פעיל</span></td>
+                                    <td><span class="status-pill is-neutral">{{ $serviceModes[$licenseSite->service_mode] ?? $licenseSite->service_mode }}</span></td>
+                                    <td><a class="licenses-manage-link" href="{{ route('dashboard.account', ['site' => $licenseSite->id]) }}">ניהול</a></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
+            </section>
+
+            <section class="licenses-lower-grid" id="new-license-form">
+                <article class="portal-content-card">
+                    <div>
+                        <p class="eyebrow">רישיון חדש</p>
+                        <h2>פתיחת רישיון נפרד לאתר נוסף</h2>
+                    </div>
+                    <p class="panel-intro">כל אתר חדש מקבל רישיון נפרד, site key משלו וקוד הטמעה ייחודי. לא משתפים את אותו קוד בין אתרים שונים.</p>
+
+                    <form class="stack-form" method="POST" action="{{ route('dashboard.sites.store') }}">
+                        @csrf
+                        <label for="new_site_name">שם האתר</label>
+                        <input id="new_site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
+
+                        <label for="new_domain">דומיין</label>
+                        <input id="new_domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://example.com" required>
+
+                        <button class="primary-button" type="submit">צור רישיון לאתר חדש</button>
+                    </form>
+                </article>
             </section>
 
             <section class="licenses-lower-grid" id="license-management">
@@ -142,6 +165,7 @@
             <section class="widget-builder-grid">
                 <form class="panel-card stack-form portal-form-card widget-builder-form" method="POST" action="{{ route('dashboard.update') }}">
                     @csrf
+                    <input type="hidden" name="site_id" value="{{ $site->id }}">
 
                     <div class="portal-card-head">
                         <div>

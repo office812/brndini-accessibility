@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Site;
 use App\Models\User;
 use App\Support\SiteSettings;
 use Illuminate\Contracts\View\View;
@@ -46,6 +47,7 @@ class DashboardController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
+            'site_id' => ['required', 'integer'],
             'company_name' => ['required', 'string', 'max:160'],
             'contact_email' => ['required', 'email', 'max:190'],
             'site_name' => ['required', 'string', 'max:160'],
@@ -82,7 +84,7 @@ class DashboardController extends Controller
         }
 
         $user = $request->user();
-        $site = $this->ensureSite($user);
+        $site = $this->resolveSite($request, $user, (int) $validated['site_id']);
 
         $user->update([
             'name' => $validated['company_name'],
@@ -111,27 +113,75 @@ class DashboardController extends Controller
         ]);
 
         return redirect()
-            ->route('dashboard')
+            ->route('dashboard', ['site' => $site->id])
             ->with('status', 'הגדרות ה-widget נשמרו. כל הטמעה עם אותו site key תתעדכן אוטומטית.');
     }
 
-    private function ensureSite(User $user)
+    public function storeSite(Request $request): RedirectResponse
     {
-        return $user->site()->firstOrCreate(
-            ['user_id' => $user->id],
-            [
-                'site_name' => $user->name . ' Site',
-                'domain' => 'https://example.com',
-                'public_key' => SiteSettings::generatePublicKey(),
-                'service_mode' => 'audit_and_fix',
-                'widget_settings' => SiteSettings::defaultWidget(),
-            ]
-        );
+        $validated = $request->validate([
+            'site_name' => ['required', 'string', 'max:160'],
+            'domain' => ['required', 'string', 'max:190'],
+        ]);
+
+        $domain = SiteSettings::normalizeUrl($validated['domain']);
+
+        if (! filter_var($domain, FILTER_VALIDATE_URL)) {
+            return back()
+                ->withErrors(['domain' => 'צריך להזין דומיין תקין.'])
+                ->withInput();
+        }
+
+        $site = $request->user()->sites()->create([
+            'site_name' => $validated['site_name'],
+            'domain' => $domain,
+            'public_key' => SiteSettings::generatePublicKey(),
+            'service_mode' => 'audit_and_fix',
+            'widget_settings' => SiteSettings::defaultWidget(),
+        ]);
+
+        return redirect()
+            ->route('dashboard', ['site' => $site->id])
+            ->with('status', 'נוצר רישיון חדש לאתר. האתר הזה קיבל site key וקוד הטמעה משלו.');
+    }
+
+    private function ensureSite(User $user): Site
+    {
+        $site = $user->sites()->orderBy('id')->first();
+
+        if ($site) {
+            return $site;
+        }
+
+        return $user->sites()->create([
+            'site_name' => $user->name . ' Site',
+            'domain' => 'https://example.com',
+            'public_key' => SiteSettings::generatePublicKey(),
+            'service_mode' => 'audit_and_fix',
+            'widget_settings' => SiteSettings::defaultWidget(),
+        ]);
+    }
+
+    private function resolveSite(Request $request, User $user, ?int $siteId = null): Site
+    {
+        $selectedId = $siteId ?? (int) $request->integer('site');
+
+        if ($selectedId > 0) {
+            $site = $user->sites()->whereKey($selectedId)->first();
+
+            if ($site) {
+                return $site;
+            }
+        }
+
+        return $this->ensureSite($user);
     }
 
     private function buildDashboardData(User $user): array
     {
-        $site = $this->ensureSite($user);
+        $request = request();
+        $site = $this->resolveSite($request, $user);
+        $sites = $user->sites()->orderBy('id')->get();
         $widget = $site->widgetConfig();
         $serviceModes = $this->serviceModes();
         $embedScriptUrl = url('/widget.js');
@@ -145,6 +195,7 @@ class DashboardController extends Controller
         return [
             'user' => $user,
             'site' => $site,
+            'sites' => $sites,
             'widget' => $widget,
             'serviceModes' => $serviceModes,
             'serviceModeLabel' => $serviceModes[$site->service_mode] ?? $site->service_mode,

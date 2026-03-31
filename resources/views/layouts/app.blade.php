@@ -17,12 +17,13 @@
 </head>
 <body>
     <a class="skip-link" href="#main-content">דלג לתוכן הראשי</a>
+    @php($siteRouteParams = isset($site) ? ['site' => $site->id] : [])
 
     <div class="page-shell {{ auth()->check() ? 'page-shell-app' : '' }}">
         @auth
             <header class="app-header">
                 <div class="app-header-brand">
-                    <a class="app-logo" href="{{ route('dashboard') }}" aria-label="A11Y Bridge dashboard">
+                    <a class="app-logo" href="{{ route('dashboard', $siteRouteParams) }}" aria-label="A11Y Bridge dashboard">
                         <span class="brand-mark brand-mark-app" aria-hidden="true">AB</span>
                         <span class="app-brand-copy">
                             <strong>A11Y Bridge</strong>
@@ -33,16 +34,16 @@
 
                 <div class="app-header-left">
                     <nav class="app-nav" aria-label="ניווט מערכת">
-                        <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">הרישיונות שלי</a>
-                        <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">השירותים שלי</a>
-                        <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">דוחות ובקרה</a>
-                        <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account') }}">החשבון</a>
+                        <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard', $siteRouteParams) }}">הרישיונות שלי</a>
+                        <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install', $siteRouteParams) }}">השירותים שלי</a>
+                        <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', $siteRouteParams) }}">דוחות ובקרה</a>
+                        <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account', $siteRouteParams) }}">החשבון</a>
                     </nav>
                 </div>
 
                 <div class="app-header-right">
-                    <a class="app-header-cta" href="{{ route('dashboard.install') }}">יצירת קשר</a>
-                    <a class="app-header-icon" href="{{ route('dashboard.compliance') }}" aria-label="מרכז תמיכה">?</a>
+                    <a class="app-header-cta" href="{{ route('dashboard.install', $siteRouteParams) }}">יצירת קשר</a>
+                    <a class="app-header-icon" href="{{ route('dashboard.compliance', $siteRouteParams) }}" aria-label="מרכז תמיכה">?</a>
                     <span class="app-header-icon" aria-hidden="true">•</span>
                     <div class="app-user-pill">
                         <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>

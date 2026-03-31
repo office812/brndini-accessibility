@@ -58,7 +58,7 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-            $user->site()->create([
+            $user->sites()->create([
                 'site_name' => $validated['site_name'],
                 'domain' => $domain,
                 'public_key' => SiteSettings::generatePublicKey(),
