@@ -501,7 +501,7 @@ class DashboardController extends Controller
         ]));
         $planCatalog = $this->planCatalog();
         $activeAlerts = collect($auditSnapshot['alerts'] ?? [])->filter(fn (array $alert) => ($alert['state'] ?? 'open') !== 'resolved')->values();
-        $currentPlanMeta = $planCatalog[$billing['plan']] ?? $planCatalog['starter'];
+        $currentPlanMeta = $planCatalog[$billing['plan']] ?? $planCatalog['free'];
         $supportAvailable = Schema::hasTable('support_tickets');
         $supportTickets = $supportAvailable
             ? $user->supportTickets()
@@ -539,7 +539,9 @@ class DashboardController extends Controller
             'billingPlans' => $planCatalog,
             'currentPlan' => [
                 'name' => $currentPlanMeta['label'],
-                'price' => '$' . $currentPlanMeta['prices'][$billing['cycle']] . ' / ' . ($billing['cycle'] === 'yearly' ? 'שנה' : 'חודש'),
+                'price' => ($currentPlanMeta['prices'][$billing['cycle']] ?? 0) === 0
+                    ? 'ללא עלות'
+                    : '$' . $currentPlanMeta['prices'][$billing['cycle']] . ' / ' . ($billing['cycle'] === 'yearly' ? 'שנה' : 'חודש'),
                 'description' => $currentPlanMeta['description'],
             ],
             'recommendedPlan' => $this->recommendedPlanForSite($site, $featureCount),
@@ -751,20 +753,15 @@ class DashboardController extends Controller
     private function planCatalog(): array
     {
         return [
-            'starter' => [
-                'label' => 'Starter',
-                'description' => 'לאתר אחד עם widget hosted, site key קבוע וקונפיגורציה בסיסית.',
-                'prices' => ['monthly' => 29, 'yearly' => 149],
+            'free' => [
+                'label' => 'חינם',
+                'description' => 'מסלול שמכסה בערך 70% מהיכולות: התאמות טקסט, ניגודיות, ניווט בסיסי, קוד הטמעה קבוע וחוויית נגישות טובה לרוב האתרים.',
+                'prices' => ['monthly' => 0, 'yearly' => 0],
             ],
-            'growth' => [
-                'label' => 'Growth',
-                'description' => 'למותגים שצריכים עוד presets, audits שוטפים והתראות אקטיביות.',
+            'premium' => [
+                'label' => 'פרימיום',
+                'description' => 'עוד 30% מהיכולות הקריטיות: פרופילי שימוש, מדריך קריאה, הסתרת תמונות, התאמות מתקדמות יותר וחוויית widget עשירה יותר.',
                 'prices' => ['monthly' => 49, 'yearly' => 249],
-            ],
-            'agency' => [
-                'label' => 'Agency',
-                'description' => 'לניהול כמה אתרים, כמה רישיונות וזרימת עבודה של צוות או סוכנות.',
-                'prices' => ['monthly' => 99, 'yearly' => 549],
             ],
         ];
     }
@@ -777,14 +774,14 @@ class DashboardController extends Controller
 
         if ($featureCount >= 4 || $site->service_mode === 'managed_service') {
             return [
-                'name' => 'Growth',
-                'description' => 'מתאים לאתר שמחזיק יותר יכולות widget, ביקורות שוטפות וניהול alerts ברמה גבוהה יותר.',
+                'name' => 'פרימיום',
+                'description' => 'מתאים לאתר שצריך את כל שכבת הווידג׳ט המתקדמת, כולל פרופילים, מדריך קריאה וכלי נראות מתקדמים.',
             ];
         }
 
         return [
-            'name' => 'Agency',
-            'description' => 'אם תמשיך להוסיף אתרים לחשבון, מסלול Agency יתאים יותר לשליטה מרוכזת בין כמה רישיונות.',
+            'name' => 'פרימיום',
+            'description' => 'אם אתה רוצה לפתוח את כל היכולות המתקדמות של הווידג׳ט ולהציג חוויה מלאה יותר למבקרים, זה השדרוג הבא.',
         ];
     }
 

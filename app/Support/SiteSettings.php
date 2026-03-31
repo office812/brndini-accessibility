@@ -60,9 +60,8 @@ class SiteSettings
     ];
 
     public const BILLING_PLANS = [
-        'starter',
-        'growth',
-        'agency',
+        'free',
+        'premium',
     ];
 
     public const BILLING_CYCLES = [
@@ -130,10 +129,10 @@ class SiteSettings
     public static function defaultBilling(bool $isActive = true): array
     {
         return [
-            'plan' => $isActive ? 'starter' : 'growth',
+            'plan' => 'free',
             'cycle' => 'yearly',
             'status' => $isActive ? 'active' : 'inactive',
-            'amount' => $isActive ? 149 : 249,
+            'amount' => $isActive ? 0 : 0,
             'currency' => 'USD',
         ];
     }
@@ -141,9 +140,10 @@ class SiteSettings
     public static function sanitizeBilling(array $billing, bool $isActiveLicense = true): array
     {
         $defaults = self::defaultBilling($isActiveLicense);
+        $normalizedPlan = self::normalizeBillingPlan($billing['plan'] ?? null);
 
         return [
-            'plan' => in_array($billing['plan'] ?? null, self::BILLING_PLANS, true) ? $billing['plan'] : $defaults['plan'],
+            'plan' => in_array($normalizedPlan, self::BILLING_PLANS, true) ? $normalizedPlan : $defaults['plan'],
             'cycle' => in_array($billing['cycle'] ?? null, self::BILLING_CYCLES, true) ? $billing['cycle'] : $defaults['cycle'],
             'status' => in_array($billing['status'] ?? null, self::BILLING_STATUSES, true) ? $billing['status'] : $defaults['status'],
             'amount' => is_numeric($billing['amount'] ?? null) ? max(0, (int) $billing['amount']) : $defaults['amount'],
@@ -223,5 +223,15 @@ class SiteSettings
     public static function generatePublicKey(): string
     {
         return 'ab_' . Str::lower(Str::random(24));
+    }
+
+    public static function normalizeBillingPlan(mixed $plan): string
+    {
+        return match ($plan) {
+            'starter' => 'free',
+            'growth', 'agency' => 'premium',
+            'premium', 'free' => $plan,
+            default => 'free',
+        };
     }
 }

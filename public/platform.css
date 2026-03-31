@@ -2410,6 +2410,32 @@ body.page-is-ready .auth-shell {
     color: var(--page-muted);
 }
 
+.plan-choice-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+.plan-choice-list li {
+    position: relative;
+    padding-inline-start: 18px;
+    color: var(--page-muted);
+    line-height: 1.75;
+}
+
+.plan-choice-list li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    top: 11px;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1d6dff, #7c3aed);
+}
+
 .compact-form {
     gap: 10px;
 }
@@ -3747,6 +3773,39 @@ body.page-is-ready .auth-shell {
 
 .plan-card p {
     margin: 10px 0 0;
+}
+
+.plan-price-line {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0d3ea7;
+}
+
+.plan-card-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+.plan-card-list li {
+    position: relative;
+    padding-inline-start: 18px;
+    color: var(--page-muted);
+    line-height: 1.75;
+}
+
+.plan-card-list li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    top: 11px;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #1d6dff, #7c3aed);
 }
 
 .plan-card-current {

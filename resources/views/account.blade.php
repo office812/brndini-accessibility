@@ -78,9 +78,23 @@
                             <strong>{{ $plan['label'] }}</strong>
                             <p>{{ $plan['description'] }}</p>
                             <div class="plan-choice-prices">
-                                <span>${{ $plan['prices']['monthly'] }} / חודש</span>
-                                <span>${{ $plan['prices']['yearly'] }} / שנה</span>
+                                <span>{{ $plan['prices']['monthly'] === 0 ? 'ללא עלות' : '$' . $plan['prices']['monthly'] . ' / חודש' }}</span>
+                                <span>{{ $plan['prices']['yearly'] === 0 ? 'ללא עלות' : '$' . $plan['prices']['yearly'] . ' / שנה' }}</span>
                             </div>
+
+                            @if ($planKey === 'free')
+                                <ul class="plan-choice-list">
+                                    <li>כ־70% מיכולות הווידג׳ט פתוחות כבר מההתחלה</li>
+                                    <li>התאמות טקסט, ניגודיות, קישורים, סמן גדול והפחתת תנועה</li>
+                                    <li>קוד הטמעה קבוע וניהול מרחוק מתוך הפלטפורמה</li>
+                                </ul>
+                            @else
+                                <ul class="plan-choice-list">
+                                    <li>עוד 30% מהיכולות הקריטיות והמתקדמות</li>
+                                    <li>מדריך קריאה, הסתרת תמונות, מרווח אותיות ויישור תוכן</li>
+                                    <li>פרופילים ייעודיים וחוויית נגישות עשירה יותר למבקרים</li>
+                                </ul>
+                            @endif
 
                             <form class="stack-form compact-form" method="POST" action="{{ route('dashboard.account.billing', ['site' => $site->id]) }}">
                                 @csrf
