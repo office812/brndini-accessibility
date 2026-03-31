@@ -19,6 +19,7 @@
   }
 
   var platformOrigin = new URL(currentScript.src, window.location.href).origin;
+  var brandLogoUrl = platformOrigin + '/inn-logo.png';
   var storageKey = 'a11yBridgePrefs:' + siteKey;
 
   injectStyles();
@@ -124,7 +125,12 @@
 
     var panelBadge = document.createElement('span');
     panelBadge.className = 'ab-widget-brand-badge';
-    panelBadge.innerHTML = getWidgetIconSvg(config.widget.icon);
+
+    var panelLogo = document.createElement('img');
+    panelLogo.className = 'ab-widget-brand-logo';
+    panelLogo.src = brandLogoUrl;
+    panelLogo.alt = '';
+    panelBadge.appendChild(panelLogo);
 
     var panelBrandText = document.createElement('div');
     panelBrandText.className = 'ab-widget-brand-text';
@@ -406,7 +412,7 @@
       + '.ab-widget-button-glow{position:absolute;inset:-1px;background:radial-gradient(circle at top right,rgba(255,255,255,.34),transparent 34%);pointer-events:none;}'
       + '.ab-widget-button:hover{transform:translateY(-1px);filter:saturate(1.02);box-shadow:0 24px 56px rgba(15,23,42,.22);}'
       + '.ab-widget-button-icon{position:relative;width:34px;height:34px;display:inline-grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18);}'
-      + '.ab-widget-button-icon svg,.ab-widget-brand-badge svg{width:18px;height:18px;}'
+      + '.ab-widget-button-icon svg{width:18px;height:18px;}'
       + '.ab-widget-button-label,.ab-widget-button-chevron{position:relative;}'
       + '.ab-widget-button-label{display:block;font-size:15px;}'
       + '.ab-widget-button-chevron{font-size:22px;line-height:1;opacity:.78;transition:transform var(--ab-motion-base) ease;}'
@@ -439,7 +445,8 @@
       + '.ab-widget-header,.ab-widget-brand,.ab-widget-row,.ab-widget-footer{position:relative;display:flex;}'
       + '.ab-widget-header{align-items:flex-start;justify-content:space-between;gap:12px;}'
       + '.ab-widget-brand{align-items:center;gap:12px;}'
-      + '.ab-widget-brand-badge{width:42px;height:42px;display:inline-grid;place-items:center;border-radius:16px;background:linear-gradient(135deg,#081121,#1d6dff);color:#fff;font-weight:800;box-shadow:0 10px 24px rgba(29,109,255,.14);}'
+      + '.ab-widget-brand-badge{width:42px;height:42px;display:inline-grid;place-items:center;padding:6px;border-radius:16px;background:rgba(255,255,255,.96);box-shadow:0 10px 24px rgba(29,109,255,.14);overflow:hidden;}'
+      + '.ab-widget-brand-logo{width:100%;height:100%;object-fit:contain;display:block;}'
       + '.ab-widget-brand-text{display:grid;gap:2px;}'
       + '.ab-widget-eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#64748b;font-weight:800;}'
       + '.ab-widget-title{margin:0;font:700 21px/1.08 "Assistant","Segoe UI",Arial,sans-serif;letter-spacing:-.02em;}'

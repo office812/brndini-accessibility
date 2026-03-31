@@ -7,7 +7,9 @@
     <section class="auth-screen">
         <div class="auth-screen-panel">
             <a class="auth-brand" href="{{ route('home') }}">
-                <span class="brand-mark" aria-hidden="true">AB</span>
+                <span class="brand-mark" aria-hidden="true">
+                    <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
+                </span>
                 <span>
                     <strong>A11Y Bridge</strong>
                     <small>Hosted accessibility management platform</small>

@@ -24,7 +24,9 @@
             <header class="app-header">
                 <div class="app-header-brand">
                     <a class="app-logo" href="{{ route('dashboard', $siteRouteParams) }}" aria-label="A11Y Bridge dashboard">
-                        <span class="brand-mark brand-mark-app" aria-hidden="true">AB</span>
+                        <span class="brand-mark brand-mark-app" aria-hidden="true">
+                            <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
+                        </span>
                         <span class="app-brand-copy">
                             <strong>A11Y Bridge</strong>
                             <small>סביבת ניהול נגישות</small>
@@ -67,7 +69,9 @@
         @else
             <header class="site-header {{ request()->routeIs('home') ? 'site-header-public' : '' }}">
                 <a class="brand" href="{{ route('home') }}">
-                    <span class="brand-mark" aria-hidden="true">AB</span>
+                    <span class="brand-mark" aria-hidden="true">
+                        <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
+                    </span>
                     <span>
                         <strong>A11Y Bridge</strong>
                         <small>פלטפורמה לניהול נגישות אתר, widget hosted והטמעה קבועה</small>
