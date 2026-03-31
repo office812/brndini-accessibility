@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'home'])->name('home');
 Route::view('/about', 'about')->name('about');
 Route::view('/pricing', 'pricing')->name('pricing');
+Route::get('/statement/{publicKey}', [DashboardController::class, 'statementPage'])->name('statement.show');
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
@@ -30,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/account/activate', [DashboardController::class, 'activateLicense'])->name('dashboard.account.activate');
     Route::post('/dashboard/compliance/audit', [DashboardController::class, 'runAudit'])->name('dashboard.compliance.audit');
     Route::post('/dashboard/compliance/alerts', [DashboardController::class, 'updateAlerts'])->name('dashboard.compliance.alerts');
+    Route::post('/dashboard/compliance/statement', [DashboardController::class, 'updateStatementBuilder'])->name('dashboard.compliance.statement');
     Route::post('/dashboard/support/tickets', [DashboardController::class, 'storeSupportTicket'])->name('dashboard.support.store');
     Route::post('/dashboard', [DashboardController::class, 'update'])->name('dashboard.update');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -53,7 +53,7 @@ class PublicWidgetController extends Controller
                     'siteKey' => $site->public_key,
                     'siteName' => $site->site_name,
                     'domain' => $site->domain,
-                    'statementUrl' => $site->statement_url,
+                    'statementUrl' => $this->statementUrlForSite($site),
                     'licenseStatus' => $site->license_status ?? 'active',
                     'purchaseUrl' => $site->purchase_url,
                     'billing' => $site->billingConfig(),
@@ -140,5 +140,20 @@ class PublicWidgetController extends Controller
         }
 
         return $site->applyRuntimeOverrides($applicable);
+    }
+
+    private function statementUrlForSite(Site $site): ?string
+    {
+        if (filled($site->statement_url)) {
+            return $site->statement_url;
+        }
+
+        $statementBuilder = Cache::get('site:' . $site->id . ':statement_builder');
+
+        if (is_array($statementBuilder) && ($statementBuilder['organization_name'] ?? '') !== '') {
+            return route('statement.show', $site->public_key);
+        }
+
+        return null;
     }
 }

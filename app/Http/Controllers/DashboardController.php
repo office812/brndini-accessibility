@@ -53,6 +53,23 @@ class DashboardController extends Controller
         return view('support', $this->buildDashboardData($request->user()));
     }
 
+    public function statementPage(string $publicKey): View
+    {
+        $site = Site::where('public_key', $publicKey)->firstOrFail();
+        $site = $this->applySiteRuntimeOverrides($site);
+        $statementBuilder = $this->statementBuilderData($site, $site->user);
+        $statementPreview = $this->buildStatementPreview($site, $statementBuilder);
+
+        return view('statement', [
+            'title' => 'הצהרת נגישות | ' . $site->site_name . ' | A11Y Bridge',
+            'canonicalUrl' => route('statement.show', $site->public_key),
+            'metaDescription' => 'הצהרת נגישות עבור ' . $site->site_name . ' בפלטפורמת A11Y Bridge.',
+            'site' => $site,
+            'statementPreview' => $statementPreview,
+            'statementBuilder' => $statementBuilder,
+        ]);
+    }
+
     public function superAdmin(Request $request): View
     {
         $this->ensureSuperAdmin($request->user());
@@ -324,6 +341,83 @@ class DashboardController extends Controller
             ->with('status', 'התראות האתר עודכנו. המסך ימשיך להבליט רק את מה שבאמת חשוב לעקוב אחריו.');
     }
 
+    public function updateStatementBuilder(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'site_id' => ['required', 'integer'],
+            'statement.organization_name' => ['required', 'string', 'max:160'],
+            'statement.organization_type' => ['required', Rule::in(array_keys($this->statementOrganizationTypes()))],
+            'statement.website_purpose' => ['nullable', 'string', 'max:220'],
+            'statement.service_scope' => ['required', Rule::in(array_keys($this->statementServiceScopes()))],
+            'statement.accessibility_owner' => ['nullable', 'string', 'max:160'],
+            'statement.contact_email' => ['required', 'email', 'max:190'],
+            'statement.contact_phone' => ['nullable', 'string', 'max:80'],
+            'statement.contact_form_url' => ['nullable', 'string', 'max:190'],
+            'statement.response_time' => ['required', Rule::in(array_keys($this->statementResponseTimes()))],
+            'statement.last_reviewed_at' => ['nullable', 'date'],
+            'statement.testing_manual_keyboard' => ['nullable', 'boolean'],
+            'statement.testing_screen_reader' => ['nullable', 'boolean'],
+            'statement.testing_automation' => ['nullable', 'boolean'],
+            'statement.testing_content_review' => ['nullable', 'boolean'],
+            'statement.physical_location_accessible' => ['nullable', 'boolean'],
+            'statement.accessible_parking' => ['nullable', 'boolean'],
+            'statement.additional_arrangements' => ['nullable', 'string', 'max:700'],
+            'statement.known_limitations' => ['nullable', 'string', 'max:1500'],
+            'statement.additional_note' => ['nullable', 'string', 'max:700'],
+        ]);
+
+        $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
+        $contactFormUrl = SiteSettings::normalizeOptionalUrl(data_get($validated, 'statement.contact_form_url'));
+
+        if ($contactFormUrl !== null && ! filter_var($contactFormUrl, FILTER_VALIDATE_URL)) {
+            return back()->withErrors([
+                'statement.contact_form_url' => 'צריך להזין קישור תקין לטופס יצירת קשר.',
+            ])->withInput();
+        }
+
+        $statementData = [
+            'organization_name' => trim((string) data_get($validated, 'statement.organization_name')),
+            'organization_type' => (string) data_get($validated, 'statement.organization_type'),
+            'website_purpose' => trim((string) data_get($validated, 'statement.website_purpose', '')),
+            'service_scope' => (string) data_get($validated, 'statement.service_scope'),
+            'accessibility_owner' => trim((string) data_get($validated, 'statement.accessibility_owner', '')),
+            'contact_email' => strtolower(trim((string) data_get($validated, 'statement.contact_email'))),
+            'contact_phone' => trim((string) data_get($validated, 'statement.contact_phone', '')),
+            'contact_form_url' => $contactFormUrl,
+            'response_time' => (string) data_get($validated, 'statement.response_time'),
+            'last_reviewed_at' => data_get($validated, 'statement.last_reviewed_at')
+                ? Carbon::parse((string) data_get($validated, 'statement.last_reviewed_at'))->format('Y-m-d')
+                : now()->format('Y-m-d'),
+            'testing_manual_keyboard' => $request->boolean('statement.testing_manual_keyboard'),
+            'testing_screen_reader' => $request->boolean('statement.testing_screen_reader'),
+            'testing_automation' => $request->boolean('statement.testing_automation'),
+            'testing_content_review' => $request->boolean('statement.testing_content_review'),
+            'physical_location_accessible' => $request->boolean('statement.physical_location_accessible'),
+            'accessible_parking' => $request->boolean('statement.accessible_parking'),
+            'additional_arrangements' => trim((string) data_get($validated, 'statement.additional_arrangements', '')),
+            'known_limitations' => trim((string) data_get($validated, 'statement.known_limitations', '')),
+            'additional_note' => trim((string) data_get($validated, 'statement.additional_note', '')),
+        ];
+
+        Cache::put($this->statementBuilderCacheKey($site), $statementData, now()->addDays(30));
+
+        $statementUrl = route('statement.show', $site->public_key);
+
+        if ($this->siteColumnsAvailable(['statement_url'])) {
+            $site->update([
+                'statement_url' => $statementUrl,
+            ]);
+        } else {
+            $this->storeRuntimeOverrides($site, [
+                'statement_url' => $statementUrl,
+            ]);
+        }
+
+        return redirect()
+            ->to(route('dashboard.compliance', ['site' => $site->id]) . '#tab-statement-builder')
+            ->with('status', 'הצהרת הנגישות נשמרה. עכשיו יש לך ניסוח מוכן, קישור ציבורי ותצוגה מקדימה שאפשר לשתף.');
+    }
+
     public function storeSupportTicket(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -492,6 +586,10 @@ class DashboardController extends Controller
         $billing = $site->billingConfig();
         $alertSettings = $site->alertConfig();
         $auditSnapshot = $site->audit_snapshot ? $site->auditConfig() : $this->generateAuditSnapshot($site);
+        $statementBuilder = $this->statementBuilderData($site, $user);
+        $statementPreview = $this->buildStatementPreview($site, $statementBuilder);
+        $statementUrl = $this->statementUrlForSite($site);
+        $statementConnected = $this->siteHasStatement($site);
         $serviceModes = $this->serviceModes();
         $featureCount = count(array_filter([
             $widget['showContrast'],
@@ -545,7 +643,13 @@ class DashboardController extends Controller
                 'description' => $currentPlanMeta['description'],
             ],
             'recommendedPlan' => $this->recommendedPlanForSite($site, $featureCount),
-            'statementStatus' => $site->statement_url ? 'connected' : 'missing',
+            'statementStatus' => $statementConnected ? 'connected' : 'missing',
+            'statementUrl' => $statementUrl,
+            'statementBuilder' => $statementBuilder,
+            'statementPreview' => $statementPreview,
+            'statementOrganizationTypes' => $this->statementOrganizationTypes(),
+            'statementServiceScopes' => $this->statementServiceScopes(),
+            'statementResponseTimes' => $this->statementResponseTimes(),
             'featureCount' => $featureCount,
             'auditSnapshot' => $auditSnapshot,
             'auditChecks' => $auditSnapshot['checks'] ?? [],
@@ -816,7 +920,7 @@ class DashboardController extends Controller
 
         $licenseActive = ($site->license_status ?? 'active') === 'active';
         $widgetInstalled = $installationSignal['installed'];
-        $statementConnected = filled($site->statement_url);
+        $statementConnected = $this->siteHasStatement($site);
         $billingActive = ($billing['status'] ?? 'inactive') === 'active';
 
         $checks[] = $this->buildCheck(
@@ -944,6 +1048,175 @@ class DashboardController extends Controller
             'monitoring' => 'הבסיס חזק, אבל עדיין יש ' . $alertCount . ' נקודות שכדאי לעקוב אחריהן כדי לשמור על סביבת נגישות יציבה.',
             default => 'יש פעולות פתוחות שדורשות טיפול לפני שאפשר להציג את האתר הזה כסט אפ בריא ומנוהל היטב. ברוב המקרים זה מתחיל מהשלמת ההטמעה באתר עצמו.',
         };
+    }
+
+    private function statementOrganizationTypes(): array
+    {
+        return [
+            'business' => 'עסק / חברה',
+            'agency' => 'סוכנות / סטודיו',
+            'ecommerce' => 'מסחר אלקטרוני',
+            'public' => 'גוף ציבורי / מוניציפלי',
+            'nonprofit' => 'עמותה / ארגון חברתי',
+            'content' => 'אתר תוכן / מגזין',
+        ];
+    }
+
+    private function statementServiceScopes(): array
+    {
+        return [
+            'website_only' => 'אתר ציבורי בלבד',
+            'website_account' => 'אתר ציבורי + אזור אישי / טפסים',
+            'managed_service' => 'שירות מנוהל עם תחזוקה ובקרה שוטפת',
+        ];
+    }
+
+    private function statementResponseTimes(): array
+    {
+        return [
+            '2_business_days' => 'עד שני ימי עסקים',
+            '5_business_days' => 'עד חמישה ימי עסקים',
+            'custom' => 'מענה מותאם לפי סוג הפנייה',
+        ];
+    }
+
+    private function statementBuilderDefaults(Site $site, ?User $user = null): array
+    {
+        $owner = $user ?? $site->user;
+
+        return [
+            'organization_name' => $site->site_name ?: ($owner?->name ?? 'הארגון'),
+            'organization_type' => 'business',
+            'website_purpose' => 'מתן מידע, שירותים דיגיטליים וגישה נוחה לתוכן וליצירת קשר.',
+            'service_scope' => 'website_only',
+            'accessibility_owner' => $owner?->name ?? '',
+            'contact_email' => $owner?->contact_email ?: ($owner?->email ?? ''),
+            'contact_phone' => '',
+            'contact_form_url' => '',
+            'response_time' => '2_business_days',
+            'last_reviewed_at' => now()->format('Y-m-d'),
+            'testing_manual_keyboard' => true,
+            'testing_screen_reader' => true,
+            'testing_automation' => true,
+            'testing_content_review' => true,
+            'physical_location_accessible' => false,
+            'accessible_parking' => false,
+            'additional_arrangements' => '',
+            'known_limitations' => '',
+            'additional_note' => '',
+        ];
+    }
+
+    private function statementBuilderCacheKey(Site $site): string
+    {
+        return 'site:' . $site->id . ':statement_builder';
+    }
+
+    private function statementBuilderData(Site $site, ?User $user = null): array
+    {
+        $defaults = $this->statementBuilderDefaults($site, $user);
+        $cached = Cache::get($this->statementBuilderCacheKey($site), []);
+
+        if (! is_array($cached)) {
+            return $defaults;
+        }
+
+        return array_merge($defaults, $cached);
+    }
+
+    private function statementUrlForSite(Site $site): ?string
+    {
+        if (filled($site->statement_url)) {
+            return $site->statement_url;
+        }
+
+        $cached = Cache::get($this->statementBuilderCacheKey($site));
+
+        if (is_array($cached) && ($cached['organization_name'] ?? '') !== '') {
+            return route('statement.show', $site->public_key);
+        }
+
+        return null;
+    }
+
+    private function siteHasStatement(Site $site): bool
+    {
+        return filled($this->statementUrlForSite($site));
+    }
+
+    private function buildStatementPreview(Site $site, array $statement): array
+    {
+        $organizationTypes = $this->statementOrganizationTypes();
+        $serviceScopes = $this->statementServiceScopes();
+        $responseTimes = $this->statementResponseTimes();
+
+        $testingMethods = collect([
+            $statement['testing_manual_keyboard'] ? 'בדיקות מקלדת וזרימת פוקוס' : null,
+            $statement['testing_screen_reader'] ? 'בדיקות עם קוראי מסך וכלי עזר' : null,
+            $statement['testing_automation'] ? 'בדיקות אוטומטיות וכלי סריקה' : null,
+            $statement['testing_content_review'] ? 'סקירה ידנית של תוכן, קישורים וטפסים' : null,
+        ])->filter()->values()->all();
+
+        $locationSummary = $statement['physical_location_accessible']
+            ? 'קיימים גם הסדרי נגישות פיזיים' . ($statement['accessible_parking'] ? ', כולל חניה נגישה' : '') . '.'
+            : 'הצהרה זו מתמקדת כרגע בנגישות האתר והשירותים הדיגיטליים.';
+
+        if ($statement['additional_arrangements'] !== '') {
+            $locationSummary .= ' ' . $statement['additional_arrangements'];
+        }
+
+        $contactChannels = collect([
+            filled($statement['contact_email']) ? 'בדוא״ל: ' . $statement['contact_email'] : null,
+            filled($statement['contact_phone']) ? 'בטלפון: ' . $statement['contact_phone'] : null,
+            filled($statement['contact_form_url']) ? 'בטופס יצירת קשר: ' . $statement['contact_form_url'] : null,
+        ])->filter()->values()->all();
+
+        return [
+            'title' => 'הצהרת נגישות עבור ' . $statement['organization_name'],
+            'summary' => $statement['organization_name'] . ' פועלת להנגשת האתר ' . (parse_url($site->domain, PHP_URL_HOST) ?: $site->domain) . ' ולשיפור חוויית השימוש לכלל המשתמשים.',
+            'badges' => [
+                $organizationTypes[$statement['organization_type']] ?? 'ארגון',
+                $serviceScopes[$statement['service_scope']] ?? 'אתר ציבורי בלבד',
+                $responseTimes[$statement['response_time']] ?? 'עד שני ימי עסקים',
+            ],
+            'sections' => [
+                [
+                    'title' => 'מחויבות לנגישות',
+                    'body' => $statement['organization_name'] . ' רואה חשיבות רבה בהנגשת האתר ומתייחסת לנגישות כחלק בלתי נפרד מחוויית השירות. אנו פועלים לשפר באופן שוטף את השימושיות, הקריאות, הניווט וההתאמה לטכנולוגיות מסייעות.',
+                ],
+                [
+                    'title' => 'היקף השירות והאתר',
+                    'body' => 'האתר נועד עבור ' . ($statement['website_purpose'] !== '' ? $statement['website_purpose'] : 'הצגת מידע ושירותים דיגיטליים') . ' היקף השירות הנוכחי הוא: ' . ($serviceScopes[$statement['service_scope']] ?? 'אתר ציבורי בלבד') . '.',
+                ],
+                [
+                    'title' => 'בדיקות והתאמות שבוצעו',
+                    'body' => $testingMethods === []
+                        ? 'בוצעו התאמות נגישות שוטפות, אך חשוב להמשיך בבדיקות ועדכונים בהתאם לשינויים באתר.'
+                        : 'במהלך העבודה בוצעו או מבוצעות באופן שוטף ההתאמות והבדיקות הבאות: ' . implode(' · ', $testingMethods) . '.',
+                ],
+                [
+                    'title' => 'יצירת קשר ומשוב',
+                    'body' => 'אם נתקלת בקושי, נשמח שתעדכן אותנו כדי שנוכל לבדוק ולטפל. ניתן ליצור קשר ' . ($contactChannels === [] ? 'באמצעי הקשר שמופיעים באתר' : implode(' · ', $contactChannels)) . '. זמן המענה הצפוי: ' . ($responseTimes[$statement['response_time']] ?? 'עד שני ימי עסקים') . '.',
+                ],
+                [
+                    'title' => 'הסדרים נוספים',
+                    'body' => $locationSummary,
+                ],
+                [
+                    'title' => 'מגבלות ידועות והערות',
+                    'body' => $statement['known_limitations'] !== ''
+                        ? $statement['known_limitations']
+                        : 'למרות המאמצים להנגיש את כלל חלקי האתר, ייתכן שחלקים מסוימים עדיין דורשים שיפור או התאמה נוספת. אם מצאת רכיב שאינו נגיש, נשמח לקבל משוב ולפעול לתיקון.',
+                ],
+                [
+                    'title' => 'מידע נוסף',
+                    'body' => $statement['additional_note'] !== ''
+                        ? $statement['additional_note']
+                        : 'הצהרה זו עודכנה כחלק מתהליך ניהול הנגישות השוטף של האתר.',
+                ],
+            ],
+            'last_reviewed_label' => Carbon::parse($statement['last_reviewed_at'])->format('d.m.Y'),
+        ];
     }
 
     private function calculateExpiry(string $cycle): Carbon

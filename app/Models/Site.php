@@ -77,6 +77,7 @@ class Site extends Model
     public function applyRuntimeOverrides(array $overrides): static
     {
         foreach ([
+            'statement_url',
             'license_status',
             'purchase_url',
             'billing_settings',

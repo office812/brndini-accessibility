@@ -3,7 +3,7 @@
 @php($title = 'לוח ניהול | A11Y Bridge')
 
 @section('content')
-    @php($statementConnected = filled($site->statement_url))
+    @php($statementConnected = $statementStatus === 'connected')
     @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'שכבת נגישות מנוהלת')
 
     <section class="licenses-shell" data-dashboard-tabs>
