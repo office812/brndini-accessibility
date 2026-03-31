@@ -43,8 +43,8 @@
                     <a href="#solutions">פתרונות</a>
                     <a href="#platform-flow">איך זה עובד</a>
                     <a href="#articles">משאבים</a>
-                    <a href="#signup-form">Login</a>
-                    <a class="nav-button nav-button-primary" href="#signup-form">Start free trial</a>
+                    <a href="{{ route('login.show') }}">Login</a>
+                    <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">Start free trial</a>
                 @endauth
             </nav>
         </header>

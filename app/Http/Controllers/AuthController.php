@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Support\SiteSettings;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,22 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function showLogin(): View
+    {
+        return view('auth.session', [
+            'mode' => 'login',
+            'title' => 'התחברות לחשבון | A11Y Bridge',
+        ]);
+    }
+
+    public function showRegister(): View
+    {
+        return view('auth.session', [
+            'mode' => 'register',
+            'title' => 'פתיחת חשבון | A11Y Bridge',
+        ]);
+    }
+
     public function register(Request $request): RedirectResponse
     {
         $validated = $request->validate([

@@ -13,7 +13,7 @@
             </p>
 
             <div class="hero-action-row hero-action-row-center">
-                <a class="primary-button button-link" href="#signup-form">התחל ניסיון</a>
+                <a class="primary-button button-link" href="{{ route('register.show') }}">התחל ניסיון</a>
                 <a class="ghost-button button-link" href="#how-a11y-bridge-works">איך זה עובד</a>
             </div>
         </div>
@@ -129,7 +129,7 @@
             <p class="eyebrow">Find out now if your website is accessible</p>
             <h2>קבל שליטה מלאה על שכבת הנגישות של האתר שלך.</h2>
         </div>
-        <a class="primary-button button-link" href="#signup-form">פתח חשבון</a>
+        <a class="primary-button button-link" href="{{ route('register.show') }}">פתח חשבון</a>
     </section>
 
     <section class="section-band" id="solutions">
@@ -349,54 +349,23 @@
     </section>
 
     <section class="section-band section-band-cta" id="signup-form">
-        <div class="auth-grid auth-grid-home">
-            <section class="panel-card">
+        <div class="auth-cta-grid">
+            <section class="panel-card auth-cta-card">
                 <p class="eyebrow">Start free trial</p>
                 <h2>פתיחת חשבון חדש</h2>
                 <p class="hero-text">
                     מתחילים עם dashboard, hosted widget, install center, compliance center וקוד הטמעה קבוע.
                 </p>
-
-                <form class="stack-form" method="POST" action="{{ route('register') }}">
-                    @csrf
-
-                    <label for="company_name">שם החברה</label>
-                    <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}" required>
-
-                    <label for="signup_email">אימייל</label>
-                    <input id="signup_email" name="email" type="email" value="{{ old('email') }}" required>
-
-                    <label for="signup_password">סיסמה</label>
-                    <input id="signup_password" name="password" type="password" minlength="8" required>
-
-                    <label for="site_name">שם האתר</label>
-                    <input id="site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
-
-                    <label for="domain">דומיין</label>
-                    <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
-
-                    <button class="primary-button" type="submit">ליצור חשבון</button>
-                </form>
+                <a class="primary-button button-link" href="{{ route('register.show') }}">למסך פתיחת חשבון</a>
             </section>
 
-            <section class="panel-card" id="login-form" aria-labelledby="login-title">
+            <section class="panel-card auth-cta-card">
                 <p class="eyebrow">Login</p>
-                <h2 id="login-title">כניסה למשתמש קיים</h2>
+                <h2>כניסה למשתמש קיים</h2>
                 <p class="hero-text">
                     כניסה מהירה להגדרות ה־widget, למסך ההתקנה, למסגור ה־compliance ולאזור החשבון.
                 </p>
-
-                <form class="stack-form" method="POST" action="{{ route('login') }}">
-                    @csrf
-
-                    <label for="login_email">אימייל</label>
-                    <input id="login_email" name="email" type="email" value="{{ old('email') }}" required>
-
-                    <label for="login_password">סיסמה</label>
-                    <input id="login_password" name="password" type="password" required>
-
-                    <button class="secondary-button" type="submit">להיכנס</button>
-                </form>
+                <a class="ghost-button button-link" href="{{ route('login.show') }}">למסך התחברות</a>
             </section>
         </div>
     </section>
