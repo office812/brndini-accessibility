@@ -20,9 +20,9 @@ jobs:
           CW_HOST: ${{ secrets.CW_HOST }}
         run: |
           mkdir -p ~/.ssh
-          if printf "%s" "$CW_SSH_PRIVATE_KEY" | grep -q "BEGIN OPENSSH PRIVATE KEY"; then
+          if [ -n "$CW_SSH_PRIVATE_KEY" ] && printf "%s" "$CW_SSH_PRIVATE_KEY" | grep -q "BEGIN OPENSSH PRIVATE KEY"; then
             printf "%s" "$CW_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
-          else
+          elif [ -n "$CW_SSH_PRIVATE_KEY" ]; then
             python3 - <<'PY'
 import base64
 import os
@@ -34,20 +34,36 @@ decoded = base64.b64decode(clean)
 Path(os.path.expanduser("~/.ssh/id_ed25519")).write_bytes(decoded)
 PY
           fi
-          chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$CW_HOST" >> ~/.ssh/known_hosts
+          if [ -f ~/.ssh/id_ed25519 ]; then
+            chmod 600 ~/.ssh/id_ed25519
+          fi
 
       - name: Deploy on Cloudways
         env:
           CW_HOST: ${{ secrets.CW_HOST }}
           CW_USER: ${{ secrets.CW_USER }}
+          CW_PASSWORD: ${{ secrets.CW_PASSWORD }}
           CW_APP_PATH: ${{ secrets.CW_APP_PATH }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 "$CW_USER@$CW_HOST" <<EOF
-            set -e
-            cd "$CW_APP_PATH"
-            git pull origin main
-            composer install --no-dev --optimize-autoloader --no-interaction
-            php artisan migrate --force
-            php artisan optimize:clear
-          EOF
+          if [ -n "$CW_PASSWORD" ]; then
+            sudo apt-get update
+            sudo apt-get install -y sshpass
+            sshpass -p "$CW_PASSWORD" ssh -o StrictHostKeyChecking=no "$CW_USER@$CW_HOST" <<EOF
+              set -e
+              cd "$CW_APP_PATH"
+              git pull origin main
+              composer install --no-dev --optimize-autoloader --no-interaction
+              php artisan migrate --force
+              php artisan optimize:clear
+            EOF
+          else
+            ssh -i ~/.ssh/id_ed25519 "$CW_USER@$CW_HOST" <<EOF
+              set -e
+              cd "$CW_APP_PATH"
+              git pull origin main
+              composer install --no-dev --optimize-autoloader --no-interaction
+              php artisan migrate --force
+              php artisan optimize:clear
+            EOF
+          fi
