@@ -3105,10 +3105,87 @@ body.page-is-ready .auth-shell {
     align-items: start;
 }
 
+.super-admin-content-grid-wide {
+    grid-template-columns: minmax(0, 1.7fr) minmax(320px, 0.8fr);
+}
+
 .super-admin-main-stack,
 .super-admin-side-stack {
     display: grid;
     gap: 20px;
+}
+
+.super-admin-form-shell {
+    gap: 18px;
+}
+
+.super-admin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 4px;
+}
+
+.super-admin-form-card {
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(245, 248, 253, 0.9);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.super-admin-form-card-head {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.super-admin-form-card-head h3 {
+    margin: 0;
+    font-size: 1.04rem;
+}
+
+.super-admin-form-card-head p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.7;
+}
+
+.super-admin-form-actions {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.super-admin-table-card {
+    gap: 16px;
+}
+
+.super-admin-note-list {
+    display: grid;
+    gap: 14px;
+}
+
+.super-admin-note-list > div {
+    display: grid;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(245, 248, 253, 0.94);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.super-admin-note-list strong {
+    color: #13263e;
+}
+
+.super-admin-note-list p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.7;
 }
 
 .super-admin-actions-list {
@@ -4944,6 +5021,11 @@ body.page-is-ready .auth-shell {
 
     .super-admin-kpi-grid,
     .super-admin-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .super-admin-content-grid-wide,
+    .super-admin-form-grid {
         grid-template-columns: 1fr;
     }
 
