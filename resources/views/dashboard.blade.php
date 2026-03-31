@@ -109,7 +109,7 @@
                                 <td>-</td>
                                 <td><span class="status-pill is-good">Active</span></td>
                                 <td><span class="status-pill is-neutral">{{ $serviceLabel }}</span></td>
-                                <td><a class="licenses-manage-link" href="#license-management">Manage</a></td>
+                                <td><a class="licenses-manage-link" href="{{ route('dashboard.account') }}">Manage</a></td>
                             </tr>
                         </tbody>
                     </table>
