@@ -5,7 +5,6 @@
 @section('content')
     @php($statementConnected = filled($site->statement_url))
     @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'Managed accessibility layer')
-    @php($activeSitesCount = $sites->where('license_status', 'active')->count())
 
     <section class="licenses-shell">
         <aside class="licenses-sidebar">

@@ -381,6 +381,9 @@ class DashboardController extends Controller
             : collect();
         $openTickets = $supportTickets->whereIn('status', ['open', 'pending']);
         $urgentTickets = $supportTickets->where('priority', 'urgent');
+        $activeSitesCount = $sites->filter(function (Site $candidate) {
+            return ($candidate->license_status ?? 'active') === 'active';
+        })->count();
 
         return [
             'user' => $user,
@@ -420,6 +423,7 @@ class DashboardController extends Controller
                     'url' => route(request()->route()?->getName() ?: 'dashboard', ['site' => $candidate->id]),
                 ];
             })->all(),
+            'activeSitesCount' => $activeSitesCount,
             'supportAvailable' => $supportAvailable,
             'supportTickets' => $supportTickets,
             'supportCategories' => $this->supportCategories(),
