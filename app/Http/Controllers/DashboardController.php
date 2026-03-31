@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 
@@ -218,9 +219,13 @@ class DashboardController extends Controller
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
 
         if (! $this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at'])) {
+            $snapshot = $this->generateAuditSnapshot($site);
+            Cache::put($this->auditSnapshotCacheKey($site), $snapshot, now()->addDays(30));
+            Cache::put($this->auditTimestampCacheKey($site), Carbon::now()->toIso8601String(), now()->addDays(30));
+
             return redirect()
                 ->route('dashboard.compliance', ['site' => $site->id])
-                ->withErrors(['audit' => 'הרצת בדיקה עדיין לא זמינה בשרת הזה. צריך להשלים את עדכון מסד הנתונים, ואז הכפתור יעבוד רגיל.']);
+                ->with('status', 'הבדיקה הורצה ונשמרה במצב זמני עד שעדכון מסד הנתונים יושלם בשרת.');
         }
 
         $snapshot = $this->generateAuditSnapshot($site);
@@ -246,20 +251,27 @@ class DashboardController extends Controller
         ]);
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
+        $incomingAlerts = SiteSettings::sanitizeAlertSettings([
+            'license' => $request->boolean('alerts.license'),
+            'statement' => $request->boolean('alerts.statement'),
+            'audit' => $request->boolean('alerts.audit'),
+            'sync' => $request->boolean('alerts.sync'),
+        ]);
 
         if (! $this->siteColumnsAvailable(['alert_settings', 'audit_snapshot'])) {
+            Cache::put($this->alertSettingsCacheKey($site), $incomingAlerts, now()->addDays(30));
+            $previewSite = clone $site;
+            $previewSite->alert_settings = $incomingAlerts;
+            $snapshot = $this->generateAuditSnapshot($previewSite);
+            Cache::put($this->auditSnapshotCacheKey($site), $snapshot, now()->addDays(30));
+
             return redirect()
                 ->route('dashboard.compliance', ['site' => $site->id])
-                ->withErrors(['alerts' => 'שמירת התראות עדיין לא זמינה בשרת הזה. צריך להשלים את עדכון מסד הנתונים, ואז הכפתור יעבוד רגיל.']);
+                ->with('status', 'ההתראות נשמרו במצב זמני עד שעדכון מסד הנתונים יושלם בשרת.');
         }
 
         $site->update([
-            'alert_settings' => SiteSettings::sanitizeAlertSettings([
-                'license' => $request->boolean('alerts.license'),
-                'statement' => $request->boolean('alerts.statement'),
-                'audit' => $request->boolean('alerts.audit'),
-                'sync' => $request->boolean('alerts.sync'),
-            ]),
+            'alert_settings' => $incomingAlerts,
         ]);
 
         $snapshot = $this->generateAuditSnapshot($site->fresh());
@@ -354,6 +366,22 @@ class DashboardController extends Controller
         $request = request();
         $site = $this->resolveSite($request, $user);
         $sites = $user->sites()->orderBy('id')->get();
+        $cachedAlerts = Cache::get($this->alertSettingsCacheKey($site));
+        $cachedAudit = Cache::get($this->auditSnapshotCacheKey($site));
+        $cachedAuditTimestamp = Cache::get($this->auditTimestampCacheKey($site));
+
+        if (! $this->siteColumnsAvailable(['alert_settings']) && is_array($cachedAlerts)) {
+            $site->alert_settings = $cachedAlerts;
+        }
+
+        if (! $this->siteColumnsAvailable(['audit_snapshot']) && is_array($cachedAudit)) {
+            $site->audit_snapshot = $cachedAudit;
+        }
+
+        if (! $this->siteColumnsAvailable(['last_audited_at']) && is_string($cachedAuditTimestamp)) {
+            $site->last_audited_at = Carbon::parse($cachedAuditTimestamp);
+        }
+
         $widget = $site->widgetConfig();
         $billing = $site->billingConfig();
         $alertSettings = $site->alertConfig();
@@ -436,6 +464,21 @@ class DashboardController extends Controller
                 'lastActivity' => $supportTickets->first()?->last_activity_at?->diffForHumans() ?? 'עדיין לא נפתחה פנייה',
             ],
         ];
+    }
+
+    private function auditSnapshotCacheKey(Site $site): string
+    {
+        return 'site:' . $site->id . ':audit_snapshot_fallback';
+    }
+
+    private function auditTimestampCacheKey(Site $site): string
+    {
+        return 'site:' . $site->id . ':last_audited_fallback';
+    }
+
+    private function alertSettingsCacheKey(Site $site): string
+    {
+        return 'site:' . $site->id . ':alert_settings_fallback';
     }
 
     private function serviceModes(): array

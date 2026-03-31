@@ -27,7 +27,7 @@
 
             @unless($auditActionsAvailable)
                 <section class="domain-card">
-                    <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש. אפשר ללחוץ על הכפתור, והמערכת תחזיר הודעה מסודרת עד שה־migration יושלם.</p>
+                    <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש, אבל אפשר כבר להריץ בדיקה. התוצאה תישמר זמנית עד שה־migration יושלם בשרת.</p>
                 </section>
             @endunless
 
@@ -118,7 +118,7 @@
                     </div>
 
                     @unless($alertSettingsAvailable)
-                        <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש. אפשר ללחוץ על הכפתור, והמערכת תחזיר הודעה מסודרת עד שה־migration יושלם.</p>
+                        <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש, אבל אפשר כבר לשמור התראות. ההגדרות יישמרו זמנית עד שה־migration יושלם בשרת.</p>
                     @endunless
 
                     <button class="primary-button" type="submit">שמור התראות</button>
