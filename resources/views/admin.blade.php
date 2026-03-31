@@ -53,97 +53,203 @@
 
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="overview">
-                        <section class="domain-card domain-hero-card">
-                            <div>
-                                <p class="eyebrow">גישה מלאה למערכת</p>
-                                <h2>ניהול משתמשים, פניות, אתרים וקודי מעקב גלובליים</h2>
-                                <p class="panel-intro">מכאן אפשר לעזור ללקוחות, לעקוב אחרי פניות פתוחות, לראות את כל האתרים במערכת ולהטמיע קודי אנליטיקס ומעקב לכל האתר.</p>
-                            </div>
-
-                            <div class="billing-hero-meta">
-                                <span class="status-pill is-neutral">משתמשים: {{ $adminSummary['users'] }}</span>
-                                <span class="status-pill is-neutral">אתרים: {{ $adminSummary['sites'] }}</span>
-                                <span class="status-pill {{ $adminSummary['tickets_open'] > 0 ? 'is-warn' : 'is-good' }}">פניות פתוחות: {{ $adminSummary['tickets_open'] }}</span>
-                                <span class="status-pill is-good">אתרים פעילים: {{ $adminSummary['active_sites'] }}</span>
-                            </div>
-                        </section>
-
-                        <section class="licenses-lower-grid super-admin-grid">
-                            <article class="portal-content-card">
-                                <div>
-                                    <p class="eyebrow">משתמשים ואתרים</p>
-                                    <h2>תמונת מצב מהירה</h2>
+                        <section class="super-admin-hero-card">
+                            <div class="super-admin-hero-copy">
+                                <p class="eyebrow">שליטה מערכתית מלאה</p>
+                                <h2>מרכז תפעול, תמיכה, אתרים ומשתמשים במקום אחד</h2>
+                                <p class="panel-intro">האזור הזה מרכז את תמונת המצב של כל המערכת: לקוחות, רישיונות, הטמעות, טיקטים פתוחים וקודי מעקב גלובליים. הוא צריך לעזור לך לפתור בעיות מהר, לא לגרום לגלילה מיותרת.</p>
+                                <div class="super-admin-hero-actions">
+                                    <button class="primary-button" type="button" data-dashboard-tab-link="support">פתח מרכז תמיכה</button>
+                                    <button class="secondary-button" type="button" data-dashboard-tab-link="tracking">ערוך קודי מעקב</button>
                                 </div>
+                            </div>
 
+                            <div class="super-admin-health-card">
+                                <h3>מצב מערכת</h3>
                                 <div class="domain-info-list">
-                                    @foreach ($adminUsers->take(8) as $adminUser)
+                                    @foreach ($platformReadiness['checks'] as $label => $ready)
                                         <div class="domain-info-row">
-                                            <span>{{ $adminUser->name }} · {{ $adminUser->email }}</span>
-                                            <strong>{{ $adminUser->sites_count }} אתרים / {{ $adminUser->support_tickets_count }} פניות</strong>
+                                            <span>{{ $label }}</span>
+                                            <strong class="{{ $ready ? 'super-admin-good' : 'super-admin-warn' }}">{{ $ready ? 'מוכן' : 'במצב גיבוי' }}</strong>
                                         </div>
                                     @endforeach
                                 </div>
-                            </article>
+                            </div>
+                        </section>
 
-                            <article class="portal-content-card">
-                                <div>
-                                    <p class="eyebrow">מרכז שליטה</p>
-                                    <h2>פעולות מהירות</h2>
-                                </div>
-                                <div class="domain-info-list">
-                                    <div class="domain-info-row">
-                                        <span>עריכת קודי מעקב גלובליים</span>
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="tracking">פתח</button>
-                                    </div>
-                                    <div class="domain-info-row">
-                                        <span>מעבר על כל המשתמשים</span>
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="users">פתח</button>
-                                    </div>
-                                    <div class="domain-info-row">
-                                        <span>ניהול כל האתרים והרישיונות</span>
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="sites">פתח</button>
-                                    </div>
-                                    <div class="domain-info-row">
-                                        <span>טיפול בטיקטים פתוחים</span>
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="support">פתח</button>
-                                    </div>
-                                </div>
+                        <section class="super-admin-kpi-grid">
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">👥</span>
+                                <strong>{{ $adminSummary['users'] }}</strong>
+                                <p>משתמשים פעילים במערכת</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🌐</span>
+                                <strong>{{ $adminSummary['sites'] }}</strong>
+                                <p>אתרים ורישיונות</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">✅</span>
+                                <strong>{{ $adminSummary['active_sites'] }}</strong>
+                                <p>אתרים פעילים</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🎫</span>
+                                <strong>{{ $adminSummary['tickets_open'] }}</strong>
+                                <p>פניות פתוחות לטיפול</p>
+                            </article>
+                        </section>
+
+                        <section class="super-admin-content-grid">
+                            <div class="super-admin-main-stack">
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">משתמשים ואתרים</p>
+                                            <h2>פעילות אחרונה של לקוחות</h2>
+                                        </div>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="users">לכל המשתמשים</button>
+                                    </div>
+
+                                    <div class="domain-info-list">
+                                        @foreach ($adminUsers->take(6) as $adminUser)
+                                            <div class="domain-info-row">
+                                                <span>{{ $adminUser->name }} · {{ $adminUser->email }}</span>
+                                                <strong>{{ $adminUser->sites_count }} אתרים / {{ $adminUser->support_tickets_count }} פניות</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">טיפול מהיר</p>
+                                            <h2>פניות אחרונות במערכת</h2>
+                                        </div>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="support">לכל הפניות</button>
+                                    </div>
+
+                                    @if ($adminSupportTickets->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>אין כרגע פניות פעילות</strong>
+                                            <p>ברגע שלקוח יפתח פנייה, היא תופיע כאן עם סטטוס, עדיפות והקשר האתר.</p>
+                                        </div>
+                                    @else
+                                        <div class="super-admin-ticket-stack">
+                                            @foreach ($adminSupportTickets->take(4) as $ticket)
+                                                <article class="super-admin-mini-ticket">
+                                                    <div>
+                                                        <strong>{{ $ticket->subject }}</strong>
+                                                        <p>{{ $ticket->user_email ?? 'משתמש לא ידוע' }} · {{ $ticket->site_name ?? 'ללא אתר' }}</p>
+                                                    </div>
+                                                    <div class="support-ticket-pills">
+                                                        <span class="status-pill {{ in_array($ticket->status, ['resolved', 'answered'], true) ? 'is-good' : 'is-neutral' }}">
+                                                            {{ $supportStatusLabels[$ticket->status] ?? $ticket->status }}
+                                                        </span>
+                                                        <span class="status-pill {{ in_array($ticket->priority, ['high', 'urgent'], true) ? 'is-warn' : 'is-neutral' }}">
+                                                            {{ $supportPriorityLabels[$ticket->priority] ?? $ticket->priority }}
+                                                        </span>
+                                                    </div>
+                                                </article>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+                            </div>
+
+                            <div class="super-admin-side-stack">
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">פעולות מהירות</p>
+                                            <h2>ניווט ישיר</h2>
+                                        </div>
+                                    </div>
+                                    <div class="super-admin-actions-list">
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="tracking">עריכת קודי מעקב</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="users">ניהול משתמשים</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="sites">ניהול אתרים</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="support">טיפול בפניות</button>
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">גישה ושיוך</p>
+                                            <h2>חשבון הסופר־אדמין</h2>
+                                        </div>
+                                    </div>
+                                    <p class="panel-intro">רק החשבון הזה רואה את מרכז הסופר־אדמין ויכול לנהל תמיכה, אתרים, רישיונות וקודי מעקב גלובליים.</p>
+                                    <div class="mini-status-list">
+                                        <span class="status-pill is-neutral">office@brndini.co.il</span>
+                                        <span class="status-pill is-good">גישה מלאה</span>
+                                    </div>
+                                </article>
+                            </div>
                         </section>
                     </div>
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="tracking">
-                        <article class="portal-content-card">
-                            <div>
-                                <p class="eyebrow">קודי מעקב גלובליים</p>
-                                <h2>אנליטיקס, GTM, פיקסל וקודים מותאמים</h2>
-                            </div>
-                            <p class="panel-intro">הקודים כאן נטענים אוטומטית באתר הציבורי, במסכי ההתחברות וההרשמה, ובכל מקום שבו הפלטפורמה רצה.</p>
+                        <section class="super-admin-content-grid">
+                            <article class="portal-content-card">
+                                <div>
+                                    <p class="eyebrow">קודי מעקב גלובליים</p>
+                                    <h2>אנליטיקס, GTM, פיקסל וקודים מותאמים</h2>
+                                </div>
+                                <p class="panel-intro">הקודים כאן נטענים אוטומטית באתר הציבורי, במסכי ההתחברות וההרשמה, ובכל מקום שבו הפלטפורמה רצה.</p>
 
-                            <form class="stack-form" method="POST" action="{{ route('dashboard.super-admin.tracking') }}">
-                                @csrf
+                                <form class="stack-form" method="POST" action="{{ route('dashboard.super-admin.tracking') }}">
+                                    @csrf
 
-                                <label for="google_analytics_head">Google Analytics / gtag בראש העמוד</label>
-                                <textarea id="google_analytics_head" name="google_analytics_head" rows="4">{{ old('google_analytics_head', $trackingScripts['google_analytics_head'] ?? '') }}</textarea>
+                                    <label for="google_analytics_head">Google Analytics / gtag בראש העמוד</label>
+                                    <textarea id="google_analytics_head" name="google_analytics_head" rows="4">{{ old('google_analytics_head', $trackingScripts['google_analytics_head'] ?? '') }}</textarea>
 
-                                <label for="google_tag_manager_head">Google Tag Manager בראש העמוד</label>
-                                <textarea id="google_tag_manager_head" name="google_tag_manager_head" rows="4">{{ old('google_tag_manager_head', $trackingScripts['google_tag_manager_head'] ?? '') }}</textarea>
+                                    <label for="google_tag_manager_head">Google Tag Manager בראש העמוד</label>
+                                    <textarea id="google_tag_manager_head" name="google_tag_manager_head" rows="4">{{ old('google_tag_manager_head', $trackingScripts['google_tag_manager_head'] ?? '') }}</textarea>
 
-                                <label for="google_tag_manager_body">Google Tag Manager בתחילת ה־body</label>
-                                <textarea id="google_tag_manager_body" name="google_tag_manager_body" rows="4">{{ old('google_tag_manager_body', $trackingScripts['google_tag_manager_body'] ?? '') }}</textarea>
+                                    <label for="google_tag_manager_body">Google Tag Manager בתחילת ה־body</label>
+                                    <textarea id="google_tag_manager_body" name="google_tag_manager_body" rows="4">{{ old('google_tag_manager_body', $trackingScripts['google_tag_manager_body'] ?? '') }}</textarea>
 
-                                <label for="meta_pixel_head">Meta Pixel / Facebook Pixel</label>
-                                <textarea id="meta_pixel_head" name="meta_pixel_head" rows="4">{{ old('meta_pixel_head', $trackingScripts['meta_pixel_head'] ?? '') }}</textarea>
+                                    <label for="meta_pixel_head">Meta Pixel / Facebook Pixel</label>
+                                    <textarea id="meta_pixel_head" name="meta_pixel_head" rows="4">{{ old('meta_pixel_head', $trackingScripts['meta_pixel_head'] ?? '') }}</textarea>
 
-                                <label for="custom_head_scripts">קודים נוספים ל־head</label>
-                                <textarea id="custom_head_scripts" name="custom_head_scripts" rows="5">{{ old('custom_head_scripts', $trackingScripts['custom_head_scripts'] ?? '') }}</textarea>
+                                    <label for="custom_head_scripts">קודים נוספים ל־head</label>
+                                    <textarea id="custom_head_scripts" name="custom_head_scripts" rows="5">{{ old('custom_head_scripts', $trackingScripts['custom_head_scripts'] ?? '') }}</textarea>
 
-                                <label for="custom_body_scripts">קודים נוספים ל־body</label>
-                                <textarea id="custom_body_scripts" name="custom_body_scripts" rows="5">{{ old('custom_body_scripts', $trackingScripts['custom_body_scripts'] ?? '') }}</textarea>
+                                    <label for="custom_body_scripts">קודים נוספים ל־body</label>
+                                    <textarea id="custom_body_scripts" name="custom_body_scripts" rows="5">{{ old('custom_body_scripts', $trackingScripts['custom_body_scripts'] ?? '') }}</textarea>
 
-                                <button class="primary-button" type="submit">שמור קודי מעקב</button>
-                            </form>
-                        </article>
+                                    <button class="primary-button" type="submit">שמור קודי מעקב</button>
+                                </form>
+                            </article>
+
+                            <aside class="super-admin-side-stack">
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">איפה זה נטען</p>
+                                            <h2>השפעה גלובלית</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        <div class="domain-info-row">
+                                            <span>אתר ציבורי</span>
+                                            <strong>נטען אוטומטית</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>התחברות והרשמה</span>
+                                            <strong>נטען אוטומטית</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>אזור אישי</span>
+                                            <strong>נטען אוטומטית</strong>
+                                        </div>
+                                    </div>
+                                </article>
+                            </aside>
+                        </section>
                     </div>
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="users">
@@ -235,6 +341,24 @@
                     </div>
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="support">
+                        <section class="super-admin-kpi-grid super-admin-kpi-grid-compact">
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">📬</span>
+                                <strong>{{ $adminSupportTickets->count() }}</strong>
+                                <p>פניות במערכת</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">⏳</span>
+                                <strong>{{ $adminSupportTickets->whereIn('status', ['open', 'pending'])->count() }}</strong>
+                                <p>פניות שדורשות תגובה</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">⚡</span>
+                                <strong>{{ $adminSupportTickets->whereIn('priority', ['high', 'urgent'])->count() }}</strong>
+                                <p>פניות בעדיפות גבוהה</p>
+                            </article>
+                        </section>
+
                         <section class="domain-card">
                             <div class="domain-card-head">
                                 <div>

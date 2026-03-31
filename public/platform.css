@@ -2947,11 +2947,14 @@ body.page-is-ready .auth-shell {
 }
 
 .super-admin-workspace {
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 280px minmax(0, 1fr);
 }
 
 .super-admin-rail {
     gap: 16px;
+    position: sticky;
+    top: 92px;
+    align-self: start;
 }
 
 .super-admin-rail .licenses-product-subnav {
@@ -2964,6 +2967,160 @@ body.page-is-ready .auth-shell {
 
 .super-admin-main .dashboard-tab-panel.is-active {
     gap: 22px;
+}
+
+.super-admin-hero-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+    gap: 18px;
+    align-items: stretch;
+    padding: 24px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #0d49df 0%, #194ad0 46%, #eff5ff 46%, #eff5ff 100%);
+    border: 1px solid rgba(29, 109, 255, 0.18);
+    box-shadow: 0 28px 60px rgba(15, 23, 42, 0.1);
+}
+
+.super-admin-hero-copy {
+    display: grid;
+    align-content: space-between;
+    gap: 16px;
+    color: #f8fbff;
+}
+
+.super-admin-hero-copy h2 {
+    margin: 0;
+    max-width: 13ch;
+    font-size: clamp(2rem, 3.2vw, 3.3rem);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+}
+
+.super-admin-hero-copy .panel-intro {
+    max-width: 56ch;
+    color: rgba(248, 251, 255, 0.84);
+}
+
+.super-admin-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.super-admin-hero-actions .secondary-button {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.super-admin-health-card {
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--page-ink);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+}
+
+.super-admin-health-card h3 {
+    margin: 0 0 14px;
+    font-size: 1.15rem;
+}
+
+.super-admin-good {
+    color: var(--success);
+}
+
+.super-admin-warn {
+    color: var(--warning);
+}
+
+.super-admin-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.super-admin-kpi-grid-compact {
+    margin-bottom: 2px;
+}
+
+.super-admin-kpi-card {
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow-xs);
+    display: grid;
+    gap: 8px;
+}
+
+.super-admin-kpi-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: inline-grid;
+    place-items: center;
+    background: rgba(29, 109, 255, 0.08);
+    color: #0d49df;
+    font-size: 1.05rem;
+}
+
+.super-admin-kpi-card strong {
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+.super-admin-kpi-card p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.5;
+}
+
+.super-admin-content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.super-admin-main-stack,
+.super-admin-side-stack {
+    display: grid;
+    gap: 18px;
+}
+
+.super-admin-actions-list {
+    display: grid;
+    gap: 10px;
+}
+
+.super-admin-actions-list .secondary-button {
+    justify-content: center;
+}
+
+.super-admin-ticket-stack {
+    display: grid;
+    gap: 12px;
+}
+
+.super-admin-mini-ticket {
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(245, 248, 253, 0.98);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.super-admin-mini-ticket strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.super-admin-mini-ticket p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.6;
 }
 
 .portal-welcome {
@@ -4732,7 +4889,8 @@ body.page-is-ready .auth-shell {
     .magazine-page-hero,
     .enterprise-band-grid,
     .about-hero,
-    .site-footer-top {
+    .site-footer-top,
+    .super-admin-hero-card {
         grid-template-columns: 1fr;
     }
 
@@ -4760,6 +4918,11 @@ body.page-is-ready .auth-shell {
 
     .widget-builder-preview {
         position: static;
+    }
+
+    .super-admin-kpi-grid,
+    .super-admin-content-grid {
+        grid-template-columns: 1fr;
     }
 
     .licenses-toolbar,
@@ -5208,6 +5371,14 @@ body.page-is-ready .auth-shell {
     .portal-preview-card,
     .portal-note-card,
     .domain-card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .super-admin-hero-card,
+    .super-admin-health-card,
+    .super-admin-kpi-card,
+    .super-admin-mini-ticket {
         padding: 16px;
         border-radius: 18px;
     }
