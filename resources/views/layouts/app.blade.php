@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url('/platform.css') }}">
+    <link rel="stylesheet" href="{{ url('/platform.css') }}?v={{ $assetVersion ?? '1' }}">
     {!! $globalTrackingScripts['google_analytics_head'] ?? '' !!}
     {!! $globalTrackingScripts['google_tag_manager_head'] ?? '' !!}
     {!! $globalTrackingScripts['meta_pixel_head'] ?? '' !!}
@@ -194,12 +194,12 @@
         @endguest
     </div>
 
-    <script src="{{ url('/platform.js') }}" defer></script>
+    <script src="{{ url('/platform.js') }}?v={{ $assetVersion ?? '1' }}" defer></script>
 
     @if (!empty($platformWidgetSiteKey))
         <script
             async
-            src="{{ url('/widget.js') }}"
+            src="{{ url('/widget.js') }}?v={{ $assetVersion ?? '1' }}"
             data-a11y-bridge="{{ $platformWidgetSiteKey }}"
             data-a11y-position="bottom-left"
         ></script>
