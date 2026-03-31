@@ -589,10 +589,23 @@ class DashboardController extends Controller
             'custom_body_scripts',
         ]);
 
-        $users = User::query()
-            ->withCount(['sites', 'supportTickets'])
-            ->orderByDesc('id')
-            ->get();
+        $supportAvailable = Schema::hasTable('support_tickets');
+
+        $usersQuery = User::query()
+            ->withCount(['sites'])
+            ->orderByDesc('id');
+
+        if ($supportAvailable) {
+            $usersQuery->withCount(['supportTickets']);
+        }
+
+        $users = $usersQuery->get();
+
+        if (! $supportAvailable) {
+            $users->each(function (User $adminUser): void {
+                $adminUser->setAttribute('support_tickets_count', 0);
+            });
+        }
 
         $sites = Site::query()
             ->with('user')
@@ -600,7 +613,6 @@ class DashboardController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        $supportAvailable = Schema::hasTable('support_tickets');
         $tickets = $supportAvailable
             ? SupportTicket::query()
                 ->with(['user', 'site', 'assignedUser'])
