@@ -14,7 +14,7 @@
             </p>
             <div class="hero-action-row">
                 <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון</a>
-                <a class="ghost-button button-link" href="{{ route('home') }}#pricing">לצפייה בחבילות</a>
+                <a class="ghost-button button-link" href="{{ route('pricing') }}">לצפייה בחבילות</a>
             </div>
         </div>
 

@@ -98,6 +98,7 @@
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="{{ route('home') }}#solutions">פתרונות</a>
                         <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
+                        <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('login.show') }}">התחברות</a>
@@ -162,7 +163,7 @@
                         <div class="footer-link-group">
                             <h3>המוצר</h3>
                             <a href="{{ route('home') }}#solutions">פתרונות</a>
-                            <a href="{{ route('home') }}#pricing">חבילות</a>
+                            <a href="{{ route('pricing') }}">מחירון</a>
                             <a href="{{ route('home') }}#articles">מאמרים</a>
                         </div>
                         <div class="footer-link-group">
@@ -184,6 +185,7 @@
                     <span>© {{ now()->year }} A11Y Bridge. כל הזכויות שמורות.</span>
                     <div class="footer-inline-links">
                         <a href="{{ route('about') }}">אודות</a>
+                        <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('register.show') }}">פתיחת חשבון</a>
                     </div>
