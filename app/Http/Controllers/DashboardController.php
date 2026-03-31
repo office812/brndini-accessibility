@@ -7,12 +7,12 @@ use App\Models\Article;
 use App\Models\Site;
 use App\Models\SupportTicket;
 use App\Models\User;
+use App\Support\RuntimeStore;
 use App\Support\SiteSettings;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
@@ -247,8 +247,10 @@ class DashboardController extends Controller
                 'last_audited_at' => Carbon::now(),
             ]);
         } else {
-            Cache::put($this->auditSnapshotCacheKey($site), $snapshot, now()->addDays(30));
-            Cache::put($this->auditTimestampCacheKey($site), Carbon::now()->toIso8601String(), now()->addDays(30));
+            RuntimeStore::putMany($this->siteRuntimeScope($site), [
+                $this->auditSnapshotCacheKey($site) => $snapshot,
+                $this->auditTimestampCacheKey($site) => Carbon::now()->toIso8601String(),
+            ]);
         }
 
         return redirect()
@@ -266,8 +268,10 @@ class DashboardController extends Controller
 
         if (! $this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at'])) {
             $snapshot = $this->generateAuditSnapshot($site);
-            Cache::put($this->auditSnapshotCacheKey($site), $snapshot, now()->addDays(30));
-            Cache::put($this->auditTimestampCacheKey($site), Carbon::now()->toIso8601String(), now()->addDays(30));
+            RuntimeStore::putMany($this->siteRuntimeScope($site), [
+                $this->auditSnapshotCacheKey($site) => $snapshot,
+                $this->auditTimestampCacheKey($site) => Carbon::now()->toIso8601String(),
+            ]);
 
             return redirect()
                 ->route('dashboard.compliance', ['site' => $site->id])
@@ -305,11 +309,11 @@ class DashboardController extends Controller
         ]);
 
         if (! $this->siteColumnsAvailable(['alert_settings', 'audit_snapshot'])) {
-            Cache::put($this->alertSettingsCacheKey($site), $incomingAlerts, now()->addDays(30));
+            RuntimeStore::put($this->siteRuntimeScope($site), $this->alertSettingsCacheKey($site), $incomingAlerts);
             $previewSite = clone $site;
             $previewSite->alert_settings = $incomingAlerts;
             $snapshot = $this->generateAuditSnapshot($previewSite);
-            Cache::put($this->auditSnapshotCacheKey($site), $snapshot, now()->addDays(30));
+            RuntimeStore::put($this->siteRuntimeScope($site), $this->auditSnapshotCacheKey($site), $snapshot);
 
             return redirect()
                 ->route('dashboard.compliance', ['site' => $site->id])
@@ -389,7 +393,7 @@ class DashboardController extends Controller
             'additional_note' => trim((string) data_get($validated, 'statement.additional_note', '')),
         ];
 
-        Cache::put($this->statementBuilderCacheKey($site), $statementData, now()->addDays(30));
+        RuntimeStore::put($this->siteRuntimeScope($site), $this->statementBuilderCacheKey($site), $statementData);
 
         $statementUrl = route('statement.show', $site->public_key);
 
@@ -471,7 +475,7 @@ class DashboardController extends Controller
                 'admin_response' => $response === '' ? null : $response,
             ]);
         } else {
-            Cache::put('support_ticket:' . $ticket->id . ':admin_response', $response === '' ? null : $response, now()->addDays(30));
+            RuntimeStore::put('support-ticket-' . $ticket->id, 'admin_response', $response === '' ? null : $response);
         }
 
         return redirect()
@@ -549,9 +553,9 @@ class DashboardController extends Controller
             ->orderBy('id')
             ->get()
             ->map(fn (Site $candidate) => $this->applySiteRuntimeOverrides($candidate));
-        $cachedAlerts = Cache::get($this->alertSettingsCacheKey($site));
-        $cachedAudit = Cache::get($this->auditSnapshotCacheKey($site));
-        $cachedAuditTimestamp = Cache::get($this->auditTimestampCacheKey($site));
+        $cachedAlerts = RuntimeStore::get($this->siteRuntimeScope($site), $this->alertSettingsCacheKey($site));
+        $cachedAudit = RuntimeStore::get($this->siteRuntimeScope($site), $this->auditSnapshotCacheKey($site));
+        $cachedAuditTimestamp = RuntimeStore::get($this->siteRuntimeScope($site), $this->auditTimestampCacheKey($site));
 
         if (! $this->siteColumnsAvailable(['alert_settings']) && is_array($cachedAlerts)) {
             $site->alert_settings = $cachedAlerts;
@@ -600,6 +604,7 @@ class DashboardController extends Controller
         $activeSitesCount = $sites->filter(function (Site $candidate) {
             return ($candidate->license_status ?? 'active') === 'active';
         })->count();
+        $platformReadiness = $this->platformReadiness();
 
         return [
             'user' => $user,
@@ -663,6 +668,7 @@ class DashboardController extends Controller
                 'resolved' => $supportTickets->where('status', 'resolved')->count(),
                 'lastActivity' => $supportTickets->first()?->last_activity_at?->diffForHumans() ?? 'עדיין לא נפתחה פנייה',
             ],
+            'platformReadiness' => $platformReadiness,
         ];
     }
 
@@ -726,6 +732,7 @@ class DashboardController extends Controller
                 'active_sites' => $sites->filter(fn (Site $site) => ($site->license_status ?? 'active') === 'active')->count(),
                 'tickets_open' => $tickets->whereIn('status', ['open', 'pending'])->count(),
             ],
+            'platformReadiness' => $this->platformReadiness(),
         ];
     }
 
@@ -840,8 +847,8 @@ class DashboardController extends Controller
             ];
         }
 
-        $lastSeenAt = Cache::get('site:' . $site->id . ':widget_seen_at');
-        $pageUrl = Cache::get('site:' . $site->id . ':widget_seen_url');
+        $lastSeenAt = RuntimeStore::get($this->siteRuntimeScope($site), 'widget_seen_at');
+        $pageUrl = RuntimeStore::get($this->siteRuntimeScope($site), 'widget_seen_url');
 
         return [
             'installed' => is_string($lastSeenAt) && trim($lastSeenAt) !== '',
@@ -1099,7 +1106,7 @@ class DashboardController extends Controller
     private function statementBuilderData(Site $site, ?User $user = null): array
     {
         $defaults = $this->statementBuilderDefaults($site, $user);
-        $cached = Cache::get($this->statementBuilderCacheKey($site), []);
+        $cached = RuntimeStore::get($this->siteRuntimeScope($site), $this->statementBuilderCacheKey($site), []);
 
         if (! is_array($cached)) {
             return $defaults;
@@ -1114,7 +1121,7 @@ class DashboardController extends Controller
             return $site->statement_url;
         }
 
-        $cached = Cache::get($this->statementBuilderCacheKey($site));
+        $cached = RuntimeStore::get($this->siteRuntimeScope($site), $this->statementBuilderCacheKey($site));
 
         if (is_array($cached) && ($cached['organization_name'] ?? '') !== '') {
             return route('statement.show', $site->public_key);
@@ -1247,18 +1254,18 @@ class DashboardController extends Controller
             return;
         }
 
-        $current = Cache::get($this->runtimeOverridesCacheKey($site), []);
+        $current = RuntimeStore::get($this->siteRuntimeScope($site), $this->runtimeOverridesCacheKey($site), []);
 
-        Cache::put(
+        RuntimeStore::put(
+            $this->siteRuntimeScope($site),
             $this->runtimeOverridesCacheKey($site),
-            array_merge(is_array($current) ? $current : [], $missingColumnPayload),
-            now()->addDays(30)
+            array_merge(is_array($current) ? $current : [], $missingColumnPayload)
         );
     }
 
     private function applySiteRuntimeOverrides(Site $site): Site
     {
-        $overrides = Cache::get($this->runtimeOverridesCacheKey($site), []);
+        $overrides = RuntimeStore::get($this->siteRuntimeScope($site), $this->runtimeOverridesCacheKey($site), []);
 
         if (! is_array($overrides) || $overrides === []) {
             return $site;
@@ -1273,5 +1280,36 @@ class DashboardController extends Controller
         }
 
         return $site->applyRuntimeOverrides($applicable);
+    }
+
+    private function siteRuntimeScope(Site $site): string
+    {
+        return 'site-' . $site->id;
+    }
+
+    private function platformReadiness(): array
+    {
+        $checks = [
+            'ריבוי אתרים לחשבון' => $this->supportsMultipleSites(),
+            'חיוב, בדיקות והתראות' => $this->siteColumnsAvailable(['billing_settings', 'audit_snapshot', 'alert_settings']),
+            'זיהוי הטמעה באתר' => $this->siteColumnsAvailable(['last_seen_at', 'last_seen_url']),
+            'מרכז תמיכה' => Schema::hasTable('support_tickets'),
+            'קודי מעקב גלובליים' => Schema::hasTable('app_settings'),
+        ];
+
+        $missing = collect($checks)
+            ->filter(fn (bool $ready) => ! $ready)
+            ->keys()
+            ->values()
+            ->all();
+
+        return [
+            'ready' => $missing === [],
+            'checks' => $checks,
+            'missing' => $missing,
+            'summary' => $missing === []
+                ? 'כל רכיבי הליבה של הפלטפורמה זמינים ושומרים למסד כרגיל.'
+                : 'יש עדיין רכיבים שרצים במצב גיבוי עד שהשרת ישלים מיגרציות: ' . implode(' · ', $missing),
+        ];
     }
 }

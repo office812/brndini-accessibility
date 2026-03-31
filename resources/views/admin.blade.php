@@ -9,6 +9,13 @@
                 <h1>מרכז סופר־אדמין</h1>
             </section>
 
+            @unless($platformReadiness['ready'])
+                <section class="alert-strip">
+                    <strong>מצב שרת:</strong>
+                    <span>{{ $platformReadiness['summary'] }}</span>
+                </section>
+            @endunless
+
             <section class="dashboard-workspace dashboard-workspace-inline super-admin-workspace" data-dashboard-tabs>
                 <aside class="dashboard-tab-rail super-admin-rail">
                     <div class="licenses-sidebar-block">

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Support\RuntimeStore;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 class AppSetting extends Model
@@ -19,7 +19,7 @@ class AppSetting extends Model
 
     public static function getMany(array $keys): array
     {
-        $fallback = Cache::get(self::CACHE_KEY, []);
+        $fallback = RuntimeStore::all(self::CACHE_KEY);
         $values = [];
 
         foreach ($keys as $key) {
@@ -50,8 +50,7 @@ class AppSetting extends Model
             $filtered[$key] = is_string($value) ? trim($value) : null;
         }
 
-        $fallback = Cache::get(self::CACHE_KEY, []);
-        Cache::forever(self::CACHE_KEY, array_merge($fallback, $filtered));
+        RuntimeStore::putMany(self::CACHE_KEY, $filtered);
 
         if (! Schema::hasTable('app_settings')) {
             return;

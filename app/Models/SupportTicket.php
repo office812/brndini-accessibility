@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\RuntimeStore;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 class SupportTicket extends Model
@@ -51,7 +51,7 @@ class SupportTicket extends Model
             return $this->admin_response;
         }
 
-        $value = Cache::get('support_ticket:' . $this->id . ':admin_response');
+        $value = RuntimeStore::get('support-ticket-' . $this->id, 'admin_response');
 
         return is_string($value) && trim($value) !== '' ? $value : null;
     }

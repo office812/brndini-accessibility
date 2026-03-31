@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Site;
+use App\Support\RuntimeStore;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 class PublicWidgetController extends Controller
@@ -90,8 +90,10 @@ class PublicWidgetController extends Controller
                     'last_seen_url' => $pageUrl,
                 ]);
             } else {
-                Cache::put('site:' . $site->id . ':widget_seen_at', now()->toIso8601String(), now()->addDays(30));
-                Cache::put('site:' . $site->id . ':widget_seen_url', $pageUrl, now()->addDays(30));
+                RuntimeStore::putMany('site-' . $site->id, [
+                    'widget_seen_at' => now()->toIso8601String(),
+                    'widget_seen_url' => $pageUrl,
+                ]);
             }
         }
 
@@ -125,7 +127,7 @@ class PublicWidgetController extends Controller
 
     private function applyRuntimeOverrides(Site $site): Site
     {
-        $overrides = Cache::get('site:' . $site->id . ':runtime_overrides');
+        $overrides = RuntimeStore::get('site-' . $site->id, 'runtime_overrides');
 
         if (! is_array($overrides)) {
             return $site;
@@ -148,7 +150,7 @@ class PublicWidgetController extends Controller
             return $site->statement_url;
         }
 
-        $statementBuilder = Cache::get('site:' . $site->id . ':statement_builder');
+        $statementBuilder = RuntimeStore::get('site-' . $site->id, 'statement_builder');
 
         if (is_array($statementBuilder) && ($statementBuilder['organization_name'] ?? '') !== '') {
             return route('statement.show', $site->public_key);

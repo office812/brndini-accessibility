@@ -52,6 +52,13 @@
                 <h1>{{ $user->name }}, סביבת הניהול שלך מוכנה לעבודה</h1>
             </section>
 
+            @unless($platformReadiness['ready'])
+                <section class="alert-strip">
+                    <strong>מצב שרת:</strong>
+                    <span>{{ $platformReadiness['summary'] }}</span>
+                </section>
+            @endunless
+
             <section class="dashboard-workspace dashboard-workspace-inline">
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="overview">
