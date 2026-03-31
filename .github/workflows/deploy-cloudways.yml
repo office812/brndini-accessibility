@@ -1,0 +1,40 @@
+name: Deploy to Cloudways
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        env:
+          CW_SSH_PRIVATE_KEY: ${{ secrets.CW_SSH_PRIVATE_KEY }}
+          CW_HOST: ${{ secrets.CW_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf "%s" "$CW_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "$CW_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy on Cloudways
+        env:
+          CW_HOST: ${{ secrets.CW_HOST }}
+          CW_USER: ${{ secrets.CW_USER }}
+          CW_APP_PATH: ${{ secrets.CW_APP_PATH }}
+        run: |
+          ssh "$CW_USER@$CW_HOST" <<EOF
+            set -e
+            cd "$CW_APP_PATH"
+            git pull origin main
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
+            php artisan optimize:clear
+          EOF
