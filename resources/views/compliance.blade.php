@@ -21,13 +21,13 @@
                 <form method="POST" action="{{ route('dashboard.compliance.audit', ['site' => $site->id]) }}">
                     @csrf
                     <input type="hidden" name="site_id" value="{{ $site->id }}">
-                    <button class="primary-button" type="submit" @disabled(! $auditActionsAvailable)>הרץ בדיקה חדשה</button>
+                    <button class="primary-button" type="submit">הרץ בדיקה חדשה</button>
                 </form>
             </section>
 
             @unless($auditActionsAvailable)
                 <section class="domain-card">
-                    <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש, לכן אי אפשר להריץ בדיקה עד שה־migration יושלם.</p>
+                    <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש. אפשר ללחוץ על הכפתור, והמערכת תחזיר הודעה מסודרת עד שה־migration יושלם.</p>
                 </section>
             @endunless
 
@@ -118,10 +118,10 @@
                     </div>
 
                     @unless($alertSettingsAvailable)
-                        <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש, לכן אי אפשר לשמור התראות עד שה־migration יושלם.</p>
+                        <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש. אפשר ללחוץ על הכפתור, והמערכת תחזיר הודעה מסודרת עד שה־migration יושלם.</p>
                     @endunless
 
-                    <button class="primary-button" type="submit" @disabled(! $alertSettingsAvailable)>שמור התראות</button>
+                    <button class="primary-button" type="submit">שמור התראות</button>
                 </form>
             </section>
 
