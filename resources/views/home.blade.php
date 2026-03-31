@@ -80,6 +80,25 @@
         <div class="trust-chip">מותאם לסוכנויות וצוותים גדלים</div>
     </section>
 
+    <section class="company-proof-strip" aria-label="company proof">
+        <article class="company-proof-card">
+            <strong>פלטפורמה אחת</strong>
+            <span>וידג׳ט, התקנה, תמיכה וציות</span>
+        </article>
+        <article class="company-proof-card">
+            <strong>2 חבילות</strong>
+            <span>חינם להתחלה ופרימיום ליכולות מתקדמות</span>
+        </article>
+        <article class="company-proof-card">
+            <strong>Multi-site</strong>
+            <span>ניהול כמה אתרים ורישיונות מאותו חשבון</span>
+        </article>
+        <article class="company-proof-card">
+            <strong>תוכן אורגני</strong>
+            <span>מאמרים, מסרים שיווקיים ועמודי מוצר</span>
+        </article>
+    </section>
+
     <section class="section-band section-band-plain" id="how-a11y-bridge-works">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">איך A11Y Bridge עובדת</p>
@@ -167,6 +186,38 @@
                 <h3>צמיחה דרך תוכן</h3>
                 <p>אזור מאמרים מובנה שעוזר גם לקידום אורגני וגם להסברת הקטגוריה.</p>
             </article>
+        </div>
+    </section>
+
+    <section class="section-band section-band-plain enterprise-band">
+        <div class="enterprise-band-grid">
+            <div class="enterprise-band-copy">
+                <p class="eyebrow">Enterprise ready</p>
+                <h2>נראות של חברת הייטק, שליטה של SaaS ותהליך עבודה ברור לכל אתר.</h2>
+                <p class="hero-text">
+                    A11Y Bridge נבנתה כך שהמוצר עצמו ייראה רציני לא רק למבקר הקצה, אלא גם לבעל העסק,
+                    לסוכנות, לאיש התמיכה ולכל מי שמנהל כמה אתרים במקביל.
+                </p>
+                <div class="flow-stage-pills">
+                    <span class="preview-pill">Hosted widget</span>
+                    <span class="preview-pill">Support center</span>
+                    <span class="preview-pill">Super admin</span>
+                    <span class="preview-pill">SEO content</span>
+                </div>
+            </div>
+
+            <div class="enterprise-band-panel">
+                <article class="enterprise-panel-card">
+                    <span class="eyebrow">בקרה</span>
+                    <strong>הטמעה, סטטוס, ציות וחבילה</strong>
+                    <p>כל אתר מקבל מצב רישיון, קוד הטמעה, סטטוס חי וחיווי אמיתי על מה שהוטמע בפועל.</p>
+                </article>
+                <article class="enterprise-panel-card">
+                    <span class="eyebrow">תפעול</span>
+                    <strong>תמיכה, משתמשים וסופר־אדמין</strong>
+                    <p>ניהול פניות, מעקבים גלובליים, לקוחות, אתרים וחבילות מתוך אזור מרכזי אחד.</p>
+                </article>
+            </div>
         </div>
     </section>
 

@@ -98,8 +98,9 @@
 
                 <div class="site-header-menu" id="site-menu-panel" data-header-menu-panel="site-menu">
                     <nav class="site-nav" aria-label="ניווט ראשי">
-                        <a href="#solutions">פתרונות</a>
-                        <a href="#platform-flow">איך זה עובד</a>
+                        <a href="{{ route('home') }}#solutions">פתרונות</a>
+                        <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
+                        <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('login.show') }}">התחברות</a>
                         <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון</a>
@@ -127,6 +128,58 @@
         <main id="main-content">
             @yield('content')
         </main>
+
+        @guest
+            <footer class="site-footer">
+                <div class="site-footer-top">
+                    <div class="site-footer-brand">
+                        <a class="brand brand-footer" href="{{ route('home') }}">
+                            <span class="brand-mark" aria-hidden="true">
+                                <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
+                            </span>
+                            <span>
+                                <strong>A11Y Bridge</strong>
+                                <small>פלטפורמת נגישות מנוהלת לאתרים, סוכנויות וארגונים.</small>
+                            </span>
+                        </a>
+                        <p>
+                            וידג׳ט מנוהל, קוד הטמעה קבוע, דשבורד ניהול, מסלול ציות, תוכן ותמיכה
+                            במסגרת מוצרית אחת.
+                        </p>
+                    </div>
+
+                    <div class="site-footer-links">
+                        <div class="footer-link-group">
+                            <h3>המוצר</h3>
+                            <a href="{{ route('home') }}#solutions">פתרונות</a>
+                            <a href="{{ route('home') }}#pricing">חבילות</a>
+                            <a href="{{ route('home') }}#articles">מאמרים</a>
+                        </div>
+                        <div class="footer-link-group">
+                            <h3>החברה</h3>
+                            <a href="{{ route('about') }}">אודות</a>
+                            <a href="{{ route('articles.index') }}">בלוג</a>
+                            <a href="{{ route('login.show') }}">אזור לקוחות</a>
+                        </div>
+                        <div class="footer-link-group">
+                            <h3>התחלה מהירה</h3>
+                            <a href="{{ route('register.show') }}">פתיחת חשבון</a>
+                            <a href="{{ route('login.show') }}">התחברות</a>
+                            <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="site-footer-bottom">
+                    <span>© {{ now()->year }} A11Y Bridge. כל הזכויות שמורות.</span>
+                    <div class="footer-inline-links">
+                        <a href="{{ route('about') }}">אודות</a>
+                        <a href="{{ route('articles.index') }}">מאמרים</a>
+                        <a href="{{ route('register.show') }}">פתיחת חשבון</a>
+                    </div>
+                </div>
+            </footer>
+        @endguest
     </div>
 
     <script src="{{ url('/platform.js') }}" defer></script>
