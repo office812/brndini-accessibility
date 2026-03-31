@@ -210,6 +210,13 @@ class DashboardController extends Controller
         ]);
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
+
+        if (! $this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at'])) {
+            return redirect()
+                ->route('dashboard.compliance', ['site' => $site->id])
+                ->withErrors(['audit' => 'הרצת בדיקה עדיין לא זמינה בשרת הזה. צריך להשלים את עדכון מסד הנתונים, ואז הכפתור יעבוד רגיל.']);
+        }
+
         $snapshot = $this->generateAuditSnapshot($site);
 
         $site->update([
@@ -219,7 +226,7 @@ class DashboardController extends Controller
 
         return redirect()
             ->route('dashboard.compliance', ['site' => $site->id])
-            ->with('status', 'Audit snapshot עודכן. עכשיו אפשר לראות ציון, התראות ופעולות פתוחות עבור האתר הזה.');
+            ->with('status', 'הבדיקה עודכנה. עכשיו אפשר לראות ציון, התראות ופעולות פתוחות עבור האתר הזה.');
     }
 
     public function updateAlerts(Request $request): RedirectResponse
@@ -344,9 +351,10 @@ class DashboardController extends Controller
             'openAlerts' => $activeAlerts,
             'openAlertsCount' => $activeAlerts->count(),
             'alertSettings' => $alertSettings,
+            'auditActionsAvailable' => $this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at']),
             'alertSettingsAvailable' => $this->siteColumnsAvailable(['alert_settings', 'audit_snapshot']),
             'licenseExpiresLabel' => $site->license_expires_at ? $site->license_expires_at->timezone(config('app.timezone'))->format('d.m.Y') : 'טרם הופעל',
-            'lastAuditedLabel' => $site->last_audited_at ? $site->last_audited_at->diffForHumans() : 'עדיין לא הורץ audit',
+            'lastAuditedLabel' => $site->last_audited_at ? $site->last_audited_at->diffForHumans() : 'עדיין לא הורצה בדיקה',
             'siteSwitcherOptions' => $sites->map(function (Site $candidate) {
                 return [
                     'id' => $candidate->id,
@@ -502,21 +510,21 @@ class DashboardController extends Controller
         $hasRecentAudit = $site->last_audited_at && $site->last_audited_at->gt(Carbon::now()->subDays(21));
 
         $checks[] = $this->buildCheck(
-            'Audit אחרון',
+            'בדיקה אחרונה',
             $hasRecentAudit ? 'pass' : 'warn',
             $hasRecentAudit
-                ? 'ה־audit רץ לאחרונה ונותן תמונת מצב טרייה.'
-                : 'כדאי להריץ audit חדש כדי לעדכן score והתראות מול מצב ההגדרות הנוכחי.'
+                ? 'הבדיקה רצה לאחרונה ונותנת תמונת מצב טרייה.'
+                : 'כדאי להריץ בדיקה חדשה כדי לעדכן ציון והתראות מול מצב ההגדרות הנוכחי.'
         );
 
         $score += $hasRecentAudit ? 10 : 3;
 
         if (! $hasRecentAudit && $alertSettings['audit']) {
-            $alerts[] = $this->buildAlert('audit', 'Audit דורש רענון', 'medium', 'לא רץ audit עדכני לאחרונה. הפעל בדיקה חדשה כדי לרענן score והתראות.');
+            $alerts[] = $this->buildAlert('audit', 'הבדיקה דורשת רענון', 'medium', 'לא רצה בדיקה עדכנית לאחרונה. הפעל בדיקה חדשה כדי לרענן ציון והתראות.');
         }
 
         if ($site->last_audited_at && $site->updated_at && $site->updated_at->gt($site->last_audited_at) && $alertSettings['sync']) {
-            $alerts[] = $this->buildAlert('sync', 'יש שינויים מאז ה-audit האחרון', 'low', 'בוצעו עדכוני widget או פרטי אתר אחרי ה־audit האחרון. מומלץ לרענן את הדוח.');
+            $alerts[] = $this->buildAlert('sync', 'יש שינויים מאז הבדיקה האחרונה', 'low', 'בוצעו עדכוני widget או פרטי אתר אחרי הבדיקה האחרונה. מומלץ לרענן את הדוח.');
         }
 
         if ($site->service_mode === 'managed_service') {

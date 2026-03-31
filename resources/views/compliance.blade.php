@@ -21,13 +21,19 @@
                 <form method="POST" action="{{ route('dashboard.compliance.audit', ['site' => $site->id]) }}">
                     @csrf
                     <input type="hidden" name="site_id" value="{{ $site->id }}">
-                    <button class="primary-button" type="submit">הרץ audit חדש</button>
+                    <button class="primary-button" type="submit" @disabled(! $auditActionsAvailable)>הרץ בדיקה חדשה</button>
                 </form>
             </section>
 
+            @unless($auditActionsAvailable)
+                <section class="domain-card">
+                    <p class="panel-intro">השרת הזה עדיין בלי עדכון המסד החדש, לכן אי אפשר להריץ בדיקה עד שה־migration יושלם.</p>
+                </section>
+            @endunless
+
             <section class="status-grid">
                 <article class="portal-stat-card">
-                    <span class="meta-label">סטטוס audit</span>
+                    <span class="meta-label">סטטוס בדיקה</span>
                     <strong>{{ $auditSnapshot['status'] }}</strong>
                     <p>{{ $openAlertsCount }} התראות פתוחות</p>
                 </article>
@@ -83,7 +89,7 @@
             </section>
 
             <section class="domain-card" id="impact-report">
-                <h2>הגדרות alerts</h2>
+                <h2>הגדרות התראות</h2>
                 <form class="stack-form" method="POST" action="{{ route('dashboard.compliance.alerts', ['site' => $site->id]) }}">
                     @csrf
                     <input type="hidden" name="site_id" value="{{ $site->id }}">
@@ -102,12 +108,12 @@
                         <label class="toggle-row">
                             <input type="hidden" name="alerts[audit]" value="0">
                             <input type="checkbox" name="alerts[audit]" value="1" @checked($alertSettings['audit'])>
-                            <span>התראת audit לא עדכני</span>
+                            <span>התראת בדיקה לא עדכנית</span>
                         </label>
                         <label class="toggle-row">
                             <input type="hidden" name="alerts[sync]" value="0">
                             <input type="checkbox" name="alerts[sync]" value="1" @checked($alertSettings['sync'])>
-                            <span>התראת שינויים מאז ה־audit</span>
+                            <span>התראת שינויים מאז הבדיקה</span>
                         </label>
                     </div>
 
@@ -122,8 +128,8 @@
             <section class="domain-card" id="proof-toolkit">
                 <h2>ערכת הוכחת מאמץ</h2>
                 <ul class="check-list">
-                    <li>לכל אתר יש audit score נפרד ו־alerts נפרדים, לא מצב רוחבי לכל החשבון.</li>
-                    <li>אפשר לראות מתי רץ audit לאחרונה והאם בוצעו שינויים מאז.</li>
+                    <li>לכל אתר יש ציון בדיקה נפרד והתראות נפרדות, לא מצב רוחבי לכל החשבון.</li>
+                    <li>אפשר לראות מתי רצה בדיקה לאחרונה והאם בוצעו שינויים מאז.</li>
                     <li>המערכת מבהירה מה מכוסה בווידג׳ט ומה עדיין דורש remediation ובדיקות ידניות.</li>
                 </ul>
             </section>

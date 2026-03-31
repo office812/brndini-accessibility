@@ -36,7 +36,7 @@
         </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#impact-report">
             <span>◫</span>
-            <span>הגדרות alerts</span>
+            <span>הגדרות התראות</span>
         </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#audit-report">
             <span>⟡</span>
