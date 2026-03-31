@@ -418,7 +418,7 @@ class DashboardController extends Controller
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
 
-        if (! Schema::hasTable('support_tickets')) {
+        if (! SupportTicket::tableAvailable()) {
             $this->storeRuntimeSupportTicket($request->user(), $site, $validated);
 
             return redirect()
@@ -458,7 +458,7 @@ class DashboardController extends Controller
             'admin_response' => ['nullable', 'string', 'max:4000'],
         ]);
 
-        if (Schema::hasTable('support_tickets') && ctype_digit($ticketKey)) {
+        if (SupportTicket::tableAvailable() && ctype_digit($ticketKey)) {
             $ticket = SupportTicket::query()->findOrFail((int) $ticketKey);
 
             $ticket->update([
@@ -467,7 +467,7 @@ class DashboardController extends Controller
                 'last_activity_at' => Carbon::now(),
             ]);
 
-            if (Schema::hasColumn('support_tickets', 'assigned_user_id')) {
+            if (SupportTicket::columnsAvailable(['assigned_user_id'])) {
                 $ticket->update([
                     'assigned_user_id' => $admin->id,
                 ]);
@@ -475,7 +475,7 @@ class DashboardController extends Controller
 
             $response = trim((string) ($validated['admin_response'] ?? ''));
 
-            if (Schema::hasColumn('support_tickets', 'admin_response')) {
+            if (SupportTicket::columnsAvailable(['admin_response'])) {
                 $ticket->update([
                     'admin_response' => $response === '' ? null : $response,
                 ]);
@@ -595,7 +595,7 @@ class DashboardController extends Controller
         $planCatalog = $this->planCatalog();
         $activeAlerts = collect($auditSnapshot['alerts'] ?? [])->filter(fn (array $alert) => ($alert['state'] ?? 'open') !== 'resolved')->values();
         $currentPlanMeta = $planCatalog[$billing['plan']] ?? $planCatalog['free'];
-        $dbSupportTickets = Schema::hasTable('support_tickets')
+        $dbSupportTickets = SupportTicket::tableAvailable()
             ? $user->supportTickets()
                 ->with('site')
                 ->where(function ($query) use ($site) {
@@ -673,7 +673,7 @@ class DashboardController extends Controller
             })->all(),
             'activeSitesCount' => $activeSitesCount,
             'supportAvailable' => true,
-            'supportUsesRuntimeFallback' => ! Schema::hasTable('support_tickets'),
+            'supportUsesRuntimeFallback' => ! SupportTicket::tableAvailable(),
             'supportTickets' => $supportTickets,
             'supportCategories' => $this->supportCategories(),
             'supportPriorityLabels' => $this->supportPriorityLabels(),
@@ -699,7 +699,7 @@ class DashboardController extends Controller
             'custom_body_scripts',
         ]);
 
-        $supportAvailable = Schema::hasTable('support_tickets');
+        $supportAvailable = SupportTicket::tableAvailable();
 
         $usersQuery = User::query()
             ->withCount(['sites'])
@@ -1325,7 +1325,7 @@ class DashboardController extends Controller
             'ריבוי אתרים לחשבון' => $this->supportsMultipleSites(),
             'חיוב, בדיקות והתראות' => $this->siteColumnsAvailable(['billing_settings', 'audit_snapshot', 'alert_settings']),
             'זיהוי הטמעה באתר' => $this->siteColumnsAvailable(['last_seen_at', 'last_seen_url']),
-            'מרכז תמיכה' => Schema::hasTable('support_tickets'),
+            'מרכז תמיכה' => SupportTicket::tableAvailable(),
             'קודי מעקב גלובליים' => Schema::hasTable('app_settings'),
         ];
 

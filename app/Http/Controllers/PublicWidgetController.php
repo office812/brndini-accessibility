@@ -6,7 +6,6 @@ use App\Models\Site;
 use App\Support\RuntimeStore;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Schema;
 
 class PublicWidgetController extends Controller
 {
@@ -42,7 +41,7 @@ class PublicWidgetController extends Controller
                 ]);
         }
 
-        $site = $this->applyRuntimeOverrides($site);
+        $site = $site->loadRuntimeOverrides();
 
         if (($site->license_status ?? 'active') !== 'active') {
             return response()
@@ -106,12 +105,12 @@ class PublicWidgetController extends Controller
 
         if ($siteHost !== '' && $pageHost !== '' && $siteHost === $pageHost) {
             if ($this->siteColumnsAvailable(['last_seen_at', 'last_seen_url'])) {
-                $site->update([
+                $site->persistPayload([
                     'last_seen_at' => now(),
                     'last_seen_url' => $pageUrl,
                 ]);
             } else {
-                RuntimeStore::putMany('site-' . $site->id, [
+                RuntimeStore::putMany($site->runtimeScope(), [
                     'widget_seen_at' => now()->toIso8601String(),
                     'widget_seen_url' => $pageUrl,
                 ]);
@@ -137,32 +136,7 @@ class PublicWidgetController extends Controller
 
     private function siteColumnsAvailable(array $columns): bool
     {
-        foreach ($columns as $column) {
-            if (! Schema::hasColumn('sites', $column)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private function applyRuntimeOverrides(Site $site): Site
-    {
-        $overrides = RuntimeStore::get('site-' . $site->id, 'runtime_overrides');
-
-        if (! is_array($overrides)) {
-            return $site;
-        }
-
-        $applicable = [];
-
-        foreach ($overrides as $attribute => $value) {
-            if (! Schema::hasColumn('sites', $attribute)) {
-                $applicable[$attribute] = $value;
-            }
-        }
-
-        return $site->applyRuntimeOverrides($applicable);
+        return Site::columnsAvailable($columns);
     }
 
     private function statementUrlForSite(Site $site): ?string
@@ -171,7 +145,7 @@ class PublicWidgetController extends Controller
             return $site->statement_url;
         }
 
-        $statementBuilder = RuntimeStore::get('site-' . $site->id, 'statement_builder');
+        $statementBuilder = RuntimeStore::get($site->runtimeScope(), 'statement_builder');
 
         if (is_array($statementBuilder) && ($statementBuilder['organization_name'] ?? '') !== '') {
             return route('statement.show', $site->public_key);

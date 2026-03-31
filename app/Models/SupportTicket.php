@@ -30,6 +30,22 @@ class SupportTicket extends Model
         'last_activity_at' => 'datetime',
     ];
 
+    public static function tableAvailable(): bool
+    {
+        return Schema::hasTable('support_tickets');
+    }
+
+    public static function columnsAvailable(array $columns): bool
+    {
+        foreach ($columns as $column) {
+            if (! Schema::hasColumn('support_tickets', $column)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -47,7 +63,7 @@ class SupportTicket extends Model
 
     public function runtimeAdminResponse(): ?string
     {
-        if (Schema::hasColumn('support_tickets', 'admin_response')) {
+        if (static::columnsAvailable(['admin_response'])) {
             return $this->admin_response;
         }
 
