@@ -469,8 +469,24 @@
     closeButton.setAttribute('aria-label', 'סגור פאנל');
     closeButton.textContent = '×';
 
+    var headerActions = document.createElement('div');
+    headerActions.className = 'ab-widget-header-actions';
+
+    var resetButton = document.createElement('button');
+    resetButton.type = 'button';
+    resetButton.className = 'ab-widget-reset';
+    resetButton.textContent = 'איפוס';
+    resetButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      updatePrefs(Object.assign({}, defaultPrefs));
+    });
+
+    headerActions.appendChild(resetButton);
+    headerActions.appendChild(closeButton);
+
     panelHeader.appendChild(panelBrand);
-    panelHeader.appendChild(closeButton);
+    panelHeader.appendChild(headerActions);
     panel.appendChild(panelHeader);
 
     var infoStrip = document.createElement('div');
@@ -485,6 +501,7 @@
     panel.appendChild(panelBody);
 
     function refreshPanel() {
+      var currentScrollTop = panel.scrollTop;
       prefs = loadPrefs();
       applyPrefs(prefs);
       panelBody.innerHTML = '';
@@ -492,20 +509,26 @@
       panel.className = 'ab-widget-panel ab-preset-' + preset + ' ab-layout-' + panelLayout;
       panelBody.className = 'ab-widget-body ab-layout-' + panelLayout;
 
-      panelBody.appendChild(createOverviewCard(config, plan));
+      panelBody.appendChild(createOverviewCard(config, plan, prefs));
 
       var sectionsWrap = document.createElement('div');
       sectionsWrap.className = 'ab-widget-sections ab-layout-' + panelLayout;
-      sectionsWrap.appendChild(createProfileSection(plan, purchaseUrl, prefs));
+      var lockedPremiumItems = [];
+
+      sectionsWrap.appendChild(createProfileSection(plan, prefs, lockedPremiumItems));
       sectionsWrap.appendChild(createFeatureSection('התאמות טקסט ותוכן', 'כלים לקריאה, מרווחים ויישור טקסט.', featureCatalog.filter(function (feature) {
         return feature.section === 'text';
-      }), plan, purchaseUrl, prefs, 'text'));
+      }), plan, prefs, 'text', lockedPremiumItems));
       sectionsWrap.appendChild(createFeatureSection('התאמות צבעים ותצוגה', 'ניגודיות, בהירות ונראות כללית של האתר.', featureCatalog.filter(function (feature) {
         return feature.section === 'display';
-      }), plan, purchaseUrl, prefs, 'display'));
+      }), plan, prefs, 'display', lockedPremiumItems));
       sectionsWrap.appendChild(createFeatureSection('ניווט, מיקוד ונוחות', 'הפחתת תנועה, סמן גדול וכלי ריכוז.', featureCatalog.filter(function (feature) {
         return feature.section === 'focus';
-      }), plan, purchaseUrl, prefs, 'focus'));
+      }), plan, prefs, 'focus', lockedPremiumItems));
+
+      if (plan !== 'premium' && lockedPremiumItems.length) {
+        sectionsWrap.appendChild(createPremiumShowcaseSection(lockedPremiumItems, purchaseUrl));
+      }
       panelBody.appendChild(sectionsWrap);
 
       var footer = document.createElement('div');
@@ -534,15 +557,17 @@
       note.textContent = 'מסלול חינם פותח כ־70% מהיכולות. פרימיום מוסיף את ההתאמות המתקדמות והפרופילים הייעודיים.';
       footer.appendChild(note);
       panelBody.appendChild(footer);
+      panel.scrollTop = currentScrollTop;
     }
 
-    function createOverviewCard(widgetConfig, planName) {
+    function createOverviewCard(widgetConfig, planName, currentPrefs) {
       var overview = document.createElement('section');
       overview.className = 'ab-widget-overview';
 
       [
         { label: 'מסלול', value: planName === 'premium' ? 'פרימיום' : 'חינם' },
         { label: 'ציון', value: widgetConfig.audit && widgetConfig.audit.score ? String(widgetConfig.audit.score) : '—' },
+        { label: 'מצב', value: currentPrefs.profile !== 'none' ? 'פרופיל פעיל' : 'התאמה ידנית' },
         { label: 'הצהרה', value: widgetConfig.statementUrl ? 'מחוברת' : 'חסרה' }
       ].forEach(function (fact) {
         var card = document.createElement('article');
@@ -614,7 +639,7 @@
       panel.setAttribute('aria-hidden', 'true');
     }
 
-    function createProfileSection(planName, premiumUrl, currentPrefs) {
+    function createProfileSection(planName, currentPrefs, lockedPremiumItems) {
       var section = document.createElement('section');
       section.className = 'ab-widget-section is-full';
       var unlockedProfiles = profiles.filter(function (profile) {
@@ -677,20 +702,20 @@
       section.appendChild(profileGrid);
 
       if (lockedProfiles.length) {
-        section.appendChild(createPremiumSummaryCard(
-          'פרופילים מתקדמים בפרימיום',
-          'פתחו פרופילים ייעודיים לדיסלקסיה, ADHD ומיקוד קוגניטיבי.',
-          lockedProfiles.map(function (profile) {
-            return profile.title;
-          }),
-          premiumUrl
-        ));
+        lockedProfiles.forEach(function (profile) {
+          lockedPremiumItems.push({
+            title: profile.title,
+            description: profile.description,
+            icon: profile.key === 'vision' ? 'contrastMode' : profile.key === 'epilepsy' ? 'reduceMotion' : profile.key === 'adhd' ? 'readingGuide' : profile.key === 'cognitive' ? 'letterSpacing' : profile.key === 'dyslexia' ? 'readableFont' : 'fontScale',
+            group: 'פרופילים'
+          });
+        });
       }
 
       return section;
     }
 
-    function createFeatureSection(titleText, descriptionText, features, planName, premiumUrl, currentPrefs, sectionType) {
+    function createFeatureSection(titleText, descriptionText, features, planName, currentPrefs, sectionType, lockedPremiumItems) {
       var section = document.createElement('section');
       section.className = 'ab-widget-section';
       var unlockedFeatures = features.filter(function (feature) {
@@ -740,14 +765,14 @@
       section.appendChild(grid);
 
       if (lockedFeatures.length) {
-        section.appendChild(createPremiumSummaryCard(
-          'אפשרויות נוספות בפרימיום',
-          'התאמות מתקדמות יותר שזמינות רק במסלול פרימיום.',
-          lockedFeatures.map(function (feature) {
-            return feature.title;
-          }),
-          premiumUrl
-        ));
+        lockedFeatures.forEach(function (feature) {
+          lockedPremiumItems.push({
+            title: feature.title,
+            description: feature.description,
+            icon: feature.key,
+            group: titleText
+          });
+        });
       }
 
       return section;
@@ -801,28 +826,61 @@
       return badge;
     }
 
-    function createPremiumSummaryCard(titleText, descriptionText, items, premiumUrl) {
+    function createPremiumShowcaseSection(items, premiumUrl) {
+      var uniqueItems = [];
+      var seen = {};
+
+      items.forEach(function (item) {
+        var key = item.group + '::' + item.title;
+        if (!seen[key]) {
+          seen[key] = true;
+          uniqueItems.push(item);
+        }
+      });
+
+      var section = document.createElement('section');
+      section.className = 'ab-widget-section is-full';
+      section.appendChild(createSectionHead('יכולות פרימיום', 'כל ההתאמות המתקדמות מרוכזות כאן בצורה מסודרת, בלי לפזר כרטיסים נעולים לכל אורך הווידג׳ט.', 'focus', String(uniqueItems.length) + ' יכולות מתקדמות'));
+
       var card = document.createElement('article');
       card.className = 'ab-widget-upgrade-card';
-
-      var badge = createMiniBadge('פרימיום');
-      card.appendChild(badge);
+      card.appendChild(createMiniBadge('פרימיום'));
 
       var titleNode = document.createElement('strong');
       titleNode.className = 'ab-widget-card-title';
-      titleNode.textContent = titleText;
+      titleNode.textContent = 'פתחו את השכבה המתקדמת';
 
       var descNode = document.createElement('p');
       descNode.className = 'ab-widget-card-copy';
-      descNode.textContent = descriptionText;
+      descNode.textContent = 'המסלול החינמי כבר נותן את רוב ההתאמות. פרימיום פותח פרופילים חכמים, שליטה עמוקה יותר בטקסט ותצוגה, וכלי מיקוד מתקדמים.';
 
-      var list = document.createElement('ul');
-      list.className = 'ab-widget-upgrade-list';
+      var grid = document.createElement('div');
+      grid.className = 'ab-widget-premium-list';
 
-      items.forEach(function (item) {
-        var li = document.createElement('li');
-        li.textContent = item;
-        list.appendChild(li);
+      uniqueItems.forEach(function (item) {
+        var premiumItem = document.createElement('div');
+        premiumItem.className = 'ab-widget-premium-item';
+
+        var iconNode = document.createElement('span');
+        iconNode.className = 'ab-widget-card-icon';
+        iconNode.innerHTML = getFeatureIconSvg(item.icon);
+
+        var copy = document.createElement('div');
+        copy.className = 'ab-widget-premium-copy';
+
+        var label = document.createElement('strong');
+        label.className = 'ab-widget-card-title';
+        label.textContent = item.title;
+
+        var meta = document.createElement('p');
+        meta.className = 'ab-widget-card-copy';
+        meta.textContent = item.group + ' · ' + item.description;
+
+        copy.appendChild(label);
+        copy.appendChild(meta);
+        premiumItem.appendChild(iconNode);
+        premiumItem.appendChild(copy);
+        grid.appendChild(premiumItem);
       });
 
       var actionWrap = document.createElement('div');
@@ -831,17 +889,18 @@
 
       card.appendChild(titleNode);
       card.appendChild(descNode);
-      card.appendChild(list);
+      card.appendChild(grid);
       card.appendChild(actionWrap);
+      section.appendChild(card);
 
-      return card;
+      return section;
     }
 
     function createLockButton(url) {
       var link = document.createElement('a');
       link.className = 'ab-widget-lock-button';
       link.href = url;
-      link.textContent = 'זמין בפרימיום';
+      link.textContent = 'שדרג לפרימיום';
       return link;
     }
 
@@ -988,6 +1047,7 @@
       .ab-widget-panel::-webkit-scrollbar{width:10px;}
       .ab-widget-panel::-webkit-scrollbar-thumb{background:rgba(15,23,42,.12);border-radius:999px;}
       .ab-widget-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+      .ab-widget-header-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
       .ab-widget-brand{display:flex;align-items:center;gap:12px;}
       .ab-widget-brand-badge{width:42px;height:42px;display:inline-grid;place-items:center;padding:6px;border-radius:16px;background:rgba(255,255,255,.96);box-shadow:0 10px 24px rgba(29,109,255,.14);overflow:hidden;}
       .ab-widget-brand-logo{width:100%;height:100%;object-fit:contain;display:block;}
@@ -995,13 +1055,15 @@
       .ab-widget-eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#64748b;font-weight:800;}
       .ab-widget-title{margin:0;font:800 22px/1.08 "Assistant","Segoe UI",Arial,sans-serif;letter-spacing:-.02em;}
       .ab-widget-close{width:38px;height:38px;border:1px solid rgba(15,23,42,.08);border-radius:14px;background:rgba(255,255,255,.72);color:#0f172a;font-size:24px;line-height:1;cursor:pointer;}
+      .ab-widget-reset{min-height:38px;padding:0 14px;border:1px solid rgba(15,23,42,.08);border-radius:999px;background:rgba(255,255,255,.72);color:#334155;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease;}
+      .ab-widget-reset:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(15,23,42,.08);}
       .ab-widget-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
       .ab-widget-chip{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#0b1220;color:#fff;font-size:12px;font-weight:700;}
       .ab-widget-chip.is-chip-muted{background:rgba(15,23,42,.05);color:#0f172a;}
       .ab-widget-chip.is-plan-free{background:rgba(21,128,61,.1);color:#166534;}
       .ab-widget-chip.is-plan-premium{background:rgba(124,58,237,.12);color:#6d28d9;}
       .ab-widget-body{display:grid;gap:18px;margin-top:16px;}
-      .ab-widget-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+      .ab-widget-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
       .ab-widget-overview-card{display:grid;gap:4px;padding:13px 14px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
       .ab-widget-overview-label{font-size:11px;color:#64748b;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
       .ab-widget-overview-value{font-size:15px;font-weight:800;}
@@ -1027,6 +1089,9 @@
       .ab-widget-card-copy{margin:0;color:#64748b;font-size:12px;line-height:1.7;}
       .ab-widget-card-actions{margin-top:auto;display:flex;flex-wrap:wrap;gap:8px;min-width:0;}
       .ab-widget-mini-badge{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;background:rgba(124,58,237,.1);color:#6d28d9;font-size:11px;font-weight:800;}
+      .ab-widget-premium-list{display:grid;gap:10px;margin-top:4px;}
+      .ab-widget-premium-item{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:12px 13px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(124,58,237,.1);}
+      .ab-widget-premium-copy{display:grid;gap:4px;min-width:0;}
       .ab-widget-upgrade-list{margin:0;padding:0;list-style:none;display:grid;gap:6px;color:#4c1d95;font-size:12px;font-weight:700;}
       .ab-widget-upgrade-list li{position:relative;padding-right:16px;line-height:1.6;}
       .ab-widget-upgrade-list li::before{content:"";position:absolute;right:0;top:.55em;width:7px;height:7px;border-radius:50%;background:rgba(124,58,237,.55);}
@@ -1082,6 +1147,8 @@
         .ab-widget-overview,
         .ab-widget-sections.ab-layout-split,
         .ab-widget-grid{grid-template-columns:1fr;}
+        .ab-widget-header{align-items:flex-start;}
+        .ab-widget-header-actions{width:100%;justify-content:flex-end;}
         .ab-widget-section-head{grid-template-columns:auto 1fr;}
         .ab-widget-section-badge{grid-column:1 / -1;justify-self:start;}
       }
@@ -1105,7 +1172,11 @@
   }
 
   function savePrefs(prefs) {
-    window.localStorage.setItem(storageKey, JSON.stringify(prefs));
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(prefs));
+    } catch (error) {
+      return;
+    }
   }
 
   function applyPrefs(prefs) {
