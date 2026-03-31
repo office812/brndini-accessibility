@@ -11,10 +11,21 @@
             <div class="licenses-sidebar-block">
                 <h2>המוצרים שלי</h2>
                 <nav class="licenses-product-nav" aria-label="מוצרים">
-                    <a class="is-current" href="{{ route('dashboard', ['site' => $site->id]) }}">
-                        <span class="licenses-product-icon">◉</span>
-                        <span>ווידג׳ט נגישות</span>
-                    </a>
+                    <div class="licenses-product-group is-current">
+                        <a class="is-current" href="{{ route('dashboard', ['site' => $site->id]) }}">
+                            <span class="licenses-product-icon">◉</span>
+                            <span>ווידג׳ט נגישות</span>
+                        </a>
+
+                        <div class="licenses-product-subnav dashboard-tab-nav" aria-label="תתי עמודים של ווידג׳ט נגישות">
+                            <button class="dashboard-tab-button is-active" type="button" data-dashboard-tab-button="overview">סקירה</button>
+                            <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="licenses">רישיונות</button>
+                            <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="new-site">אתר חדש</button>
+                            <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="install">הטמעה</button>
+                            <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="widget">עיצוב ווידג׳ט</button>
+                        </div>
+                    </div>
+
                     <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">
                         <span class="licenses-product-icon">◇</span>
                         <span>ציות ובקרה</span>
@@ -40,17 +51,7 @@
                 <h1>{{ $user->name }}, סביבת הניהול שלך מוכנה לעבודה</h1>
             </section>
 
-            <section class="dashboard-workspace" data-dashboard-tabs>
-                <aside class="dashboard-tab-rail" aria-label="לשוניות הדשבורד">
-                    <nav class="dashboard-tab-nav">
-                        <button class="dashboard-tab-button is-active" type="button" data-dashboard-tab-button="overview">סקירה</button>
-                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="licenses">רישיונות</button>
-                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="new-site">אתר חדש</button>
-                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="install">הטמעה</button>
-                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="widget">עיצוב ווידג׳ט</button>
-                    </nav>
-                </aside>
-
+            <section class="dashboard-workspace dashboard-workspace-inline" data-dashboard-tabs>
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="overview">
                         <section class="licenses-hero-card">

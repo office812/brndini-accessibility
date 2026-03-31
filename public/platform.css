@@ -2044,6 +2044,11 @@ body.page-is-ready .auth-shell {
     gap: 10px;
 }
 
+.licenses-product-group {
+    display: grid;
+    gap: 10px;
+}
+
 .licenses-product-nav a {
     display: grid;
     grid-template-columns: 28px 1fr;
@@ -2061,6 +2066,17 @@ body.page-is-ready .auth-shell {
     background: rgba(29, 109, 255, 0.05);
     color: #1550d0;
     border-inline-start-color: #1d6dff;
+}
+
+.licenses-product-subnav {
+    margin-inline-start: 18px;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.licenses-product-subnav .dashboard-tab-button {
+    min-height: 48px;
+    font-size: 0.95rem;
 }
 
 .licenses-product-icon {
@@ -2109,6 +2125,10 @@ body.page-is-ready .auth-shell {
     grid-template-columns: 260px minmax(0, 1fr);
     gap: 20px;
     align-items: start;
+}
+
+.dashboard-workspace-inline {
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .dashboard-tab-rail {
