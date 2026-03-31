@@ -381,7 +381,6 @@
     var preset = config.widget.preset || 'classic';
     var position = forcedPosition || config.widget.position || 'bottom-right';
     var panelLayout = config.widget.panelLayout || 'stacked';
-    var currentPanelView = 'profiles';
 
     applyPrefs(prefs);
 
@@ -490,26 +489,18 @@
 
       panelBody.appendChild(createOverviewCard(config, plan));
 
-      panelBody.appendChild(createSectionSwitcher());
-
       var sectionsWrap = document.createElement('div');
       sectionsWrap.className = 'ab-widget-sections ab-layout-' + panelLayout;
-
-      if (currentPanelView === 'profiles') {
-        sectionsWrap.appendChild(createProfileSection(plan, purchaseUrl, prefs));
-      } else if (currentPanelView === 'text') {
-        sectionsWrap.appendChild(createFeatureSection('התאמות טקסט ותוכן', 'כלים לקריאה, מרווחים ויישור טקסט.', featureCatalog.filter(function (feature) {
-          return feature.section === 'text';
-        }), plan, purchaseUrl, prefs, 'text'));
-      } else if (currentPanelView === 'display') {
-        sectionsWrap.appendChild(createFeatureSection('התאמות צבעים ותצוגה', 'ניגודיות, בהירות ונראות כללית של האתר.', featureCatalog.filter(function (feature) {
-          return feature.section === 'display';
-        }), plan, purchaseUrl, prefs, 'display'));
-      } else {
-        sectionsWrap.appendChild(createFeatureSection('ניווט, מיקוד ונוחות', 'הפחתת תנועה, סמן גדול וכלי ריכוז.', featureCatalog.filter(function (feature) {
-          return feature.section === 'focus';
-        }), plan, purchaseUrl, prefs, 'focus'));
-      }
+      sectionsWrap.appendChild(createProfileSection(plan, purchaseUrl, prefs));
+      sectionsWrap.appendChild(createFeatureSection('התאמות טקסט ותוכן', 'כלים לקריאה, מרווחים ויישור טקסט.', featureCatalog.filter(function (feature) {
+        return feature.section === 'text';
+      }), plan, purchaseUrl, prefs, 'text'));
+      sectionsWrap.appendChild(createFeatureSection('התאמות צבעים ותצוגה', 'ניגודיות, בהירות ונראות כללית של האתר.', featureCatalog.filter(function (feature) {
+        return feature.section === 'display';
+      }), plan, purchaseUrl, prefs, 'display'));
+      sectionsWrap.appendChild(createFeatureSection('ניווט, מיקוד ונוחות', 'הפחתת תנועה, סמן גדול וכלי ריכוז.', featureCatalog.filter(function (feature) {
+        return feature.section === 'focus';
+      }), plan, purchaseUrl, prefs, 'focus'));
       panelBody.appendChild(sectionsWrap);
 
       var footer = document.createElement('div');
@@ -568,32 +559,9 @@
       return overview;
     }
 
-    function createSectionSwitcher() {
-      var nav = document.createElement('div');
-      nav.className = 'ab-widget-tabbar';
-
-      [
-        { key: 'profiles', label: 'פרופילים' },
-        { key: 'text', label: 'טקסט' },
-        { key: 'display', label: 'צבעים' },
-        { key: 'focus', label: 'מיקוד' }
-      ].forEach(function (item) {
-        var tab = document.createElement('button');
-        tab.type = 'button';
-        tab.className = 'ab-widget-tab' + (currentPanelView === item.key ? ' is-active' : '');
-        tab.textContent = item.label;
-        tab.setAttribute('aria-pressed', String(currentPanelView === item.key));
-        tab.addEventListener('click', function () {
-          currentPanelView = item.key;
-          refreshPanel();
-        });
-        nav.appendChild(tab);
-      });
-
-      return nav;
-    }
-
-    button.addEventListener('click', function () {
+    button.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
       if (button.getAttribute('aria-expanded') === 'true') {
         closePanel();
         return;
@@ -602,12 +570,20 @@
       openPanel();
     });
 
-    closeButton.addEventListener('click', closePanel);
+    closeButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      closePanel();
+    });
 
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape') {
         closePanel();
       }
+    });
+
+    shell.addEventListener('click', function (event) {
+      event.stopPropagation();
     });
 
     document.addEventListener('click', function (event) {
@@ -943,10 +919,6 @@
       .ab-widget-overview-card{display:grid;gap:4px;padding:13px 14px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
       .ab-widget-overview-label{font-size:11px;color:#64748b;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
       .ab-widget-overview-value{font-size:15px;font-weight:800;}
-      .ab-widget-tabbar{display:flex;flex-wrap:wrap;gap:8px;padding:6px;border-radius:18px;background:rgba(255,255,255,.66);border:1px solid rgba(15,23,42,.06);}
-      .ab-widget-tab{min-height:38px;padding:0 14px;border:0;border-radius:999px;background:transparent;color:#475569;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:background var(--ab-motion-fast) ease,color var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease;}
-      .ab-widget-tab:hover{background:rgba(29,109,255,.08);color:#0d3ea7;}
-      .ab-widget-tab.is-active{background:linear-gradient(135deg,#1d6dff,#0d3ea7);color:#fff;box-shadow:0 10px 18px rgba(29,109,255,.22);}
       .ab-widget-sections{display:grid;gap:18px;}
       .ab-widget-sections.ab-layout-split{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;}
       .ab-widget-section{display:grid;gap:12px;}
