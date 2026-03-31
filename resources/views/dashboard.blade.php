@@ -265,134 +265,223 @@
                                 </div>
                                 <p class="panel-intro">מכאן מגדירים פריסטים, מבני פאנל, צבעים, פקדים ומידע עסקי עבור אתר אחד בלבד. התצוגה המקדימה משמאל נשארת מול העיניים לאורך כל העריכה.</p>
 
-                                <div class="portal-form-section">
-                                    <p class="eyebrow">חברה ואתר</p>
-                                    <label for="company_name">שם החברה</label>
-                                    <input id="company_name" name="company_name" type="text" value="{{ old('company_name', $user->name) }}" required>
-
-                                    <label for="contact_email">אימייל ליצירת קשר</label>
-                                    <input id="contact_email" name="contact_email" type="email" value="{{ old('contact_email', $user->contact_email) }}" required>
-
-                                    <label for="site_name">שם האתר</label>
-                                    <input id="site_name" name="site_name" type="text" value="{{ old('site_name', $site->site_name) }}" required>
-
-                                    <label for="domain">דומיין</label>
-                                    <input id="domain" name="domain" type="text" value="{{ old('domain', $site->domain) }}" required>
-
-                                    <label for="statement_url">קישור להצהרת נגישות</label>
-                                    <input id="statement_url" name="statement_url" type="text" value="{{ old('statement_url', $site->statement_url) }}" placeholder="https://your-site.com/accessibility">
-
-                                    <label for="service_mode">מסלול שירות</label>
-                                    <select id="service_mode" name="service_mode">
-                                        @foreach ($serviceModes as $value => $label)
-                                            <option value="{{ $value }}" @selected(old('service_mode', $site->service_mode) === $value)>{{ $label }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="widget-compact-meta">
+                                    <span class="widget-meta-pill">פריסט: {{ $widgetPresetLabels[$widget['preset']] ?? $widget['preset'] }}</span>
+                                    <span class="widget-meta-pill">פאנל: {{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</span>
+                                    <span class="widget-meta-pill">דומיין: {{ $site->domain }}</span>
                                 </div>
 
-                                <div class="form-divider"></div>
-
-                                <div class="portal-form-section">
-                                    <p class="eyebrow">פריסט + לייאאוט</p>
-
-                                    <label for="widget_preset">פריסט מוכן</label>
-                                    <select id="widget_preset" name="widget[preset]" data-preview="preset">
-                                        <option value="classic" @selected(old('widget.preset', $widget['preset']) === 'classic')>{{ $widgetPresetLabels['classic'] }}</option>
-                                        <option value="high-tech" @selected(old('widget.preset', $widget['preset']) === 'high-tech')>{{ $widgetPresetLabels['high-tech'] }}</option>
-                                        <option value="elegant" @selected(old('widget.preset', $widget['preset']) === 'elegant')>{{ $widgetPresetLabels['elegant'] }}</option>
-                                        <option value="bold" @selected(old('widget.preset', $widget['preset']) === 'bold')>{{ $widgetPresetLabels['bold'] }}</option>
-                                    </select>
-
-                                    <label for="widget_panel_layout">מבנה פאנל</label>
-                                    <select id="widget_panel_layout" name="widget[panelLayout]" data-preview="panel-layout">
-                                        <option value="stacked" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'stacked')>{{ $widgetLayoutLabels['stacked'] }}</option>
-                                        <option value="split" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'split')>{{ $widgetLayoutLabels['split'] }}</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-divider"></div>
-
-                                <div class="portal-form-section">
-                                    <p class="eyebrow">עיצוב הכפתור</p>
-
-                                    <label for="widget_position">מיקום</label>
-                                    <select id="widget_position" name="widget[position]" data-preview="position">
-                                        <option value="bottom-right" @selected(old('widget.position', $widget['position']) === 'bottom-right')>ימין למטה</option>
-                                        <option value="bottom-left" @selected(old('widget.position', $widget['position']) === 'bottom-left')>שמאל למטה</option>
-                                    </select>
-
-                                    <label for="widget_color">צבע כפתור</label>
-                                    <input id="widget_color" name="widget[color]" type="color" value="{{ old('widget.color', $widget['color']) }}" data-preview="color" required>
-
-                                    <label for="widget_size">גודל</label>
-                                    <select id="widget_size" name="widget[size]" data-preview="size">
-                                        <option value="compact" @selected(old('widget.size', $widget['size']) === 'compact')>קומפקטי</option>
-                                        <option value="comfortable" @selected(old('widget.size', $widget['size']) === 'comfortable')>רגיל</option>
-                                        <option value="large" @selected(old('widget.size', $widget['size']) === 'large')>גדול</option>
-                                    </select>
-
-                                    <label for="widget_button_mode">תצוגת כפתור</label>
-                                    <select id="widget_button_mode" name="widget[buttonMode]" data-preview="button-mode">
-                                        <option value="icon-label" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'icon-label')>אייקון וטקסט</option>
-                                        <option value="label-only" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'label-only')>טקסט בלבד</option>
-                                        <option value="icon-only" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'icon-only')>אייקון בלבד</option>
-                                    </select>
-
-                                    <label for="widget_icon">סוג אייקון</label>
-                                    <select id="widget_icon" name="widget[icon]" data-preview="icon">
-                                        <option value="figure" @selected(old('widget.icon', $widget['icon']) === 'figure')>דמות נגישות</option>
-                                        <option value="spark" @selected(old('widget.icon', $widget['icon']) === 'spark')>ניצוץ</option>
-                                        <option value="shield" @selected(old('widget.icon', $widget['icon']) === 'shield')>מגן</option>
-                                        <option value="pulse" @selected(old('widget.icon', $widget['icon']) === 'pulse')>פולס</option>
-                                    </select>
-
-                                    <label for="widget_button_style">סגנון כפתור</label>
-                                    <select id="widget_button_style" name="widget[buttonStyle]" data-preview="button-style">
-                                        <option value="solid" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'solid')>מודגש</option>
-                                        <option value="soft" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'soft')>רך ובהיר</option>
-                                        <option value="glass" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'glass')>זכוכית</option>
-                                        <option value="midnight" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'midnight')>כהה יוקרתי</option>
-                                    </select>
-
-                                    <label for="widget_label">טקסט על הכפתור</label>
-                                    <input id="widget_label" name="widget[label]" type="text" value="{{ old('widget.label', $widget['label']) }}" data-preview="label" required>
-
-                                    <label for="widget_language">שפה</label>
-                                    <select id="widget_language" name="widget[language]">
-                                        <option value="he" @selected(old('widget.language', $widget['language']) === 'he')>עברית</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-divider"></div>
-
-                                <div class="portal-form-section">
-                                    <p class="eyebrow">פקדים פעילים</p>
-
-                                    <div class="toggle-grid">
-                                        <label class="toggle-row">
-                                            <input type="hidden" name="widget[showContrast]" value="0">
-                                            <input type="checkbox" name="widget[showContrast]" value="1" @checked(old('widget.showContrast', $widget['showContrast']))>
-                                            <span>הצג כפתור ניגודיות</span>
-                                        </label>
-
-                                        <label class="toggle-row">
-                                            <input type="hidden" name="widget[showFontScale]" value="0">
-                                            <input type="checkbox" name="widget[showFontScale]" value="1" @checked(old('widget.showFontScale', $widget['showFontScale']))>
-                                            <span>הצג שינוי גודל טקסט</span>
-                                        </label>
-
-                                        <label class="toggle-row">
-                                            <input type="hidden" name="widget[showUnderlineLinks]" value="0">
-                                            <input type="checkbox" name="widget[showUnderlineLinks]" value="1" @checked(old('widget.showUnderlineLinks', $widget['showUnderlineLinks']))>
-                                            <span>הצג הדגשת קישורים</span>
-                                        </label>
-
-                                        <label class="toggle-row">
-                                            <input type="hidden" name="widget[showReduceMotion]" value="0">
-                                            <input type="checkbox" name="widget[showReduceMotion]" value="1" @checked(old('widget.showReduceMotion', $widget['showReduceMotion']))>
-                                            <span>הצג הפחתת תנועה</span>
-                                        </label>
+                                <div class="widget-pane-shell" data-widget-pane-root>
+                                    <div class="widget-pane-switcher" role="tablist" aria-label="הגדרות ווידג׳ט">
+                                        <button class="widget-pane-button is-active" type="button" data-widget-pane-button="button" aria-selected="true">
+                                            <span class="widget-pane-icon">◎</span>
+                                            <span>כפתור</span>
+                                        </button>
+                                        <button class="widget-pane-button" type="button" data-widget-pane-button="appearance" aria-selected="false">
+                                            <span class="widget-pane-icon">◧</span>
+                                            <span>מראה</span>
+                                        </button>
+                                        <button class="widget-pane-button" type="button" data-widget-pane-button="features" aria-selected="false">
+                                            <span class="widget-pane-icon">✓</span>
+                                            <span>פקדים</span>
+                                        </button>
+                                        <button class="widget-pane-button" type="button" data-widget-pane-button="site" aria-selected="false">
+                                            <span class="widget-pane-icon">⌘</span>
+                                            <span>אתר ומותג</span>
+                                        </button>
                                     </div>
+
+                                    <section class="widget-pane is-active" data-widget-pane="button">
+                                        <div class="widget-section-head">
+                                            <div>
+                                                <p class="eyebrow">כפתור</p>
+                                                <h3>איך הכפתור עצמו נראה ומתנהג</h3>
+                                            </div>
+                                            <span class="widget-section-chip">מה שרואים קודם</span>
+                                        </div>
+
+                                        <div class="widget-form-grid">
+                                            <div>
+                                                <label for="widget_position">מיקום</label>
+                                                <select id="widget_position" name="widget[position]" data-preview="position">
+                                                    <option value="bottom-right" @selected(old('widget.position', $widget['position']) === 'bottom-right')>ימין למטה</option>
+                                                    <option value="bottom-left" @selected(old('widget.position', $widget['position']) === 'bottom-left')>שמאל למטה</option>
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label for="widget_size">גודל</label>
+                                                <select id="widget_size" name="widget[size]" data-preview="size">
+                                                    <option value="compact" @selected(old('widget.size', $widget['size']) === 'compact')>קומפקטי</option>
+                                                    <option value="comfortable" @selected(old('widget.size', $widget['size']) === 'comfortable')>רגיל</option>
+                                                    <option value="large" @selected(old('widget.size', $widget['size']) === 'large')>גדול</option>
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label for="widget_button_mode">תצוגת כפתור</label>
+                                                <select id="widget_button_mode" name="widget[buttonMode]" data-preview="button-mode">
+                                                    <option value="icon-label" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'icon-label')>אייקון וטקסט</option>
+                                                    <option value="label-only" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'label-only')>טקסט בלבד</option>
+                                                    <option value="icon-only" @selected(old('widget.buttonMode', $widget['buttonMode']) === 'icon-only')>אייקון בלבד</option>
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label for="widget_label">טקסט על הכפתור</label>
+                                                <input id="widget_label" name="widget[label]" type="text" value="{{ old('widget.label', $widget['label']) }}" data-preview="label" required>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section class="widget-pane" data-widget-pane="appearance" hidden>
+                                        <div class="widget-section-head">
+                                            <div>
+                                                <p class="eyebrow">מראה</p>
+                                                <h3>פריסט, לייאאוט, אייקון וצבע</h3>
+                                            </div>
+                                            <span class="widget-section-chip">עיצוב חי</span>
+                                        </div>
+
+                                        <div class="widget-form-grid">
+                                            <div>
+                                                <label for="widget_preset">פריסט מוכן</label>
+                                                <select id="widget_preset" name="widget[preset]" data-preview="preset">
+                                                    <option value="classic" @selected(old('widget.preset', $widget['preset']) === 'classic')>{{ $widgetPresetLabels['classic'] }}</option>
+                                                    <option value="high-tech" @selected(old('widget.preset', $widget['preset']) === 'high-tech')>{{ $widgetPresetLabels['high-tech'] }}</option>
+                                                    <option value="elegant" @selected(old('widget.preset', $widget['preset']) === 'elegant')>{{ $widgetPresetLabels['elegant'] }}</option>
+                                                    <option value="bold" @selected(old('widget.preset', $widget['preset']) === 'bold')>{{ $widgetPresetLabels['bold'] }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label for="widget_panel_layout">מבנה פאנל</label>
+                                                <select id="widget_panel_layout" name="widget[panelLayout]" data-preview="panel-layout">
+                                                    <option value="stacked" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'stacked')>{{ $widgetLayoutLabels['stacked'] }}</option>
+                                                    <option value="split" @selected(old('widget.panelLayout', $widget['panelLayout']) === 'split')>{{ $widgetLayoutLabels['split'] }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label for="widget_icon">סוג אייקון</label>
+                                                <select id="widget_icon" name="widget[icon]" data-preview="icon">
+                                                    <option value="figure" @selected(old('widget.icon', $widget['icon']) === 'figure')>דמות נגישות</option>
+                                                    <option value="spark" @selected(old('widget.icon', $widget['icon']) === 'spark')>ניצוץ</option>
+                                                    <option value="shield" @selected(old('widget.icon', $widget['icon']) === 'shield')>מגן</option>
+                                                    <option value="pulse" @selected(old('widget.icon', $widget['icon']) === 'pulse')>פולס</option>
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label for="widget_button_style">סגנון כפתור</label>
+                                                <select id="widget_button_style" name="widget[buttonStyle]" data-preview="button-style">
+                                                    <option value="solid" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'solid')>מודגש</option>
+                                                    <option value="soft" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'soft')>רך ובהיר</option>
+                                                    <option value="glass" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'glass')>זכוכית</option>
+                                                    <option value="midnight" @selected(old('widget.buttonStyle', $widget['buttonStyle']) === 'midnight')>כהה יוקרתי</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="widget-color-field">
+                                                <label for="widget_color">צבע כפתור</label>
+                                                <input id="widget_color" name="widget[color]" type="color" value="{{ old('widget.color', $widget['color']) }}" data-preview="color" required>
+                                            </div>
+
+                                            <div>
+                                                <label for="widget_language">שפה</label>
+                                                <select id="widget_language" name="widget[language]">
+                                                    <option value="he" @selected(old('widget.language', $widget['language']) === 'he')>עברית</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section class="widget-pane" data-widget-pane="features" hidden>
+                                        <div class="widget-section-head">
+                                            <div>
+                                                <p class="eyebrow">פקדים פעילים</p>
+                                                <h3>איזה כלים הלקוח יראה בפאנל</h3>
+                                            </div>
+                                            <span class="widget-section-chip">נגישות בפועל</span>
+                                        </div>
+
+                                        <div class="widget-toggle-grid">
+                                            <label class="toggle-row">
+                                                <input type="hidden" name="widget[showContrast]" value="0">
+                                                <input type="checkbox" name="widget[showContrast]" value="1" @checked(old('widget.showContrast', $widget['showContrast']))>
+                                                <span>הצג כפתור ניגודיות</span>
+                                            </label>
+
+                                            <label class="toggle-row">
+                                                <input type="hidden" name="widget[showFontScale]" value="0">
+                                                <input type="checkbox" name="widget[showFontScale]" value="1" @checked(old('widget.showFontScale', $widget['showFontScale']))>
+                                                <span>הצג שינוי גודל טקסט</span>
+                                            </label>
+
+                                            <label class="toggle-row">
+                                                <input type="hidden" name="widget[showUnderlineLinks]" value="0">
+                                                <input type="checkbox" name="widget[showUnderlineLinks]" value="1" @checked(old('widget.showUnderlineLinks', $widget['showUnderlineLinks']))>
+                                                <span>הצג הדגשת קישורים</span>
+                                            </label>
+
+                                            <label class="toggle-row">
+                                                <input type="hidden" name="widget[showReduceMotion]" value="0">
+                                                <input type="checkbox" name="widget[showReduceMotion]" value="1" @checked(old('widget.showReduceMotion', $widget['showReduceMotion']))>
+                                                <span>הצג הפחתת תנועה</span>
+                                            </label>
+                                        </div>
+                                    </section>
+
+                                    <section class="widget-pane" data-widget-pane="site" hidden>
+                                        <div class="widget-section-head">
+                                            <div>
+                                                <p class="eyebrow">אתר ומותג</p>
+                                                <h3>הנתונים העסקיים שמחוברים לווידג׳ט</h3>
+                                            </div>
+                                            <span class="widget-section-chip">אתר אחד בלבד</span>
+                                        </div>
+
+                                        <div class="widget-form-grid">
+                                            <div>
+                                                <label for="company_name">שם החברה</label>
+                                                <input id="company_name" name="company_name" type="text" value="{{ old('company_name', $user->name) }}" required>
+                                            </div>
+
+                                            <div>
+                                                <label for="contact_email">אימייל ליצירת קשר</label>
+                                                <input id="contact_email" name="contact_email" type="email" value="{{ old('contact_email', $user->contact_email) }}" required>
+                                            </div>
+
+                                            <div>
+                                                <label for="site_name">שם האתר</label>
+                                                <input id="site_name" name="site_name" type="text" value="{{ old('site_name', $site->site_name) }}" required>
+                                            </div>
+
+                                            <div>
+                                                <label for="domain">דומיין</label>
+                                                <input id="domain" name="domain" type="text" value="{{ old('domain', $site->domain) }}" required>
+                                            </div>
+
+                                            <div class="widget-field-wide">
+                                                <label for="statement_url">קישור להצהרת נגישות</label>
+                                                <input id="statement_url" name="statement_url" type="text" value="{{ old('statement_url', $site->statement_url) }}" placeholder="https://your-site.com/accessibility">
+                                            </div>
+
+                                            <div>
+                                                <label for="service_mode">מסלול שירות</label>
+                                                <select id="service_mode" name="service_mode">
+                                                    @foreach ($serviceModes as $value => $label)
+                                                        <option value="{{ $value }}" @selected(old('service_mode', $site->service_mode) === $value)>{{ $label }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+
+                                <div class="widget-form-actions">
+                                    <span class="meta-note">השינויים נשמרים רק לאתר הפעיל שמופיע בצד שמאל, והתצוגה המקדימה מתעדכנת מיד.</span>
+                                    <button class="primary-button" type="submit">לשמור הגדרות</button>
                                 </div>
                             </form>
 

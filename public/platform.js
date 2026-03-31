@@ -273,6 +273,43 @@ document.addEventListener('DOMContentLoaded', function () {
     setActiveTab(initialHash || buttons[0].getAttribute('data-dashboard-tab-button'), false);
   });
 
+  document.querySelectorAll('[data-widget-pane-root]').forEach(function (root) {
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-widget-pane-button]'));
+    var panes = Array.prototype.slice.call(root.querySelectorAll('[data-widget-pane]'));
+
+    if (!buttons.length || !panes.length) {
+      return;
+    }
+
+    function setActivePane(name) {
+      var activeName = name;
+
+      if (!panes.some(function (pane) { return pane.getAttribute('data-widget-pane') === activeName; })) {
+        activeName = buttons[0].getAttribute('data-widget-pane-button');
+      }
+
+      buttons.forEach(function (button) {
+        var isActive = button.getAttribute('data-widget-pane-button') === activeName;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+
+      panes.forEach(function (pane) {
+        var isActive = pane.getAttribute('data-widget-pane') === activeName;
+        pane.classList.toggle('is-active', isActive);
+        pane.hidden = !isActive;
+      });
+    }
+
+    buttons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        setActivePane(button.getAttribute('data-widget-pane-button'));
+      });
+    });
+
+    setActivePane(buttons[0].getAttribute('data-widget-pane-button'));
+  });
+
   document.querySelectorAll('a[href]').forEach(function (link) {
     link.addEventListener('click', function (event) {
       var href = link.getAttribute('href');
