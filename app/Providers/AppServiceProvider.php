@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\PublicWidgetController;
 use App\Models\AppSetting;
 use App\Models\Site;
 use Illuminate\Support\Facades\Artisan;
@@ -31,46 +32,24 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer(['layouts.app', 'layouts.auth'], function ($view) {
             $view->with('assetVersion', $this->assetVersion());
+            $view->with('globalTrackingScripts', $this->globalTrackingScripts());
 
             if (! Schema::hasTable('sites')) {
-                $view->with('platformWidgetSiteKey', null);
-                $view->with('globalTrackingScripts', $this->globalTrackingScripts());
+                $view->with('platformWidgetSiteKey', $this->platformWidgetSiteKey());
 
                 return;
             }
 
-            $configuredSiteKey = config('services.a11y_bridge.platform_widget_site_key');
-            $requestHost = $this->normalizeHost(request()->getHost() ?? '');
-
+            $configuredSiteKey = $this->platformWidgetSiteKey();
             $platformSite = null;
 
-            if (is_string($configuredSiteKey) && trim($configuredSiteKey) !== '') {
+            if ($configuredSiteKey !== PublicWidgetController::PLATFORM_WIDGET_KEY) {
                 $platformSite = Site::query()
-                    ->where('public_key', trim($configuredSiteKey))
+                    ->where('public_key', $configuredSiteKey)
                     ->first();
             }
 
-            if (! $platformSite && $requestHost !== '') {
-                $platformSite = Site::query()
-                    ->orderByDesc('id')
-                    ->get()
-                    ->first(function (Site $site) use ($requestHost) {
-                        $siteHost = $this->normalizeHost(parse_url($site->domain, PHP_URL_HOST) ?: $site->domain);
-
-                        if ($siteHost === '' || $siteHost !== $requestHost) {
-                            return false;
-                        }
-
-                        if (Schema::hasColumn('sites', 'license_status') && ($site->license_status ?? 'active') !== 'active') {
-                            return false;
-                        }
-
-                        return true;
-                    });
-            }
-
-            $view->with('platformWidgetSiteKey', $platformSite?->public_key);
-            $view->with('globalTrackingScripts', $this->globalTrackingScripts());
+            $view->with('platformWidgetSiteKey', $platformSite?->public_key ?: PublicWidgetController::PLATFORM_WIDGET_KEY);
         });
     }
 
@@ -136,14 +115,10 @@ class AppServiceProvider extends ServiceProvider
         ]);
     }
 
-    private function normalizeHost(string $host): string
+    private function platformWidgetSiteKey(): string
     {
-        $normalized = strtolower(trim($host));
+        $configuredSiteKey = trim((string) config('services.a11y_bridge.platform_widget_site_key'));
 
-        if (str_starts_with($normalized, 'www.')) {
-            return substr($normalized, 4);
-        }
-
-        return $normalized;
+        return $configuredSiteKey !== '' ? $configuredSiteKey : PublicWidgetController::PLATFORM_WIDGET_KEY;
     }
 }

@@ -10,8 +10,22 @@ use Illuminate\Support\Facades\Schema;
 
 class PublicWidgetController extends Controller
 {
+    public const PLATFORM_WIDGET_KEY = 'platform-premium';
+
     public function show(string $publicKey): JsonResponse
     {
+        if ($this->isPlatformWidgetKey($publicKey)) {
+            return response()
+                ->json([
+                    'success' => true,
+                    'data' => $this->platformWidgetPayload(),
+                ])
+                ->withHeaders([
+                    'Access-Control-Allow-Origin' => '*',
+                    'Cache-Control' => 'no-store',
+                ]);
+        }
+
         $site = Site::where('public_key', $publicKey)->first();
 
         if (! $site) {
@@ -70,6 +84,13 @@ class PublicWidgetController extends Controller
 
     public function track(string $publicKey, Request $request): JsonResponse
     {
+        if ($this->isPlatformWidgetKey($publicKey)) {
+            return response()->json(['ok' => true])->withHeaders([
+                'Access-Control-Allow-Origin' => '*',
+                'Cache-Control' => 'no-store',
+            ]);
+        }
+
         $site = Site::where('public_key', $publicKey)->first();
 
         if (! $site) {
@@ -157,5 +178,53 @@ class PublicWidgetController extends Controller
         }
 
         return null;
+    }
+
+    private function isPlatformWidgetKey(string $publicKey): bool
+    {
+        return $publicKey === self::PLATFORM_WIDGET_KEY;
+    }
+
+    private function platformWidgetPayload(): array
+    {
+        return [
+            'siteKey' => self::PLATFORM_WIDGET_KEY,
+            'siteName' => 'A11Y Bridge',
+            'domain' => request()->getHost(),
+            'statementUrl' => null,
+            'licenseStatus' => 'active',
+            'purchaseUrl' => route('pricing'),
+            'billing' => [
+                'plan' => 'premium',
+                'cycle' => 'yearly',
+                'status' => 'active',
+                'amount' => 249,
+                'currency' => 'USD',
+            ],
+            'audit' => [
+                'score' => 100,
+                'status' => 'healthy',
+                'summary' => 'ווידג׳ט הפרימיום של הפלטפורמה זמין בכל עמוד באתר.',
+                'checks' => [],
+                'alerts' => [],
+            ],
+            'widget' => [
+                'position' => 'bottom-left',
+                'color' => '#2563eb',
+                'size' => 'comfortable',
+                'label' => 'נגישות',
+                'language' => 'he',
+                'buttonMode' => 'icon-label',
+                'buttonStyle' => 'solid',
+                'icon' => 'figure',
+                'preset' => 'high-tech',
+                'panelLayout' => 'stacked',
+                'showContrast' => true,
+                'showFontScale' => true,
+                'showUnderlineLinks' => true,
+                'showReduceMotion' => true,
+            ],
+            'updatedAt' => now()->toIso8601String(),
+        ];
     }
 }
