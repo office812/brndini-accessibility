@@ -180,9 +180,7 @@
       description: 'חזרה להתאמות הרגילות שלך.',
       plan: 'free',
       prefs: function () {
-        return {
-          profile: 'none'
-        };
+        return Object.assign({}, defaultPrefs);
       }
     },
     {
@@ -645,8 +643,19 @@
           var profileButton = document.createElement('button');
           profileButton.type = 'button';
           profileButton.className = 'ab-widget-choice-button' + (currentPrefs.profile === profile.key ? ' is-active' : '');
-          profileButton.textContent = currentPrefs.profile === profile.key && profile.key !== 'none' ? 'פעיל' : (profile.key === 'none' ? 'איפוס' : 'הפעל');
+          if (profile.key === 'none') {
+            profileButton.textContent = 'איפוס';
+          } else if (currentPrefs.profile === profile.key) {
+            profileButton.textContent = 'בטל פרופיל';
+          } else {
+            profileButton.textContent = 'הפעל';
+          }
           profileButton.addEventListener('click', function () {
+            if (profile.key !== 'none' && currentPrefs.profile === profile.key) {
+              updatePrefs(Object.assign({}, defaultPrefs));
+              return;
+            }
+
             updatePrefs(profile.prefs());
           });
           actionWrap.appendChild(profileButton);
@@ -774,6 +783,7 @@
     function createChoiceGroup(feature, currentValue) {
       var group = document.createElement('div');
       group.className = 'ab-widget-choice-group';
+      var defaultValue = defaultPrefs[feature.key];
 
       feature.options.forEach(function (option) {
         var button = document.createElement('button');
@@ -781,9 +791,13 @@
         button.className = 'ab-widget-choice-button' + (currentValue === option.value ? ' is-active' : '');
         button.textContent = option.label;
         button.addEventListener('click', function () {
+          var nextValue = currentValue === option.value && typeof defaultValue !== 'undefined'
+            ? defaultValue
+            : option.value;
+
           updatePrefs({
             profile: 'none',
-            [feature.key]: option.value
+            [feature.key]: nextValue
           });
         });
         group.appendChild(button);
@@ -809,6 +823,13 @@
 
     function updatePrefs(partial) {
       var nextPrefs = Object.assign({}, loadPrefs(), partial);
+
+      Object.keys(defaultPrefs).forEach(function (key) {
+        if (typeof nextPrefs[key] === 'undefined' || nextPrefs[key] === null) {
+          nextPrefs[key] = defaultPrefs[key];
+        }
+      });
+
       savePrefs(nextPrefs);
       refreshPanel();
     }
