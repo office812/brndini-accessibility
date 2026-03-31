@@ -33,6 +33,7 @@ class PublicWidgetController extends Controller
                     'message' => 'License inactive.',
                     'siteName' => $site->site_name,
                     'purchaseUrl' => $site->purchase_url ?: route('home') . '#pricing',
+                    'widget' => $site->widgetConfig(),
                 ], 403)
                 ->withHeaders([
                     'Access-Control-Allow-Origin' => '*',
