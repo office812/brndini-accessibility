@@ -2874,6 +2874,27 @@ body.page-is-ready .auth-shell {
 
 .super-admin-grid {
     align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.super-admin-workspace {
+    grid-template-columns: 300px minmax(0, 1fr);
+}
+
+.super-admin-rail {
+    gap: 16px;
+}
+
+.super-admin-rail .licenses-product-subnav {
+    margin-inline-start: 0;
+}
+
+.super-admin-rail .dashboard-tab-button {
+    justify-content: flex-start;
+}
+
+.super-admin-main .dashboard-tab-panel.is-active {
+    gap: 22px;
 }
 
 .portal-welcome {
