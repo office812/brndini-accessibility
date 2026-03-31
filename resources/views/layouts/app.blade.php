@@ -144,6 +144,18 @@
                             וידג׳ט מנוהל, קוד הטמעה קבוע, דשבורד ניהול, מסלול ציות, תוכן ותמיכה
                             במסגרת מוצרית אחת.
                         </p>
+
+                        <div class="site-footer-presence" aria-label="צוותים ושותפים">
+                            <div class="site-footer-avatars">
+                                <span>IN</span>
+                                <span>UX</span>
+                                <span>QA</span>
+                            </div>
+                            <div class="site-footer-presence-copy">
+                                <strong>מוצר, תמיכה ותוכן באותו קו</strong>
+                                <small>חוויית SaaS חיה שמתאימה לבעלי אתרים, סוכנויות וארגונים.</small>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="site-footer-links">

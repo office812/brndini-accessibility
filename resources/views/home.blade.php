@@ -312,6 +312,31 @@
                 <strong>שותף / משווק</strong>
             </article>
         </div>
+
+        <div class="people-signal-band" aria-label="אנשים מאחורי המוצר">
+            <article class="people-signal-card people-signal-card-highlight">
+                <div class="people-signal-avatars">
+                    <span>PM</span>
+                    <span>UX</span>
+                    <span>CS</span>
+                </div>
+                <div>
+                    <p class="eyebrow">People layer</p>
+                    <h3>צוות אחד שמחבר מוצר, תמיכה ותוכן.</h3>
+                    <p>המערכת מרגישה חיה יותר כי היא בנויה כמו חברה אמיתית: מוצר, תמיכה, חוויית משתמש ותפעול סביב אותו לקוח.</p>
+                </div>
+            </article>
+
+            <article class="people-signal-card">
+                <strong>מוצר ונראות</strong>
+                <p>שפת ממשק אחידה, ווידג׳ט מנוהל וזרימה שנראית כמו SaaS בוגר.</p>
+            </article>
+
+            <article class="people-signal-card">
+                <strong>תמיכה והטמעה</strong>
+                <p>מרכז תמיכה, סטטוס התקנה וחיווי אמיתי למה שמוטמע בפועל.</p>
+            </article>
+        </div>
     </section>
 
     <section class="section-band section-band-alt" id="pricing">

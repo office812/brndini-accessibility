@@ -142,7 +142,10 @@ code {
 .page-shell {
     width: min(1240px, calc(100% - 36px));
     margin: 0 auto;
-    padding: 18px 0 72px;
+    min-height: 100vh;
+    padding: 18px 0 0;
+    display: flex;
+    flex-direction: column;
     position: relative;
     z-index: 1;
     opacity: 0.01;
@@ -168,6 +171,10 @@ body.page-is-ready .page-shell,
 body.page-is-ready .auth-shell {
     opacity: 1;
     transform: translateY(0);
+}
+
+#main-content {
+    flex: 1 0 auto;
 }
 
 .site-header {
@@ -649,7 +656,7 @@ body.page-is-ready .auth-shell {
 }
 
 .site-footer {
-    margin-top: 48px;
+    margin-top: auto;
     padding: 30px 28px 20px;
     border-radius: 34px 34px 0 0;
     background: linear-gradient(180deg, rgba(11, 18, 32, 0.96), rgba(18, 29, 52, 0.98));
@@ -668,6 +675,60 @@ body.page-is-ready .auth-shell {
 .site-footer-brand {
     display: grid;
     gap: 16px;
+}
+
+.site-footer-presence {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: fit-content;
+    max-width: 100%;
+}
+
+.site-footer-avatars,
+.people-signal-avatars {
+    display: flex;
+    align-items: center;
+}
+
+.site-footer-avatars span,
+.people-signal-avatars span {
+    width: 38px;
+    height: 38px;
+    margin-inline-start: -8px;
+    border-radius: 999px;
+    display: inline-grid;
+    place-items: center;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1d6dff 0%, #7c3aed 100%);
+    border: 2px solid rgba(11, 18, 32, 0.96);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+}
+
+.site-footer-avatars span:first-child,
+.people-signal-avatars span:first-child {
+    margin-inline-start: 0;
+}
+
+.site-footer-presence-copy {
+    display: grid;
+    gap: 4px;
+}
+
+.site-footer-presence-copy strong,
+.site-footer-presence-copy small {
+    display: block;
+}
+
+.site-footer-presence-copy small {
+    color: rgba(240, 244, 252, 0.7);
+    line-height: 1.6;
 }
 
 .brand-footer {
@@ -4131,6 +4192,47 @@ body.page-is-ready .auth-shell {
     font-size: 0.95rem;
 }
 
+.people-signal-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.people-signal-card {
+    padding: 22px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid rgba(255, 255, 255, 0.84);
+    box-shadow: var(--shadow-xs);
+    display: grid;
+    align-content: start;
+    gap: 10px;
+}
+
+.people-signal-card-highlight {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    background:
+        radial-gradient(circle at top right, rgba(29, 109, 255, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(243, 247, 252, 0.86));
+}
+
+.people-signal-card h3,
+.people-signal-card strong {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.28rem;
+    line-height: 1.08;
+}
+
+.people-signal-card p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.7;
+}
+
 .compliance-badges {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     margin-top: 10px;
@@ -4279,6 +4381,7 @@ body.page-is-ready .auth-shell {
 @media (max-width: 1080px) {
     .trust-bar,
     .company-proof-strip,
+    .people-signal-band,
     .home-hero,
     .flow-section,
     .capability-grid,
@@ -4375,6 +4478,10 @@ body.page-is-ready .auth-shell {
     .about-story-grid,
     .about-process-grid,
     .site-footer-links {
+        grid-template-columns: 1fr;
+    }
+
+    .people-signal-card-highlight {
         grid-template-columns: 1fr;
     }
 
@@ -4571,6 +4678,7 @@ body.page-is-ready .auth-shell {
     .dashboard-grid-secondary,
     .auth-cta-grid,
     .company-proof-strip,
+    .people-signal-band,
     .about-hero-grid,
     .about-story-grid,
     .about-process-grid,
@@ -4660,6 +4768,12 @@ body.page-is-ready .auth-shell {
     .site-footer-bottom {
         flex-direction: column;
         align-items: flex-start;
+    }
+
+    .site-footer-presence {
+        width: 100%;
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .hero-copy h1,
