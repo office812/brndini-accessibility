@@ -199,18 +199,10 @@ class DashboardController extends Controller
         ]);
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
-        $billing = $site->billingConfig();
-
-        $billing['plan'] = $validated['billing_plan'];
-        $billing['cycle'] = $validated['billing_cycle'];
-        $billing['amount'] = $this->planCatalog()[$validated['billing_plan']]['prices'][$validated['billing_cycle']] ?? $billing['amount'];
-        $billing['status'] = $site->licenseActive() ? 'active' : 'inactive';
-
-        $payload = [
-            'billing_settings' => SiteSettings::sanitizeBilling($billing, $site->licenseActive()),
-        ];
-
-        $this->persistSitePayload($site, $payload);
+        $this->persistSitePayload($site, $site->billingUpdatePayload(
+            $validated['billing_plan'],
+            $validated['billing_cycle']
+        ));
 
         return redirect()
             ->route('dashboard.account', ['site' => $site->id])
@@ -224,18 +216,7 @@ class DashboardController extends Controller
         ]);
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
-        $billing = $site->billingConfig();
-
-        $billing['status'] = 'active';
-
-        $licensePayload = [
-            'license_status' => 'active',
-            'purchase_url' => null,
-            'billing_settings' => SiteSettings::sanitizeBilling($billing, true),
-            'license_expires_at' => $this->calculateExpiry($billing['cycle']),
-        ];
-
-        $this->persistSitePayload($site, $licensePayload);
+        $this->persistSitePayload($site, $site->activationPayload());
 
         $site = $this->applySiteRuntimeOverrides($site->fresh());
 
@@ -592,9 +573,9 @@ class DashboardController extends Controller
             $widget['showUnderlineLinks'],
             $widget['showReduceMotion'],
         ]));
-        $planCatalog = $this->planCatalog();
+        $planCatalog = SiteSettings::billingCatalog();
         $activeAlerts = collect($auditSnapshot['alerts'] ?? [])->filter(fn (array $alert) => ($alert['state'] ?? 'open') !== 'resolved')->values();
-        $currentPlanMeta = $planCatalog[$billing['plan']] ?? $planCatalog['free'];
+        $currentPlanMeta = $site->billingPlanMeta();
         $dbSupportTickets = SupportTicket::tableAvailable()
             ? $user->supportTickets()
                 ->with('site')
@@ -886,24 +867,22 @@ class DashboardController extends Controller
         return $site->installationSignal();
     }
 
-    private function planCatalog(): array
-    {
-        return [
-            'free' => [
-                'label' => 'חינם',
-                'description' => 'מסלול שמכסה בערך 70% מהיכולות: התאמות טקסט, ניגודיות, ניווט בסיסי, קוד הטמעה קבוע וחוויית נגישות טובה לרוב האתרים.',
-                'prices' => ['monthly' => 0, 'yearly' => 0],
-            ],
-            'premium' => [
-                'label' => 'פרימיום',
-                'description' => 'עוד 30% מהיכולות הקריטיות: פרופילי שימוש, מדריך קריאה, הסתרת תמונות, התאמות מתקדמות יותר וחוויית widget עשירה יותר.',
-                'prices' => ['monthly' => 49, 'yearly' => 249],
-            ],
-        ];
-    }
-
     private function recommendedPlanForSite(Site $site, int $featureCount): array
     {
+        if ($site->licenseActive() && $site->billingPlan() === 'premium') {
+            return [
+                'name' => 'פרימיום פעיל',
+                'description' => 'האתר כבר מחובר למסלול הפרימיום ופתוח לכל היכולות המתקדמות.',
+            ];
+        }
+
+        if ($site->licenseActive() && $site->billingPlan() === 'free') {
+            return [
+                'name' => 'שדרוג לפרימיום',
+                'description' => 'הבסיס כבר פעיל. השדרוג הבא יפתח את הכלים המתקדמים, הפרופילים וההתאמות המורחבות.',
+            ];
+        }
+
         if ($site->sites_count ?? null) {
             return [];
         }
@@ -941,7 +920,7 @@ class DashboardController extends Controller
         $licenseActive = $site->licenseActive();
         $widgetInstalled = $installationSignal['installed'];
         $statementConnected = $this->siteHasStatement($site);
-        $billingActive = ($billing['status'] ?? 'inactive') === 'active';
+        $billingActive = $site->billingActive();
 
         $checks[] = $this->buildCheck(
             'הטמעה באתר',
@@ -995,7 +974,7 @@ class DashboardController extends Controller
             'Billing',
             $billingActive ? 'pass' : 'warn',
             $billingActive
-                ? 'החבילה מסומנת כפעילה עם מסלול ' . ($this->planCatalog()[$billing['plan']]['label'] ?? $billing['plan']) . '.'
+                ? 'החבילה מסומנת כפעילה עם מסלול ' . ($site->billingPlanMeta()['label'] ?? $site->billingPlan()) . '.'
                 : 'האתר עדיין לא עבר הפעלה מלאה במסלול שנבחר.'
         );
 
@@ -1237,11 +1216,6 @@ class DashboardController extends Controller
             ],
             'last_reviewed_label' => Carbon::parse($statement['last_reviewed_at'])->format('d.m.Y'),
         ];
-    }
-
-    private function calculateExpiry(string $cycle): Carbon
-    {
-        return $cycle === 'monthly' ? Carbon::now()->addMonth() : Carbon::now()->addYear();
     }
 
     private function persistSitePayload(Site $site, array $payload): void

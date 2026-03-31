@@ -67,6 +67,71 @@ class Site extends Model
         );
     }
 
+    public function billingStatus(): string
+    {
+        return $this->billingConfig()['status'] ?? 'inactive';
+    }
+
+    public function billingActive(): bool
+    {
+        return in_array($this->billingStatus(), ['active', 'trial'], true);
+    }
+
+    public function billingPlan(): string
+    {
+        return $this->billingConfig()['plan'] ?? 'free';
+    }
+
+    public function billingCycle(): string
+    {
+        return $this->billingConfig()['cycle'] ?? 'yearly';
+    }
+
+    public function billingAmount(): int
+    {
+        return (int) ($this->billingConfig()['amount'] ?? 0);
+    }
+
+    public function billingPlanMeta(): array
+    {
+        $catalog = SiteSettings::billingCatalog();
+
+        return $catalog[$this->billingPlan()] ?? $catalog['free'];
+    }
+
+    public function billingUpdatePayload(string $plan, string $cycle): array
+    {
+        $billing = $this->billingConfig();
+        $billing['plan'] = SiteSettings::normalizeBillingPlan($plan);
+        $billing['cycle'] = in_array($cycle, SiteSettings::BILLING_CYCLES, true) ? $cycle : $billing['cycle'];
+        $billing['amount'] = SiteSettings::billingPriceFor($billing['plan'], $billing['cycle']);
+        $billing['status'] = $this->licenseActive() ? 'active' : 'inactive';
+
+        return [
+            'billing_settings' => SiteSettings::sanitizeBilling($billing, $this->licenseActive()),
+        ];
+    }
+
+    public function nextLicenseExpiry(?string $cycle = null): Carbon
+    {
+        $billingCycle = in_array($cycle, SiteSettings::BILLING_CYCLES, true) ? $cycle : $this->billingCycle();
+
+        return $billingCycle === 'monthly' ? Carbon::now()->addMonth() : Carbon::now()->addYear();
+    }
+
+    public function activationPayload(): array
+    {
+        $billing = $this->billingConfig();
+        $billing['status'] = 'active';
+
+        return [
+            'license_status' => 'active',
+            'purchase_url' => null,
+            'billing_settings' => SiteSettings::sanitizeBilling($billing, true),
+            'license_expires_at' => $this->nextLicenseExpiry($billing['cycle'] ?? null),
+        ];
+    }
+
     public function alertConfig(): array
     {
         return SiteSettings::sanitizeAlertSettings($this->alert_settings ?? []);

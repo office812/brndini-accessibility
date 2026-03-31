@@ -151,6 +151,31 @@ class SiteSettings
         ];
     }
 
+    public static function billingCatalog(): array
+    {
+        return [
+            'free' => [
+                'label' => 'חינם',
+                'description' => 'מסלול שמכסה בערך 70% מהיכולות: התאמות טקסט, ניגודיות, ניווט בסיסי, קוד הטמעה קבוע וחוויית נגישות טובה לרוב האתרים.',
+                'prices' => ['monthly' => 0, 'yearly' => 0],
+            ],
+            'premium' => [
+                'label' => 'פרימיום',
+                'description' => 'עוד 30% מהיכולות הקריטיות: פרופילי שימוש, מדריך קריאה, הסתרת תמונות, התאמות מתקדמות יותר וחוויית widget עשירה יותר.',
+                'prices' => ['monthly' => 49, 'yearly' => 249],
+            ],
+        ];
+    }
+
+    public static function billingPriceFor(?string $plan, ?string $cycle): int
+    {
+        $catalog = self::billingCatalog();
+        $normalizedPlan = self::normalizeBillingPlan($plan);
+        $normalizedCycle = in_array($cycle, self::BILLING_CYCLES, true) ? $cycle : 'yearly';
+
+        return (int) ($catalog[$normalizedPlan]['prices'][$normalizedCycle] ?? 0);
+    }
+
     public static function defaultAlertSettings(): array
     {
         return [
