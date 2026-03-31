@@ -204,10 +204,10 @@ class DashboardController extends Controller
         $billing['plan'] = $validated['billing_plan'];
         $billing['cycle'] = $validated['billing_cycle'];
         $billing['amount'] = $this->planCatalog()[$validated['billing_plan']]['prices'][$validated['billing_cycle']] ?? $billing['amount'];
-        $billing['status'] = ($site->license_status ?? 'active') === 'active' ? 'active' : 'inactive';
+        $billing['status'] = $site->licenseActive() ? 'active' : 'inactive';
 
         $payload = [
-            'billing_settings' => SiteSettings::sanitizeBilling($billing, ($site->license_status ?? 'active') === 'active'),
+            'billing_settings' => SiteSettings::sanitizeBilling($billing, $site->licenseActive()),
         ];
 
         $this->persistSitePayload($site, $payload);
@@ -616,9 +616,7 @@ class DashboardController extends Controller
             ->values();
         $openTickets = $supportTickets->whereIn('status', ['open', 'pending']);
         $urgentTickets = $supportTickets->where('priority', 'urgent');
-        $activeSitesCount = $sites->filter(function (Site $candidate) {
-            return ($candidate->license_status ?? 'active') === 'active';
-        })->count();
+        $activeSitesCount = $sites->filter(fn (Site $candidate) => $candidate->licenseActive())->count();
         $platformReadiness = $this->platformReadiness();
 
         return [
@@ -632,7 +630,7 @@ class DashboardController extends Controller
             'serviceModeLabel' => $serviceModes[$site->service_mode] ?? $site->service_mode,
             'embedScriptUrl' => url('/widget.js'),
             'embedCode' => sprintf('<script async src="%s" data-a11y-bridge="%s"></script>', url('/widget.js'), $site->public_key),
-            'licenseStatus' => $site->license_status ?? 'active',
+            'licenseStatus' => $site->licenseStatus(),
             'installationStatus' => $installationSignal['installed'] ? 'installed' : 'pending',
             'installationLabel' => $installationSignal['installed'] ? 'הוטמע באתר' : 'ממתין להטמעה',
             'installationSeenLabel' => $installationSignal['last_seen_at']?->diffForHumans() ?? 'עדיין לא זוהתה טעינה מהאתר',
@@ -748,9 +746,9 @@ class DashboardController extends Controller
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
         $clientUsersCount = max($users->count() - $superAdminUsersCount - $adminUsersCount, 0);
-        $installedSitesCount = $sites->filter(fn (Site $site) => filled($site->last_seen_at))->count();
+        $installedSitesCount = $sites->filter(fn (Site $site) => $site->installationSignal()['installed'])->count();
         $pendingInstallSitesCount = max($sites->count() - $installedSitesCount, 0);
-        $trackingScriptsActiveCount = collect($tracking)->filter(fn ($script) => filled(trim((string) $script)))->count();
+        $trackingScriptsActiveCount = AppSetting::activeCount($tracking);
 
         return [
             'title' => 'מרכז סופר־אדמין | A11Y Bridge',
@@ -773,7 +771,7 @@ class DashboardController extends Controller
             'adminSummary' => [
                 'users' => $users->count(),
                 'sites' => $sites->count(),
-                'active_sites' => $sites->filter(fn (Site $site) => ($site->license_status ?? 'active') === 'active')->count(),
+                'active_sites' => $sites->filter(fn (Site $site) => $site->licenseActive())->count(),
                 'tickets_open' => $tickets->whereIn('status', ['open', 'pending'])->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
@@ -885,22 +883,7 @@ class DashboardController extends Controller
 
     private function installationSignal(Site $site): array
     {
-        if ($this->siteColumnsAvailable(['last_seen_at', 'last_seen_url'])) {
-            return [
-                'installed' => filled($site->last_seen_at),
-                'last_seen_at' => $site->last_seen_at,
-                'page_url' => filled($site->last_seen_url) ? $site->last_seen_url : null,
-            ];
-        }
-
-        $lastSeenAt = RuntimeStore::get($this->siteRuntimeScope($site), 'widget_seen_at');
-        $pageUrl = RuntimeStore::get($this->siteRuntimeScope($site), 'widget_seen_url');
-
-        return [
-            'installed' => is_string($lastSeenAt) && trim($lastSeenAt) !== '',
-            'last_seen_at' => is_string($lastSeenAt) ? Carbon::parse($lastSeenAt) : null,
-            'page_url' => is_string($pageUrl) && trim($pageUrl) !== '' ? $pageUrl : null,
-        ];
+        return $site->installationSignal();
     }
 
     private function planCatalog(): array
@@ -955,7 +938,7 @@ class DashboardController extends Controller
         $checks = [];
         $alerts = [];
 
-        $licenseActive = ($site->license_status ?? 'active') === 'active';
+        $licenseActive = $site->licenseActive();
         $widgetInstalled = $installationSignal['installed'];
         $statementConnected = $this->siteHasStatement($site);
         $billingActive = ($billing['status'] ?? 'inactive') === 'active';

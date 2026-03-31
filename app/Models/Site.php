@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 
 class Site extends Model
@@ -62,7 +63,7 @@ class Site extends Model
     {
         return SiteSettings::sanitizeBilling(
             $this->billing_settings ?? [],
-            ($this->license_status ?? 'active') === 'active'
+            $this->licenseActive()
         );
     }
 
@@ -74,6 +75,55 @@ class Site extends Model
     public function auditConfig(): array
     {
         return SiteSettings::sanitizeAuditSnapshot($this->audit_snapshot ?? []);
+    }
+
+    public function licenseStatus(): string
+    {
+        return ($this->license_status ?? 'active') === 'active' ? 'active' : 'inactive';
+    }
+
+    public function licenseActive(): bool
+    {
+        return $this->licenseStatus() === 'active';
+    }
+
+    public function markWidgetSeen(?string $pageUrl = null): void
+    {
+        $payload = [
+            'last_seen_at' => now(),
+            'last_seen_url' => $pageUrl,
+        ];
+
+        if (static::columnsAvailable(['last_seen_at', 'last_seen_url'])) {
+            $this->persistPayload($payload);
+
+            return;
+        }
+
+        RuntimeStore::putMany($this->runtimeScope(), [
+            'widget_seen_at' => now()->toIso8601String(),
+            'widget_seen_url' => $pageUrl,
+        ]);
+    }
+
+    public function installationSignal(): array
+    {
+        if (static::columnsAvailable(['last_seen_at', 'last_seen_url'])) {
+            return [
+                'installed' => filled($this->last_seen_at),
+                'last_seen_at' => $this->last_seen_at,
+                'page_url' => filled($this->last_seen_url) ? $this->last_seen_url : null,
+            ];
+        }
+
+        $lastSeenAt = RuntimeStore::get($this->runtimeScope(), 'widget_seen_at');
+        $pageUrl = RuntimeStore::get($this->runtimeScope(), 'widget_seen_url');
+
+        return [
+            'installed' => is_string($lastSeenAt) && trim($lastSeenAt) !== '',
+            'last_seen_at' => is_string($lastSeenAt) ? Carbon::parse($lastSeenAt) : null,
+            'page_url' => is_string($pageUrl) && trim($pageUrl) !== '' ? $pageUrl : null,
+        ];
     }
 
     public static function tableAvailable(): bool

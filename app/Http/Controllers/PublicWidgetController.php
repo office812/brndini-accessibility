@@ -43,7 +43,7 @@ class PublicWidgetController extends Controller
 
         $site = $site->loadRuntimeOverrides();
 
-        if (($site->license_status ?? 'active') !== 'active') {
+        if (! $site->licenseActive()) {
             return response()
                 ->json([
                     'success' => false,
@@ -67,7 +67,7 @@ class PublicWidgetController extends Controller
                     'siteName' => $site->site_name,
                     'domain' => $site->domain,
                     'statementUrl' => $this->statementUrlForSite($site),
-                    'licenseStatus' => $site->license_status ?? 'active',
+                    'licenseStatus' => $site->licenseStatus(),
                     'purchaseUrl' => $site->purchase_url,
                     'billing' => $site->billingConfig(),
                     'audit' => $site->auditConfig(),
@@ -104,17 +104,7 @@ class PublicWidgetController extends Controller
         $pageHost = $this->normalizeHost(parse_url($pageUrl, PHP_URL_HOST) ?: '');
 
         if ($siteHost !== '' && $pageHost !== '' && $siteHost === $pageHost) {
-            if ($this->siteColumnsAvailable(['last_seen_at', 'last_seen_url'])) {
-                $site->persistPayload([
-                    'last_seen_at' => now(),
-                    'last_seen_url' => $pageUrl,
-                ]);
-            } else {
-                RuntimeStore::putMany($site->runtimeScope(), [
-                    'widget_seen_at' => now()->toIso8601String(),
-                    'widget_seen_url' => $pageUrl,
-                ]);
-            }
+            $site->markWidgetSeen($pageUrl);
         }
 
         return response()->json(['ok' => true])->withHeaders([
@@ -132,11 +122,6 @@ class PublicWidgetController extends Controller
         }
 
         return $normalized;
-    }
-
-    private function siteColumnsAvailable(array $columns): bool
-    {
-        return Site::columnsAvailable($columns);
     }
 
     private function statementUrlForSite(Site $site): ?string

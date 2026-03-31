@@ -17,6 +17,11 @@ class AppSetting extends Model
         'value',
     ];
 
+    public static function tableAvailable(): bool
+    {
+        return Schema::hasTable('app_settings');
+    }
+
     public static function getMany(array $keys): array
     {
         $fallback = RuntimeStore::all(self::CACHE_KEY);
@@ -26,7 +31,7 @@ class AppSetting extends Model
             $values[$key] = $fallback[$key] ?? null;
         }
 
-        if (! Schema::hasTable('app_settings')) {
+        if (! static::tableAvailable()) {
             return $values;
         }
 
@@ -52,7 +57,7 @@ class AppSetting extends Model
 
         RuntimeStore::putMany(self::CACHE_KEY, $filtered);
 
-        if (! Schema::hasTable('app_settings')) {
+        if (! static::tableAvailable()) {
             return;
         }
 
@@ -62,5 +67,12 @@ class AppSetting extends Model
                 ['value' => $value === '' ? null : $value]
             );
         }
+    }
+
+    public static function activeCount(array $settings): int
+    {
+        return collect($settings)
+            ->filter(fn ($script) => filled(trim((string) $script)))
+            ->count();
     }
 }

@@ -9,7 +9,7 @@
         $superAdminUsersCount = $superAdminUsersCount ?? $adminUsers->filter(fn ($adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $adminUsersCount ?? $adminUsers->filter(fn ($adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
         $clientUsersCount = $clientUsersCount ?? max(($adminSummary['users'] ?? $adminUsers->count()) - $superAdminUsersCount - $adminUsersCount, 0);
-        $installedSitesCount = $installedSitesCount ?? $adminSites->filter(fn ($adminSite) => filled($adminSite->last_seen_at))->count();
+        $installedSitesCount = $installedSitesCount ?? $adminSites->filter(fn ($adminSite) => $adminSite->installationSignal()['installed'])->count();
         $pendingInstallSitesCount = $pendingInstallSitesCount ?? max($adminSites->count() - $installedSitesCount, 0);
     @endphp
 
@@ -481,8 +481,8 @@
                                     <tbody>
                                         @foreach ($adminSites as $adminSite)
                                             @php
-                                                $licenseKey = ($adminSite->license_status ?? 'active') === 'active' ? 'active' : 'inactive';
-                                                $installKey = filled($adminSite->last_seen_at) ? 'installed' : 'pending';
+                                                $licenseKey = $adminSite->licenseActive() ? 'active' : 'inactive';
+                                                $installKey = $adminSite->installationSignal()['installed'] ? 'installed' : 'pending';
                                                 $ownerEmail = $adminSite->user?->email ?? 'לא ידוע';
                                             @endphp
                                             <tr
@@ -495,13 +495,13 @@
                                                 <td data-label="דומיין">{{ parse_url($adminSite->domain, PHP_URL_HOST) ?: $adminSite->domain }}</td>
                                                 <td data-label="בעלים">{{ $adminSite->user?->email ?? 'לא ידוע' }}</td>
                                                 <td data-label="רישיון">
-                                                    <span class="status-pill {{ ($adminSite->license_status ?? 'active') === 'active' ? 'is-good' : 'is-warn' }}">
-                                                        {{ ($adminSite->license_status ?? 'active') === 'active' ? 'פעיל' : 'לא פעיל' }}
+                                                    <span class="status-pill {{ $adminSite->licenseActive() ? 'is-good' : 'is-warn' }}">
+                                                        {{ $adminSite->licenseActive() ? 'פעיל' : 'לא פעיל' }}
                                                     </span>
                                                 </td>
                                                 <td data-label="הטמעה">
-                                                    <span class="status-pill {{ filled($adminSite->last_seen_at) ? 'is-good' : 'is-neutral' }}">
-                                                        {{ filled($adminSite->last_seen_at) ? 'זוהתה טעינה' : 'ממתין להטמעה' }}
+                                                    <span class="status-pill {{ $adminSite->installationSignal()['installed'] ? 'is-good' : 'is-neutral' }}">
+                                                        {{ $adminSite->installationSignal()['installed'] ? 'זוהתה טעינה' : 'ממתין להטמעה' }}
                                                     </span>
                                                 </td>
                                             </tr>
