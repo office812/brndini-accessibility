@@ -14,8 +14,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url('/platform.css') }}">
+    {!! $globalTrackingScripts['google_analytics_head'] ?? '' !!}
+    {!! $globalTrackingScripts['google_tag_manager_head'] ?? '' !!}
+    {!! $globalTrackingScripts['meta_pixel_head'] ?? '' !!}
+    {!! $globalTrackingScripts['custom_head_scripts'] ?? '' !!}
 </head>
 <body>
+    {!! $globalTrackingScripts['google_tag_manager_body'] ?? '' !!}
+    {!! $globalTrackingScripts['custom_body_scripts'] ?? '' !!}
     <div class="top-progress" aria-hidden="true" data-top-progress>
         <span class="top-progress-bar"></span>
     </div>
@@ -50,6 +56,9 @@
                             <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install', $siteRouteParams) }}">השירותים שלי</a>
                             <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', $siteRouteParams) }}">דוחות ובקרה</a>
                             <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account', $siteRouteParams) }}">החשבון</a>
+                            @if (($user ?? Auth::user())?->isSuperAdmin())
+                                <a class="{{ request()->routeIs('dashboard.super-admin') ? 'is-current' : '' }}" href="{{ route('dashboard.super-admin') }}">סופר־אדמין</a>
+                            @endif
                         </nav>
                     </div>
 
@@ -77,7 +86,7 @@
                     </span>
                     <span>
                         <strong>A11Y Bridge</strong>
-                        <small>פלטפורמה לניהול נגישות אתר, widget hosted והטמעה קבועה</small>
+                        <small>פלטפורמה לניהול נגישות אתר, וידג׳ט מנוהל והטמעה קבועה</small>
                     </span>
                 </a>
 

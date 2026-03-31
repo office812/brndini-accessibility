@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AppSetting;
 use App\Models\Site;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -25,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['layouts.app', 'layouts.auth'], function ($view) {
             if (! Schema::hasTable('sites')) {
                 $view->with('platformWidgetSiteKey', null);
+                $view->with('globalTrackingScripts', $this->globalTrackingScripts());
 
                 return;
             }
@@ -60,7 +62,20 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $view->with('platformWidgetSiteKey', $platformSite?->public_key);
+            $view->with('globalTrackingScripts', $this->globalTrackingScripts());
         });
+    }
+
+    private function globalTrackingScripts(): array
+    {
+        return AppSetting::getMany([
+            'google_analytics_head',
+            'google_tag_manager_head',
+            'google_tag_manager_body',
+            'meta_pixel_head',
+            'custom_head_scripts',
+            'custom_body_scripts',
+        ]);
     }
 
     private function normalizeHost(string $host): string

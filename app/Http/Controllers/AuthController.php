@@ -51,6 +51,7 @@ class AuthController extends Controller
 
         $user = DB::transaction(function () use ($validated, $domain) {
             $isFirstUser = User::query()->count() === 0;
+            $isSuperAdmin = strtolower($validated['email']) === strtolower((string) config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il'));
 
             $userPayload = [
                 'name' => $validated['company_name'],
@@ -63,7 +64,7 @@ class AuthController extends Controller
             }
 
             if (Schema::hasColumn('users', 'is_admin')) {
-                $userPayload['is_admin'] = $isFirstUser;
+                $userPayload['is_admin'] = $isFirstUser || $isSuperAdmin;
             }
 
             $user = User::create($userPayload);

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 class SupportTicket extends Model
 {
@@ -19,6 +21,8 @@ class SupportTicket extends Model
         'priority',
         'status',
         'message',
+        'admin_response',
+        'assigned_user_id',
         'last_activity_at',
     ];
 
@@ -34,5 +38,21 @@ class SupportTicket extends Model
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function assignedUser(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_user_id');
+    }
+
+    public function runtimeAdminResponse(): ?string
+    {
+        if (Schema::hasColumn('support_tickets', 'admin_response')) {
+            return $this->admin_response;
+        }
+
+        $value = Cache::get('support_ticket:' . $this->id . ':admin_response');
+
+        return is_string($value) && trim($value) !== '' ? $value : null;
     }
 }

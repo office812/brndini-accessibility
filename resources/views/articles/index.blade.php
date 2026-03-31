@@ -79,7 +79,7 @@
         </section>
 
         @auth
-            @if (auth()->user()->is_admin)
+            @if (auth()->user()->is_admin || auth()->user()->isSuperAdmin())
                 <section class="panel-card article-admin-card">
                     <p class="eyebrow">ניהול תוכן</p>
                     <h2>פרסום מאמר חדש</h2>

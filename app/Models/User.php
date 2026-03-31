@@ -47,4 +47,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(SupportTicket::class);
     }
+
+    public function isSuperAdmin(): bool
+    {
+        $email = strtolower(trim((string) $this->email));
+        $superAdminEmail = strtolower(trim((string) config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il')));
+
+        return $email !== '' && $email === $superAdminEmail;
+    }
 }

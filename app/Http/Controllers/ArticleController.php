@@ -40,7 +40,7 @@ class ArticleController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        abort_unless($request->user()?->is_admin, 403);
+        abort_unless($request->user()?->is_admin || $request->user()?->isSuperAdmin(), 403);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:180'],

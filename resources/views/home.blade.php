@@ -356,7 +356,7 @@
         </div>
 
         @auth
-            @if (auth()->user()->is_admin)
+            @if (auth()->user()->is_admin || auth()->user()->isSuperAdmin())
                 <section class="panel-card article-admin-card" aria-labelledby="article-admin-title">
                     <p class="eyebrow">ניהול תוכן</p>
                     <h2 id="article-admin-title">פרסום מאמר חדש</h2>

@@ -2504,6 +2504,29 @@ body.page-is-ready .auth-shell {
     color: #21354f;
 }
 
+.support-admin-response {
+    display: grid;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(15, 98, 254, 0.07);
+    border: 1px solid rgba(15, 98, 254, 0.12);
+}
+
+.support-admin-response strong {
+    color: #10233a;
+}
+
+.support-admin-response p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.7;
+}
+
+.super-admin-grid {
+    align-items: start;
+}
+
 .portal-welcome {
     margin-bottom: 18px;
 }

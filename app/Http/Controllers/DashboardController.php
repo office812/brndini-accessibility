@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use App\Models\Article;
 use App\Models\Site;
 use App\Models\SupportTicket;
@@ -12,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 
@@ -49,6 +51,13 @@ class DashboardController extends Controller
     public function support(Request $request): View
     {
         return view('support', $this->buildDashboardData($request->user()));
+    }
+
+    public function superAdmin(Request $request): View
+    {
+        $this->ensureSuperAdmin($request->user());
+
+        return view('admin', $this->buildSuperAdminData($request->user()));
     }
 
     public function update(Request $request): RedirectResponse
@@ -354,6 +363,64 @@ class DashboardController extends Controller
             ->with('status', 'הפנייה נפתחה בהצלחה. צוות התמיכה יוכל לחזור אליך מתוך סביבת הניהול של האתר הזה.');
     }
 
+    public function updateSupportTicketAdmin(Request $request, SupportTicket $ticket): RedirectResponse
+    {
+        $admin = $request->user();
+        $this->ensureSuperAdmin($admin);
+
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(array_keys($this->supportStatusLabels()))],
+            'priority' => ['required', Rule::in(array_keys($this->supportPriorityLabels()))],
+            'admin_response' => ['nullable', 'string', 'max:4000'],
+        ]);
+
+        $ticket->update([
+            'status' => $validated['status'],
+            'priority' => $validated['priority'],
+            'last_activity_at' => Carbon::now(),
+        ]);
+
+        if (Schema::hasColumn('support_tickets', 'assigned_user_id')) {
+            $ticket->update([
+                'assigned_user_id' => $admin->id,
+            ]);
+        }
+
+        $response = trim((string) ($validated['admin_response'] ?? ''));
+
+        if (Schema::hasColumn('support_tickets', 'admin_response')) {
+            $ticket->update([
+                'admin_response' => $response === '' ? null : $response,
+            ]);
+        } else {
+            Cache::put('support_ticket:' . $ticket->id . ':admin_response', $response === '' ? null : $response, now()->addDays(30));
+        }
+
+        return redirect()
+            ->route('dashboard.super-admin')
+            ->with('status', 'הפנייה עודכנה ונשמרה ממרכז הסופר־אדמין.');
+    }
+
+    public function updateGlobalTracking(Request $request): RedirectResponse
+    {
+        $this->ensureSuperAdmin($request->user());
+
+        $validated = $request->validate([
+            'google_analytics_head' => ['nullable', 'string', 'max:20000'],
+            'google_tag_manager_head' => ['nullable', 'string', 'max:20000'],
+            'google_tag_manager_body' => ['nullable', 'string', 'max:20000'],
+            'meta_pixel_head' => ['nullable', 'string', 'max:20000'],
+            'custom_head_scripts' => ['nullable', 'string', 'max:40000'],
+            'custom_body_scripts' => ['nullable', 'string', 'max:40000'],
+        ]);
+
+        AppSetting::putMany($validated);
+
+        return redirect()
+            ->route('dashboard.super-admin')
+            ->with('status', 'קודי המעקב וההטמעות הגלובליות עודכנו.');
+    }
+
     private function ensureSite(User $user): Site
     {
         $site = $user->sites()->orderBy('id')->first();
@@ -509,6 +576,57 @@ class DashboardController extends Controller
         ];
     }
 
+    private function buildSuperAdminData(User $user): array
+    {
+        $tracking = AppSetting::getMany([
+            'google_analytics_head',
+            'google_tag_manager_head',
+            'google_tag_manager_body',
+            'meta_pixel_head',
+            'custom_head_scripts',
+            'custom_body_scripts',
+        ]);
+
+        $users = User::query()
+            ->withCount(['sites', 'supportTickets'])
+            ->orderByDesc('id')
+            ->get();
+
+        $sites = Site::query()
+            ->with('user')
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->get();
+
+        $supportAvailable = Schema::hasTable('support_tickets');
+        $tickets = $supportAvailable
+            ? SupportTicket::query()
+                ->with(['user', 'site', 'assignedUser'])
+                ->latest('last_activity_at')
+                ->latest('created_at')
+                ->get()
+            : collect();
+
+        return [
+            'title' => 'מרכז סופר־אדמין | A11Y Bridge',
+            'user' => $user,
+            'trackingScripts' => $tracking,
+            'adminUsers' => $users,
+            'adminSites' => $sites,
+            'adminSupportTickets' => $tickets,
+            'supportCategories' => $this->supportCategories(),
+            'supportPriorityLabels' => $this->supportPriorityLabels(),
+            'supportStatusLabels' => $this->supportStatusLabels(),
+            'supportAvailable' => $supportAvailable,
+            'adminSummary' => [
+                'users' => $users->count(),
+                'sites' => $sites->count(),
+                'active_sites' => $sites->filter(fn (Site $site) => ($site->license_status ?? 'active') === 'active')->count(),
+                'tickets_open' => $tickets->whereIn('status', ['open', 'pending'])->count(),
+            ],
+        ];
+    }
+
     private function auditSnapshotCacheKey(Site $site): string
     {
         return 'site:' . $site->id . ':audit_snapshot_fallback';
@@ -542,6 +660,11 @@ class DashboardController extends Controller
         }
 
         return true;
+    }
+
+    private function ensureSuperAdmin(User $user): void
+    {
+        abort_unless($user->isSuperAdmin(), 403);
     }
 
     private function supportsMultipleSites(): bool

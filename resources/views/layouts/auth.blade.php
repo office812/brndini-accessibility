@@ -9,8 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url('/platform.css') }}">
+    {!! $globalTrackingScripts['google_analytics_head'] ?? '' !!}
+    {!! $globalTrackingScripts['google_tag_manager_head'] ?? '' !!}
+    {!! $globalTrackingScripts['meta_pixel_head'] ?? '' !!}
+    {!! $globalTrackingScripts['custom_head_scripts'] ?? '' !!}
 </head>
 <body class="auth-page">
+    {!! $globalTrackingScripts['google_tag_manager_body'] ?? '' !!}
+    {!! $globalTrackingScripts['custom_body_scripts'] ?? '' !!}
     <div class="top-progress" aria-hidden="true" data-top-progress>
         <span class="top-progress-bar"></span>
     </div>
