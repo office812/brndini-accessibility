@@ -18,36 +18,61 @@
 <body>
     <a class="skip-link" href="#main-content">דלג לתוכן הראשי</a>
 
-    <div class="page-shell">
-        <header class="site-header {{ request()->routeIs('home') ? 'site-header-public' : '' }}">
-            <a class="brand" href="{{ route('home') }}">
-                <span class="brand-mark" aria-hidden="true">AB</span>
-                <span>
-                    <strong>A11Y Bridge</strong>
-                    <small>פלטפורמה לניהול נגישות אתר, widget hosted והטמעה קבועה</small>
-                </span>
-            </a>
+    <div class="page-shell {{ auth()->check() ? 'page-shell-app' : '' }}">
+        @auth
+            <header class="app-header">
+                <div class="app-header-brand">
+                    <a class="app-logo" href="{{ route('dashboard') }}" aria-label="A11Y Bridge dashboard">
+                        <span class="brand-mark brand-mark-app" aria-hidden="true">AB</span>
+                        <span class="app-brand-copy">
+                            <strong>A11Y Bridge</strong>
+                            <small>Accessibility partner workspace</small>
+                        </span>
+                    </a>
+                </div>
 
-            <nav class="site-nav" aria-label="ניווט ראשי">
-                @auth
-                    <a class="{{ request()->routeIs('home') ? 'is-current' : '' }}" href="{{ route('home') }}">עמוד הבית</a>
-                    <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">הגדרות ה־widget</a>
-                    <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">התקנה</a>
-                    <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">ציות ומסגור</a>
-                    <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account') }}">חשבון</a>
+                <div class="app-header-left">
+                    <nav class="app-nav" aria-label="ניווט מערכת">
+                        <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard') }}">My Workspace</a>
+                        <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install') }}">My Services</a>
+                        <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance') }}">My Audits</a>
+                        <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account') }}">Partners</a>
+                    </nav>
+                </div>
+
+                <div class="app-header-right">
+                    <a class="app-header-cta" href="{{ route('dashboard.install') }}">Contact Sales</a>
+                    <a class="app-header-icon" href="{{ route('dashboard.compliance') }}" aria-label="Support center">?</a>
+                    <span class="app-header-icon" aria-hidden="true">•</span>
+                    <div class="app-user-pill">
+                        <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>
+                        <span>{{ $user->name ?? Auth::user()->name }}</span>
+                    </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button class="nav-button" type="submit">התנתקות</button>
+                        <button class="app-logout-button" type="submit">Logout</button>
                     </form>
-                @else
+                </div>
+            </header>
+        @else
+            <header class="site-header {{ request()->routeIs('home') ? 'site-header-public' : '' }}">
+                <a class="brand" href="{{ route('home') }}">
+                    <span class="brand-mark" aria-hidden="true">AB</span>
+                    <span>
+                        <strong>A11Y Bridge</strong>
+                        <small>פלטפורמה לניהול נגישות אתר, widget hosted והטמעה קבועה</small>
+                    </span>
+                </a>
+
+                <nav class="site-nav" aria-label="ניווט ראשי">
                     <a href="#solutions">פתרונות</a>
                     <a href="#platform-flow">איך זה עובד</a>
                     <a href="#articles">משאבים</a>
                     <a href="{{ route('login.show') }}">Login</a>
                     <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">Start free trial</a>
-                @endauth
-            </nav>
-        </header>
+                </nav>
+            </header>
+        @endauth
 
         @if (session('status'))
             <div class="flash flash-success" role="status">{{ session('status') }}</div>
