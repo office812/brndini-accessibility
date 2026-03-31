@@ -20,8 +20,12 @@ jobs:
           CW_HOST: ${{ secrets.CW_HOST }}
         run: |
           mkdir -p ~/.ssh
-          printf "%s" "$CW_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          if printf "%s" "$CW_SSH_PRIVATE_KEY" | grep -q "BEGIN OPENSSH PRIVATE KEY"; then
+            printf "%s" "$CW_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          else
+            printf "%s" "$CW_SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
+          fi
+          chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$CW_HOST" >> ~/.ssh/known_hosts
 
       - name: Deploy on Cloudways
@@ -30,7 +34,7 @@ jobs:
           CW_USER: ${{ secrets.CW_USER }}
           CW_APP_PATH: ${{ secrets.CW_APP_PATH }}
         run: |
-          ssh "$CW_USER@$CW_HOST" <<EOF
+          ssh -i ~/.ssh/id_ed25519 "$CW_USER@$CW_HOST" <<EOF
             set -e
             cd "$CW_APP_PATH"
             git pull origin main
