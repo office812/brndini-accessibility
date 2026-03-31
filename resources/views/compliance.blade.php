@@ -13,7 +13,7 @@
 
             <section class="domain-card domain-hero-card">
                 <div>
-                    <p class="eyebrow">Compliance center</p>
+                    <p class="eyebrow">מרכז ציות</p>
                     <h2>ציון {{ $auditSnapshot['score'] }} · {{ $lastAuditedLabel }}</h2>
                     <p class="panel-intro">{{ $auditSnapshot['summary'] }}</p>
                 </div>
@@ -103,7 +103,7 @@
                         <label class="toggle-row">
                             <input type="hidden" name="alerts[statement]" value="0">
                             <input type="checkbox" name="alerts[statement]" value="1" @checked($alertSettings['statement'])>
-                            <span>התראת statement חסר</span>
+                            <span>התראת הצהרה חסרה</span>
                         </label>
                         <label class="toggle-row">
                             <input type="hidden" name="alerts[audit]" value="0">

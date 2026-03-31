@@ -87,7 +87,7 @@
                         <strong>{{ $widgetPresetLabels[$widget['preset']] ?? $widget['preset'] }}</strong>
                     </div>
                     <div class="domain-info-row">
-                        <span>Layout</span>
+                        <span>מבנה פאנל</span>
                         <strong>{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</strong>
                     </div>
                     <div class="domain-info-row">

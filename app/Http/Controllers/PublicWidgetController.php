@@ -6,6 +6,7 @@ use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 
 class PublicWidgetController extends Controller
 {
@@ -26,6 +27,8 @@ class PublicWidgetController extends Controller
                     'Cache-Control' => 'no-store',
                 ]);
         }
+
+        $site = $this->applyRuntimeOverrides($site);
 
         if (($site->license_status ?? 'active') !== 'active') {
             return response()
@@ -81,8 +84,15 @@ class PublicWidgetController extends Controller
         $pageHost = $this->normalizeHost(parse_url($pageUrl, PHP_URL_HOST) ?: '');
 
         if ($siteHost !== '' && $pageHost !== '' && $siteHost === $pageHost) {
-            Cache::put('site:' . $site->id . ':widget_seen_at', now()->toIso8601String(), now()->addDays(30));
-            Cache::put('site:' . $site->id . ':widget_seen_url', $pageUrl, now()->addDays(30));
+            if ($this->siteColumnsAvailable(['last_seen_at', 'last_seen_url'])) {
+                $site->update([
+                    'last_seen_at' => now(),
+                    'last_seen_url' => $pageUrl,
+                ]);
+            } else {
+                Cache::put('site:' . $site->id . ':widget_seen_at', now()->toIso8601String(), now()->addDays(30));
+                Cache::put('site:' . $site->id . ':widget_seen_url', $pageUrl, now()->addDays(30));
+            }
         }
 
         return response()->json(['ok' => true])->withHeaders([
@@ -100,5 +110,35 @@ class PublicWidgetController extends Controller
         }
 
         return $normalized;
+    }
+
+    private function siteColumnsAvailable(array $columns): bool
+    {
+        foreach ($columns as $column) {
+            if (! Schema::hasColumn('sites', $column)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function applyRuntimeOverrides(Site $site): Site
+    {
+        $overrides = Cache::get('site:' . $site->id . ':runtime_overrides');
+
+        if (! is_array($overrides)) {
+            return $site;
+        }
+
+        $applicable = [];
+
+        foreach ($overrides as $attribute => $value) {
+            if (! Schema::hasColumn('sites', $attribute)) {
+                $applicable[$attribute] = $value;
+            }
+        }
+
+        return $site->applyRuntimeOverrides($applicable);
     }
 }

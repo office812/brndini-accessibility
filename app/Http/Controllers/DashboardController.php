@@ -137,7 +137,13 @@ class DashboardController extends Controller
             return back()->withErrors(['domain' => 'צריך להזין דומיין תקין.'])->withInput();
         }
 
-        $site = $request->user()->sites()->create([
+        if (! $this->supportsMultipleSites() && $request->user()->sites()->exists()) {
+            return back()->withErrors([
+                'site_name' => 'כדי להוסיף אתר נוסף לחשבון צריך קודם להשלים את עדכון המסד בשרת. כרגע הסביבה תומכת באתר אחד בלבד.',
+            ])->withInput();
+        }
+
+        $sitePayload = [
             'site_name' => $validated['site_name'],
             'domain' => $domain,
             'public_key' => SiteSettings::generatePublicKey(),
@@ -148,7 +154,10 @@ class DashboardController extends Controller
             'alert_settings' => SiteSettings::defaultAlertSettings(),
             'service_mode' => 'audit_and_fix',
             'widget_settings' => SiteSettings::defaultWidget(),
-        ]);
+        ];
+
+        $site = $request->user()->sites()->create($this->filterSitePayload($sitePayload));
+        $this->storeRuntimeOverrides($site, $sitePayload);
 
         return redirect()
             ->route('dashboard', ['site' => $site->id])
@@ -171,9 +180,15 @@ class DashboardController extends Controller
         $billing['amount'] = $this->planCatalog()[$validated['billing_plan']]['prices'][$validated['billing_cycle']] ?? $billing['amount'];
         $billing['status'] = ($site->license_status ?? 'active') === 'active' ? 'active' : 'inactive';
 
-        $site->update([
+        $payload = [
             'billing_settings' => SiteSettings::sanitizeBilling($billing, ($site->license_status ?? 'active') === 'active'),
-        ]);
+        ];
+
+        if ($this->siteColumnsAvailable(['billing_settings'])) {
+            $site->update($payload);
+        } else {
+            $this->storeRuntimeOverrides($site, $payload);
+        }
 
         return redirect()
             ->route('dashboard.account', ['site' => $site->id])
@@ -191,19 +206,34 @@ class DashboardController extends Controller
 
         $billing['status'] = 'active';
 
-        $site->update([
+        $licensePayload = [
             'license_status' => 'active',
             'purchase_url' => null,
             'billing_settings' => SiteSettings::sanitizeBilling($billing, true),
             'license_expires_at' => $this->calculateExpiry($billing['cycle']),
-        ]);
+        ];
 
-        $snapshot = $this->generateAuditSnapshot($site->fresh());
+        $persistedLicensePayload = $this->filterSitePayload($licensePayload);
 
-        $site->update([
-            'audit_snapshot' => $snapshot,
-            'last_audited_at' => Carbon::now(),
-        ]);
+        if ($persistedLicensePayload !== []) {
+            $site->update($persistedLicensePayload);
+        }
+
+        $this->storeRuntimeOverrides($site, $licensePayload);
+
+        $site = $this->applySiteRuntimeOverrides($site->fresh());
+
+        $snapshot = $this->generateAuditSnapshot($site);
+
+        if ($this->siteColumnsAvailable(['audit_snapshot', 'last_audited_at'])) {
+            $site->update([
+                'audit_snapshot' => $snapshot,
+                'last_audited_at' => Carbon::now(),
+            ]);
+        } else {
+            Cache::put($this->auditSnapshotCacheKey($site), $snapshot, now()->addDays(30));
+            Cache::put($this->auditTimestampCacheKey($site), Carbon::now()->toIso8601String(), now()->addDays(30));
+        }
 
         return redirect()
             ->route('dashboard.account', ['site' => $site->id])
@@ -332,7 +362,7 @@ class DashboardController extends Controller
             return $site;
         }
 
-        return $user->sites()->create([
+        $sitePayload = [
             'site_name' => $user->name . ' Site',
             'domain' => 'https://example.com',
             'public_key' => SiteSettings::generatePublicKey(),
@@ -343,7 +373,12 @@ class DashboardController extends Controller
             'license_expires_at' => Carbon::now()->addYear(),
             'service_mode' => 'audit_and_fix',
             'widget_settings' => SiteSettings::defaultWidget(),
-        ]);
+        ];
+
+        $site = $user->sites()->create($this->filterSitePayload($sitePayload));
+        $this->storeRuntimeOverrides($site, $sitePayload);
+
+        return $site;
     }
 
     private function resolveSite(Request $request, User $user, ?int $siteId = null): Site
@@ -354,18 +389,21 @@ class DashboardController extends Controller
             $site = $user->sites()->whereKey($selectedId)->first();
 
             if ($site) {
-                return $site;
+                return $this->applySiteRuntimeOverrides($site);
             }
         }
 
-        return $this->ensureSite($user);
+        return $this->applySiteRuntimeOverrides($this->ensureSite($user));
     }
 
     private function buildDashboardData(User $user): array
     {
         $request = request();
-        $site = $this->resolveSite($request, $user);
-        $sites = $user->sites()->orderBy('id')->get();
+        $site = $this->applySiteRuntimeOverrides($this->resolveSite($request, $user));
+        $sites = $user->sites()
+            ->orderBy('id')
+            ->get()
+            ->map(fn (Site $candidate) => $this->applySiteRuntimeOverrides($candidate));
         $cachedAlerts = Cache::get($this->alertSettingsCacheKey($site));
         $cachedAudit = Cache::get($this->auditSnapshotCacheKey($site));
         $cachedAuditTimestamp = Cache::get($this->auditTimestampCacheKey($site));
@@ -506,6 +544,17 @@ class DashboardController extends Controller
         return true;
     }
 
+    private function supportsMultipleSites(): bool
+    {
+        if (! Schema::hasTable('migrations')) {
+            return false;
+        }
+
+        return DB::table('migrations')
+            ->where('migration', '2026_03_31_000005_allow_multiple_sites_per_user')
+            ->exists();
+    }
+
     private function widgetPresetLabels(): array
     {
         return [
@@ -558,6 +607,14 @@ class DashboardController extends Controller
 
     private function installationSignal(Site $site): array
     {
+        if ($this->siteColumnsAvailable(['last_seen_at', 'last_seen_url'])) {
+            return [
+                'installed' => filled($site->last_seen_at),
+                'last_seen_at' => $site->last_seen_at,
+                'page_url' => filled($site->last_seen_url) ? $site->last_seen_url : null,
+            ];
+        }
+
         $lastSeenAt = Cache::get('site:' . $site->id . ':widget_seen_at');
         $pageUrl = Cache::get('site:' . $site->id . ':widget_seen_url');
 
@@ -760,5 +817,59 @@ class DashboardController extends Controller
     private function calculateExpiry(string $cycle): Carbon
     {
         return $cycle === 'monthly' ? Carbon::now()->addMonth() : Carbon::now()->addYear();
+    }
+
+    private function filterSitePayload(array $payload): array
+    {
+        if (! Schema::hasTable('sites')) {
+            return [];
+        }
+
+        return collect($payload)
+            ->filter(fn ($_value, $column) => Schema::hasColumn('sites', $column))
+            ->all();
+    }
+
+    private function runtimeOverridesCacheKey(Site $site): string
+    {
+        return 'site:' . $site->id . ':runtime_overrides';
+    }
+
+    private function storeRuntimeOverrides(Site $site, array $payload): void
+    {
+        $missingColumnPayload = collect($payload)
+            ->filter(fn ($_value, $column) => ! Schema::hasColumn('sites', $column))
+            ->all();
+
+        if ($missingColumnPayload === []) {
+            return;
+        }
+
+        $current = Cache::get($this->runtimeOverridesCacheKey($site), []);
+
+        Cache::put(
+            $this->runtimeOverridesCacheKey($site),
+            array_merge(is_array($current) ? $current : [], $missingColumnPayload),
+            now()->addDays(30)
+        );
+    }
+
+    private function applySiteRuntimeOverrides(Site $site): Site
+    {
+        $overrides = Cache::get($this->runtimeOverridesCacheKey($site), []);
+
+        if (! is_array($overrides) || $overrides === []) {
+            return $site;
+        }
+
+        $applicable = collect($overrides)
+            ->filter(fn ($_value, $column) => ! Schema::hasColumn('sites', $column))
+            ->all();
+
+        if ($applicable === []) {
+            return $site;
+        }
+
+        return $site->applyRuntimeOverrides($applicable);
     }
 }

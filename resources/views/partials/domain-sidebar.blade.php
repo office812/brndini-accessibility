@@ -44,7 +44,7 @@
         </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#audit-report">
             <span>⟡</span>
-            <span>בדיקות audit</span>
+            <span>בדיקות</span>
         </a>
         <a href="{{ route('dashboard.account', ['site' => $site->id]) }}#license-owner">
             <span>◌</span>

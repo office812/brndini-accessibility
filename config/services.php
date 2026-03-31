@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'a11y_bridge' => [
+        'platform_widget_site_key' => env('PLATFORM_WIDGET_SITE_KEY'),
+    ],
+
 ];

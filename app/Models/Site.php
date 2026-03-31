@@ -25,6 +25,8 @@ class Site extends Model
         'alert_settings',
         'license_expires_at',
         'last_audited_at',
+        'last_seen_at',
+        'last_seen_url',
         'service_mode',
         'widget_settings',
     ];
@@ -36,6 +38,7 @@ class Site extends Model
         'alert_settings' => 'array',
         'license_expires_at' => 'datetime',
         'last_audited_at' => 'datetime',
+        'last_seen_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -69,5 +72,26 @@ class Site extends Model
     public function auditConfig(): array
     {
         return SiteSettings::sanitizeAuditSnapshot($this->audit_snapshot ?? []);
+    }
+
+    public function applyRuntimeOverrides(array $overrides): static
+    {
+        foreach ([
+            'license_status',
+            'purchase_url',
+            'billing_settings',
+            'audit_snapshot',
+            'alert_settings',
+            'license_expires_at',
+            'last_audited_at',
+            'last_seen_at',
+            'last_seen_url',
+        ] as $attribute) {
+            if (array_key_exists($attribute, $overrides)) {
+                $this->setAttribute($attribute, $overrides[$attribute]);
+            }
+        }
+
+        return $this;
     }
 }

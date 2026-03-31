@@ -5,7 +5,7 @@
 @section('content')
     <section class="landing-hero" id="top">
         <div class="landing-hero-copy">
-            <p class="eyebrow">ACCESSIBILITY PLATFORM</p>
+            <p class="eyebrow">פלטפורמת נגישות</p>
             <h1>פתרון נגישות אתרים עם widget hosted, ניהול מרכזי והטמעה קבועה.</h1>
             <p class="hero-text hero-text-lead">
                 A11Y Bridge מאפשרת לעסקים, סוכנויות ואתרים גדולים לנהל שכבת נגישות ממקום אחד:
@@ -20,14 +20,14 @@
 
         <div class="hero-product-stage" aria-label="A11Y Bridge platform preview">
             <div class="hero-product-float hero-float-right">
-                <span class="hero-float-label">Hosted setup</span>
+                <span class="hero-float-label">הטמעה מנוהלת</span>
                 <strong>קוד אחד באתר</strong>
                 <p>snippet קבוע עם config דינמי.</p>
             </div>
 
             <div class="hero-product-float hero-float-left">
-                <span class="hero-float-label">Compliance</span>
-                <strong>statement + service mode</strong>
+                <span class="hero-float-label">ציות</span>
+                <strong>הצהרה + מסלול שירות</strong>
                 <p>מסר ברור ושקוף ללקוח.</p>
             </div>
 
@@ -76,8 +76,8 @@
     <section class="trust-bar" aria-label="trust signals">
         <div class="trust-chip">ניהול ווידג׳ט מנוהל</div>
         <div class="trust-chip">הטמעה אחת, ניהול מרחוק</div>
-        <div class="trust-chip">Statement and compliance framing</div>
-        <div class="trust-chip">Built for agencies and growing teams</div>
+        <div class="trust-chip">הצהרה ומסגרת ציות</div>
+        <div class="trust-chip">מותאם לסוכנויות וצוותים גדלים</div>
     </section>
 
     <section class="section-band section-band-plain" id="how-a11y-bridge-works">
