@@ -3350,7 +3350,7 @@ code {
 
     .app-header {
         padding: 12px 0 16px;
-        position: static;
+        position: relative;
         background: transparent;
         backdrop-filter: none;
         margin-bottom: 18px;
