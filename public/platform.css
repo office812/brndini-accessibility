@@ -3235,7 +3235,7 @@ code {
     .header-menu-toggle {
         display: inline-flex;
         position: relative;
-        z-index: 45;
+        z-index: 95;
     }
 
     .site-header,
@@ -3247,31 +3247,41 @@ code {
 
     .site-header-menu,
     .app-header-menu {
-        position: absolute;
-        top: calc(100% + 12px);
-        right: 0;
-        left: 0;
-        z-index: 40;
+        position: fixed;
+        top: 86px;
+        right: 12px;
+        left: 12px;
+        z-index: 90;
         grid-column: 1 / -1;
-        display: none;
-        width: 100%;
-        margin-top: 10px;
-        padding: 14px;
-        border-radius: 24px;
+        display: grid;
+        width: auto;
+        max-height: calc(100dvh - 110px);
+        overflow: auto;
+        margin-top: 0;
+        padding: 16px;
+        border-radius: 26px;
         border: 1px solid rgba(15, 23, 42, 0.08);
-        background: rgba(255, 255, 255, 0.96);
-        box-shadow: 0 28px 70px rgba(15, 23, 42, 0.12);
-        backdrop-filter: blur(18px);
+        background: rgba(255, 255, 255, 0.985);
+        box-shadow: 0 32px 80px rgba(15, 23, 42, 0.18);
+        backdrop-filter: blur(24px);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-8px) scale(0.985);
+        transition:
+            opacity var(--motion-fast) ease,
+            transform var(--motion-fast) ease;
     }
 
     .site-header-menu.is-open,
     .app-header-menu.is-open {
-        display: grid;
-        animation: headerMenuIn var(--motion-base) ease;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
     }
 
     .header-menu-backdrop.is-open {
         display: block;
+        z-index: 80;
     }
 
     .site-nav,
@@ -3360,7 +3370,10 @@ code {
     .site-header-menu {
         padding: 12px;
         border-radius: 22px;
-        top: calc(100% + 10px);
+        top: 78px;
+        right: 10px;
+        left: 10px;
+        max-height: calc(100dvh - 96px);
     }
 
     .hero-copy h1,
