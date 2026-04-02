@@ -99,6 +99,7 @@
                         <a href="{{ route('home') }}#solutions">פתרונות</a>
                         <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
                         <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
+                        <a href="{{ route('products') }}">מוצרים נוספים</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('faq') }}">שאלות נפוצות</a>
                         <a href="{{ route('about') }}">אודות</a>
@@ -167,6 +168,7 @@
                             <a href="{{ route('home') }}#solutions">פתרונות</a>
                             <a href="{{ route('pricing') }}">מחירון</a>
                             <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
+                            <a href="{{ route('products') }}">מוצרים נוספים</a>
                             <a href="{{ route('faq') }}">שאלות נפוצות</a>
                             <a href="{{ route('home') }}#articles">מאמרים</a>
                         </div>
@@ -194,6 +196,7 @@
                         <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
+                        <a href="{{ route('products') }}">מוצרים נוספים</a>
                         <a href="{{ route('faq') }}">שאלות נפוצות</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('legal.terms') }}">תנאי שימוש</a>

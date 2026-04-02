@@ -102,6 +102,10 @@
         </div>
 
         @include('partials.brndini-services-cards')
+
+        <div class="magazine-actions">
+            <a class="ghost-button button-link" href="{{ route('products') }}">להכיר את המוצרים הבאים</a>
+        </div>
     </section>
 
     <section class="cta-banner cta-banner-wide">

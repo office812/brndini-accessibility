@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'home'])->name('home');
 Route::view('/about', 'about')->name('about');
 Route::view('/pricing', 'pricing')->name('pricing');
+Route::view('/products', 'products')->name('products');
 Route::view('/faq', 'faq')->name('faq');
 Route::view('/brndini-services', 'public-services')->name('brndini.services');
 Route::post('/brndini-services/leads', [DashboardController::class, 'storePublicServiceLead'])->name('brndini.services.store');

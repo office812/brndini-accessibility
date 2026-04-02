@@ -362,10 +362,13 @@
             </p>
         </div>
 
+        @include('partials.brndini-future-products')
+
         <div class="magazine-actions">
             <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access']) }}#public-service-form">
                 אני רוצה גישה מוקדמת
             </a>
+            <a class="ghost-button button-link" href="{{ route('products') }}">לכל המוצרים הבאים</a>
             <a class="ghost-button button-link" href="{{ route('brndini.services') }}">לכל שירותי Brndini</a>
         </div>
     </section>
