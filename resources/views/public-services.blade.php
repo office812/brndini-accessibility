@@ -2,6 +2,7 @@
 
 @php($title = 'שירותי Brndini | אחסון, SEO, קמפיינים, תחזוקה ואוטומציות')
 @php($metaDescription = 'שירותי Brndini לעסקים: אחסון, SEO, קמפיינים, תחזוקת אתר, שדרוג אתר קיים, דפי נחיתה ואוטומציות. הווידג׳ט נשאר חינמי, והשירותים זמינים כשצריך צמיחה ותפעול חכם.')
+@php($selectedPublicServiceType = old('service_type', request('service', 'hosting')))
 
 @section('content')
     <section class="about-hero pricing-page-hero">
@@ -60,6 +61,31 @@
         @include('partials.brndini-services-cards')
     </section>
 
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">איך זה עובד בפועל</p>
+            <h2>תהליך פשוט, ברור ומהיר משלב הפנייה ועד התאמה לשירות.</h2>
+        </div>
+
+        <div class="about-process-grid">
+            <article class="process-card-strong">
+                <span class="process-index">01</span>
+                <h3>בוחרים שירות שמתאים לעסק</h3>
+                <p>אחסון, SEO, קמפיינים, תחזוקה, שדרוג אתר, דפי נחיתה או אוטומציות לפי השלב שבו העסק נמצא.</p>
+            </article>
+            <article class="process-card-strong">
+                <span class="process-index">02</span>
+                <h3>משאירים פנייה עסקית מסודרת</h3>
+                <p>שם, אימייל, אתר, מטרה עסקית ודרך חזרה מועדפת. בלי לפתוח טיקט תמיכה ובלי לבלבל עם הווידג׳ט.</p>
+            </article>
+            <article class="process-card-strong">
+                <span class="process-index">03</span>
+                <h3>Brndini ממשיכה משם</h3>
+                <p>הפנייה נכנסת ישירות למרכז הלידים, ומאפשרת לך לנהל מכירה, תיאום וחזרה ללקוח מתוך מערכת אחת.</p>
+            </article>
+        </div>
+    </section>
+
     <section class="section-band section-band-alt" id="public-service-form">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">פנייה עסקית</p>
@@ -98,13 +124,13 @@
 
                     <label for="public_service_type">איזה שירות מעניין אותך?</label>
                     <select id="public_service_type" name="service_type">
-                        <option value="hosting" @selected(old('service_type') === 'hosting')>אחסון וניהול שרת</option>
-                        <option value="seo" @selected(old('service_type') === 'seo')>SEO וקידום אורגני</option>
-                        <option value="campaigns" @selected(old('service_type') === 'campaigns')>קמפיינים ופרסום</option>
-                        <option value="maintenance" @selected(old('service_type') === 'maintenance')>תחזוקת אתר</option>
-                        <option value="website_upgrade" @selected(old('service_type') === 'website_upgrade')>שדרוג אתר קיים</option>
-                        <option value="landing_pages" @selected(old('service_type') === 'landing_pages')>דפי נחיתה</option>
-                        <option value="automations" @selected(old('service_type') === 'automations')>אוטומציות ותהליכים</option>
+                        <option value="hosting" @selected($selectedPublicServiceType === 'hosting')>אחסון וניהול שרת</option>
+                        <option value="seo" @selected($selectedPublicServiceType === 'seo')>SEO וקידום אורגני</option>
+                        <option value="campaigns" @selected($selectedPublicServiceType === 'campaigns')>קמפיינים ופרסום</option>
+                        <option value="maintenance" @selected($selectedPublicServiceType === 'maintenance')>תחזוקת אתר</option>
+                        <option value="website_upgrade" @selected($selectedPublicServiceType === 'website_upgrade')>שדרוג אתר קיים</option>
+                        <option value="landing_pages" @selected($selectedPublicServiceType === 'landing_pages')>דפי נחיתה</option>
+                        <option value="automations" @selected($selectedPublicServiceType === 'automations')>אוטומציות ותהליכים</option>
                     </select>
 
                     <label for="public_service_goal">מה אתה רוצה להשיג?</label>
@@ -146,6 +172,24 @@
                         <div class="domain-info-row">
                             <span>שדרוג אתר</span>
                             <strong>כשהאתר הנוכחי מרגיש כבד, מיושן או לא ממיר</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="domain-card">
+                    <h2>מה קורה אחרי ששולחים?</h2>
+                    <div class="domain-info-list">
+                        <div class="domain-info-row">
+                            <span>קליטת הפנייה</span>
+                            <strong>נכנסת ישירות למרכז הלידים</strong>
+                        </div>
+                        <div class="domain-info-row">
+                            <span>חזרה אליך</span>
+                            <strong>לפי ערוץ הקשר שבחרת</strong>
+                        </div>
+                        <div class="domain-info-row">
+                            <span>מטרת התהליך</span>
+                            <strong>להבין התאמה עסקית, לא תמיכה טכנית</strong>
                         </div>
                     </div>
                 </section>

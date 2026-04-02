@@ -37,7 +37,7 @@
 @endphp
 
 <div class="brndini-service-grid">
-    @foreach ($serviceCards as $serviceCard)
+    @foreach ($serviceCards as $serviceKey => $serviceCard)
         <article class="brndini-service-card">
             <span class="brndini-service-icon" aria-hidden="true">{{ str($serviceCard['title'])->substr(0, 1) }}</span>
             <h3>{{ $serviceCard['title'] }}</h3>
@@ -47,6 +47,9 @@
                     <span class="preview-pill">{{ $highlight }}</span>
                 @endforeach
             </div>
+            <a class="secondary-button button-link" href="{{ auth()->check() ? route('dashboard.services', array_filter(['site' => request('site'), 'service' => $serviceKey])) : route('brndini.services', ['service' => $serviceKey]) . '#public-service-form' }}">
+                רוצה פרטים
+            </a>
         </article>
     @endforeach
 </div>
