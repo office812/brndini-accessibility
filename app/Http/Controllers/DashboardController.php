@@ -421,8 +421,10 @@ class DashboardController extends Controller
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
-            'contact_phone' => ['nullable', 'string', 'max:40'],
+            'contact_phone' => ['nullable', 'required_if:preferred_contact,phone,whatsapp', 'string', 'max:40'],
             'entry_point' => ['nullable', Rule::in(['dashboard-services', 'dashboard-recommendations'])],
+        ], [
+            'contact_phone.required_if' => 'אם בחרת טלפון או ווטסאפ, צריך להוסיף מספר לחזרה.',
         ]);
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
@@ -443,8 +445,10 @@ class DashboardController extends Controller
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
-            'contact_phone' => ['nullable', 'string', 'max:40'],
+            'contact_phone' => ['nullable', 'required_if:preferred_contact,phone,whatsapp', 'string', 'max:40'],
             'entry_point' => ['nullable', Rule::in(['public-services', 'home-ecosystem', 'products-page', 'services-cards'])],
+        ], [
+            'contact_phone.required_if' => 'אם בחרת טלפון או ווטסאפ, צריך להוסיף מספר לחזרה.',
         ]);
 
         ServiceLead::storePublicRuntime($validated);

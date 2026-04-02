@@ -114,6 +114,7 @@
 
                                     <label for="service_contact_phone">טלפון / ווטסאפ לחזרה</label>
                                     <input id="service_contact_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
+                                    <span class="meta-note">אם נוח לך שיחזרו בטלפון או בווטסאפ, צריך להשאיר כאן מספר זמין.</span>
 
                                     <div class="support-form-actions">
                                         <button class="primary-button" type="submit">שלח פנייה לשירות</button>
@@ -219,6 +220,8 @@
 
                                             @if (!empty($lead->contact_phone))
                                                 <p class="support-ticket-meta">טלפון לחזרה: {{ $lead->contact_phone }}</p>
+                                            @elseif (!empty($lead->missing_preferred_contact_detail))
+                                                <p class="support-ticket-meta">נבחר ערוץ חזרה טלפוני, אבל עדיין חסר מספר.</p>
                                             @endif
 
                                             <p class="support-ticket-message">{{ $lead->message }}</p>

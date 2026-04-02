@@ -835,6 +835,8 @@
                                                 </p>
                                                 @if (!empty($lead->contact_phone))
                                                     <p class="support-ticket-meta">טלפון לחזרה: {{ $lead->contact_phone }}</p>
+                                                @elseif (!empty($lead->missing_preferred_contact_detail))
+                                                    <p class="support-ticket-meta">נבחר ערוץ חזרה טלפוני, אבל עדיין חסר מספר.</p>
                                                 @endif
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">{{ $lead->intent_label }}</span>

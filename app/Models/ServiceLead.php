@@ -148,6 +148,7 @@ class ServiceLead extends Model
             : null;
         $preferredContact = $lead['preferred_contact'] ?? 'email';
         $entryPoint = (string) ($lead['entry_point'] ?? ($source === 'public' ? 'public-services' : 'dashboard-services'));
+        $missingPreferredContactDetail = in_array($preferredContact, ['phone', 'whatsapp'], true) && ! filled($contactPhone);
 
         $freshnessKey = 'fresh';
         $freshnessLabel = 'חדש';
@@ -199,6 +200,7 @@ class ServiceLead extends Model
             'follow_up_label' => $followUpStatus['label'],
             'follow_up_tone' => $followUpStatus['tone'],
             'preferred_contact_key' => $preferredContact,
+            'missing_preferred_contact_detail' => $missingPreferredContactDetail,
             'next_step_label' => static::nextStepLabel(
                 $lead['status'] ?? 'new',
                 $preferredContact,

@@ -186,6 +186,7 @@
 
                     <label for="public_service_phone">טלפון / ווטסאפ לחזרה</label>
                     <input id="public_service_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
+                    <span class="meta-note">אם בחרת טלפון או ווטסאפ, חשוב להוסיף כאן מספר זמין.</span>
 
                     <div class="support-form-actions">
                         <button class="primary-button" type="submit">שלח פנייה עסקית</button>
