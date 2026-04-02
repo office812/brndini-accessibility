@@ -17,6 +17,7 @@ class ServiceLead extends Model
         'service_type',
         'contact_name',
         'contact_email',
+        'contact_phone',
         'goal',
         'message',
         'preferred_contact',
@@ -67,6 +68,7 @@ class ServiceLead extends Model
             'service_type' => $validated['service_type'],
             'contact_name' => $user->name,
             'contact_email' => $user->email,
+            'contact_phone' => static::normalizePhone($validated['contact_phone'] ?? null),
             'goal' => trim((string) $validated['goal']),
             'message' => trim((string) $validated['message']),
             'preferred_contact' => $validated['preferred_contact'],
@@ -99,6 +101,7 @@ class ServiceLead extends Model
             'user_email' => trim((string) $validated['email']),
             'contact_name' => trim((string) $validated['name']),
             'contact_email' => trim((string) $validated['email']),
+            'contact_phone' => static::normalizePhone($validated['contact_phone'] ?? null),
             'site_id' => null,
             'site_name' => $website === '' ? 'ליד ציבורי' : $website,
             'site_domain' => $website,
@@ -128,10 +131,19 @@ class ServiceLead extends Model
         $contactName = $lead['contact_name'] ?? $lead['user_name'] ?? null;
         $contactEmail = $lead['contact_email'] ?? $lead['user_email'] ?? null;
         $contactEmail = filled($contactEmail) ? trim((string) $contactEmail) : null;
+        $contactPhone = static::normalizePhone($lead['contact_phone'] ?? null);
         $siteName = $lead['site_name'] ?? null;
         $subject = 'פנייה לגבי ' . ($siteName ?: 'שירותי Brndini');
         $mailTo = $contactEmail
             ? 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($subject)
+            : null;
+        $phoneDigits = $contactPhone ? preg_replace('/\D+/', '', $contactPhone) : null;
+        $whatsAppDigits = $phoneDigits
+            ? (str_starts_with($phoneDigits, '0') ? '972' . substr($phoneDigits, 1) : $phoneDigits)
+            : null;
+        $phoneHref = $phoneDigits ? 'tel:' . $phoneDigits : null;
+        $whatsappHref = $whatsAppDigits
+            ? 'https://wa.me/' . $whatsAppDigits . '?text=' . rawurlencode('היי, זאת Brndini לגבי הפנייה ' . ($lead['reference_code'] ?? ''))
             : null;
         $preferredContact = $lead['preferred_contact'] ?? 'email';
         $entryPoint = (string) ($lead['entry_point'] ?? ($source === 'public' ? 'public-services' : 'dashboard-services'));
@@ -169,9 +181,12 @@ class ServiceLead extends Model
             'user_email' => $lead['user_email'] ?? $contactEmail,
             'contact_name' => $contactName,
             'contact_email' => $contactEmail,
+            'contact_phone' => $contactPhone,
             'site_name' => $siteName,
             'site_domain' => $lead['site_domain'] ?? null,
             'mail_to' => $mailTo,
+            'phone_href' => $phoneHref,
+            'whatsapp_href' => $whatsappHref,
             'freshness_key' => $freshnessKey,
             'freshness_label' => $freshnessLabel,
             'freshness_tone' => $freshnessTone,
@@ -252,6 +267,13 @@ class ServiceLead extends Model
     public static function entryLabel(string $entryPoint): string
     {
         return static::entryOptions()[$entryPoint] ?? 'כניסה כללית';
+    }
+
+    protected static function normalizePhone(mixed $value): ?string
+    {
+        $phone = trim((string) ($value ?? ''));
+
+        return $phone === '' ? null : $phone;
     }
 
     public static function updateRuntime(string $leadKey, User $admin, array $validated): void

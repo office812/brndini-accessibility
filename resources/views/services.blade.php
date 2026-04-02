@@ -112,6 +112,9 @@
                                         @endforeach
                                     </select>
 
+                                    <label for="service_contact_phone">טלפון / ווטסאפ לחזרה</label>
+                                    <input id="service_contact_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
+
                                     <div class="support-form-actions">
                                         <button class="primary-button" type="submit">שלח פנייה לשירות</button>
                                         <span class="meta-note">פניות כאן מועברות לאזור הלידים של Brndini, בנפרד מהתמיכה הטכנית של המערכת.</span>
@@ -213,6 +216,10 @@
                                             <p class="support-ticket-meta">
                                                 {{ $lead->goal }} · {{ $lead->last_activity_label }}
                                             </p>
+
+                                            @if (!empty($lead->contact_phone))
+                                                <p class="support-ticket-meta">טלפון לחזרה: {{ $lead->contact_phone }}</p>
+                                            @endif
 
                                             <p class="support-ticket-message">{{ $lead->message }}</p>
                                         </article>

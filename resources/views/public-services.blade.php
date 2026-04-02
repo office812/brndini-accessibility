@@ -184,6 +184,9 @@
                         <option value="whatsapp" @selected(old('preferred_contact') === 'whatsapp')>ווטסאפ</option>
                     </select>
 
+                    <label for="public_service_phone">טלפון / ווטסאפ לחזרה</label>
+                    <input id="public_service_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
+
                     <div class="support-form-actions">
                         <button class="primary-button" type="submit">שלח פנייה עסקית</button>
                         <span class="meta-note">Brndini תחזור רק בנושא השירות שביקשת. זה לא ערוץ תמיכה טכנית של המערכת.</span>

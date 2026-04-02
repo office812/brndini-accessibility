@@ -802,7 +802,7 @@
                                             <article
                                                 class="support-ticket-card"
                                                 data-filter-item
-                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
+                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->contact_phone ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
                                                 data-filter-service="{{ $lead->service_type }}"
                                                 data-filter-source="{{ $lead->source ?? 'dashboard' }}"
                                                 data-filter-entry="{{ $lead->entry_point ?? '' }}"
@@ -828,6 +828,9 @@
                                                 <p class="support-ticket-meta">
                                                     {{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->user_email ?? 'ללא אימייל' }} · {{ $lead->site_name ?? 'ללא אתר' }}
                                                 </p>
+                                                @if (!empty($lead->contact_phone))
+                                                    <p class="support-ticket-meta">טלפון לחזרה: {{ $lead->contact_phone }}</p>
+                                                @endif
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">{{ $lead->intent_label }}</span>
                                                     <span class="meta-note">הפעולה הבאה: {{ $lead->next_step_label }}</span>
@@ -835,6 +838,12 @@
                                                 <div class="lead-quick-actions">
                                                     @if (!empty($lead->mail_to))
                                                         <a class="secondary-button" href="{{ $lead->mail_to }}">שלח מייל</a>
+                                                    @endif
+                                                    @if (!empty($lead->whatsapp_href))
+                                                        <a class="secondary-button" href="{{ $lead->whatsapp_href }}" target="_blank" rel="noreferrer">ווטסאפ</a>
+                                                    @endif
+                                                    @if (!empty($lead->phone_href))
+                                                        <a class="secondary-button" href="{{ $lead->phone_href }}">התקשר</a>
                                                     @endif
                                                     @if (filled($lead->site_domain))
                                                         <a class="secondary-button" href="{{ Str::startsWith($lead->site_domain, ['http://', 'https://']) ? $lead->site_domain : 'https://' . ltrim($lead->site_domain, '/') }}" target="_blank" rel="noreferrer">פתח אתר</a>
