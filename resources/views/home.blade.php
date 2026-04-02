@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @php($title = 'כלי חינמי להטמעת וידג׳ט נגישות | דשבורד, הטמעה והצהרה בסיסית | A11Y Bridge')
+@php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
     <section class="landing-hero" id="top">
@@ -365,11 +366,11 @@
         @include('partials.brndini-future-products')
 
         <div class="magazine-actions">
-            <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access', 'entry' => 'home-ecosystem']) }}#public-service-form">
+            <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access', 'entry' => 'home-ecosystem'])) }}#public-service-form">
                 אני רוצה גישה מוקדמת
             </a>
-            <a class="ghost-button button-link" href="{{ route('products') }}">לכל המוצרים הבאים</a>
-            <a class="ghost-button button-link" href="{{ route('brndini.services') }}">לכל שירותי Brndini</a>
+            <a class="ghost-button button-link" href="{{ route('products', $marketingParams) }}">לכל המוצרים הבאים</a>
+            <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לכל שירותי Brndini</a>
         </div>
     </section>
 

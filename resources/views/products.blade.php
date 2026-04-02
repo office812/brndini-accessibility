@@ -2,6 +2,7 @@
 
 @php($title = 'המוצרים הבאים של Brndini | גישה מוקדמת לכלים עתידיים')
 @php($metaDescription = 'Brndini בונה עוד מוצרים וכלים דיגיטליים לעסקים: SEO, לידים, אוטומציות ובקרת אתר. אפשר להצטרף עכשיו לרשימת הגישה המוקדמת.')
+@php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
     <section class="about-hero pricing-page-hero">
@@ -14,8 +15,8 @@
                 אפשר להיכנס עכשיו לרשימת המתעניינים.
             </p>
             <div class="hero-action-row">
-                <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access', 'entry' => 'products-page']) }}#public-service-form">אני רוצה גישה מוקדמת</a>
-                <a class="ghost-button button-link" href="{{ route('brndini.services') }}">לשירותי Brndini</a>
+                <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access', 'entry' => 'products-page'])) }}#public-service-form">אני רוצה גישה מוקדמת</a>
+                <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לשירותי Brndini</a>
             </div>
         </div>
 
@@ -83,7 +84,7 @@
         </div>
 
         <div class="brndini-service-actions">
-            <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access', 'entry' => 'products-page']) }}#public-service-form">
+            <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access', 'entry' => 'products-page'])) }}#public-service-form">
                 להצטרף לרשימת הגישה המוקדמת
             </a>
         </div>

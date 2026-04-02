@@ -807,7 +807,7 @@
                                             <article
                                                 class="support-ticket-card"
                                                 data-filter-item
-                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->contact_phone ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
+                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->contact_phone ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->utm_source ?? '') . ' ' . ($lead->utm_medium ?? '') . ' ' . ($lead->utm_campaign ?? '') . ' ' . ($lead->referrer_host ?? '')) }}"
                                                 data-filter-service="{{ $lead->service_type }}"
                                                 data-filter-source="{{ $lead->source ?? 'dashboard' }}"
                                                 data-filter-entry="{{ $lead->entry_point ?? '' }}"
@@ -842,6 +842,16 @@
                                                     <span class="status-pill is-neutral">{{ $lead->intent_label }}</span>
                                                     <span class="meta-note">הפעולה הבאה: {{ $lead->next_step_label }}</span>
                                                 </div>
+                                                @if (!empty($lead->marketing_label) || !empty($lead->referrer_host))
+                                                    <div class="lead-intel-row">
+                                                        @if (!empty($lead->marketing_label))
+                                                            <span class="status-pill is-neutral">UTM: {{ $lead->marketing_label }}</span>
+                                                        @endif
+                                                        @if (!empty($lead->referrer_host))
+                                                            <span class="meta-note">מפנה: {{ $lead->referrer_host }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill {{ $lead->follow_up_tone === 'good' ? 'is-good' : ($lead->follow_up_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
                                                         {{ $lead->follow_up_label }}
@@ -914,6 +924,23 @@
                                             </div>
                                         @endforeach
                                         @foreach ($serviceLeadEntrySummary->take(4) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">איכות שיווקית</p>
+                                            <h2>כמה לידים באמת מדידים</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach ($serviceLeadMarketingSummary as $item)
                                             <div class="domain-info-row">
                                                 <span>{{ $item['label'] }}</span>
                                                 <strong>{{ $item['count'] }}</strong>

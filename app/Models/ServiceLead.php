@@ -24,6 +24,10 @@ class ServiceLead extends Model
         'status',
         'source',
         'entry_point',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'referrer_url',
         'internal_note',
         'follow_up_at',
         'last_activity_at',
@@ -76,6 +80,10 @@ class ServiceLead extends Model
             'status' => 'new',
             'source' => 'dashboard',
             'entry_point' => $validated['entry_point'] ?? 'dashboard-services',
+            'utm_source' => null,
+            'utm_medium' => null,
+            'utm_campaign' => null,
+            'referrer_url' => null,
             'internal_note' => '',
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
@@ -114,6 +122,10 @@ class ServiceLead extends Model
             'status' => 'new',
             'source' => 'public',
             'entry_point' => $validated['entry_point'] ?? 'public-services',
+            'utm_source' => static::normalizeText($validated['utm_source'] ?? null),
+            'utm_medium' => static::normalizeText($validated['utm_medium'] ?? null),
+            'utm_campaign' => static::normalizeText($validated['utm_campaign'] ?? null),
+            'referrer_url' => static::normalizeUrl($validated['referrer_url'] ?? null),
             'internal_note' => '',
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
@@ -149,6 +161,11 @@ class ServiceLead extends Model
         $preferredContact = $lead['preferred_contact'] ?? 'email';
         $entryPoint = (string) ($lead['entry_point'] ?? ($source === 'public' ? 'public-services' : 'dashboard-services'));
         $missingPreferredContactDetail = in_array($preferredContact, ['phone', 'whatsapp'], true) && ! filled($contactPhone);
+        $utmSource = static::normalizeText($lead['utm_source'] ?? null);
+        $utmMedium = static::normalizeText($lead['utm_medium'] ?? null);
+        $utmCampaign = static::normalizeText($lead['utm_campaign'] ?? null);
+        $referrerUrl = static::normalizeUrl($lead['referrer_url'] ?? null);
+        $referrerHost = $referrerUrl ? (parse_url($referrerUrl, PHP_URL_HOST) ?: null) : null;
 
         $freshnessKey = 'fresh';
         $freshnessLabel = 'חדש';
@@ -183,6 +200,12 @@ class ServiceLead extends Model
             'source_label' => static::sourceLabel($source, $entryPoint),
             'entry_point' => $entryPoint,
             'entry_label' => static::entryLabel($entryPoint),
+            'utm_source' => $utmSource,
+            'utm_medium' => $utmMedium,
+            'utm_campaign' => $utmCampaign,
+            'referrer_url' => $referrerUrl,
+            'referrer_host' => $referrerHost,
+            'marketing_label' => static::marketingLabel($utmSource, $utmMedium, $utmCampaign),
             'user_name' => $lead['user_name'] ?? $contactName,
             'user_email' => $lead['user_email'] ?? $contactEmail,
             'contact_name' => $contactName,
@@ -279,11 +302,44 @@ class ServiceLead extends Model
         return static::entryOptions()[$entryPoint] ?? 'כניסה כללית';
     }
 
+    public static function marketingLabel(?string $utmSource, ?string $utmMedium, ?string $utmCampaign): ?string
+    {
+        $parts = array_values(array_filter([$utmSource, $utmMedium, $utmCampaign]));
+
+        if ($parts === []) {
+            return null;
+        }
+
+        return implode(' / ', $parts);
+    }
+
     protected static function normalizePhone(mixed $value): ?string
     {
         $phone = trim((string) ($value ?? ''));
 
         return $phone === '' ? null : $phone;
+    }
+
+    protected static function normalizeText(mixed $value): ?string
+    {
+        $text = trim((string) ($value ?? ''));
+
+        return $text === '' ? null : $text;
+    }
+
+    protected static function normalizeUrl(mixed $value): ?string
+    {
+        $url = trim((string) ($value ?? ''));
+
+        if ($url === '') {
+            return null;
+        }
+
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+            return null;
+        }
+
+        return $url;
     }
 
     protected static function followUpMeta(?Carbon $followUpAt): array

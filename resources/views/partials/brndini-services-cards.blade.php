@@ -1,4 +1,10 @@
 @php
+    $marketingParams = array_filter(request()->only([
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'referrer_url',
+    ]));
     $serviceCards = [
         [
             'title' => 'אחסון וניהול שרת',
@@ -39,7 +45,9 @@
         ],
     ];
 
-    $brndiniServiceCtaHref = auth()->check() ? route('dashboard.services') : route('brndini.services') . '#public-service-form';
+    $brndiniServiceCtaHref = auth()->check()
+        ? route('dashboard.services')
+        : route('brndini.services', $marketingParams) . '#public-service-form';
     $brndiniServiceCtaLabel = auth()->check() ? 'לשירותי Brndini' : 'להשארת פנייה עסקית';
 @endphp
 
@@ -57,7 +65,7 @@
                     <span class="preview-pill">{{ $highlight }}</span>
                 @endforeach
             </div>
-            <a class="secondary-button button-link" href="{{ auth()->check() ? route('dashboard.services', array_filter(['site' => request('site'), 'service' => $serviceKey, 'entry' => 'dashboard-recommendations'])) : route('brndini.services', ['service' => $serviceKey, 'entry' => 'services-cards']) . '#public-service-form' }}">
+            <a class="secondary-button button-link" href="{{ auth()->check() ? route('dashboard.services', array_filter(['site' => request('site'), 'service' => $serviceKey, 'entry' => 'dashboard-recommendations'])) : route('brndini.services', array_merge($marketingParams, ['service' => $serviceKey, 'entry' => 'services-cards'])) . '#public-service-form' }}">
                 {{ $serviceCard['cta'] ?? 'רוצה פרטים' }}
             </a>
         </article>
@@ -66,5 +74,5 @@
 
 <div class="brndini-service-actions">
     <a class="primary-button button-link" href="{{ $brndiniServiceCtaHref }}">{{ $brndiniServiceCtaLabel }}</a>
-    <a class="ghost-button button-link" href="{{ route('brndini.services') }}">לכל שירותי Brndini</a>
+    <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לכל שירותי Brndini</a>
 </div>

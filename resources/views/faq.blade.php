@@ -2,6 +2,7 @@
 
 @php($title = 'שאלות נפוצות | A11Y Bridge')
 @php($metaDescription = 'שאלות נפוצות על A11Y Bridge: מה כולל הכלי החינמי, איך עובדת ההטמעה, מה זה לא כולל, ואיך Brndini משתלבת עם שירותים עסקיים נוספים.')
+@php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
     <section class="about-hero pricing-page-hero">
@@ -14,7 +15,7 @@
             </p>
             <div class="hero-action-row">
                 <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
-                <a class="ghost-button button-link" href="{{ route('brndini.services') }}">לשירותי Brndini</a>
+                <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לשירותי Brndini</a>
             </div>
         </div>
 

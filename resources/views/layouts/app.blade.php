@@ -22,6 +22,7 @@
 <body>
     {!! $globalTrackingScripts['google_tag_manager_body'] ?? '' !!}
     {!! $globalTrackingScripts['custom_body_scripts'] ?? '' !!}
+    @php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
     <div class="top-progress" aria-hidden="true" data-top-progress>
         <span class="top-progress-bar"></span>
     </div>
@@ -98,8 +99,8 @@
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="{{ route('home') }}#solutions">פתרונות</a>
                         <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
-                        <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
-                        <a href="{{ route('products') }}">מוצרים נוספים</a>
+                        <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
+                        <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('faq') }}">שאלות נפוצות</a>
                         <a href="{{ route('about') }}">אודות</a>
@@ -167,8 +168,8 @@
                             <h3>המוצר</h3>
                             <a href="{{ route('home') }}#solutions">פתרונות</a>
                             <a href="{{ route('pricing') }}">מחירון</a>
-                            <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
-                            <a href="{{ route('products') }}">מוצרים נוספים</a>
+                            <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
+                            <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                             <a href="{{ route('faq') }}">שאלות נפוצות</a>
                             <a href="{{ route('home') }}#articles">מאמרים</a>
                         </div>
@@ -195,8 +196,8 @@
                     <div class="footer-inline-links">
                         <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
-                        <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
-                        <a href="{{ route('products') }}">מוצרים נוספים</a>
+                        <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
+                        <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                         <a href="{{ route('faq') }}">שאלות נפוצות</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('legal.terms') }}">תנאי שימוש</a>

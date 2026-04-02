@@ -447,6 +447,10 @@ class DashboardController extends Controller
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
             'contact_phone' => ['nullable', 'required_if:preferred_contact,phone,whatsapp', 'string', 'max:40'],
             'entry_point' => ['nullable', Rule::in(['public-services', 'home-ecosystem', 'products-page', 'services-cards'])],
+            'utm_source' => ['nullable', 'string', 'max:120'],
+            'utm_medium' => ['nullable', 'string', 'max:120'],
+            'utm_campaign' => ['nullable', 'string', 'max:180'],
+            'referrer_url' => ['nullable', 'url', 'max:500'],
         ], [
             'contact_phone.required_if' => 'אם בחרת טלפון או ווטסאפ, צריך להוסיף מספר לחזרה.',
         ]);
@@ -812,6 +816,23 @@ class DashboardController extends Controller
             ->filter(fn (array $item) => $item['count'] > 0)
             ->sortByDesc('count')
             ->values();
+        $serviceLeadMarketingSummary = collect([
+            [
+                'key' => 'attributed',
+                'label' => 'עם UTM',
+                'count' => $serviceLeads->filter(fn ($lead) => filled($lead->marketing_label ?? null))->count(),
+            ],
+            [
+                'key' => 'campaigns',
+                'label' => 'עם קמפיין',
+                'count' => $serviceLeads->filter(fn ($lead) => filled($lead->utm_campaign ?? null))->count(),
+            ],
+            [
+                'key' => 'referrers',
+                'label' => 'עם אתר מפנה',
+                'count' => $serviceLeads->filter(fn ($lead) => filled($lead->referrer_host ?? null))->count(),
+            ],
+        ])->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -832,6 +853,7 @@ class DashboardController extends Controller
             'adminServiceLeads' => $serviceLeads,
             'serviceLeadSourceSummary' => $serviceLeadSourceSummary,
             'serviceLeadEntrySummary' => $serviceLeadEntrySummary,
+            'serviceLeadMarketingSummary' => $serviceLeadMarketingSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),

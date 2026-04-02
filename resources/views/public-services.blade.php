@@ -3,6 +3,7 @@
 @php($title = 'שירותי Brndini | אחסון, SEO, קמפיינים, תחזוקה ואוטומציות')
 @php($metaDescription = 'שירותי Brndini לעסקים: אחסון, SEO, קמפיינים, תחזוקת אתר, שדרוג אתר קיים, דפי נחיתה ואוטומציות. הווידג׳ט נשאר חינמי, והשירותים זמינים כשצריך צמיחה ותפעול חכם.')
 @php($selectedPublicServiceType = old('service_type', request('service', 'hosting')))
+@php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
     <section class="about-hero pricing-page-hero">
@@ -90,7 +91,7 @@
         </div>
 
         <div class="brndini-service-actions">
-            <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access']) }}#public-service-form">
+            <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access'])) }}#public-service-form">
                 אני רוצה גישה מוקדמת
             </a>
         </div>
@@ -170,6 +171,10 @@
                     </select>
 
                     <input type="hidden" name="entry_point" value="{{ old('entry_point', request('entry', 'public-services')) }}">
+                    <input type="hidden" name="utm_source" value="{{ old('utm_source', request('utm_source')) }}">
+                    <input type="hidden" name="utm_medium" value="{{ old('utm_medium', request('utm_medium')) }}">
+                    <input type="hidden" name="utm_campaign" value="{{ old('utm_campaign', request('utm_campaign')) }}">
+                    <input type="hidden" name="referrer_url" value="{{ old('referrer_url', request('referrer_url', request()->headers->get('referer'))) }}">
 
                     <label for="public_service_goal">מה אתה רוצה להשיג?</label>
                     <input id="public_service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להגדיל לידים, להעביר לאחסון יציב">
