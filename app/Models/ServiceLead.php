@@ -22,6 +22,7 @@ class ServiceLead extends Model
         'preferred_contact',
         'status',
         'source',
+        'entry_point',
         'internal_note',
         'last_activity_at',
     ];
@@ -71,6 +72,7 @@ class ServiceLead extends Model
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
             'source' => 'dashboard',
+            'entry_point' => $validated['entry_point'] ?? 'dashboard-services',
             'internal_note' => '',
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
@@ -107,6 +109,7 @@ class ServiceLead extends Model
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
             'source' => 'public',
+            'entry_point' => $validated['entry_point'] ?? 'public-services',
             'internal_note' => '',
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
@@ -131,6 +134,7 @@ class ServiceLead extends Model
             ? 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($subject)
             : null;
         $preferredContact = $lead['preferred_contact'] ?? 'email';
+        $entryPoint = (string) ($lead['entry_point'] ?? ($source === 'public' ? 'public-services' : 'dashboard-services'));
 
         $freshnessKey = 'fresh';
         $freshnessLabel = 'חדש';
@@ -158,7 +162,9 @@ class ServiceLead extends Model
             'status' => $lead['status'] ?? 'new',
             'internal_note' => $lead['internal_note'] ?? '',
             'source' => $source,
-            'source_label' => $source === 'public' ? 'פנייה מהאתר הציבורי' : 'פנייה מתוך הדשבורד',
+            'source_label' => static::sourceLabel($source, $entryPoint),
+            'entry_point' => $entryPoint,
+            'entry_label' => static::entryLabel($entryPoint),
             'user_name' => $lead['user_name'] ?? $contactName,
             'user_email' => $lead['user_email'] ?? $contactEmail,
             'contact_name' => $contactName,
@@ -207,6 +213,45 @@ class ServiceLead extends Model
             'whatsapp' => 'לחזור בווטסאפ',
             default => $serviceType === 'ecosystem_access' ? 'לשלוח עדכון גישה מוקדמת' : 'לשלוח מייל היכרות',
         };
+    }
+
+    public static function sourceOptions(): array
+    {
+        return [
+            'public' => 'האתר הציבורי',
+            'dashboard' => 'הדשבורד',
+        ];
+    }
+
+    public static function entryOptions(): array
+    {
+        return [
+            'dashboard-services' => 'שירותים בדשבורד',
+            'dashboard-recommendations' => 'המלצות בדשבורד',
+            'home-ecosystem' => 'אקו־סיסטם בעמוד הבית',
+            'products-page' => 'עמוד המוצרים',
+            'services-cards' => 'כרטיסי שירותים',
+            'public-services' => 'טופס שירותים ציבורי',
+        ];
+    }
+
+    public static function sourceLabel(string $source, string $entryPoint): string
+    {
+        if ($source === 'dashboard') {
+            return 'פנייה מתוך הדשבורד';
+        }
+
+        return match ($entryPoint) {
+            'home-ecosystem' => 'פנייה מעמוד הבית',
+            'products-page' => 'פנייה מעמוד המוצרים',
+            'services-cards' => 'פנייה מכרטיסי השירותים',
+            default => 'פנייה מהאתר הציבורי',
+        };
+    }
+
+    public static function entryLabel(string $entryPoint): string
+    {
+        return static::entryOptions()[$entryPoint] ?? 'כניסה כללית';
     }
 
     public static function updateRuntime(string $leadKey, User $admin, array $validated): void

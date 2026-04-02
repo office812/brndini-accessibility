@@ -14,7 +14,7 @@
                 אפשר להיכנס עכשיו לרשימת המתעניינים.
             </p>
             <div class="hero-action-row">
-                <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access']) }}#public-service-form">אני רוצה גישה מוקדמת</a>
+                <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access', 'entry' => 'products-page']) }}#public-service-form">אני רוצה גישה מוקדמת</a>
                 <a class="ghost-button button-link" href="{{ route('brndini.services') }}">לשירותי Brndini</a>
             </div>
         </div>
@@ -83,7 +83,7 @@
         </div>
 
         <div class="brndini-service-actions">
-            <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access']) }}#public-service-form">
+            <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access', 'entry' => 'products-page']) }}#public-service-form">
                 להצטרף לרשימת הגישה המוקדמת
             </a>
         </div>

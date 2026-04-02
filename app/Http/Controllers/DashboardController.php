@@ -421,6 +421,7 @@ class DashboardController extends Controller
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
+            'entry_point' => ['nullable', Rule::in(['dashboard-services', 'dashboard-recommendations'])],
         ]);
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
@@ -441,6 +442,7 @@ class DashboardController extends Controller
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
+            'entry_point' => ['nullable', Rule::in(['public-services', 'home-ecosystem', 'products-page', 'services-cards'])],
         ]);
 
         ServiceLead::storePublicRuntime($validated);
@@ -787,6 +789,22 @@ class DashboardController extends Controller
             ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
             ->sortByDesc('sort_timestamp')
             ->values();
+        $serviceLeadSourceSummary = collect(ServiceLead::sourceOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('source', $key)->count(),
+            ])
+            ->values();
+        $serviceLeadEntrySummary = collect(ServiceLead::entryOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('entry_point', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -805,6 +823,8 @@ class DashboardController extends Controller
             'adminSites' => $sites,
             'adminSupportTickets' => $tickets,
             'adminServiceLeads' => $serviceLeads,
+            'serviceLeadSourceSummary' => $serviceLeadSourceSummary,
+            'serviceLeadEntrySummary' => $serviceLeadEntrySummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),

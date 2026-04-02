@@ -766,8 +766,18 @@
                                         <label for="super_admin_leads_source">סינון מקור</label>
                                         <select id="super_admin_leads_source" data-filter-field="source">
                                             <option value="">כל המקורות</option>
-                                            <option value="public">האתר הציבורי</option>
-                                            <option value="dashboard">הדשבורד</option>
+                                            @foreach ($serviceLeadSourceSummary as $item)
+                                                <option value="{{ $item['key'] }}">{{ $item['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_leads_entry">סינון נקודת כניסה</label>
+                                        <select id="super_admin_leads_entry" data-filter-field="entry">
+                                            <option value="">כל נקודות הכניסה</option>
+                                            @foreach ($serviceLeadEntrySummary as $item)
+                                                <option value="{{ $item['key'] }}">{{ $item['label'] }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="super-admin-toolbar-field">
@@ -795,6 +805,7 @@
                                                 data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
                                                 data-filter-service="{{ $lead->service_type }}"
                                                 data-filter-source="{{ $lead->source ?? 'dashboard' }}"
+                                                data-filter-entry="{{ $lead->entry_point ?? '' }}"
                                                 data-filter-status="{{ $lead->status }}"
                                             >
                                                 <div class="support-ticket-head">
@@ -804,6 +815,7 @@
                                                     </div>
                                                     <div class="support-ticket-pills">
                                                         <span class="status-pill is-neutral">{{ $lead->source_label ?? 'פנייה עסקית' }}</span>
+                                                        <span class="status-pill is-neutral">{{ $lead->entry_label ?? 'כניסה כללית' }}</span>
                                                         <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact_key ?? $lead->preferred_contact] ?? $lead->preferred_contact }}</span>
                                                         <span class="status-pill {{ $lead->freshness_tone === 'good' ? 'is-good' : ($lead->freshness_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
                                                             {{ $lead->freshness_label }}
@@ -866,7 +878,30 @@
                                     <div class="portal-card-head">
                                         <div>
                                             <p class="eyebrow">מקורות צמיחה</p>
-                                            <h2>איזה שירותים מעניינים יותר</h2>
+                                            <h2>מאיפה הלידים מגיעים</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach ($serviceLeadSourceSummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach ($serviceLeadEntrySummary->take(4) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">עניין לפי שירות</p>
+                                            <h2>מה מעניין יותר עכשיו</h2>
                                         </div>
                                     </div>
                                     <div class="domain-info-list">
