@@ -27,6 +27,29 @@
                 </div>
             </section>
 
+            <section class="super-admin-kpi-grid super-admin-kpi-grid-compact">
+                <article class="super-admin-kpi-card">
+                    <span class="super-admin-kpi-icon">🚀</span>
+                    <strong>{{ $serviceLeadSummary['total'] }}</strong>
+                    <p>פניות עסקיות לאתר הזה</p>
+                </article>
+                <article class="super-admin-kpi-card">
+                    <span class="super-admin-kpi-icon">📬</span>
+                    <strong>{{ $serviceLeadSummary['new'] }}</strong>
+                    <p>פניות חדשות שמחכות לטיפול</p>
+                </article>
+                <article class="super-admin-kpi-card">
+                    <span class="super-admin-kpi-icon">🧾</span>
+                    <strong>{{ $serviceLeadSummary['proposal'] }}</strong>
+                    <p>פניות שנמצאות בשלב הצעה</p>
+                </article>
+                <article class="super-admin-kpi-card">
+                    <span class="super-admin-kpi-icon">✅</span>
+                    <strong>{{ $serviceLeadSummary['won'] }}</strong>
+                    <p>פניות שנסגרו כלקוח</p>
+                </article>
+            </section>
+
             <section class="dashboard-workspace dashboard-workspace-inline domain-tab-workspace" data-dashboard-tabs>
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-nav domain-inline-tab-nav" aria-label="לשוניות שירותי Brndini">
@@ -132,9 +155,40 @@
                                     <p>ברגע שתפתח פנייה ראשונה, היא תופיע כאן עם השירות שביקשת, דרך החזרה המועדפת והזמן האחרון שבו עודכנה.</p>
                                 </div>
                             @else
+                                <div class="super-admin-toolbar" data-filter-root>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="site_service_leads_search">חיפוש פנייה</label>
+                                        <input id="site_service_leads_search" type="search" placeholder="חפש לפי שירות, מטרה או תוכן" data-filter-search>
+                                    </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="site_service_leads_service">סינון שירות</label>
+                                        <select id="site_service_leads_service" data-filter-field="service">
+                                            <option value="">כל השירותים</option>
+                                            @foreach ($serviceCatalog as $serviceKey => $service)
+                                                <option value="{{ $serviceKey }}">{{ $service['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="site_service_leads_status">סינון סטטוס</label>
+                                        <select id="site_service_leads_status" data-filter-field="status">
+                                            <option value="">כל הסטטוסים</option>
+                                            @foreach ($serviceLeadStatusLabels as $statusKey => $statusLabel)
+                                                <option value="{{ $statusKey }}">{{ $statusLabel }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="support-ticket-list">
                                     @foreach ($serviceLeads as $lead)
-                                        <article class="support-ticket-card">
+                                        <article
+                                            class="support-ticket-card"
+                                            data-filter-item
+                                            data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
+                                            data-filter-service="{{ $lead->service_type }}"
+                                            data-filter-status="{{ $lead->status }}"
+                                        >
                                             <div class="support-ticket-head">
                                                 <div>
                                                     <p class="support-ticket-code">{{ $lead->reference_code }}</p>
@@ -142,7 +196,9 @@
                                                 </div>
 
                                                 <div class="support-ticket-pills">
-                                                    <span class="status-pill is-neutral">חדש</span>
+                                                    <span class="status-pill {{ in_array($lead->status, ['won', 'qualified'], true) ? 'is-good' : ($lead->status === 'closed' ? 'is-neutral' : 'is-warn') }}">
+                                                        {{ $serviceLeadStatusLabels[$lead->status] ?? $lead->status }}
+                                                    </span>
                                                     <span class="status-pill is-good">{{ $servicePreferredContactLabels[$lead->preferred_contact] ?? $lead->preferred_contact }}</span>
                                                 </div>
                                             </div>

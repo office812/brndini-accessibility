@@ -719,6 +719,8 @@ class DashboardController extends Controller
             'serviceLeadSummary' => [
                 'total' => $serviceLeads->count(),
                 'new' => $serviceLeads->where('status', 'new')->count(),
+                'proposal' => $serviceLeads->where('status', 'proposal')->count(),
+                'won' => $serviceLeads->where('status', 'won')->count(),
                 'lastActivity' => $serviceLeads->first()?->last_activity_label ?? 'עדיין לא נשלחה פנייה',
             ],
             'platformReadiness' => $platformReadiness,
