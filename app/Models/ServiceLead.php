@@ -122,6 +122,29 @@ class ServiceLead extends Model
     {
         $lastActivityAt = isset($lead['last_activity_at']) ? Carbon::parse($lead['last_activity_at']) : null;
         $source = $lead['source'] ?? 'dashboard';
+        $contactName = $lead['contact_name'] ?? $lead['user_name'] ?? null;
+        $contactEmail = $lead['contact_email'] ?? $lead['user_email'] ?? null;
+        $contactEmail = filled($contactEmail) ? trim((string) $contactEmail) : null;
+        $siteName = $lead['site_name'] ?? null;
+        $subject = 'פנייה לגבי ' . ($siteName ?: 'שירותי Brndini');
+        $mailTo = $contactEmail
+            ? 'mailto:' . rawurlencode($contactEmail) . '?subject=' . rawurlencode($subject)
+            : null;
+        $preferredContact = $lead['preferred_contact'] ?? 'email';
+
+        $freshnessKey = 'fresh';
+        $freshnessLabel = 'חדש';
+        $freshnessTone = 'good';
+
+        if ($lastActivityAt && $lastActivityAt->lt(now()->subDays(3))) {
+            $freshnessKey = 'stale';
+            $freshnessLabel = 'דורש חזרה';
+            $freshnessTone = 'warn';
+        } elseif ($lastActivityAt && $lastActivityAt->lt(now()->subDay())) {
+            $freshnessKey = 'aging';
+            $freshnessLabel = 'בהמתנה';
+            $freshnessTone = 'neutral';
+        }
 
         return (object) [
             'update_key' => (string) ($lead['key'] ?? ('service-' . ($lead['id'] ?? 'x'))),
@@ -134,10 +157,17 @@ class ServiceLead extends Model
             'internal_note' => $lead['internal_note'] ?? '',
             'source' => $source,
             'source_label' => $source === 'public' ? 'פנייה מהאתר הציבורי' : 'פנייה מתוך הדשבורד',
-            'user_name' => $lead['user_name'] ?? $lead['contact_name'] ?? null,
-            'user_email' => $lead['user_email'] ?? $lead['contact_email'] ?? null,
-            'site_name' => $lead['site_name'] ?? null,
+            'user_name' => $lead['user_name'] ?? $contactName,
+            'user_email' => $lead['user_email'] ?? $contactEmail,
+            'contact_name' => $contactName,
+            'contact_email' => $contactEmail,
+            'site_name' => $siteName,
             'site_domain' => $lead['site_domain'] ?? null,
+            'mail_to' => $mailTo,
+            'freshness_key' => $freshnessKey,
+            'freshness_label' => $freshnessLabel,
+            'freshness_tone' => $freshnessTone,
+            'preferred_contact_key' => $preferredContact,
             'last_activity_label' => $lastActivityAt?->diffForHumans() ?? 'נוצר עכשיו',
             'sort_timestamp' => $lastActivityAt?->timestamp ?? 0,
         ];

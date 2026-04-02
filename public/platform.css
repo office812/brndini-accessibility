@@ -3000,6 +3000,17 @@ body.page-is-ready .auth-shell {
     color: #21354f;
 }
 
+.lead-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.lead-quick-actions .secondary-button {
+    min-height: 40px;
+    padding-inline: 16px;
+}
+
 .support-admin-response {
     display: grid;
     gap: 6px;
@@ -3240,7 +3251,7 @@ body.page-is-ready .auth-shell {
 
 .super-admin-toolbar {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 14px;
     margin-bottom: 14px;
 }

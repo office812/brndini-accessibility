@@ -752,6 +752,23 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_leads_source">סינון מקור</label>
+                                        <select id="super_admin_leads_source" data-filter-field="source">
+                                            <option value="">כל המקורות</option>
+                                            <option value="public">האתר הציבורי</option>
+                                            <option value="dashboard">הדשבורד</option>
+                                        </select>
+                                    </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_leads_status">סינון סטטוס</label>
+                                        <select id="super_admin_leads_status" data-filter-field="status">
+                                            <option value="">כל הסטטוסים</option>
+                                            @foreach ($serviceLeadStatusLabels as $statusKey => $statusLabel)
+                                                <option value="{{ $statusKey }}">{{ $statusLabel }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
                                 @if ($adminServiceLeads->isEmpty())
@@ -767,23 +784,36 @@
                                                 data-filter-item
                                                 data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
                                                 data-filter-service="{{ $lead->service_type }}"
+                                                data-filter-source="{{ $lead->source ?? 'dashboard' }}"
+                                                data-filter-status="{{ $lead->status }}"
                                             >
                                                 <div class="support-ticket-head">
                                                     <div>
                                                         <p class="support-ticket-code">{{ $lead->reference_code }}</p>
                                                         <h3>{{ $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type }}</h3>
                                                     </div>
-                                                <div class="support-ticket-pills">
-                                                    <span class="status-pill is-neutral">{{ $lead->source_label ?? 'פנייה עסקית' }}</span>
-                                                    <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact] ?? $lead->preferred_contact }}</span>
-                                                    <span class="status-pill {{ in_array($lead->status, ['won', 'qualified'], true) ? 'is-good' : ($lead->status === 'closed' ? 'is-neutral' : 'is-warn') }}">
-                                                        {{ $serviceLeadStatusLabels[$lead->status] ?? $lead->status }}
-                                                    </span>
+                                                    <div class="support-ticket-pills">
+                                                        <span class="status-pill is-neutral">{{ $lead->source_label ?? 'פנייה עסקית' }}</span>
+                                                        <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact_key ?? $lead->preferred_contact] ?? $lead->preferred_contact }}</span>
+                                                        <span class="status-pill {{ $lead->freshness_tone === 'good' ? 'is-good' : ($lead->freshness_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                            {{ $lead->freshness_label }}
+                                                        </span>
+                                                        <span class="status-pill {{ in_array($lead->status, ['won', 'qualified'], true) ? 'is-good' : ($lead->status === 'closed' ? 'is-neutral' : 'is-warn') }}">
+                                                            {{ $serviceLeadStatusLabels[$lead->status] ?? $lead->status }}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <p class="support-ticket-meta">
-                                                {{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->user_email ?? 'ללא אימייל' }} · {{ $lead->site_name ?? 'ללא אתר' }}
-                                            </p>
+                                                <p class="support-ticket-meta">
+                                                    {{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->user_email ?? 'ללא אימייל' }} · {{ $lead->site_name ?? 'ללא אתר' }}
+                                                </p>
+                                                <div class="lead-quick-actions">
+                                                    @if (!empty($lead->mail_to))
+                                                        <a class="secondary-button" href="{{ $lead->mail_to }}">שלח מייל</a>
+                                                    @endif
+                                                    @if (filled($lead->site_domain))
+                                                        <a class="secondary-button" href="{{ Str::startsWith($lead->site_domain, ['http://', 'https://']) ? $lead->site_domain : 'https://' . ltrim($lead->site_domain, '/') }}" target="_blank" rel="noreferrer">פתח אתר</a>
+                                                    @endif
+                                                </div>
                                             <p class="support-ticket-message"><strong>מטרה:</strong> {{ $lead->goal }}</p>
                                             <p class="support-ticket-message">{{ $lead->message }}</p>
 
