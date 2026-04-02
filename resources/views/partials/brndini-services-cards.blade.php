@@ -30,6 +30,13 @@
             'description' => 'עמודים ממירים, טפסים, CRM ותהליכים שמחברים בין תנועה, לידים וצוות המכירות.',
             'highlights' => ['דפי נחיתה', 'טפסים', 'CRM', 'אוטומציות'],
         ],
+        [
+            'title' => 'גישה מוקדמת לכלי Brndini הבאים',
+            'description' => 'רשימת המתנה לכלים והפלטפורמות הבאות של Brndini, כדי לתפוס מקום מוקדם ולהיות הראשונים לנסות.',
+            'highlights' => ['גישה מוקדמת', 'כלים חדשים', 'רשימת המתנה', 'עדכונים'],
+            'eyebrow' => 'אקוסיסטם',
+            'cta' => 'מעניין אותי',
+        ],
     ];
 
     $brndiniServiceCtaHref = auth()->check() ? route('dashboard.services') : route('brndini.services') . '#public-service-form';
@@ -40,6 +47,9 @@
     @foreach ($serviceCards as $serviceKey => $serviceCard)
         <article class="brndini-service-card">
             <span class="brndini-service-icon" aria-hidden="true">{{ str($serviceCard['title'])->substr(0, 1) }}</span>
+            @if (! empty($serviceCard['eyebrow']))
+                <span class="eyebrow">{{ $serviceCard['eyebrow'] }}</span>
+            @endif
             <h3>{{ $serviceCard['title'] }}</h3>
             <p>{{ $serviceCard['description'] }}</p>
             <div class="brndini-service-highlights">
@@ -48,7 +58,7 @@
                 @endforeach
             </div>
             <a class="secondary-button button-link" href="{{ auth()->check() ? route('dashboard.services', array_filter(['site' => request('site'), 'service' => $serviceKey])) : route('brndini.services', ['service' => $serviceKey]) . '#public-service-form' }}">
-                רוצה פרטים
+                {{ $serviceCard['cta'] ?? 'רוצה פרטים' }}
             </a>
         </article>
     @endforeach

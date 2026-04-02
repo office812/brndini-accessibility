@@ -352,6 +352,24 @@
         @include('partials.brndini-services-cards')
     </section>
 
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">Brndini Ecosystem</p>
+            <h2>הווידג׳ט הוא רק הצעד הראשון. Brndini בונה עוד כלים חינמיים וחכמים לעסקים.</h2>
+            <p class="hero-text">
+                אם מעניין אותך לקבל גישה מוקדמת לכלים הבאים של Brndini, אפשר להיכנס כבר עכשיו
+                לרשימת העניין ולהיות הראשונים לשמוע כשמשהו חדש נפתח.
+            </p>
+        </div>
+
+        <div class="magazine-actions">
+            <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access']) }}#public-service-form">
+                אני רוצה גישה מוקדמת
+            </a>
+            <a class="ghost-button button-link" href="{{ route('brndini.services') }}">לכל שירותי Brndini</a>
+        </div>
+    </section>
+
     <section class="section-band section-band-alt" id="pricing">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">מסלולים</p>

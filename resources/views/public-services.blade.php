@@ -63,6 +63,41 @@
 
     <section class="section-band section-band-plain">
         <div class="section-heading section-heading-center">
+            <p class="eyebrow">Brndini Ecosystem</p>
+            <h2>בונים גם את השכבה הבאה: כלים שיביאו עוד תנועה, שליטה וצמיחה.</h2>
+            <p class="hero-text">
+                מעבר לכלי החינמי ולשירותים שכבר זמינים עכשיו, Brndini בונה עוד מוצרים וכלים דיגיטליים.
+                אפשר להשאיר עניין מוקדם ולקבל גישה ראשונה כשהם ייפתחו.
+            </p>
+        </div>
+
+        <div class="about-process-grid">
+            <article class="process-card-strong">
+                <span class="process-index">01</span>
+                <h3>כלי SEO ותוכן</h3>
+                <p>כלים שיחברו מחקר, תוכן, מבנה עמודים ואופטימיזציה למערכת פעולה אחת.</p>
+            </article>
+            <article class="process-card-strong">
+                <span class="process-index">02</span>
+                <h3>כלי אוטומציה ולידים</h3>
+                <p>פתרונות שיחברו טפסים, CRM, follow-up ותהליכי מכירה מהירים יותר.</p>
+            </article>
+            <article class="process-card-strong">
+                <span class="process-index">03</span>
+                <h3>מרכז כלים של Brndini</h3>
+                <p>אקו־סיסטם של מוצרים חינמיים וכלים חכמים, שכולם מובילים לצמיחה ולשליטה טובה יותר.</p>
+            </article>
+        </div>
+
+        <div class="brndini-service-actions">
+            <a class="primary-button button-link" href="{{ route('brndini.services', ['service' => 'ecosystem_access']) }}#public-service-form">
+                אני רוצה גישה מוקדמת
+            </a>
+        </div>
+    </section>
+
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
             <p class="eyebrow">איך זה עובד בפועל</p>
             <h2>תהליך פשוט, ברור ומהיר משלב הפנייה ועד התאמה לשירות.</h2>
         </div>
@@ -131,6 +166,7 @@
                         <option value="website_upgrade" @selected($selectedPublicServiceType === 'website_upgrade')>שדרוג אתר קיים</option>
                         <option value="landing_pages" @selected($selectedPublicServiceType === 'landing_pages')>דפי נחיתה</option>
                         <option value="automations" @selected($selectedPublicServiceType === 'automations')>אוטומציות ותהליכים</option>
+                        <option value="ecosystem_access" @selected($selectedPublicServiceType === 'ecosystem_access')>גישה מוקדמת לכלי Brndini הבאים</option>
                     </select>
 
                     <label for="public_service_goal">מה אתה רוצה להשיג?</label>

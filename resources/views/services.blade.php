@@ -91,11 +91,11 @@
                                     @csrf
                                     <input type="hidden" name="site_id" value="{{ old('site_id', $site->id) }}">
 
-                                    <label for="service_type">איזה שירות מעניין אותך?</label>
-                                    <select id="service_type" name="service_type">
-                                        @foreach ($serviceCatalog as $serviceKey => $service)
-                                            <option value="{{ $serviceKey }}" @selected($selectedServiceType === $serviceKey)>{{ $service['label'] }}</option>
-                                        @endforeach
+                    <label for="service_type">איזה שירות מעניין אותך?</label>
+                    <select id="service_type" name="service_type">
+                        @foreach ($serviceCatalog as $serviceKey => $service)
+                            <option value="{{ $serviceKey }}" @selected($selectedServiceType === $serviceKey)>{{ $service['label'] }}</option>
+                        @endforeach
                                     </select>
 
                                     <label for="service_goal">מה המטרה שלך?</label>
@@ -133,6 +133,10 @@
                                         <div class="domain-info-row">
                                             <span>פניות שנשלחו</span>
                                             <strong>{{ $serviceLeadSummary['total'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>גישה מוקדמת</span>
+                                            <strong>אפשר גם להתעניין בכלי Brndini הבאים</strong>
                                         </div>
                                     </div>
                                 </section>

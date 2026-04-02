@@ -956,6 +956,11 @@ class DashboardController extends Controller
                 'description' => 'חיבורים, CRM, אוטומציות שיווק וייעול תהליכים פנימיים.',
                 'highlights' => ['CRM', 'מיילים', 'אינטגרציות', 'תהליכים'],
             ],
+            'ecosystem_access' => [
+                'label' => 'גישה מוקדמת לכלי Brndini הבאים',
+                'description' => 'הצטרפות מוקדמת לרשימת המתעניינים בכלים הבאים של Brndini: ניתוח אתרים, אוטומציות, SEO וכלי צמיחה נוספים.',
+                'highlights' => ['גישה מוקדמת', 'רשימת המתנה', 'מוצרים חדשים', 'עדכונים'],
+            ],
         ];
     }
 
@@ -1032,7 +1037,7 @@ class DashboardController extends Controller
             ];
         }
 
-        $fallbackOrder = ['maintenance', 'website_upgrade', 'hosting', 'seo', 'campaigns', 'landing_pages', 'automations'];
+        $fallbackOrder = ['maintenance', 'website_upgrade', 'hosting', 'seo', 'campaigns', 'landing_pages', 'automations', 'ecosystem_access'];
 
         foreach ($fallbackOrder as $serviceType) {
             if (count($candidates) >= 3) {
