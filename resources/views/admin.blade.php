@@ -722,6 +722,11 @@
                                 <strong>{{ $adminServiceLeads->where('status', 'won')->count() }}</strong>
                                 <p>נסגרו כלקוח</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">↗</span>
+                                <strong>{{ $adminServiceLeads->where('source', 'public')->count() }}</strong>
+                                <p>לידים מהאתר הציבורי</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -769,6 +774,7 @@
                                                         <h3>{{ $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type }}</h3>
                                                     </div>
                                                 <div class="support-ticket-pills">
+                                                    <span class="status-pill is-neutral">{{ $lead->source_label ?? 'פנייה עסקית' }}</span>
                                                     <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact] ?? $lead->preferred_contact }}</span>
                                                     <span class="status-pill {{ in_array($lead->status, ['won', 'qualified'], true) ? 'is-good' : ($lead->status === 'closed' ? 'is-neutral' : 'is-warn') }}">
                                                         {{ $serviceLeadStatusLabels[$lead->status] ?? $lead->status }}
@@ -838,6 +844,14 @@
                                         <div class="domain-info-row">
                                             <span>נסגרו כלקוח</span>
                                             <strong>{{ $adminServiceLeads->where('status', 'won')->count() }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>מהאתר הציבורי</span>
+                                            <strong>{{ $adminServiceLeads->where('source', 'public')->count() }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>מתוך הדשבורד</span>
+                                            <strong>{{ $adminServiceLeads->where('source', 'dashboard')->count() }}</strong>
                                         </div>
                                     </div>
                                 </article>

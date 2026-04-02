@@ -15,10 +15,13 @@ class ServiceLead extends Model
         'site_id',
         'reference_code',
         'service_type',
+        'contact_name',
+        'contact_email',
         'goal',
         'message',
         'preferred_contact',
         'status',
+        'source',
         'internal_note',
         'last_activity_at',
     ];
@@ -61,10 +64,49 @@ class ServiceLead extends Model
             'site_domain' => $site->domain,
             'reference_code' => 'BRN-' . str_pad((string) $nextId, 5, '0', STR_PAD_LEFT),
             'service_type' => $validated['service_type'],
+            'contact_name' => $user->name,
+            'contact_email' => $user->email,
             'goal' => trim((string) $validated['goal']),
             'message' => trim((string) $validated['message']),
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
+            'source' => 'dashboard',
+            'internal_note' => '',
+            'created_at' => $now->toIso8601String(),
+            'last_activity_at' => $now->toIso8601String(),
+        ];
+
+        RuntimeStore::putMany($scope, [
+            'next_id' => $nextId + 1,
+            'items' => static::runtimeLeads()->push($lead)->values()->all(),
+        ]);
+    }
+
+    public static function storePublicRuntime(array $validated): void
+    {
+        $scope = static::runtimeScope();
+        $nextId = (int) RuntimeStore::get($scope, 'next_id', 1);
+        $now = Carbon::now();
+        $website = trim((string) ($validated['website'] ?? ''));
+
+        $lead = [
+            'id' => $nextId,
+            'key' => 'service-public-' . $nextId,
+            'user_id' => null,
+            'user_name' => trim((string) $validated['name']),
+            'user_email' => trim((string) $validated['email']),
+            'contact_name' => trim((string) $validated['name']),
+            'contact_email' => trim((string) $validated['email']),
+            'site_id' => null,
+            'site_name' => $website === '' ? 'ליד ציבורי' : $website,
+            'site_domain' => $website,
+            'reference_code' => 'BRN-P' . str_pad((string) $nextId, 5, '0', STR_PAD_LEFT),
+            'service_type' => $validated['service_type'],
+            'goal' => trim((string) $validated['goal']),
+            'message' => trim((string) $validated['message']),
+            'preferred_contact' => $validated['preferred_contact'],
+            'status' => 'new',
+            'source' => 'public',
             'internal_note' => '',
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
@@ -79,6 +121,7 @@ class ServiceLead extends Model
     public static function presentRuntime(array $lead): object
     {
         $lastActivityAt = isset($lead['last_activity_at']) ? Carbon::parse($lead['last_activity_at']) : null;
+        $source = $lead['source'] ?? 'dashboard';
 
         return (object) [
             'update_key' => (string) ($lead['key'] ?? ('service-' . ($lead['id'] ?? 'x'))),
@@ -89,8 +132,10 @@ class ServiceLead extends Model
             'preferred_contact' => $lead['preferred_contact'] ?? 'email',
             'status' => $lead['status'] ?? 'new',
             'internal_note' => $lead['internal_note'] ?? '',
-            'user_name' => $lead['user_name'] ?? null,
-            'user_email' => $lead['user_email'] ?? null,
+            'source' => $source,
+            'source_label' => $source === 'public' ? 'פנייה מהאתר הציבורי' : 'פנייה מתוך הדשבורד',
+            'user_name' => $lead['user_name'] ?? $lead['contact_name'] ?? null,
+            'user_email' => $lead['user_email'] ?? $lead['contact_email'] ?? null,
             'site_name' => $lead['site_name'] ?? null,
             'site_domain' => $lead['site_domain'] ?? null,
             'last_activity_label' => $lastActivityAt?->diffForHumans() ?? 'נוצר עכשיו',

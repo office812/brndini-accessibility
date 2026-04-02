@@ -431,6 +431,26 @@ class DashboardController extends Controller
             ->with('status', 'פניית השירות נשלחה ונשמרה. עכשיו אפשר לחזור אליך בנושא ' . ($this->serviceCatalog()[$validated['service_type']]['label'] ?? 'השירות שביקשת') . '.');
     }
 
+    public function storePublicServiceLead(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:120'],
+            'email' => ['required', 'email', 'max:180'],
+            'website' => ['nullable', 'string', 'max:255'],
+            'service_type' => ['required', Rule::in(array_keys($this->serviceCatalog()))],
+            'goal' => ['required', 'string', 'max:180'],
+            'message' => ['required', 'string', 'min:20', 'max:4000'],
+            'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
+        ]);
+
+        ServiceLead::storePublicRuntime($validated);
+
+        return redirect()
+            ->route('brndini.services')
+            ->withFragment('public-service-form')
+            ->with('status', 'הפנייה נשלחה בהצלחה. צוות Brndini יוכל לחזור אליך לגבי ' . ($this->serviceCatalog()[$validated['service_type']]['label'] ?? 'השירות שביקשת') . '.');
+    }
+
     public function updateSupportTicketAdmin(Request $request, string $ticketKey): RedirectResponse
     {
         $admin = $request->user();

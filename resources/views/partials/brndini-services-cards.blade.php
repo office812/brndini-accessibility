@@ -32,8 +32,8 @@
         ],
     ];
 
-    $brndiniServiceCtaHref = auth()->check() ? route('dashboard.services') : route('register.show');
-    $brndiniServiceCtaLabel = auth()->check() ? 'לשירותי Brndini' : 'פתיחת חשבון חינמי';
+    $brndiniServiceCtaHref = auth()->check() ? route('dashboard.services') : route('brndini.services') . '#public-service-form';
+    $brndiniServiceCtaLabel = auth()->check() ? 'לשירותי Brndini' : 'להשארת פנייה עסקית';
 @endphp
 
 <div class="brndini-service-grid">

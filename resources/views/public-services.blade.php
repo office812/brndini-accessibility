@@ -60,6 +60,99 @@
         @include('partials.brndini-services-cards')
     </section>
 
+    <section class="section-band section-band-alt" id="public-service-form">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">פנייה עסקית</p>
+            <h2>רוצה שנחזור אליך על שירות מסוים?</h2>
+            <p class="hero-text">
+                לא צריך לפתוח חשבון כדי להשאיר פנייה עסקית. אם Brndini יכולה לעזור לך באחסון,
+                SEO, קמפיינים, תחזוקת אתר, שדרוג אתר או אוטומציות, פשוט משאירים כאן פרטים.
+            </p>
+        </div>
+
+        <section class="support-grid public-service-lead-grid">
+            <section class="domain-card support-form-card">
+                <div class="domain-card-head">
+                    <div>
+                        <h2>פתח פנייה לשירותי Brndini</h2>
+                        <p class="panel-intro">זו פנייה עסקית לשירותים של Brndini, לא תמיכה טכנית של A11Y Bridge.</p>
+                    </div>
+                </div>
+
+                <form class="stack-form" method="POST" action="{{ route('brndini.services.store') }}">
+                    @csrf
+
+                    <div class="support-form-row">
+                        <div>
+                            <label for="public_service_name">שם מלא</label>
+                            <input id="public_service_name" name="name" type="text" value="{{ old('name') }}" placeholder="למשל: מיכאל אזין">
+                        </div>
+                        <div>
+                            <label for="public_service_email">אימייל</label>
+                            <input id="public_service_email" name="email" type="email" value="{{ old('email') }}" placeholder="office@example.com">
+                        </div>
+                    </div>
+
+                    <label for="public_service_website">אתר / דומיין</label>
+                    <input id="public_service_website" name="website" type="text" value="{{ old('website') }}" placeholder="https://your-site.com">
+
+                    <label for="public_service_type">איזה שירות מעניין אותך?</label>
+                    <select id="public_service_type" name="service_type">
+                        <option value="hosting" @selected(old('service_type') === 'hosting')>אחסון וניהול שרת</option>
+                        <option value="seo" @selected(old('service_type') === 'seo')>SEO וקידום אורגני</option>
+                        <option value="campaigns" @selected(old('service_type') === 'campaigns')>קמפיינים ופרסום</option>
+                        <option value="maintenance" @selected(old('service_type') === 'maintenance')>תחזוקת אתר</option>
+                        <option value="website_upgrade" @selected(old('service_type') === 'website_upgrade')>שדרוג אתר קיים</option>
+                        <option value="landing_pages" @selected(old('service_type') === 'landing_pages')>דפי נחיתה</option>
+                        <option value="automations" @selected(old('service_type') === 'automations')>אוטומציות ותהליכים</option>
+                    </select>
+
+                    <label for="public_service_goal">מה אתה רוצה להשיג?</label>
+                    <input id="public_service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להגדיל לידים, להעביר לאחסון יציב">
+
+                    <label for="public_service_message">פרטים חשובים</label>
+                    <textarea id="public_service_message" name="message" rows="6" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה היית רוצה שיקרה בחודש הקרוב.">{{ old('message') }}</textarea>
+
+                    <label for="public_service_contact">איך נוח שנחזור אליך?</label>
+                    <select id="public_service_contact" name="preferred_contact">
+                        <option value="email" @selected(old('preferred_contact', 'email') === 'email')>אימייל</option>
+                        <option value="phone" @selected(old('preferred_contact') === 'phone')>טלפון</option>
+                        <option value="whatsapp" @selected(old('preferred_contact') === 'whatsapp')>ווטסאפ</option>
+                    </select>
+
+                    <div class="support-form-actions">
+                        <button class="primary-button" type="submit">שלח פנייה עסקית</button>
+                        <span class="meta-note">Brndini תחזור רק בנושא השירות שביקשת. זה לא ערוץ תמיכה טכנית של המערכת.</span>
+                    </div>
+                </form>
+            </section>
+
+            <aside class="support-side-stack">
+                <section class="domain-card">
+                    <h2>מתי זה מתאים?</h2>
+                    <div class="domain-info-list">
+                        <div class="domain-info-row">
+                            <span>אחסון</span>
+                            <strong>כשהאתר צריך יציבות, גיבויים ושקט תפעולי</strong>
+                        </div>
+                        <div class="domain-info-row">
+                            <span>SEO</span>
+                            <strong>כשרוצים יותר תנועה אורגנית ותוכן טוב יותר</strong>
+                        </div>
+                        <div class="domain-info-row">
+                            <span>קמפיינים</span>
+                            <strong>כשצריך יותר לידים, המרות ודפי נחיתה</strong>
+                        </div>
+                        <div class="domain-info-row">
+                            <span>שדרוג אתר</span>
+                            <strong>כשהאתר הנוכחי מרגיש כבד, מיושן או לא ממיר</strong>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </section>
+    </section>
+
     <section class="section-band section-band-alt">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">איך זה מתחבר</p>
