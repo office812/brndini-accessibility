@@ -266,6 +266,14 @@ document.addEventListener('DOMContentLoaded', function () {
     links.forEach(function (link) {
       link.addEventListener('click', function () {
         setActiveTab(link.getAttribute('data-dashboard-tab-link'), true);
+
+        var serviceType = link.getAttribute('data-service-type');
+        if (serviceType) {
+          var serviceSelect = tabsRoot.querySelector('#service_type');
+          if (serviceSelect) {
+            serviceSelect.value = serviceType;
+          }
+        }
       });
     });
 

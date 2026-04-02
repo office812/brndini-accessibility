@@ -53,7 +53,7 @@
                     <div class="app-header-left">
                         <nav class="app-nav" aria-label="ניווט מערכת">
                             <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard', $siteRouteParams) }}">הרישיונות שלי</a>
-                            <a class="{{ request()->routeIs('dashboard.install') ? 'is-current' : '' }}" href="{{ route('dashboard.install', $siteRouteParams) }}">השירותים שלי</a>
+                            <a class="{{ request()->routeIs('dashboard.services') ? 'is-current' : '' }}" href="{{ route('dashboard.services', $siteRouteParams) }}">השירותים שלי</a>
                             <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', $siteRouteParams) }}">דוחות ובקרה</a>
                             <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account', $siteRouteParams) }}">החשבון</a>
                             @if (($user ?? Auth::user())?->isSuperAdmin())

@@ -31,6 +31,7 @@
                                     <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="users">משתמשים</button>
                                     <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="sites">אתרים</button>
                                     <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="support">תמיכה</button>
+                                    <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="leads">לידים</button>
                                 </div>
                             </div>
                         </nav>
@@ -45,6 +46,7 @@
                             <span class="status-pill is-neutral">אתרים: {{ $adminSummary['sites'] }}</span>
                             <span class="status-pill {{ $adminSummary['tickets_open'] > 0 ? 'is-warn' : 'is-good' }}">פניות פתוחות: {{ $adminSummary['tickets_open'] }}</span>
                             <span class="status-pill is-good">אתרים פעילים: {{ $adminSummary['active_sites'] }}</span>
+                            <span class="status-pill is-neutral">לידים: {{ $adminSummary['service_leads'] }}</span>
                         </div>
                     </div>
                 </aside>
@@ -169,6 +171,7 @@
                                         <button class="secondary-button" type="button" data-dashboard-tab-link="users">ניהול משתמשים</button>
                                         <button class="secondary-button" type="button" data-dashboard-tab-link="sites">ניהול אתרים</button>
                                         <button class="secondary-button" type="button" data-dashboard-tab-link="support">טיפול בפניות</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="leads">לידים לשירותים</button>
                                     </div>
                                 </article>
 
@@ -691,6 +694,106 @@
                                             <strong>3. השאר מענה פנימי ברור</strong>
                                             <p>כך תוכל לחזור בקלות להיסטוריה וגם לעזור לצוות בהמשך.</p>
                                         </div>
+                                    </div>
+                                </article>
+                            </aside>
+                        </section>
+                    </div>
+
+                    <div class="dashboard-tab-panel" data-dashboard-tab-panel="leads">
+                        <section class="super-admin-kpi-grid super-admin-kpi-grid-compact">
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🚀</span>
+                                <strong>{{ $adminServiceLeads->count() }}</strong>
+                                <p>לידים לשירותי Brndini</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🌐</span>
+                                <strong>{{ $adminServiceLeads->pluck('site_name')->filter()->unique()->count() }}</strong>
+                                <p>אתרים שביקשו שירות</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">📬</span>
+                                <strong>{{ $adminServiceLeads->pluck('user_email')->filter()->unique()->count() }}</strong>
+                                <p>לקוחות שפנו</p>
+                            </article>
+                        </section>
+
+                        <section class="super-admin-content-grid super-admin-content-grid-wide">
+                            <article class="portal-content-card">
+                                <div class="domain-card-head">
+                                    <div>
+                                        <h2>לידים לשירותי Brndini</h2>
+                                        <p class="panel-intro">פניות שירות עסקיות שמגיעות מתוך הכלי החינמי: אחסון, SEO, קמפיינים, תחזוקה, שדרוגי אתר ואוטומציות. זה נפרד לחלוטין מהתמיכה הטכנית של המערכת.</p>
+                                    </div>
+                                </div>
+
+                                <div class="super-admin-toolbar" data-filter-root>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_leads_search">חיפוש ליד</label>
+                                        <input id="super_admin_leads_search" type="search" placeholder="חפש לפי שירות, אתר, משתמש או מטרה" data-filter-search>
+                                    </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_leads_service">סינון שירות</label>
+                                        <select id="super_admin_leads_service" data-filter-field="service">
+                                            <option value="">כל השירותים</option>
+                                            @foreach ($serviceCatalog as $serviceKey => $service)
+                                                <option value="{{ $serviceKey }}">{{ $service['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                @if ($adminServiceLeads->isEmpty())
+                                    <div class="support-empty-state">
+                                        <strong>עדיין אין לידים לשירותים</strong>
+                                        <p>ברגע שמשתמש יבקש אחסון, SEO, קמפיין, תחזוקה או שדרוג אתר, הפנייה תופיע כאן ותצטרף למשפך המכירה של Brndini.</p>
+                                    </div>
+                                @else
+                                    <div class="support-ticket-list">
+                                        @foreach ($adminServiceLeads as $lead)
+                                            <article
+                                                class="support-ticket-card"
+                                                data-filter-item
+                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
+                                                data-filter-service="{{ $lead->service_type }}"
+                                            >
+                                                <div class="support-ticket-head">
+                                                    <div>
+                                                        <p class="support-ticket-code">{{ $lead->reference_code }}</p>
+                                                        <h3>{{ $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type }}</h3>
+                                                    </div>
+                                                    <div class="support-ticket-pills">
+                                                        <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact] ?? $lead->preferred_contact }}</span>
+                                                        <span class="status-pill is-good">חדש</span>
+                                                    </div>
+                                                </div>
+                                                <p class="support-ticket-meta">
+                                                    {{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->user_email ?? 'ללא אימייל' }} · {{ $lead->site_name ?? 'ללא אתר' }}
+                                                </p>
+                                                <p class="support-ticket-message"><strong>מטרה:</strong> {{ $lead->goal }}</p>
+                                                <p class="support-ticket-message">{{ $lead->message }}</p>
+                                            </article>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </article>
+
+                            <aside class="super-admin-side-stack">
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">מקורות צמיחה</p>
+                                            <h2>איזה שירותים מעניינים יותר</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach ($serviceCatalog as $serviceKey => $service)
+                                            <div class="domain-info-row">
+                                                <span>{{ $service['label'] }}</span>
+                                                <strong>{{ $adminServiceLeads->where('service_type', $serviceKey)->count() }}</strong>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </article>
                             </aside>

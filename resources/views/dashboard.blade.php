@@ -206,8 +206,8 @@
                                             <a class="steward-feed-item" href="{{ route('dashboard.support', ['site' => $site->id]) }}">
                                                 <span class="steward-feed-thumb">03</span>
                                                 <div>
-                                                    <strong>פתח פנייה אם צריך</strong>
-                                                    <p>אם משהו לא נטען או לא נשמר, התמיכה הטכנית זמינה עם מעקב מסודר אחר כל פנייה.</p>
+                                                    <strong>שקול שירות נוסף של Brndini</strong>
+                                                    <p>אם האתר צריך אחסון, SEO, קמפיינים, תחזוקה או שדרוג, אפשר לפתוח פנייה עסקית מתוך אזור השירותים.</p>
                                                 </div>
                                             </a>
                                         </div>
@@ -241,10 +241,10 @@
                                 <article class="steward-side-card steward-side-card-accent">
                                     <span class="steward-side-icon">★</span>
                                     <div>
-                                        <p class="eyebrow">{{ $isPremiumPlan ? 'מסלול פעיל' : 'גישה מתקדמת' }}</p>
-                                        <h3>{{ $isPremiumPlan ? 'פרימיום כבר פעיל באתר הזה' : 'שדרוג לפרימיום' }}</h3>
-                                        <p>{{ $isPremiumPlan ? 'כל הפיצ׳רים המתקדמים פתוחים: פרופילים, מדריך קריאה, שליטה רחבה יותר ועיצוב מורחב.' : ($recommendedPlan['description'] ?? 'פתח את היכולות המתקדמות ביותר של הווידג׳ט והצג חוויה מלאה יותר למבקרים.') }}</p>
-                                        <a class="primary-button" href="{{ route('dashboard.account', ['site' => $site->id]) }}">{{ $isPremiumPlan ? 'לניהול המסלול' : 'לשדרוג לפרימיום' }}</a>
+                                        <p class="eyebrow">שירותים נוספים של Brndini</p>
+                                        <h3>האתר צריך יותר מווידג׳ט?</h3>
+                                        <p>מכאן אפשר לבקש אחסון, קידום אורגני, קמפיינים, תחזוקת אתר, דפי נחיתה או שדרוג מלא של האתר הקיים.</p>
+                                        <a class="primary-button" href="{{ route('dashboard.services', ['site' => $site->id]) }}">לשירותי Brndini</a>
                                     </div>
                                 </article>
                             </aside>

@@ -30,6 +30,10 @@
             <span>✎</span>
             <span>התקנה והתאמת הווידג׳ט</span>
         </a>
+        <a class="{{ ($activeSection ?? '') === 'services' ? 'is-current' : '' }}" href="{{ route('dashboard.services', ['site' => $site->id]) }}">
+            <span>✶</span>
+            <span>שירותי Brndini</span>
+        </a>
         <a class="{{ ($activeSection ?? '') === 'support' ? 'is-current' : '' }}" href="{{ route('dashboard.support', ['site' => $site->id]) }}">
             <span>✦</span>
             <span>תמיכה טכנית</span>

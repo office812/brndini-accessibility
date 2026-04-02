@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AppSetting;
 use App\Models\Article;
+use App\Models\ServiceLead;
 use App\Models\Site;
 use App\Models\SupportTicket;
 use App\Models\User;
@@ -52,6 +53,11 @@ class DashboardController extends Controller
     public function support(Request $request): View
     {
         return view('support', $this->buildDashboardData($request->user()));
+    }
+
+    public function services(Request $request): View
+    {
+        return view('services', $this->buildDashboardData($request->user()));
     }
 
     public function statementPage(string $publicKey): View
@@ -407,6 +413,24 @@ class DashboardController extends Controller
             ->with('status', 'הפנייה נפתחה בהצלחה. צוות התמיכה יוכל לחזור אליך מתוך סביבת הניהול של האתר הזה.');
     }
 
+    public function storeServiceLead(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'site_id' => ['required', 'integer'],
+            'service_type' => ['required', Rule::in(array_keys($this->serviceCatalog()))],
+            'goal' => ['required', 'string', 'max:180'],
+            'message' => ['required', 'string', 'min:20', 'max:4000'],
+            'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
+        ]);
+
+        $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
+        ServiceLead::storeRuntime($request->user(), $site, $validated);
+
+        return redirect()
+            ->route('dashboard.services', ['site' => $site->id])
+            ->with('status', 'פניית השירות נשלחה ונשמרה. עכשיו אפשר לחזור אליך בנושא ' . ($this->serviceCatalog()[$validated['service_type']]['label'] ?? 'השירות שביקשת') . '.');
+    }
+
     public function updateSupportTicketAdmin(Request $request, string $ticketKey): RedirectResponse
     {
         $admin = $request->user();
@@ -566,6 +590,12 @@ class DashboardController extends Controller
             ->concat($runtimeSupportTickets)
             ->sortByDesc('sort_timestamp')
             ->values();
+        $serviceLeads = ServiceLead::runtimeLeads()
+            ->filter(fn (array $lead) => (int) ($lead['user_id'] ?? 0) === $user->id)
+            ->filter(fn (array $lead) => (int) ($lead['site_id'] ?? 0) === $site->id || empty($lead['site_id']))
+            ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
+            ->sortByDesc('sort_timestamp')
+            ->values();
         $openTickets = $supportTickets->whereIn('status', ['open', 'pending']);
         $urgentTickets = $supportTickets->where('priority', 'urgent');
         $activeSitesCount = $sites->filter(fn (Site $candidate) => $candidate->licenseActive())->count();
@@ -637,6 +667,14 @@ class DashboardController extends Controller
                 'resolved' => $supportTickets->where('status', 'resolved')->count(),
                 'lastActivity' => $supportTickets->first()?->last_activity_label ?? 'עדיין לא נפתחה פנייה',
             ],
+            'serviceCatalog' => $this->serviceCatalog(),
+            'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
+            'serviceLeads' => $serviceLeads,
+            'serviceLeadSummary' => [
+                'total' => $serviceLeads->count(),
+                'new' => $serviceLeads->where('status', 'new')->count(),
+                'lastActivity' => $serviceLeads->first()?->last_activity_label ?? 'עדיין לא נשלחה פנייה',
+            ],
             'platformReadiness' => $platformReadiness,
         ];
     }
@@ -697,6 +735,10 @@ class DashboardController extends Controller
             ->concat($runtimeTickets->map(fn (array $ticket) => SupportTicket::presentRuntime($ticket)))
             ->sortByDesc('sort_timestamp')
             ->values();
+        $serviceLeads = ServiceLead::runtimeLeads()
+            ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
+            ->sortByDesc('sort_timestamp')
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -714,6 +756,9 @@ class DashboardController extends Controller
             'adminUsers' => $users,
             'adminSites' => $sites,
             'adminSupportTickets' => $tickets,
+            'adminServiceLeads' => $serviceLeads,
+            'serviceCatalog' => $this->serviceCatalog(),
+            'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'superAdminUsersCount' => $superAdminUsersCount,
             'adminUsersCount' => $adminUsersCount,
             'clientUsersCount' => $clientUsersCount,
@@ -730,6 +775,7 @@ class DashboardController extends Controller
                 'sites' => $sites->count(),
                 'active_sites' => $sites->filter(fn (Site $site) => $site->licenseActive())->count(),
                 'tickets_open' => $tickets->whereIn('status', ['open', 'pending'])->count(),
+                'service_leads' => $serviceLeads->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
@@ -820,6 +866,56 @@ class DashboardController extends Controller
             'pending' => 'ממתינה למענה',
             'answered' => 'נענתה',
             'resolved' => 'נסגרה',
+        ];
+    }
+
+    private function serviceCatalog(): array
+    {
+        return [
+            'hosting' => [
+                'label' => 'אחסון וניהול שרת',
+                'description' => 'מעבר לאחסון יציב, תחזוקה שוטפת, גיבויים וניהול תשתית במקום אחד.',
+                'highlights' => ['אחסון מהיר', 'גיבויים', 'ניהול שרת', 'זמינות גבוהה'],
+            ],
+            'seo' => [
+                'label' => 'SEO וקידום אורגני',
+                'description' => 'שיפור מהירות, היררכיית תוכן, מטא, מאמרים ועמודי נחיתה לצמיחה אורגנית.',
+                'highlights' => ['מחקר מילות מפתח', 'תוכן', 'אופטימיזציה', 'דוחות'],
+            ],
+            'campaigns' => [
+                'label' => 'קמפיינים ופרסום',
+                'description' => 'ניהול קמפיינים, דפי נחיתה, מדידה ושיפור המרות סביב העסק שלך.',
+                'highlights' => ['Meta', 'Google Ads', 'דפי נחיתה', 'מדידה'],
+            ],
+            'maintenance' => [
+                'label' => 'תחזוקת אתר',
+                'description' => 'עדכונים, שיפורים, תיקונים שוטפים ושקט תפעולי לאתר הקיים שלך.',
+                'highlights' => ['עדכונים', 'תיקונים', 'שיפורים', 'זמינות'],
+            ],
+            'website_upgrade' => [
+                'label' => 'שדרוג אתר קיים',
+                'description' => 'ריענון עיצוב, שיפור חוויית משתמש, מהירות והמרה בלי להתחיל מאפס.',
+                'highlights' => ['עיצוב', 'UX', 'ביצועים', 'המרה'],
+            ],
+            'landing_pages' => [
+                'label' => 'דפי נחיתה',
+                'description' => 'דפים ממירים לקמפיינים, מבצעים או מוצרים חדשים עם חיבור למדידה.',
+                'highlights' => ['עיצוב ממיר', 'CTA', 'מדידה', 'טפסים'],
+            ],
+            'automations' => [
+                'label' => 'אוטומציות ותהליכים',
+                'description' => 'חיבורים, CRM, אוטומציות שיווק וייעול תהליכים פנימיים.',
+                'highlights' => ['CRM', 'מיילים', 'אינטגרציות', 'תהליכים'],
+            ],
+        ];
+    }
+
+    private function servicePreferredContactLabels(): array
+    {
+        return [
+            'email' => 'אימייל',
+            'phone' => 'טלפון',
+            'whatsapp' => 'ווטסאפ',
         ];
     }
 
