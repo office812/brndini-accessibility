@@ -507,6 +507,7 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'status' => ['required', Rule::in(array_keys($this->serviceLeadStatusLabels()))],
             'internal_note' => ['nullable', 'string', 'max:4000'],
+            'follow_up_at' => ['nullable', 'date'],
         ]);
 
         ServiceLead::updateRuntime($leadKey, $admin, $validated);

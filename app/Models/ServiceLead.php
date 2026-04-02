@@ -25,6 +25,7 @@ class ServiceLead extends Model
         'source',
         'entry_point',
         'internal_note',
+        'follow_up_at',
         'last_activity_at',
     ];
 
@@ -151,6 +152,10 @@ class ServiceLead extends Model
         $freshnessKey = 'fresh';
         $freshnessLabel = 'חדש';
         $freshnessTone = 'good';
+        $followUpAt = isset($lead['follow_up_at']) && filled($lead['follow_up_at'])
+            ? Carbon::parse($lead['follow_up_at'])
+            : null;
+        $followUpStatus = static::followUpMeta($followUpAt);
 
         if ($lastActivityAt && $lastActivityAt->lt(now()->subDays(3))) {
             $freshnessKey = 'stale';
@@ -190,6 +195,9 @@ class ServiceLead extends Model
             'freshness_key' => $freshnessKey,
             'freshness_label' => $freshnessLabel,
             'freshness_tone' => $freshnessTone,
+            'follow_up_at' => $followUpAt?->toDateString(),
+            'follow_up_label' => $followUpStatus['label'],
+            'follow_up_tone' => $followUpStatus['tone'],
             'preferred_contact_key' => $preferredContact,
             'next_step_label' => static::nextStepLabel(
                 $lead['status'] ?? 'new',
@@ -276,6 +284,38 @@ class ServiceLead extends Model
         return $phone === '' ? null : $phone;
     }
 
+    protected static function followUpMeta(?Carbon $followUpAt): array
+    {
+        if (! $followUpAt) {
+            return [
+                'label' => 'ללא מועד חזרה',
+                'tone' => 'neutral',
+            ];
+        }
+
+        $today = now()->startOfDay();
+        $date = $followUpAt->copy()->startOfDay();
+
+        if ($date->lt($today)) {
+            return [
+                'label' => 'מועד חזרה עבר',
+                'tone' => 'warn',
+            ];
+        }
+
+        if ($date->equalTo($today)) {
+            return [
+                'label' => 'לחזור היום',
+                'tone' => 'good',
+            ];
+        }
+
+        return [
+            'label' => 'לחזור ב־' . $followUpAt->format('d/m'),
+            'tone' => 'neutral',
+        ];
+    }
+
     public static function updateRuntime(string $leadKey, User $admin, array $validated): void
     {
         $scope = static::runtimeScope();
@@ -289,6 +329,9 @@ class ServiceLead extends Model
 
             $lead['status'] = $validated['status'];
             $lead['internal_note'] = trim((string) ($validated['internal_note'] ?? ''));
+            $lead['follow_up_at'] = filled($validated['follow_up_at'] ?? null)
+                ? Carbon::parse($validated['follow_up_at'])->toDateString()
+                : null;
             $lead['updated_by_name'] = $admin->name;
             $lead['updated_by_email'] = $admin->email;
             $lead['last_activity_at'] = Carbon::now()->toIso8601String();

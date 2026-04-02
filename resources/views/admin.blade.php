@@ -737,6 +737,11 @@
                                 <strong>{{ $adminServiceLeads->where('freshness_key', 'stale')->count() }}</strong>
                                 <p>לידים שדורשים חזרה</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">📅</span>
+                                <strong>{{ $adminServiceLeads->where('follow_up_tone', 'good')->count() }}</strong>
+                                <p>חזרות שמתוזמנות להיום</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -835,6 +840,11 @@
                                                     <span class="status-pill is-neutral">{{ $lead->intent_label }}</span>
                                                     <span class="meta-note">הפעולה הבאה: {{ $lead->next_step_label }}</span>
                                                 </div>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill {{ $lead->follow_up_tone === 'good' ? 'is-good' : ($lead->follow_up_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                        {{ $lead->follow_up_label }}
+                                                    </span>
+                                                </div>
                                                 <div class="lead-quick-actions">
                                                     @if (!empty($lead->mail_to))
                                                         <a class="secondary-button" href="{{ $lead->mail_to }}">שלח מייל</a>
@@ -870,6 +880,10 @@
                                                     <label class="support-admin-span-2">
                                                         <span>הערה פנימית</span>
                                                         <textarea name="internal_note" rows="3" placeholder="למשל: לחזור מחר, מתאים לאחסון, צריך שיחת היכרות">{{ $lead->internal_note }}</textarea>
+                                                    </label>
+                                                    <label>
+                                                        <span>מועד חזרה</span>
+                                                        <input type="date" name="follow_up_at" value="{{ $lead->follow_up_at }}">
                                                     </label>
                                                 </div>
                                                 <div class="support-form-actions">
@@ -948,6 +962,10 @@
                                         <div class="domain-info-row">
                                             <span>דורשים חזרה</span>
                                             <strong>{{ $adminServiceLeads->where('freshness_key', 'stale')->count() }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>לחזור היום</span>
+                                            <strong>{{ $adminServiceLeads->where('follow_up_tone', 'good')->count() }}</strong>
                                         </div>
                                     </div>
                                 </article>
