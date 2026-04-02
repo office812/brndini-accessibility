@@ -74,4 +74,17 @@
             </article>
         </div>
     </section>
+
+    <section class="section-band section-band-alt">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">מעבר לחבילות</p>
+            <h2>הווידג׳ט הוא שכבת הכניסה. שירותי Brndini הם השכבה העסקית שמעליו.</h2>
+            <p class="hero-text">
+                אם אתה רוצה יותר תנועה, יותר לידים, תשתית חזקה יותר או אתר שנראה ומתפקד טוב יותר,
+                Brndini מציעה שירותים עסקיים נפרדים מהכלי החינמי.
+            </p>
+        </div>
+
+        @include('partials.brndini-services-cards')
+    </section>
 @endsection

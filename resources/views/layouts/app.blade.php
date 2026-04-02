@@ -98,6 +98,7 @@
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="{{ route('home') }}#solutions">פתרונות</a>
                         <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
+                        <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
@@ -164,6 +165,7 @@
                             <h3>המוצר</h3>
                             <a href="{{ route('home') }}#solutions">פתרונות</a>
                             <a href="{{ route('pricing') }}">מחירון</a>
+                            <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
                             <a href="{{ route('home') }}#articles">מאמרים</a>
                         </div>
                         <div class="footer-link-group">
@@ -186,6 +188,7 @@
                     <div class="footer-inline-links">
                         <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
+                        <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('register.show') }}">פתיחת חשבון</a>
                     </div>

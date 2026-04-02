@@ -91,6 +91,19 @@
         </div>
     </section>
 
+    <section class="section-band">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">מעבר לכלי החינמי</p>
+            <h2>Brndini בנויה לעבוד כמו אקו־סיסטם, לא כמו מוצר בודד.</h2>
+            <p class="hero-text">
+                הווידג׳ט החינמי פותח את הדלת. כשהעסק רוצה לשפר אתר, להשיג יותר תנועה או לעבוד על תשתית,
+                Brndini מציעה שכבת שירותים עסקיים משלימה.
+            </p>
+        </div>
+
+        @include('partials.brndini-services-cards')
+    </section>
+
     <section class="cta-banner cta-banner-wide">
         <div>
             <p class="eyebrow">בואו נבנה שכבת נגישות שנראית כמו מוצר אמיתי</p>

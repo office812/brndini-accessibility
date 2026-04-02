@@ -339,6 +339,19 @@
         </div>
     </section>
 
+    <section class="section-band section-band-alt">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">שירותים נוספים של Brndini</p>
+            <h2>הווידג׳ט נשאר חינמי. Brndini נכנסת כשצריך צמיחה, תשתית ותפעול.</h2>
+            <p class="hero-text">
+                A11Y Bridge היא דלת הכניסה. אחריה אפשר להמשיך לאחסון, SEO, קמפיינים, תחזוקת אתר,
+                שדרוג אתר קיים, דפי נחיתה ואוטומציות, בלי לבלבל את זה עם תמיכה טכנית של המערכת.
+            </p>
+        </div>
+
+        @include('partials.brndini-services-cards')
+    </section>
+
     <section class="section-band section-band-alt" id="pricing">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">מסלולים</p>
