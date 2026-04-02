@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\RuntimeStore;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,5 +55,20 @@ class User extends Authenticatable
         $superAdminEmail = strtolower(trim((string) config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il')));
 
         return $email !== '' && $email === $superAdminEmail;
+    }
+
+    public function legalConsentScope(): string
+    {
+        return 'user-legal-consents';
+    }
+
+    public function storeLegalConsents(array $payload): void
+    {
+        RuntimeStore::put($this->legalConsentScope(), 'user-' . $this->id, $payload);
+    }
+
+    public function latestLegalConsent(): array
+    {
+        return RuntimeStore::get($this->legalConsentScope(), 'user-' . $this->id, []);
     }
 }

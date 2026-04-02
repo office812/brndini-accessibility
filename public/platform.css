@@ -1613,6 +1613,25 @@ body.page-is-ready .auth-shell {
     box-shadow: var(--shadow-xs);
 }
 
+.consent-row {
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.consent-row span {
+    color: var(--page-muted);
+    line-height: 1.75;
+}
+
+.consent-row a {
+    color: var(--brand-primary);
+    font-weight: 700;
+}
+
+.signup-note-legal {
+    margin-top: -2px;
+}
+
 .flow-step-card h3,
 .capability-card h3,
 .profile-card h3 {

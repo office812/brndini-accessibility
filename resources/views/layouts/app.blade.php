@@ -173,6 +173,8 @@
                             <a href="{{ route('about') }}">אודות</a>
                             <a href="{{ route('articles.index') }}">בלוג</a>
                             <a href="{{ route('login.show') }}">אזור לקוחות</a>
+                            <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
+                            <a href="{{ route('legal.privacy') }}">פרטיות</a>
                         </div>
                         <div class="footer-link-group">
                             <h3>התחלה מהירה</h3>
@@ -190,6 +192,8 @@
                         <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('brndini.services') }}">שירותי Brndini</a>
                         <a href="{{ route('articles.index') }}">מאמרים</a>
+                        <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
+                        <a href="{{ route('legal.privacy') }}">פרטיות</a>
                         <a href="{{ route('register.show') }}">פתיחת חשבון</a>
                     </div>
                 </div>

@@ -41,6 +41,9 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8', 'max:120', 'confirmed'],
             'site_name' => ['required', 'string', 'max:160'],
             'domain' => ['required', 'string', 'max:190'],
+            'accepted_terms' => ['accepted'],
+            'accepted_privacy' => ['accepted'],
+            'acknowledged_self_service' => ['accepted'],
         ]);
 
         $domain = SiteSettings::normalizeUrl($validated['domain']);
@@ -88,6 +91,17 @@ class AuthController extends Controller
                 $site = Site::createForUser($user, $sitePayload);
 
                 $user->setRelation('sites', collect([$site]));
+
+                $user->storeLegalConsents([
+                    'accepted_terms' => true,
+                    'accepted_privacy' => true,
+                    'acknowledged_self_service' => true,
+                    'accepted_at' => Carbon::now()->toIso8601String(),
+                    'ip_address' => request()->ip(),
+                    'user_agent' => substr((string) request()->userAgent(), 0, 500),
+                    'terms_version' => '2026-04-02',
+                    'privacy_version' => '2026-04-02',
+                ]);
 
                 return $user;
             });

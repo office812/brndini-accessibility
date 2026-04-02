@@ -94,6 +94,25 @@
                             <button class="password-toggle" type="button" data-password-toggle="signup_password_confirmation" aria-label="הצג או הסתר סיסמה">👁</button>
                         </div>
 
+                        <label class="toggle-row consent-row">
+                            <input type="checkbox" name="accepted_terms" value="1" @checked(old('accepted_terms')) required>
+                            <span>קראתי ואני מאשר/ת את <a href="{{ route('legal.terms') }}" target="_blank" rel="noopener">תנאי השימוש</a>.</span>
+                        </label>
+
+                        <label class="toggle-row consent-row">
+                            <input type="checkbox" name="accepted_privacy" value="1" @checked(old('accepted_privacy')) required>
+                            <span>קראתי ואני מאשר/ת את <a href="{{ route('legal.privacy') }}" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</span>
+                        </label>
+
+                        <label class="toggle-row consent-row">
+                            <input type="checkbox" name="acknowledged_self_service" value="1" @checked(old('acknowledged_self_service')) required>
+                            <span>אני מבין/ה שזהו כלי self-service ותמיכה טכנית במערכת בלבד, ולא שירות נגישות, ייעוץ או התחייבות לציות מלא.</span>
+                        </label>
+
+                        <p class="signup-note signup-note-legal">
+                            פתיחת החשבון מיועדת לשימוש עצמאי בכלי. התמיכה בפלטפורמה היא תמיכה טכנית בלבד.
+                        </p>
+
                         <div class="signup-actions-row">
                             <button class="ghost-button" type="button" data-signup-prev>חזרה</button>
                             <button class="primary-button auth-submit" type="submit">ליצור חשבון</button>
