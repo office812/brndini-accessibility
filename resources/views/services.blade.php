@@ -90,6 +90,7 @@
                                 <form class="stack-form" method="POST" action="{{ route('dashboard.services.store', ['site' => $site->id]) }}">
                                     @csrf
                                     <input type="hidden" name="site_id" value="{{ old('site_id', $site->id) }}">
+                                    <input type="hidden" name="entry_point" value="{{ old('entry_point', request('entry', 'dashboard-services')) }}">
 
                     <label for="service_type">איזה שירות מעניין אותך?</label>
                     <select id="service_type" name="service_type">
@@ -200,6 +201,8 @@
                                                 </div>
 
                                                 <div class="support-ticket-pills">
+                                                    <span class="status-pill is-neutral">{{ $lead->source_label ?? 'פנייה עסקית' }}</span>
+                                                    <span class="status-pill is-neutral">{{ $lead->entry_label ?? 'כניסה כללית' }}</span>
                                                     <span class="status-pill {{ in_array($lead->status, ['won', 'qualified'], true) ? 'is-good' : ($lead->status === 'closed' ? 'is-neutral' : 'is-warn') }}">
                                                         {{ $serviceLeadStatusLabels[$lead->status] ?? $lead->status }}
                                                     </span>

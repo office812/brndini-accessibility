@@ -169,6 +169,8 @@
                         <option value="ecosystem_access" @selected($selectedPublicServiceType === 'ecosystem_access')>גישה מוקדמת לכלי Brndini הבאים</option>
                     </select>
 
+                    <input type="hidden" name="entry_point" value="{{ old('entry_point', request('entry', 'public-services')) }}">
+
                     <label for="public_service_goal">מה אתה רוצה להשיג?</label>
                     <input id="public_service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להגדיל לידים, להעביר לאחסון יציב">
 

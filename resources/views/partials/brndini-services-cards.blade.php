@@ -57,7 +57,7 @@
                     <span class="preview-pill">{{ $highlight }}</span>
                 @endforeach
             </div>
-            <a class="secondary-button button-link" href="{{ auth()->check() ? route('dashboard.services', array_filter(['site' => request('site'), 'service' => $serviceKey])) : route('brndini.services', ['service' => $serviceKey]) . '#public-service-form' }}">
+            <a class="secondary-button button-link" href="{{ auth()->check() ? route('dashboard.services', array_filter(['site' => request('site'), 'service' => $serviceKey, 'entry' => 'dashboard-recommendations'])) : route('brndini.services', ['service' => $serviceKey, 'entry' => 'services-cards']) . '#public-service-form' }}">
                 {{ $serviceCard['cta'] ?? 'רוצה פרטים' }}
             </a>
         </article>
