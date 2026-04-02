@@ -147,6 +147,8 @@ class ServiceLead extends Model
         }
 
         return (object) [
+            'intent_key' => ($lead['service_type'] ?? null) === 'ecosystem_access' ? 'ecosystem' : 'service',
+            'intent_label' => ($lead['service_type'] ?? null) === 'ecosystem_access' ? 'עניין במוצרים הבאים' : 'ליד שירות',
             'update_key' => (string) ($lead['key'] ?? ('service-' . ($lead['id'] ?? 'x'))),
             'reference_code' => $lead['reference_code'] ?? 'BRN-RUNTIME',
             'service_type' => $lead['service_type'] ?? 'general',
@@ -168,9 +170,43 @@ class ServiceLead extends Model
             'freshness_label' => $freshnessLabel,
             'freshness_tone' => $freshnessTone,
             'preferred_contact_key' => $preferredContact,
+            'next_step_label' => static::nextStepLabel(
+                $lead['status'] ?? 'new',
+                $preferredContact,
+                $lead['service_type'] ?? null
+            ),
             'last_activity_label' => $lastActivityAt?->diffForHumans() ?? 'נוצר עכשיו',
             'sort_timestamp' => $lastActivityAt?->timestamp ?? 0,
         ];
+    }
+
+    protected static function nextStepLabel(string $status, string $preferredContact, ?string $serviceType): string
+    {
+        if ($status === 'won') {
+            return 'להעביר לטיפול ומסירה';
+        }
+
+        if ($status === 'closed') {
+            return 'אין פעולה פתוחה כרגע';
+        }
+
+        if ($status === 'proposal') {
+            return 'לעקוב אחרי ההצעה';
+        }
+
+        if ($status === 'qualified') {
+            return $serviceType === 'ecosystem_access' ? 'לתייג לרשימת גישה מוקדמת' : 'להכין הצעה מתאימה';
+        }
+
+        if ($status === 'contacted') {
+            return $serviceType === 'ecosystem_access' ? 'לבדוק עניין במוצר הבא' : 'להבין התאמה עסקית';
+        }
+
+        return match ($preferredContact) {
+            'phone' => 'לתאם שיחה ראשונית',
+            'whatsapp' => 'לחזור בווטסאפ',
+            default => $serviceType === 'ecosystem_access' ? 'לשלוח עדכון גישה מוקדמת' : 'לשלוח מייל היכרות',
+        };
     }
 
     public static function updateRuntime(string $leadKey, User $admin, array $validated): void

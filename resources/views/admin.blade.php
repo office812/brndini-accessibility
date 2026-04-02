@@ -727,6 +727,16 @@
                                 <strong>{{ $adminServiceLeads->where('source', 'public')->count() }}</strong>
                                 <p>לידים מהאתר הציבורי</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🪄</span>
+                                <strong>{{ $adminServiceLeads->where('service_type', 'ecosystem_access')->count() }}</strong>
+                                <p>עניין במוצרים הבאים</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">⏰</span>
+                                <strong>{{ $adminServiceLeads->where('freshness_key', 'stale')->count() }}</strong>
+                                <p>לידים שדורשים חזרה</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -806,6 +816,10 @@
                                                 <p class="support-ticket-meta">
                                                     {{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->user_email ?? 'ללא אימייל' }} · {{ $lead->site_name ?? 'ללא אתר' }}
                                                 </p>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">{{ $lead->intent_label }}</span>
+                                                    <span class="meta-note">הפעולה הבאה: {{ $lead->next_step_label }}</span>
+                                                </div>
                                                 <div class="lead-quick-actions">
                                                     @if (!empty($lead->mail_to))
                                                         <a class="secondary-button" href="{{ $lead->mail_to }}">שלח מייל</a>
@@ -882,6 +896,14 @@
                                         <div class="domain-info-row">
                                             <span>מתוך הדשבורד</span>
                                             <strong>{{ $adminServiceLeads->where('source', 'dashboard')->count() }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>עניין במוצרים הבאים</span>
+                                            <strong>{{ $adminServiceLeads->where('service_type', 'ecosystem_access')->count() }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>דורשים חזרה</span>
+                                            <strong>{{ $adminServiceLeads->where('freshness_key', 'stale')->count() }}</strong>
                                         </div>
                                     </div>
                                 </article>

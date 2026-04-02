@@ -3011,6 +3011,17 @@ body.page-is-ready .auth-shell {
     padding-inline: 16px;
 }
 
+.lead-intel-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.lead-intel-row .meta-note {
+    font-weight: 700;
+}
+
 .support-admin-response {
     display: grid;
     gap: 6px;
