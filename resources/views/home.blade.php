@@ -365,6 +365,23 @@
         @include('partials.pricing-cards')
     </section>
 
+    <section class="section-band section-band-plain" id="faq">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">שאלות נפוצות</p>
+            <h2>תשובות קצרות שיעזרו להבין מהר מה המוצר נותן, ומה הוא לא.</h2>
+            <p class="hero-text">
+                זה המקום לעשות סדר: מה כולל הכלי החינמי, איך נראית התמיכה, מה קורה אחרי ההטמעה,
+                ואיפה Brndini נכנסת עם שירותים עסקיים נפרדים.
+            </p>
+        </div>
+
+        @include('partials.faq-items')
+
+        <div class="magazine-actions">
+            <a class="primary-button button-link" href="{{ route('faq') }}">לכל השאלות והתשובות</a>
+        </div>
+    </section>
+
     <section class="section-band articles-band" id="articles">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">מאמרים</p>

@@ -6187,6 +6187,34 @@ body.page-is-ready .auth-shell {
     font-size: 0.92rem;
 }
 
+.faq-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.faq-item {
+    display: grid;
+    gap: 10px;
+    padding: 20px 22px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow-xs);
+}
+
+.faq-item h3 {
+    margin: 0;
+    font-size: 1.08rem;
+    line-height: 1.4;
+}
+
+.faq-item p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.85;
+}
+
 @media (max-width: 1100px) {
     .statement-builder-grid {
         grid-template-columns: 1fr;
@@ -6195,7 +6223,8 @@ body.page-is-ready .auth-shell {
     .steward-overview-grid,
     .steward-content-grid,
     .steward-stat-grid,
-    .service-recommendation-grid {
+    .service-recommendation-grid,
+    .faq-list {
         grid-template-columns: 1fr;
     }
 
