@@ -717,6 +717,11 @@
                                 <strong>{{ $adminServiceLeads->pluck('user_email')->filter()->unique()->count() }}</strong>
                                 <p>לקוחות שפנו</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">✅</span>
+                                <strong>{{ $adminServiceLeads->where('status', 'won')->count() }}</strong>
+                                <p>נסגרו כלקוח</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -763,20 +768,47 @@
                                                         <p class="support-ticket-code">{{ $lead->reference_code }}</p>
                                                         <h3>{{ $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type }}</h3>
                                                     </div>
-                                                    <div class="support-ticket-pills">
-                                                        <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact] ?? $lead->preferred_contact }}</span>
-                                                        <span class="status-pill is-good">חדש</span>
-                                                    </div>
+                                                <div class="support-ticket-pills">
+                                                    <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact] ?? $lead->preferred_contact }}</span>
+                                                    <span class="status-pill {{ in_array($lead->status, ['won', 'qualified'], true) ? 'is-good' : ($lead->status === 'closed' ? 'is-neutral' : 'is-warn') }}">
+                                                        {{ $serviceLeadStatusLabels[$lead->status] ?? $lead->status }}
+                                                    </span>
                                                 </div>
-                                                <p class="support-ticket-meta">
-                                                    {{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->user_email ?? 'ללא אימייל' }} · {{ $lead->site_name ?? 'ללא אתר' }}
-                                                </p>
-                                                <p class="support-ticket-message"><strong>מטרה:</strong> {{ $lead->goal }}</p>
-                                                <p class="support-ticket-message">{{ $lead->message }}</p>
-                                            </article>
-                                        @endforeach
-                                    </div>
-                                @endif
+                                            </div>
+                                            <p class="support-ticket-meta">
+                                                {{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->user_email ?? 'ללא אימייל' }} · {{ $lead->site_name ?? 'ללא אתר' }}
+                                            </p>
+                                            <p class="support-ticket-message"><strong>מטרה:</strong> {{ $lead->goal }}</p>
+                                            <p class="support-ticket-message">{{ $lead->message }}</p>
+
+                                            @if (!empty($lead->internal_note))
+                                                <p class="support-ticket-message"><strong>הערה פנימית:</strong> {{ $lead->internal_note }}</p>
+                                            @endif
+
+                                            <form class="support-admin-form" method="POST" action="{{ route('dashboard.super-admin.leads.update', $lead->update_key) }}">
+                                                @csrf
+                                                <div class="support-admin-grid">
+                                                    <label>
+                                                        <span>סטטוס ליד</span>
+                                                        <select name="status">
+                                                            @foreach ($serviceLeadStatusLabels as $statusKey => $statusLabel)
+                                                                <option value="{{ $statusKey }}" @selected($lead->status === $statusKey)>{{ $statusLabel }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </label>
+                                                    <label class="support-admin-span-2">
+                                                        <span>הערה פנימית</span>
+                                                        <textarea name="internal_note" rows="3" placeholder="למשל: לחזור מחר, מתאים לאחסון, צריך שיחת היכרות">{{ $lead->internal_note }}</textarea>
+                                                    </label>
+                                                </div>
+                                                <div class="support-form-actions">
+                                                    <button class="secondary-button" type="submit">שמור ליד</button>
+                                                </div>
+                                            </form>
+                                        </article>
+                                    @endforeach
+                                </div>
+                            @endif
                             </article>
 
                             <aside class="super-admin-side-stack">
@@ -794,6 +826,19 @@
                                                 <strong>{{ $adminServiceLeads->where('service_type', $serviceKey)->count() }}</strong>
                                             </div>
                                         @endforeach
+
+                                        <div class="domain-info-row">
+                                            <span>חדשים</span>
+                                            <strong>{{ $adminServiceLeads->where('status', 'new')->count() }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>בהצעה</span>
+                                            <strong>{{ $adminServiceLeads->where('status', 'proposal')->count() }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>נסגרו כלקוח</span>
+                                            <strong>{{ $adminServiceLeads->where('status', 'won')->count() }}</strong>
+                                        </div>
                                     </div>
                                 </article>
                             </aside>

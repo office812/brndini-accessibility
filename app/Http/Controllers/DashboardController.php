@@ -475,6 +475,23 @@ class DashboardController extends Controller
             ->with('status', 'הפנייה עודכנה ונשמרה ממרכז הסופר־אדמין.');
     }
 
+    public function updateServiceLeadAdmin(Request $request, string $leadKey): RedirectResponse
+    {
+        $admin = $request->user();
+        $this->ensureSuperAdmin($admin);
+
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(array_keys($this->serviceLeadStatusLabels()))],
+            'internal_note' => ['nullable', 'string', 'max:4000'],
+        ]);
+
+        ServiceLead::updateRuntime($leadKey, $admin, $validated);
+
+        return redirect()
+            ->route('dashboard.super-admin', ['tab' => 'leads'])
+            ->with('status', 'הליד עודכן ונשמר ממרכז הסופר־אדמין.');
+    }
+
     public function updateGlobalTracking(Request $request): RedirectResponse
     {
         $this->ensureSuperAdmin($request->user());
@@ -676,6 +693,7 @@ class DashboardController extends Controller
             ],
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
+            'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
             'serviceLeads' => $serviceLeads,
             'serviceRecommendations' => $serviceRecommendations,
             'serviceLeadSummary' => [
@@ -767,6 +785,7 @@ class DashboardController extends Controller
             'adminServiceLeads' => $serviceLeads,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
+            'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
             'superAdminUsersCount' => $superAdminUsersCount,
             'adminUsersCount' => $adminUsersCount,
             'clientUsersCount' => $clientUsersCount,
@@ -924,6 +943,18 @@ class DashboardController extends Controller
             'email' => 'אימייל',
             'phone' => 'טלפון',
             'whatsapp' => 'ווטסאפ',
+        ];
+    }
+
+    private function serviceLeadStatusLabels(): array
+    {
+        return [
+            'new' => 'חדש',
+            'contacted' => 'נוצר קשר',
+            'qualified' => 'רלוונטי',
+            'proposal' => 'נשלחה הצעה',
+            'won' => 'נסגר כלקוח',
+            'closed' => 'נסגר',
         ];
     }
 

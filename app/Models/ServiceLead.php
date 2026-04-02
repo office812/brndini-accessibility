@@ -19,6 +19,7 @@ class ServiceLead extends Model
         'message',
         'preferred_contact',
         'status',
+        'internal_note',
         'last_activity_at',
     ];
 
@@ -64,6 +65,7 @@ class ServiceLead extends Model
             'message' => trim((string) $validated['message']),
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
+            'internal_note' => '',
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
         ];
@@ -86,6 +88,7 @@ class ServiceLead extends Model
             'message' => $lead['message'] ?? '',
             'preferred_contact' => $lead['preferred_contact'] ?? 'email',
             'status' => $lead['status'] ?? 'new',
+            'internal_note' => $lead['internal_note'] ?? '',
             'user_name' => $lead['user_name'] ?? null,
             'user_email' => $lead['user_email'] ?? null,
             'site_name' => $lead['site_name'] ?? null,
@@ -93,5 +96,28 @@ class ServiceLead extends Model
             'last_activity_label' => $lastActivityAt?->diffForHumans() ?? 'נוצר עכשיו',
             'sort_timestamp' => $lastActivityAt?->timestamp ?? 0,
         ];
+    }
+
+    public static function updateRuntime(string $leadKey, User $admin, array $validated): void
+    {
+        $scope = static::runtimeScope();
+
+        $updated = static::runtimeLeads()->map(function (array $lead) use ($leadKey, $admin, $validated) {
+            $currentKey = (string) ($lead['key'] ?? ('service-' . ($lead['id'] ?? 'x')));
+
+            if ($currentKey !== $leadKey) {
+                return $lead;
+            }
+
+            $lead['status'] = $validated['status'];
+            $lead['internal_note'] = trim((string) ($validated['internal_note'] ?? ''));
+            $lead['updated_by_name'] = $admin->name;
+            $lead['updated_by_email'] = $admin->email;
+            $lead['last_activity_at'] = Carbon::now()->toIso8601String();
+
+            return $lead;
+        })->values()->all();
+
+        RuntimeStore::put($scope, 'items', $updated);
     }
 }
