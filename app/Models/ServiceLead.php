@@ -166,6 +166,18 @@ class ServiceLead extends Model
         $utmCampaign = static::normalizeText($lead['utm_campaign'] ?? null);
         $referrerUrl = static::normalizeUrl($lead['referrer_url'] ?? null);
         $referrerHost = $referrerUrl ? (parse_url($referrerUrl, PHP_URL_HOST) ?: null) : null;
+        $opportunity = static::opportunityMeta(
+            (string) ($lead['service_type'] ?? 'general'),
+            (string) ($lead['goal'] ?? ''),
+            (string) ($lead['message'] ?? ''),
+            $contactPhone,
+            $contactEmail,
+            (string) ($lead['site_domain'] ?? ''),
+            $utmSource,
+            $utmMedium,
+            $utmCampaign,
+            $referrerHost
+        );
 
         $freshnessKey = 'fresh';
         $freshnessLabel = 'חדש';
@@ -206,6 +218,10 @@ class ServiceLead extends Model
             'referrer_url' => $referrerUrl,
             'referrer_host' => $referrerHost,
             'marketing_label' => static::marketingLabel($utmSource, $utmMedium, $utmCampaign),
+            'opportunity_score' => $opportunity['score'],
+            'opportunity_key' => $opportunity['key'],
+            'opportunity_label' => $opportunity['label'],
+            'opportunity_tone' => $opportunity['tone'],
             'user_name' => $lead['user_name'] ?? $contactName,
             'user_email' => $lead['user_email'] ?? $contactEmail,
             'contact_name' => $contactName,
@@ -311,6 +327,85 @@ class ServiceLead extends Model
         }
 
         return implode(' / ', $parts);
+    }
+
+    protected static function opportunityMeta(
+        string $serviceType,
+        string $goal,
+        string $message,
+        ?string $contactPhone,
+        ?string $contactEmail,
+        string $siteDomain,
+        ?string $utmSource,
+        ?string $utmMedium,
+        ?string $utmCampaign,
+        ?string $referrerHost
+    ): array {
+        $score = 0;
+
+        $score += $serviceType === 'ecosystem_access' ? 18 : 28;
+        $score += filled(trim($siteDomain)) ? 18 : 0;
+
+        $goalLength = mb_strlen(trim($goal));
+        if ($goalLength >= 50) {
+            $score += 14;
+        } elseif ($goalLength >= 20) {
+            $score += 8;
+        }
+
+        $messageLength = mb_strlen(trim($message));
+        if ($messageLength >= 120) {
+            $score += 20;
+        } elseif ($messageLength >= 60) {
+            $score += 12;
+        } elseif ($messageLength >= 20) {
+            $score += 6;
+        }
+
+        if (filled($contactPhone)) {
+            $score += 18;
+        } elseif (filled($contactEmail)) {
+            $score += 10;
+        }
+
+        if (filled($utmCampaign)) {
+            $score += 10;
+        }
+
+        if (filled($utmSource) || filled($utmMedium)) {
+            $score += 6;
+        }
+
+        if (filled($referrerHost)) {
+            $score += 6;
+        }
+
+        $score = min(100, $score);
+
+        if ($score >= 72) {
+            return [
+                'score' => $score,
+                'key' => 'hot',
+                'label' => 'ליד חם',
+                'tone' => 'good',
+            ];
+        }
+
+        if ($score >= 42) {
+            return [
+                'score' => $score,
+                'key' => 'warm',
+                'label' => 'ליד איכותי',
+                'tone' => 'warn',
+            ];
+        }
+
+        return [
+            'score' => $score,
+            'key' => 'cold',
+            'label' => 'עניין ראשוני',
+            'tone' => 'neutral',
+        ];
     }
 
     protected static function normalizePhone(mixed $value): ?string

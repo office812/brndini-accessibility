@@ -210,6 +210,7 @@
                                                     @if (!empty($lead->marketing_label))
                                                         <span class="status-pill is-neutral">UTM: {{ $lead->marketing_label }}</span>
                                                     @endif
+                                                    <span class="status-pill {{ $lead->opportunity_tone === 'good' ? 'is-good' : ($lead->opportunity_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">{{ $lead->opportunity_label }}</span>
                                                     <span class="status-pill {{ in_array($lead->status, ['won', 'qualified'], true) ? 'is-good' : ($lead->status === 'closed' ? 'is-neutral' : 'is-warn') }}">
                                                         {{ $serviceLeadStatusLabels[$lead->status] ?? $lead->status }}
                                                     </span>
@@ -230,6 +231,8 @@
                                             @if (!empty($lead->referrer_host))
                                                 <p class="support-ticket-meta">הגיע דרך: {{ $lead->referrer_host }}</p>
                                             @endif
+
+                                            <p class="support-ticket-meta">איכות פנייה: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</p>
 
                                             <p class="support-ticket-message">{{ $lead->message }}</p>
                                         </article>

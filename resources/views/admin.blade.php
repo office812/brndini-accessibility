@@ -723,6 +723,11 @@
                                 <p>נסגרו כלקוח</p>
                             </article>
                             <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🔥</span>
+                                <strong>{{ $adminServiceLeads->where('opportunity_key', 'hot')->count() }}</strong>
+                                <p>לידים חמים</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">↗</span>
                                 <strong>{{ $adminServiceLeads->where('source', 'public')->count() }}</strong>
                                 <p>לידים מהאתר הציבורי</p>
@@ -822,6 +827,9 @@
                                                         <span class="status-pill is-neutral">{{ $lead->source_label ?? 'פנייה עסקית' }}</span>
                                                         <span class="status-pill is-neutral">{{ $lead->entry_label ?? 'כניסה כללית' }}</span>
                                                         <span class="status-pill is-neutral">{{ $servicePreferredContactLabels[$lead->preferred_contact_key ?? $lead->preferred_contact] ?? $lead->preferred_contact }}</span>
+                                                        <span class="status-pill {{ $lead->opportunity_tone === 'good' ? 'is-good' : ($lead->opportunity_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                            {{ $lead->opportunity_label }}
+                                                        </span>
                                                         <span class="status-pill {{ $lead->freshness_tone === 'good' ? 'is-good' : ($lead->freshness_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
                                                             {{ $lead->freshness_label }}
                                                         </span>
@@ -841,6 +849,9 @@
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">{{ $lead->intent_label }}</span>
                                                     <span class="meta-note">הפעולה הבאה: {{ $lead->next_step_label }}</span>
+                                                </div>
+                                                <div class="lead-intel-row">
+                                                    <span class="meta-note">איכות ליד: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</span>
                                                 </div>
                                                 @if (!empty($lead->marketing_label) || !empty($lead->referrer_host))
                                                     <div class="lead-intel-row">
@@ -924,6 +935,23 @@
                                             </div>
                                         @endforeach
                                         @foreach ($serviceLeadEntrySummary->take(4) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">איכות מסחרית</p>
+                                            <h2>כמה הזדמנויות חמות יש</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach ($serviceLeadOpportunitySummary as $item)
                                             <div class="domain-info-row">
                                                 <span>{{ $item['label'] }}</span>
                                                 <strong>{{ $item['count'] }}</strong>

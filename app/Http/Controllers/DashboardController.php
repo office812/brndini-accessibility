@@ -833,6 +833,23 @@ class DashboardController extends Controller
                 'count' => $serviceLeads->filter(fn ($lead) => filled($lead->referrer_host ?? null))->count(),
             ],
         ])->values();
+        $serviceLeadOpportunitySummary = collect([
+            [
+                'key' => 'hot',
+                'label' => 'לידים חמים',
+                'count' => $serviceLeads->where('opportunity_key', 'hot')->count(),
+            ],
+            [
+                'key' => 'warm',
+                'label' => 'לידים איכותיים',
+                'count' => $serviceLeads->where('opportunity_key', 'warm')->count(),
+            ],
+            [
+                'key' => 'cold',
+                'label' => 'עניין ראשוני',
+                'count' => $serviceLeads->where('opportunity_key', 'cold')->count(),
+            ],
+        ])->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -854,6 +871,7 @@ class DashboardController extends Controller
             'serviceLeadSourceSummary' => $serviceLeadSourceSummary,
             'serviceLeadEntrySummary' => $serviceLeadEntrySummary,
             'serviceLeadMarketingSummary' => $serviceLeadMarketingSummary,
+            'serviceLeadOpportunitySummary' => $serviceLeadOpportunitySummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
