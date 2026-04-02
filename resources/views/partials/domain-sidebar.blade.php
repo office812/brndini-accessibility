@@ -32,7 +32,7 @@
         </a>
         <a class="{{ ($activeSection ?? '') === 'support' ? 'is-current' : '' }}" href="{{ route('dashboard.support', ['site' => $site->id]) }}">
             <span>✦</span>
-            <span>מרכז תמיכה ופניות</span>
+            <span>תמיכה טכנית</span>
         </a>
         <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#remediation-report">
             <span>▣</span>

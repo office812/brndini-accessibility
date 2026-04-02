@@ -64,7 +64,7 @@ class Article extends Model
                 'theme' => [
                     'slug' => 'compliance',
                     'eyebrow' => 'Compliance article',
-                    'kicker' => 'ציות, הצהרה ומסגור שירות',
+                    'kicker' => 'ציות, הצהרה ושקיפות',
                     'chips' => ['WCAG', 'הצהרה', 'ציות'],
                 ],
             ],

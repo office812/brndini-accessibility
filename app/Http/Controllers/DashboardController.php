@@ -179,7 +179,7 @@ class DashboardController extends Controller
             'billing_settings' => SiteSettings::defaultBilling(false),
             'audit_snapshot' => SiteSettings::defaultAuditSnapshot(),
             'alert_settings' => SiteSettings::defaultAlertSettings(),
-            'service_mode' => 'audit_and_fix',
+            'service_mode' => 'audit_only',
             'widget_settings' => SiteSettings::defaultWidget(),
         ];
 
@@ -488,7 +488,7 @@ class DashboardController extends Controller
             'audit_snapshot' => SiteSettings::defaultAuditSnapshot(),
             'alert_settings' => SiteSettings::defaultAlertSettings(),
             'license_expires_at' => Carbon::now()->addYear(),
-            'service_mode' => 'audit_and_fix',
+            'service_mode' => 'audit_only',
             'widget_settings' => SiteSettings::defaultWidget(),
         ];
 
@@ -738,9 +738,9 @@ class DashboardController extends Controller
     private function serviceModes(): array
     {
         return [
-            'audit_only' => 'ביקורת בלבד',
-            'audit_and_fix' => 'ביקורת + תיקונים בטוחים',
-            'managed_service' => 'שירות נגישות מנוהל',
+            'audit_only' => 'בסיסי',
+            'audit_and_fix' => 'מורחב',
+            'managed_service' => 'מלא',
         ];
     }
 
@@ -928,7 +928,7 @@ class DashboardController extends Controller
         $score += $statementConnected ? 14 : 0;
 
         if (! $statementConnected && $alertSettings['statement']) {
-            $alerts[] = $this->buildAlert('statement', 'חסרה הצהרת נגישות', 'high', 'מומלץ לחבר statement URL כדי לסגור את מסגרת השירות והציות מול הלקוח.');
+            $alerts[] = $this->buildAlert('statement', 'חסרה הצהרת נגישות', 'high', 'מומלץ לחבר עמוד הצהרה כדי להציג לגולשים מידע ברור ופרטי קשר רלוונטיים.');
         }
 
         $checks[] = $this->buildCheck(
@@ -1015,9 +1015,9 @@ class DashboardController extends Controller
     private function statusSummary(string $status, int $alertCount): string
     {
         return match ($status) {
-            'healthy' => 'האתר הזה נראה במצב טוב. נשאר רק להמשיך לעקוב אחרי שינויים ולעדכן audits לפי הצורך.',
-            'monitoring' => 'הבסיס חזק, אבל עדיין יש ' . $alertCount . ' נקודות שכדאי לעקוב אחריהן כדי לשמור על סביבת נגישות יציבה.',
-            default => 'יש פעולות פתוחות שדורשות טיפול לפני שאפשר להציג את האתר הזה כסט אפ בריא ומנוהל היטב. ברוב המקרים זה מתחיל מהשלמת ההטמעה באתר עצמו.',
+            'healthy' => 'האתר הזה נראה במצב טוב. נשאר רק להמשיך לעקוב אחרי שינויים ולעדכן בדיקות לפי הצורך.',
+            'monitoring' => 'הבסיס חזק, אבל עדיין יש ' . $alertCount . ' נקודות שכדאי לעקוב אחריהן כדי לשמור על התקנה יציבה וברורה.',
+            default => 'יש פעולות פתוחות שצריך להשלים לפני שאפשר להציג את האתר הזה כסט אפ בריא ויציב. ברוב המקרים זה מתחיל מהשלמת ההטמעה באתר עצמו.',
         };
     }
 
@@ -1038,7 +1038,7 @@ class DashboardController extends Controller
         return [
             'website_only' => 'אתר ציבורי בלבד',
             'website_account' => 'אתר ציבורי + אזור אישי / טפסים',
-            'managed_service' => 'שירות מנוהל עם תחזוקה ובקרה שוטפת',
+            'managed_service' => 'אתר ציבורי + אזור אישי + חלקים מתקדמים',
         ];
     }
 

@@ -4,7 +4,7 @@
 
 @section('content')
     @php($statementConnected = $statementStatus === 'connected')
-    @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'שכבת נגישות מנוהלת')
+    @php($serviceLabel = $serviceModes[$site->service_mode] ?? 'תצורת מערכת בסיסית')
     @php($isPremiumPlan = ($currentPlan['name'] ?? '') === 'פרימיום')
 
     <section class="licenses-shell" data-dashboard-tabs>
@@ -69,13 +69,13 @@
                                         <span class="portal-hero-kicker">לוח בקרה מרכזי</span>
                                         <h2>הופכים את האתר לנגיש, מנוהל ומוכן לעבודה.</h2>
                                         <p>
-                                            כל מה שחשוב באמת נמצא כאן: הטמעה, רישיון, בדיקות, הצהרת נגישות ותמיכה.
+                                            כל מה שחשוב באמת נמצא כאן: הטמעה, רישיון, בדיקות, הצהרה בסיסית ותמיכה טכנית.
                                             פחות גלילה, יותר שליטה, ובמבט אחד על סטטוס האתר הפעיל.
                                         </p>
 
                                         <div class="steward-hero-actions">
                                             <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">התקנה והטמעה</a>
-                                            <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">מרכז ציות</a>
+                                            <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">בדיקות והצהרה</a>
                                         </div>
                                     </div>
 
@@ -207,7 +207,7 @@
                                                 <span class="steward-feed-thumb">03</span>
                                                 <div>
                                                     <strong>פתח פנייה אם צריך</strong>
-                                                    <p>אם משהו לא נטען או לא נשמר, מרכז התמיכה זמין עם מעקב מסודר אחר כל פנייה.</p>
+                                                    <p>אם משהו לא נטען או לא נשמר, התמיכה הטכנית זמינה עם מעקב מסודר אחר כל פנייה.</p>
                                                 </div>
                                             </a>
                                         </div>
@@ -220,7 +220,7 @@
                                     <span class="steward-side-icon">?</span>
                                     <div>
                                         <h3>יש שאלות?</h3>
-                                        <p>צוות התמיכה עוזר בהטמעה, חיבור הצהרה, תקלות רישוי והגדרת ווידג׳ט.</p>
+                                        <p>התמיכה עוזרת בשימוש במערכת: הטמעה, חיבור הצהרה, תקלות רישוי והגדרת וידג׳ט.</p>
                                         <a class="secondary-button" href="{{ route('dashboard.support', ['site' => $site->id]) }}">פתח פנייה</a>
                                     </div>
                                 </article>
@@ -590,7 +590,7 @@
                                             </div>
 
                                             <div>
-                                                <label for="service_mode">מסלול שירות</label>
+                                                <label for="service_mode">תצורת מערכת</label>
                                                 <select id="service_mode" name="service_mode">
                                                     @foreach ($serviceModes as $value => $label)
                                                         <option value="{{ $value }}" @selected(old('service_mode', $site->service_mode) === $value)>{{ $label }}</option>

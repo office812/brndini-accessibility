@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@php($title = 'פלטפורמת נגישות לאתרים | וידג׳ט מנוהל, דשבורד והצהרת נגישות | A11Y Bridge')
+@php($title = 'כלי חינמי להטמעת וידג׳ט נגישות | דשבורד, הטמעה והצהרה בסיסית | A11Y Bridge')
 
 @section('content')
     <section class="landing-hero" id="top">
         <div class="landing-hero-copy">
             <p class="eyebrow">פלטפורמת נגישות</p>
-            <h1>פתרון נגישות אתרים עם וידג׳ט מנוהל, ניהול מרכזי והטמעה קבועה.</h1>
+            <h1>כלי חינמי להטמעת וידג׳ט נגישות, ניהול מרכזי והטמעה קבועה.</h1>
             <p class="hero-text hero-text-lead">
-                A11Y Bridge מאפשרת לעסקים, סוכנויות ואתרים גדולים לנהל שכבת נגישות ממקום אחד:
-                וידג׳ט מנוהל, מרכז התקנה, הצהרה, ציות ומסכי ניהול שנראים כמו מוצר אמיתי.
+                A11Y Bridge מאפשרת לבעלי אתרים, סוכנויות וצוותים להטמיע וידג׳ט נגישות ממקום אחד:
+                קוד הטמעה קבוע, דשבורד, הצהרה בסיסית, בקרה טכנית וממשק שנראה כמו מוצר אמיתי.
             </p>
 
             <div class="hero-action-row hero-action-row-center">
@@ -20,15 +20,15 @@
 
         <div class="hero-product-stage" aria-label="A11Y Bridge platform preview">
             <div class="hero-product-float hero-float-right">
-                <span class="hero-float-label">הטמעה מנוהלת</span>
+                <span class="hero-float-label">הטמעה</span>
                 <strong>קוד אחד באתר</strong>
                 <p>קוד הטמעה קבוע עם הגדרות דינמיות.</p>
             </div>
 
             <div class="hero-product-float hero-float-left">
-                <span class="hero-float-label">ציות</span>
-                <strong>הצהרה + מסלול שירות</strong>
-                <p>מסר ברור ושקוף ללקוח.</p>
+                <span class="hero-float-label">הצהרה</span>
+                <strong>הצהרה + עמוד ציבורי</strong>
+                <p>ניסוח בסיסי, קישור קבוע ועמוד ברור לגולשים.</p>
             </div>
 
             <div class="hero-device">
@@ -49,7 +49,7 @@
                     <div class="hero-device-grid">
                         <article class="hero-device-card hero-device-card-primary">
                             <span class="hero-device-label">A11Y BRIDGE</span>
-                            <strong>ווידג׳ט מנוהל</strong>
+                            <strong>ווידג׳ט נגישות</strong>
                             <p>מפתח אתר, הגדרות מותג, טקסט כפתור ושפה</p>
                         </article>
                         <article class="hero-device-card">
@@ -58,9 +58,9 @@
                             <p>העתקה, הדבקה, רענון ואימות</p>
                         </article>
                         <article class="hero-device-card">
-                            <span class="hero-device-label">ציות</span>
-                            <strong>מרכז הצהרה</strong>
-                            <p>קישור להצהרה, מסגור שירות ומסלול עבודה</p>
+                            <span class="hero-device-label">הצהרה</span>
+                            <strong>יוצר הצהרה</strong>
+                            <p>קישור קבוע, ניסוח בסיסי ופרטי קשר</p>
                         </article>
                         <article class="hero-device-card">
                             <span class="hero-device-label">תוכן</span>
@@ -74,16 +74,16 @@
     </section>
 
     <section class="trust-bar" aria-label="trust signals">
-        <div class="trust-chip">ניהול ווידג׳ט מנוהל</div>
+        <div class="trust-chip">וידג׳ט חינמי עם שליטה מרחוק</div>
         <div class="trust-chip">הטמעה אחת, ניהול מרחוק</div>
-        <div class="trust-chip">הצהרה ומסגרת ציות</div>
-        <div class="trust-chip">מותאם לסוכנויות וצוותים גדלים</div>
+        <div class="trust-chip">הצהרה בסיסית וקישור ציבורי</div>
+        <div class="trust-chip">מותאם לבעלי אתרים, סוכנויות וצוותים</div>
     </section>
 
     <section class="company-proof-strip" aria-label="company proof">
         <article class="company-proof-card">
             <strong>פלטפורמה אחת</strong>
-            <span>וידג׳ט, התקנה, תמיכה וציות</span>
+            <span>וידג׳ט, התקנה, הצהרה ובקרה טכנית</span>
         </article>
         <article class="company-proof-card">
             <strong>2 חבילות</strong>
@@ -102,7 +102,7 @@
     <section class="section-band section-band-plain" id="how-a11y-bridge-works">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">איך A11Y Bridge עובדת</p>
-            <h2>שלושה שלבים פשוטים להפעלת שכבת נגישות מנוהלת.</h2>
+            <h2>שלושה שלבים פשוטים להפעלת כלי נגישות חינמי.</h2>
         </div>
 
         <div class="flow-section">
@@ -115,7 +115,7 @@
                 <article class="flow-step-card">
                     <span class="process-index">02</span>
                     <h3>מגדירים את הפלטפורמה</h3>
-                    <p>מגדירים widget, statement, שפה, מיקום, צבע ומסלול שירות.</p>
+                    <p>מגדירים וידג׳ט, הצהרה בסיסית, שפה, מיקום וצבע.</p>
                 </article>
                 <article class="flow-step-card">
                     <span class="process-index">03</span>
@@ -127,11 +127,11 @@
             <div class="flow-stage">
                 <div class="flow-stage-card">
                     <span class="eyebrow">נגישות זורמת</span>
-                    <h3>מוצר אחד שמחבר וידג׳ט, התקנה, הצהרה ולוח ניהול.</h3>
-                    <p>
-                        במקום כמה שכבות מפוזרות, A11Y Bridge נותנת תהליך אחד ברור ללקוח, למיישם
-                        ולמי שמנהל את החשבון לאורך זמן.
-                    </p>
+                <h3>מוצר אחד שמחבר וידג׳ט, התקנה, הצהרה ולוח ניהול.</h3>
+                <p>
+                    במקום כמה שכבות מפוזרות, A11Y Bridge נותנת תהליך אחד ברור לבעל האתר,
+                    למי שמטמיע, ולמי שמנהל את החשבון לאורך זמן.
+                </p>
                     <div class="flow-stage-pills">
                         <span class="preview-pill">ווידג׳ט</span>
                         <span class="preview-pill">התקנה</span>
@@ -154,10 +154,10 @@
     <section class="section-band" id="solutions">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">טכנולוגיה שעובדת</p>
-            <h2>נגישות מנוהלת, פשוטה יותר להפעלה.</h2>
+            <h2>כלי נגישות פשוט יותר להפעלה.</h2>
             <p class="hero-text">
-                שכבת המוצר שלך לא צריכה להיות רק כפתור. היא צריכה לכלול התקנה, מסגור שירות,
-                חשבון, הצהרה וצמיחת תוכן.
+                המוצר שלך לא צריך להיות רק כפתור. הוא צריך לכלול התקנה, חשבון, הצהרה בסיסית,
+                בקרה טכנית וצמיחת תוכן.
             </p>
         </div>
 
@@ -179,8 +179,8 @@
                 <p>מיקום, צבע, טקסט, שפה והעדפות תצוגה מתוך לוח ניהול אחד.</p>
             </article>
             <article class="capability-card">
-                <h3>מסגור ציות ברור</h3>
-                <p>הצהרה, מסלול שירות ומסגרת עבודה בלי להבטיח מה שהמוצר לא יכול להבטיח.</p>
+                <h3>מסר ברור ושקוף</h3>
+                <p>הצהרה בסיסית, קישור ציבורי וניסוח אחראי בלי להבטיח מה שהמוצר לא יכול להבטיח.</p>
             </article>
             <article class="capability-card">
                 <h3>צמיחה דרך תוכן</h3>
@@ -214,8 +214,8 @@
                 </article>
                 <article class="enterprise-panel-card">
                     <span class="eyebrow">תפעול</span>
-                    <strong>תמיכה, משתמשים וסופר־אדמין</strong>
-                    <p>ניהול פניות, מעקבים גלובליים, לקוחות, אתרים וחבילות מתוך אזור מרכזי אחד.</p>
+                    <strong>תפעול, משתמשים וסופר־אדמין</strong>
+                    <p>ניהול פניות טכניות, מעקבים גלובליים, לקוחות, אתרים וחבילות מתוך אזור מרכזי אחד.</p>
                 </article>
             </div>
         </div>
@@ -234,7 +234,7 @@
             <span class="integration-pill">Webflow</span>
             <span class="integration-pill">Wix</span>
             <span class="integration-pill">Custom code</span>
-            <span class="integration-pill">שירות לסוכנויות</span>
+            <span class="integration-pill">מתאים לסוכנויות</span>
             <span class="integration-pill">קוד הטמעה מנוהל</span>
         </div>
     </section>
@@ -278,7 +278,7 @@
             <p class="eyebrow">נבנה כדי לתמוך בציות</p>
             <h2>המערכת ממסגרת נגישות כמו פתרון רציני, לא כמו תוסף בודד.</h2>
             <p class="hero-text">
-                וידג׳ט מנוהל, אימות התקנה, הצהרה, מסגור שירות ומסלול עבודה
+                    וידג׳ט נגישות, אימות התקנה, הצהרה בסיסית ותהליך עבודה ברור
                 יוצרים יחד מוצר שנראה מקצועי יותר גם ללקוח וגם לשוק.
             </p>
         </div>
@@ -287,8 +287,8 @@
             <span class="compliance-badge">תהליך עבודה ל־WCAG</span>
             <span class="compliance-badge">הצהרת נגישות</span>
             <span class="compliance-badge">אימות הטמעה</span>
-            <span class="compliance-badge">מסלול שירות</span>
-            <span class="compliance-badge">מסגור שירות ושקיפות</span>
+            <span class="compliance-badge">בדיקות בסיסיות</span>
+            <span class="compliance-badge">שקיפות והצהרה</span>
         </div>
     </section>
 

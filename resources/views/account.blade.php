@@ -87,7 +87,7 @@
                                     <strong>{{ $site->purchase_url ?: 'הרישיון כבר פעיל' }}</strong>
                                 </div>
                                 <div class="domain-info-row">
-                                    <span>מסלול שירות</span>
+                                    <span>תצורת מערכת</span>
                                     <strong>{{ $serviceModeLabel }}</strong>
                                 </div>
                                 <div class="domain-info-row">

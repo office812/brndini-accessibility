@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'A11Y Bridge' }}</title>
-    <meta name="description" content="{{ $metaDescription ?? 'A11Y Bridge היא פלטפורמת נגישות לאתרים עם widget hosted, dashboard ניהול, קוד הטמעה קבוע וגישה נוחה להצהרת נגישות.' }}">
+    <meta name="description" content="{{ $metaDescription ?? 'A11Y Bridge היא פלטפורמה חינמית להטמעת וידג׳ט נגישות עם דשבורד, קוד הטמעה קבוע וגישה נוחה להצהרה בסיסית.' }}">
     <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
     <meta property="og:title" content="{{ $title ?? 'A11Y Bridge' }}">
-    <meta property="og:description" content="{{ $metaDescription ?? 'פלטפורמת נגישות לאתרים עם widget hosted, dashboard ניהול וקוד הטמעה קבוע.' }}">
+    <meta property="og:description" content="{{ $metaDescription ?? 'פלטפורמה חינמית להטמעת וידג׳ט נגישות עם דשבורד ניהול וקוד הטמעה קבוע.' }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ $canonicalUrl ?? url()->current() }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,7 +38,7 @@
                         </span>
                         <span class="app-brand-copy">
                             <strong>A11Y Bridge</strong>
-                            <small>סביבת ניהול נגישות</small>
+                            <small>סביבת ניהול וידג׳ט</small>
                         </span>
                     </a>
                 </div>
@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="app-header-right">
-                        <a class="app-header-cta" href="{{ route('dashboard.support', $siteRouteParams) }}">תמיכה</a>
+                        <a class="app-header-cta" href="{{ route('dashboard.support', $siteRouteParams) }}">תמיכה טכנית</a>
                         <div class="app-user-pill">
                             <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>
                             <span>{{ $user->name ?? Auth::user()->name }}</span>
@@ -84,7 +84,7 @@
                     </span>
                     <span>
                         <strong>A11Y Bridge</strong>
-                        <small>פלטפורמה לניהול נגישות אתר, וידג׳ט מנוהל והטמעה קבועה</small>
+                        <small>פלטפורמה חינמית להטמעת וידג׳ט נגישות והטמעה קבועה</small>
                     </span>
                 </a>
 
@@ -138,11 +138,11 @@
                             </span>
                             <span>
                                 <strong>A11Y Bridge</strong>
-                                <small>פלטפורמת נגישות מנוהלת לאתרים, סוכנויות וארגונים.</small>
+                                <small>פלטפורמה חינמית לווידג׳ט נגישות עבור אתרים, סוכנויות וארגונים.</small>
                             </span>
                         </a>
                         <p>
-                            וידג׳ט מנוהל, קוד הטמעה קבוע, דשבורד ניהול, מסלול ציות, תוכן ותמיכה
+                            וידג׳ט נגישות, קוד הטמעה קבוע, דשבורד ניהול, הצהרה בסיסית, תוכן ותמיכה טכנית
                             במסגרת מוצרית אחת.
                         </p>
 
