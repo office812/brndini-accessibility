@@ -3857,6 +3857,51 @@ body.page-is-ready .auth-shell {
     width: 100%;
 }
 
+.steward-service-recommendations {
+    display: grid;
+    gap: 18px;
+}
+
+.service-recommendation-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.service-recommendation-card {
+    display: grid;
+    gap: 14px;
+    padding: 22px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: var(--shadow-xs);
+}
+
+.service-recommendation-card h3 {
+    margin: 0;
+    font-size: 1.12rem;
+    line-height: 1.35;
+}
+
+.service-recommendation-card p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.75;
+}
+
+.service-recommendation-list {
+    margin: 0;
+    padding: 0 18px 0 0;
+    display: grid;
+    gap: 8px;
+    color: var(--page-muted);
+}
+
+.service-recommendation-card .primary-button {
+    justify-self: flex-start;
+}
+
 .widget-builder-form {
     min-width: 0;
 }
@@ -5360,6 +5405,7 @@ body.page-is-ready .auth-shell {
     .plan-card-grid,
     .steward-stat-grid,
     .steward-content-grid,
+    .service-recommendation-grid,
     .portal-window-grid,
     .portal-code-grid,
     .metric-grid,
@@ -6055,7 +6101,8 @@ body.page-is-ready .auth-shell {
 
     .steward-overview-grid,
     .steward-content-grid,
-    .steward-stat-grid {
+    .steward-stat-grid,
+    .service-recommendation-grid {
         grid-template-columns: 1fr;
     }
 

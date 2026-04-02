@@ -596,6 +596,13 @@ class DashboardController extends Controller
             ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
             ->sortByDesc('sort_timestamp')
             ->values();
+        $serviceRecommendations = $this->serviceRecommendationsForSite(
+            $site,
+            $installationSignal,
+            $activeAlerts->count(),
+            $statementConnected,
+            $site->billingActive()
+        );
         $openTickets = $supportTickets->whereIn('status', ['open', 'pending']);
         $urgentTickets = $supportTickets->where('priority', 'urgent');
         $activeSitesCount = $sites->filter(fn (Site $candidate) => $candidate->licenseActive())->count();
@@ -670,6 +677,7 @@ class DashboardController extends Controller
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeads' => $serviceLeads,
+            'serviceRecommendations' => $serviceRecommendations,
             'serviceLeadSummary' => [
                 'total' => $serviceLeads->count(),
                 'new' => $serviceLeads->where('status', 'new')->count(),
@@ -917,6 +925,97 @@ class DashboardController extends Controller
             'phone' => 'טלפון',
             'whatsapp' => 'ווטסאפ',
         ];
+    }
+
+    private function serviceRecommendationsForSite(
+        Site $site,
+        array $installationSignal,
+        int $openAlertsCount,
+        bool $statementConnected,
+        bool $billingActive
+    ): array {
+        $catalog = $this->serviceCatalog();
+        $candidates = [];
+
+        if ($installationSignal['status'] !== 'installed') {
+            $candidates[] = [
+                'service_type' => 'maintenance',
+                'title' => 'צריך יד טכנית על האתר?',
+                'reason' => 'הווידג׳ט עדיין לא זוהה באתר, וזה בדרך כלל סימן שחסרה עבודה טכנית באתר עצמו.',
+                'cta' => 'לבקש תחזוקת אתר',
+            ];
+        }
+
+        if ($openAlertsCount > 0 || ! $statementConnected) {
+            $candidates[] = [
+                'service_type' => 'website_upgrade',
+                'title' => 'רוצה לשפר את האתר כולו?',
+                'reason' => 'יש כמה נקודות פתוחות במערכת. לפעמים זה הזמן לרענן את האתר, את התוכן ואת חוויית המשתמש.',
+                'cta' => 'לבקש שדרוג אתר',
+            ];
+        }
+
+        if (! $billingActive || $site->licenseStatus() !== 'active') {
+            $candidates[] = [
+                'service_type' => 'hosting',
+                'title' => 'מחפש תשתית יותר יציבה?',
+                'reason' => 'אחסון ותחזוקת שרת מסודרים יכולים להוריד הרבה חיכוך תפעולי ולשמור על אתר יציב יותר.',
+                'cta' => 'לבקש פרטי אחסון',
+            ];
+        }
+
+        if ($installationSignal['status'] === 'installed' && $openAlertsCount <= 1) {
+            $candidates[] = [
+                'service_type' => 'seo',
+                'title' => 'האתר כבר חי. רוצה יותר תנועה?',
+                'reason' => 'אחרי שהבסיס הטכני במקום, אפשר להשתמש באתר כדי לייצר יותר חשיפות, תוכן ולידים.',
+                'cta' => 'לבקש שירותי SEO',
+            ];
+            $candidates[] = [
+                'service_type' => 'campaigns',
+                'title' => 'מוכן לקמפיינים והמרות?',
+                'reason' => 'אם האתר כבר זמין ועובד טוב, אפשר להוסיף דפי נחיתה, קמפיינים ומדידה מסודרת.',
+                'cta' => 'לבקש קמפיינים',
+            ];
+        }
+
+        $fallbackOrder = ['maintenance', 'website_upgrade', 'hosting', 'seo', 'campaigns', 'landing_pages', 'automations'];
+
+        foreach ($fallbackOrder as $serviceType) {
+            if (count($candidates) >= 3) {
+                break;
+            }
+
+            $alreadyIncluded = collect($candidates)->contains(fn (array $candidate) => $candidate['service_type'] === $serviceType);
+            if ($alreadyIncluded || ! isset($catalog[$serviceType])) {
+                continue;
+            }
+
+            $candidates[] = [
+                'service_type' => $serviceType,
+                'title' => 'שירות נוסף של Brndini',
+                'reason' => $catalog[$serviceType]['description'],
+                'cta' => 'לשלוח פנייה',
+            ];
+        }
+
+        return collect($candidates)
+            ->take(3)
+            ->map(function (array $candidate) use ($catalog) {
+                $meta = $catalog[$candidate['service_type']] ?? null;
+
+                return [
+                    'service_type' => $candidate['service_type'],
+                    'label' => $meta['label'] ?? $candidate['service_type'],
+                    'description' => $meta['description'] ?? '',
+                    'highlights' => array_slice($meta['highlights'] ?? [], 0, 3),
+                    'title' => $candidate['title'],
+                    'reason' => $candidate['reason'],
+                    'cta' => $candidate['cta'],
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     private function installationSignal(Site $site): array

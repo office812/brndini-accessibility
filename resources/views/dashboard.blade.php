@@ -213,6 +213,31 @@
                                         </div>
                                     </article>
                                 </section>
+
+                                <section class="steward-service-recommendations">
+                                    <div class="steward-feed-head">
+                                        <h3>שירותים של Brndini שיכולים להתאים עכשיו</h3>
+                                        <a class="text-link" href="{{ route('dashboard.services', ['site' => $site->id]) }}">לכל השירותים</a>
+                                    </div>
+
+                                    <div class="service-recommendation-grid">
+                                        @foreach ($serviceRecommendations as $recommendation)
+                                            <article class="service-recommendation-card">
+                                                <span class="status-pill is-neutral">{{ $recommendation['label'] }}</span>
+                                                <h3>{{ $recommendation['title'] }}</h3>
+                                                <p>{{ $recommendation['reason'] }}</p>
+                                                <ul class="service-recommendation-list">
+                                                    @foreach ($recommendation['highlights'] as $highlight)
+                                                        <li>{{ $highlight }}</li>
+                                                    @endforeach
+                                                </ul>
+                                                <a class="primary-button" href="{{ route('dashboard.services', ['site' => $site->id, 'service' => $recommendation['service_type']]) }}#tab-request">
+                                                    {{ $recommendation['cta'] }}
+                                                </a>
+                                            </article>
+                                        @endforeach
+                                    </div>
+                                </section>
                             </div>
 
                             <aside class="steward-side-stack">

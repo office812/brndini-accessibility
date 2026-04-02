@@ -2,6 +2,7 @@
 
 @php($title = 'שירותי Brndini | A11Y Bridge')
 @php($domainLabel = parse_url($site->domain, PHP_URL_HOST) ?: $site->domain)
+@php($selectedServiceType = old('service_type', request('service', array_key_first($serviceCatalog))))
 
 @section('content')
     <section class="domain-shell">
@@ -70,7 +71,7 @@
                                     <label for="service_type">איזה שירות מעניין אותך?</label>
                                     <select id="service_type" name="service_type">
                                         @foreach ($serviceCatalog as $serviceKey => $service)
-                                            <option value="{{ $serviceKey }}" @selected(old('service_type') === $serviceKey)>{{ $service['label'] }}</option>
+                                            <option value="{{ $serviceKey }}" @selected($selectedServiceType === $serviceKey)>{{ $service['label'] }}</option>
                                         @endforeach
                                     </select>
 
