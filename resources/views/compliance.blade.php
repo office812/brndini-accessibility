@@ -25,6 +25,11 @@
                 </form>
             </section>
 
+            @include('partials.service-recommendations-panel', [
+                'heading' => 'רוצה לקחת את האתר צעד קדימה מעבר לכלי החינמי?',
+                'intro' => 'אם מתוך הבדיקות עולה שהאתר עצמו צריך שדרוג, תחזוקה, שיפור מהירות או קידום, אפשר להשאיר מכאן פנייה עסקית נפרדת ל־Brndini.',
+            ])
+
             <section class="dashboard-workspace dashboard-workspace-inline domain-tab-workspace" data-dashboard-tabs>
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-nav domain-inline-tab-nav" aria-label="לשוניות ציות ובקרה">

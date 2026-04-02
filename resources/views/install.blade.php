@@ -26,6 +26,11 @@
                 </div>
             </section>
 
+            @include('partials.service-recommendations-panel', [
+                'heading' => 'אם כבר נוגעים באתר, אפשר גם לקדם אותו',
+                'intro' => 'הטמעת הווידג׳ט נשארת חינמית, אבל אם האתר צריך שדרוג רחב יותר, אחסון, SEO או תחזוקה, אפשר לפתוח מכאן פנייה עסקית מסודרת ל־Brndini.',
+            ])
+
             <section class="dashboard-workspace dashboard-workspace-inline domain-tab-workspace" data-dashboard-tabs>
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-nav domain-inline-tab-nav" aria-label="לשוניות התקנה">

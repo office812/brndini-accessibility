@@ -26,6 +26,11 @@
                 </div>
             </section>
 
+            @include('partials.service-recommendations-panel', [
+                'heading' => 'צריך עזרה עסקית ולא רק תמיכה טכנית?',
+                'intro' => 'התמיכה במסך הזה נשארת טכנית בלבד, אבל אם מה שחסר הוא שדרוג אתר, אחסון, SEO או קמפיינים, אפשר להשאיר מכאן גם פנייה עסקית נפרדת ל־Brndini.',
+            ])
+
             <section class="dashboard-workspace dashboard-workspace-inline domain-tab-workspace" data-dashboard-tabs>
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-nav domain-inline-tab-nav" aria-label="לשוניות מרכז התמיכה">

@@ -26,6 +26,11 @@
                 </div>
             </section>
 
+            @include('partials.service-recommendations-panel', [
+                'heading' => 'Brndini יכולה לעזור גם מעבר לרישיון עצמו',
+                'intro' => 'המסך הזה מנהל את הרישוי של הכלי, אבל אם האתר צריך גם אחסון, תחזוקה, SEO או קמפיינים, אפשר לפתוח מכאן פנייה עסקית מתאימה.',
+            ])
+
             <section class="dashboard-workspace dashboard-workspace-inline domain-tab-workspace" data-dashboard-tabs>
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-nav domain-inline-tab-nav" aria-label="לשוניות תוכנית ותשלומים">
