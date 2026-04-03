@@ -990,6 +990,11 @@
                                                         <span class="status-pill is-good">המשך מומלץ: {{ $lead->recommended_service_label }}</span>
                                                     </div>
                                                 @endif
+                                                @if (!empty($lead->offer_outline_label))
+                                                    <div class="lead-intel-row">
+                                                        <span class="status-pill is-good">הצעה ראשונית: {{ $lead->offer_outline_label }}</span>
+                                                    </div>
+                                                @endif
                                                 @if (!empty($lead->playbook_label) || !empty($lead->recommended_contact_channel_label))
                                                     <div class="lead-intel-row">
                                                         @if (!empty($lead->recommended_contact_channel_label))
@@ -1002,6 +1007,9 @@
                                                 @endif
                                                 @if (!empty($lead->playbook_note))
                                                     <p class="support-ticket-message"><strong>המלצת גישה:</strong> {{ $lead->playbook_note }}</p>
+                                                @endif
+                                                @if (!empty($lead->offer_outline_note))
+                                                    <p class="support-ticket-message"><strong>מה להציע עכשיו:</strong> {{ $lead->offer_outline_note }}</p>
                                                 @endif
                                                 @if (!empty($lead->opening_line))
                                                     @php($openingLineId = 'lead-opening-' . md5((string) $lead->update_key))
@@ -1267,6 +1275,30 @@
                                     @else
                                         <div class="domain-info-list">
                                             @foreach (($serviceLeadNextServiceSummary ?? collect())->take(6) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">הצעה ראשונית מומלצת</p>
+                                            <h2>עם מה לפתוח את ההצעה</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadOfferSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין מספיק מידע להצעות מסגרת</strong>
+                                            <p>ככל שיצטברו לידים עם סוג שירות, תקציב והקשר עסקי, תראה כאן אילו מסגרות פתיחה הכי מתאימות.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadOfferSummary ?? collect())->take(6) as $item)
                                                 <div class="domain-info-row">
                                                     <span>{{ $item['label'] }}</span>
                                                     <strong>{{ $item['count'] }}</strong>

@@ -136,6 +136,7 @@ class DashboardController extends Controller
                 'דרך גישה מומלצת',
                 'נוסח פתיחה',
                 'כותרת מוצעת',
+                'הצעה ראשונית מומלצת',
                 'שווי משוער',
                 'שווי משוקלל',
                 'מקור',
@@ -185,6 +186,7 @@ class DashboardController extends Controller
                     $lead->playbook_label,
                     $lead->opening_line,
                     $lead->opening_subject,
+                    $lead->offer_outline_label,
                     $lead->budget_estimate_label,
                     $lead->weighted_estimate_label,
                     $lead->source_label,
@@ -1145,6 +1147,20 @@ class DashboardController extends Controller
             ->filter(fn (array $item) => $item['count'] > 0)
             ->sortByDesc('count')
             ->values();
+        $serviceLeadOfferSummary = $serviceLeads
+            ->filter(fn ($lead) => filled($lead->offer_outline_key ?? null))
+            ->groupBy('offer_outline_key')
+            ->map(function ($group) {
+                $first = $group->first();
+
+                return [
+                    'key' => $first->offer_outline_key,
+                    'label' => $first->offer_outline_label,
+                    'count' => $group->count(),
+                ];
+            })
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadPlaybookSummary = collect([
             'discovery_call' => 'שיחת גילוי קצרה',
             'quick_quote' => 'הצעה מהירה',
@@ -1336,6 +1352,7 @@ class DashboardController extends Controller
             'serviceLeadRepeatSummary' => $serviceLeadRepeatSummary,
             'serviceLeadRelationshipSummary' => $serviceLeadRelationshipSummary,
             'serviceLeadNextServiceSummary' => $serviceLeadNextServiceSummary,
+            'serviceLeadOfferSummary' => $serviceLeadOfferSummary,
             'serviceLeadPlaybookSummary' => $serviceLeadPlaybookSummary,
             'serviceLeadChannelSummary' => $serviceLeadChannelSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
@@ -1624,6 +1641,10 @@ class DashboardController extends Controller
                 $lead->opening_subject = $this->buildLeadOpeningSubject($lead, $serviceCatalog);
                 $lead->opening_mailto = $this->buildLeadOpeningMailto($lead);
                 $lead->opening_whatsapp_href = $this->buildLeadOpeningWhatsappHref($lead);
+                $offer = $this->recommendedLeadOffer($lead);
+                $lead->offer_outline_key = $offer['key'];
+                $lead->offer_outline_label = $offer['label'];
+                $lead->offer_outline_note = $offer['note'];
 
                 if ($priorWonCount > 0) {
                     $lead->relationship_key = 'existing_customer';
@@ -1871,6 +1892,76 @@ class DashboardController extends Controller
         $whatsAppDigits = str_starts_with($digits, '0') ? '972' . substr($digits, 1) : $digits;
 
         return 'https://wa.me/' . $whatsAppDigits . '?text=' . rawurlencode((string) ($lead->opening_line ?? ''));
+    }
+
+    private function recommendedLeadOffer(object $lead): array
+    {
+        $serviceType = (string) ($lead->service_type ?? 'general');
+        $budgetRange = (string) ($lead->budget_range ?? 'unknown');
+        $relationshipKey = (string) ($lead->relationship_key ?? 'new_relationship');
+
+        if ($serviceType === 'ecosystem_access') {
+            return [
+                'key' => 'early-access-track',
+                'label' => 'גישה מוקדמת + מסלול עדכונים',
+                'note' => 'להציע כניסה לרשימת המתנה מסודרת עם עדכונים אישיים, בלי למכור משהו כבד מיד.',
+            ];
+        }
+
+        if ($relationshipKey === 'existing_customer' || (int) ($lead->distinct_service_count ?? 1) > 1) {
+            return [
+                'key' => 'growth-bundle',
+                'label' => 'חבילת המשך לצמיחה',
+                'note' => 'מתאים כלקוח חוזר או כזה שכבר ביקש כמה כיוונים. נכון להציע חבילה רחבה יותר ולא שירות בודד.',
+            ];
+        }
+
+        return match ($serviceType) {
+            'hosting' => [
+                'key' => 'hosting-move',
+                'label' => 'מעבר אחסון מסודר',
+                'note' => 'להציע מעבר מאובטח, שיפור ביצועים וחבילת תחזוקה בסיסית כדי לסגור מהר את הצורך.',
+            ],
+            'maintenance' => [
+                'key' => 'care-plan',
+                'label' => 'מסלול תחזוקה חודשי',
+                'note' => 'להציע מסלול ברור עם טיפול שוטף, עדכונים, שקט תפעולי ונקודת קשר אחת.',
+            ],
+            'website_upgrade' => [
+                'key' => 'upgrade-sprint',
+                'label' => 'ספרינט שדרוג אתר',
+                'note' => 'להציע שדרוג ממוקד עם רשימת שיפורים, עיצוב, מהירות וחוויית משתמש בטווח זמן מוגדר.',
+            ],
+            'seo' => [
+                'key' => $budgetRange === 'small' ? 'seo-starter' : 'seo-growth',
+                'label' => $budgetRange === 'small' ? 'מסלול SEO התחלה' : 'מסלול SEO צמיחה',
+                'note' => $budgetRange === 'small'
+                    ? 'להציע התחלה ממוקדת עם תיקוני בסיס, עמודים חשובים ותוכנית עבודה קצרה.'
+                    : 'להציע מסלול צמיחה רחב יותר עם תוכן, אופטימיזציה ומדידה חודשית.',
+            ],
+            'campaigns' => [
+                'key' => $budgetRange === 'small' ? 'campaign-kickoff' : 'campaign-scale',
+                'label' => $budgetRange === 'small' ? 'קמפיין פתיחה' : 'קמפיין צמיחה',
+                'note' => $budgetRange === 'small'
+                    ? 'להציע התחלה מהירה עם תקציב רזה וניסוי ראשוני.'
+                    : 'להציע מבנה קמפיינים רחב יותר עם מדידה, קריאייטיב ואופטימיזציה.',
+            ],
+            'landing_pages' => [
+                'key' => 'landing-launch',
+                'label' => 'עמוד נחיתה + השקה',
+                'note' => 'להציע עמוד נחיתה ממוקד המרה עם חיבור לטופס, מעקב ותשתית פרסום.',
+            ],
+            'automations' => [
+                'key' => 'automation-blueprint',
+                'label' => 'Blueprint אוטומציות',
+                'note' => 'להציע אפיון קצר של התהליך ואז יישום אוטומציה אחת או שתיים עם ערך מיידי.',
+            ],
+            default => [
+                'key' => 'discovery-offer',
+                'label' => 'בדיקת התאמה + הצעת מסגרת',
+                'note' => 'להתחיל ממסגרת ברורה וקלה להבנה לפני שנכנסים להצעה מלאה.',
+            ],
+        };
     }
 
     private function siteColumnsAvailable(array $columns): bool
