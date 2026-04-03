@@ -1021,6 +1021,16 @@
                                                         </ul>
                                                     </div>
                                                 @endif
+                                                @if (!empty($lead->proposal_outline))
+                                                    <div class="lead-proposal-box">
+                                                        <strong>מה לכלול בהצעה</strong>
+                                                        <ul class="lead-discovery-list">
+                                                            @foreach ($lead->proposal_outline as $item)
+                                                                <li>{{ $item['label'] }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
                                                 @if (!empty($lead->opening_line))
                                                     @php($openingLineId = 'lead-opening-' . md5((string) $lead->update_key))
                                                     <div class="lead-opening-box">
@@ -1333,6 +1343,30 @@
                                     @else
                                         <div class="domain-info-list">
                                             @foreach (($serviceLeadDiscoverySummary ?? collect())->take(6) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">מה חייב להופיע בהצעה</p>
+                                            <h2>מרכיבי הצעה שחוזרים שוב ושוב</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadProposalSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין מספיק מידע למבני הצעה</strong>
+                                            <p>ככל שיצטברו יותר לידים, תראה כאן אילו מרכיבים חייבים להופיע בהצעה כדי לקדם סגירה.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadProposalSummary ?? collect())->take(6) as $item)
                                                 <div class="domain-info-row">
                                                     <span>{{ $item['label'] }}</span>
                                                     <strong>{{ $item['count'] }}</strong>

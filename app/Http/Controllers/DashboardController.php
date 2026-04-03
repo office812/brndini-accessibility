@@ -138,6 +138,7 @@ class DashboardController extends Controller
                 'כותרת מוצעת',
                 'הצעה ראשונית מומלצת',
                 'מה צריך לברר עכשיו',
+                'מה לכלול בהצעה',
                 'שווי משוער',
                 'שווי משוקלל',
                 'מקור',
@@ -189,6 +190,7 @@ class DashboardController extends Controller
                     $lead->opening_subject,
                     $lead->offer_outline_label,
                     collect($lead->discovery_checklist ?? [])->pluck('label')->implode(' | '),
+                    collect($lead->proposal_outline ?? [])->pluck('label')->implode(' | '),
                     $lead->budget_estimate_label,
                     $lead->weighted_estimate_label,
                     $lead->source_label,
@@ -1185,6 +1187,28 @@ class DashboardController extends Controller
             })
             ->sortByDesc('count')
             ->values();
+        $serviceLeadProposalSummary = $serviceLeads
+            ->flatMap(function ($lead) {
+                return collect($lead->proposal_outline ?? [])->map(function ($item) {
+                    return [
+                        'key' => $item['key'] ?? null,
+                        'label' => $item['label'] ?? null,
+                    ];
+                });
+            })
+            ->filter(fn (array $item) => filled($item['key'] ?? null) && filled($item['label'] ?? null))
+            ->groupBy('key')
+            ->map(function ($group) {
+                $first = $group->first();
+
+                return [
+                    'key' => $first['key'],
+                    'label' => $first['label'],
+                    'count' => $group->count(),
+                ];
+            })
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadPlaybookSummary = collect([
             'discovery_call' => 'שיחת גילוי קצרה',
             'quick_quote' => 'הצעה מהירה',
@@ -1378,6 +1402,7 @@ class DashboardController extends Controller
             'serviceLeadNextServiceSummary' => $serviceLeadNextServiceSummary,
             'serviceLeadOfferSummary' => $serviceLeadOfferSummary,
             'serviceLeadDiscoverySummary' => $serviceLeadDiscoverySummary,
+            'serviceLeadProposalSummary' => $serviceLeadProposalSummary,
             'serviceLeadPlaybookSummary' => $serviceLeadPlaybookSummary,
             'serviceLeadChannelSummary' => $serviceLeadChannelSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
@@ -1671,6 +1696,7 @@ class DashboardController extends Controller
                 $lead->offer_outline_label = $offer['label'];
                 $lead->offer_outline_note = $offer['note'];
                 $lead->discovery_checklist = $this->leadDiscoveryChecklist($lead, $serviceCatalog);
+                $lead->proposal_outline = $this->leadProposalOutline($lead);
 
                 if ($priorWonCount > 0) {
                     $lead->relationship_key = 'existing_customer';
@@ -2083,6 +2109,89 @@ class DashboardController extends Controller
         return $items
             ->unique(fn (array $item) => $item['key'])
             ->take(4)
+            ->values()
+            ->all();
+    }
+
+    private function leadProposalOutline(object $lead): array
+    {
+        $serviceType = (string) ($lead->service_type ?? 'general');
+        $items = collect([
+            [
+                'key' => 'scope',
+                'label' => 'מה בדיוק כלול בטיפול ומה יוצא בסוף',
+            ],
+            [
+                'key' => 'timeline',
+                'label' => 'לוח זמנים ברור עם שלב ראשון מהיר',
+            ],
+        ]);
+
+        if (($lead->budget_range ?? null) !== 'unknown') {
+            $items->push([
+                'key' => 'pricing',
+                'label' => 'מסגרת מחיר מותאמת לתקציב שסומן',
+            ]);
+        } else {
+            $items->push([
+                'key' => 'pricing-range',
+                'label' => 'טווח מחיר ראשוני כדי ליישר ציפיות',
+            ]);
+        }
+
+        $serviceSpecific = match ($serviceType) {
+            'hosting' => [
+                ['key' => 'hosting-migration', 'label' => 'שלבי מעבר האחסון, אחריות וזמני מעבר'],
+                ['key' => 'hosting-performance', 'label' => 'מה משתפר בביצועים וביציבות אחרי המעבר'],
+            ],
+            'maintenance' => [
+                ['key' => 'maintenance-sla', 'label' => 'מה תדירות הטיפול ומה SLA התגובה'],
+                ['key' => 'maintenance-scope', 'label' => 'אילו משימות שוטפות נכנסות למסלול החודשי'],
+            ],
+            'website_upgrade' => [
+                ['key' => 'upgrade-priorities', 'label' => 'רשימת שיפורים לפי עדיפות עסקית'],
+                ['key' => 'upgrade-outcome', 'label' => 'איך האתר ייראה ויעבוד טוב יותר אחרי הספרינט'],
+            ],
+            'seo' => [
+                ['key' => 'seo-deliverables', 'label' => 'Deliverables חודשיים: אופטימיזציה, תוכן ומדידה'],
+                ['key' => 'seo-metrics', 'label' => 'איך מודדים תנועה, מיקומים ולידים'],
+            ],
+            'campaigns' => [
+                ['key' => 'campaign-structure', 'label' => 'מבנה הקמפיינים, תקציב וניהול חודשי'],
+                ['key' => 'campaign-metrics', 'label' => 'איך מודדים תוצאות בפועל ולא רק קליקים'],
+            ],
+            'landing_pages' => [
+                ['key' => 'landing-flow', 'label' => 'מה כולל העמוד, הטופס והמעקב'],
+                ['key' => 'landing-conversion', 'label' => 'איך העמוד בנוי להמרה ולא רק לעיצוב'],
+            ],
+            'automations' => [
+                ['key' => 'automation-flow', 'label' => 'איזה תהליך נטמיע ראשון ואיך הוא יחסוך עבודה'],
+                ['key' => 'automation-stack', 'label' => 'אילו כלים מתחברים ואיפה נשמרת הבקרה'],
+            ],
+            'ecosystem_access' => [
+                ['key' => 'ecosystem-track', 'label' => 'איך נראית הגישה המוקדמת ומה מקבלים בדרך'],
+                ['key' => 'ecosystem-updates', 'label' => 'מתי מקבלים עדכונים ואיך נשארים בלופ'],
+            ],
+            default => [
+                ['key' => 'proposal-fit', 'label' => 'למה הפתרון הזה מתאים בדיוק למצב שלהם'],
+                ['key' => 'proposal-next-step', 'label' => 'מה הצעד הבא אם מאשרים להתקדם'],
+            ],
+        };
+
+        foreach ($serviceSpecific as $item) {
+            $items->push($item);
+        }
+
+        if (($lead->relationship_key ?? null) === 'existing_customer') {
+            $items->push([
+                'key' => 'existing-customer-context',
+                'label' => 'קישור ברור למה שכבר נעשה יחד ומה מורחבים עכשיו',
+            ]);
+        }
+
+        return $items
+            ->unique(fn (array $item) => $item['key'])
+            ->take(5)
             ->values()
             ->all();
     }
