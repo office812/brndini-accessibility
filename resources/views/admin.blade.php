@@ -756,6 +756,9 @@
                                         <h2>לידים לשירותי Brndini</h2>
                                         <p class="panel-intro">פניות שירות עסקיות שמגיעות מתוך הכלי החינמי: אחסון, SEO, קמפיינים, תחזוקה, שדרוגי אתר ואוטומציות. זה נפרד לחלוטין מהתמיכה הטכנית של המערכת.</p>
                                     </div>
+                                    <div class="portal-card-actions">
+                                        <a class="secondary-button" href="{{ route('dashboard.super-admin.leads.export') }}">ייצוא CSV</a>
+                                    </div>
                                 </div>
 
                                 <div class="super-admin-toolbar" data-filter-root>

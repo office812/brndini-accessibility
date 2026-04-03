@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class DashboardController extends Controller
@@ -98,6 +99,95 @@ class DashboardController extends Controller
         $this->ensureSuperAdmin($request->user());
 
         return view('admin', $this->buildSuperAdminData($request->user()));
+    }
+
+    public function exportServiceLeads(Request $request): StreamedResponse
+    {
+        $this->ensureSuperAdmin($request->user());
+
+        $serviceCatalog = $this->serviceCatalog();
+        $preferredContactLabels = $this->servicePreferredContactLabels();
+        $statusLabels = $this->serviceLeadStatusLabels();
+        $leads = $this->collectAdminServiceLeads();
+        $fileName = 'brndini-service-leads-' . now()->format('Y-m-d-His') . '.csv';
+
+        return response()->streamDownload(function () use ($leads, $serviceCatalog, $preferredContactLabels, $statusLabels) {
+            $handle = fopen('php://output', 'w');
+
+            if (! $handle) {
+                return;
+            }
+
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            fputcsv($handle, [
+                'קוד פנייה',
+                'סוג פנייה',
+                'שירות',
+                'סטטוס',
+                'איכות ליד',
+                'ציון',
+                'מקור',
+                'נקודת כניסה',
+                'שם',
+                'אימייל',
+                'טלפון',
+                'אתר',
+                'דומיין',
+                'מטרה',
+                'פירוט',
+                'סוג עסק',
+                'גודל צוות',
+                'זמן התחלה',
+                'תקציב',
+                'דחיפות',
+                'חלון חזרה',
+                'ערוץ חזרה',
+                'הפעולה הבאה',
+                'מועד חזרה',
+                'עודכן לאחרונה',
+                'UTM',
+                'אתר מפנה',
+                'הערה פנימית',
+            ]);
+
+            foreach ($leads as $lead) {
+                fputcsv($handle, [
+                    $lead->reference_code,
+                    $lead->intent_label,
+                    $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type,
+                    $statusLabels[$lead->status] ?? $lead->status,
+                    $lead->opportunity_label,
+                    $lead->opportunity_score,
+                    $lead->source_label,
+                    $lead->entry_label,
+                    $lead->user_name ?? $lead->contact_name,
+                    $lead->user_email ?? $lead->contact_email,
+                    $lead->contact_phone,
+                    $lead->site_name,
+                    $lead->site_domain,
+                    $lead->goal,
+                    $lead->message,
+                    $lead->business_type_label,
+                    $lead->team_size_label,
+                    $lead->timeframe_label,
+                    $lead->budget_range_label,
+                    $lead->urgency_level_label,
+                    $lead->callback_window_label,
+                    $preferredContactLabels[$lead->preferred_contact_key ?? $lead->preferred_contact] ?? ($lead->preferred_contact ?? ''),
+                    $lead->next_step_label,
+                    $lead->follow_up_at,
+                    $lead->last_activity_label,
+                    $lead->marketing_label,
+                    $lead->referrer_host,
+                    $lead->internal_note,
+                ]);
+            }
+
+            fclose($handle);
+        }, $fileName, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
     }
 
     public function update(Request $request): RedirectResponse
@@ -835,10 +925,7 @@ class DashboardController extends Controller
             ->concat($runtimeTickets->map(fn (array $ticket) => SupportTicket::presentRuntime($ticket)))
             ->sortByDesc('sort_timestamp')
             ->values();
-        $serviceLeads = ServiceLead::runtimeLeads()
-            ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
-            ->sortByDesc('sort_timestamp')
-            ->values();
+        $serviceLeads = $this->collectAdminServiceLeads();
         $serviceLeadSourceSummary = collect(ServiceLead::sourceOptions())
             ->map(fn (string $label, string $key) => [
                 'key' => $key,
@@ -1003,6 +1090,14 @@ class DashboardController extends Controller
             'audit_and_fix' => 'מורחב',
             'managed_service' => 'מלא',
         ];
+    }
+
+    private function collectAdminServiceLeads()
+    {
+        return ServiceLead::runtimeLeads()
+            ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
+            ->sortByDesc('sort_timestamp')
+            ->values();
     }
 
     private function siteColumnsAvailable(array $columns): bool

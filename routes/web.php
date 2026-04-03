@@ -25,6 +25,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth')->group(function () {
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
     Route::get('/dashboard/super-admin', [DashboardController::class, 'superAdmin'])->name('dashboard.super-admin');
+    Route::get('/dashboard/super-admin/leads/export', [DashboardController::class, 'exportServiceLeads'])->name('dashboard.super-admin.leads.export');
     Route::post('/dashboard/super-admin/tracking', [DashboardController::class, 'updateGlobalTracking'])->name('dashboard.super-admin.tracking');
     Route::post('/dashboard/super-admin/tickets/{ticketKey}', [DashboardController::class, 'updateSupportTicketAdmin'])->name('dashboard.super-admin.tickets.update');
     Route::post('/dashboard/super-admin/leads/{leadKey}', [DashboardController::class, 'updateServiceLeadAdmin'])->name('dashboard.super-admin.leads.update');
