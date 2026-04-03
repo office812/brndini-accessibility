@@ -812,7 +812,7 @@
                                             <article
                                                 class="support-ticket-card"
                                                 data-filter-item
-                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->contact_phone ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->utm_source ?? '') . ' ' . ($lead->utm_medium ?? '') . ' ' . ($lead->utm_campaign ?? '') . ' ' . ($lead->referrer_host ?? '')) }}"
+                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->contact_phone ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->business_type_label ?? '') . ' ' . ($lead->team_size_label ?? '') . ' ' . ($lead->utm_source ?? '') . ' ' . ($lead->utm_medium ?? '') . ' ' . ($lead->utm_campaign ?? '') . ' ' . ($lead->referrer_host ?? '')) }}"
                                                 data-filter-service="{{ $lead->service_type }}"
                                                 data-filter-source="{{ $lead->source ?? 'dashboard' }}"
                                                 data-filter-entry="{{ $lead->entry_point ?? '' }}"
@@ -849,6 +849,10 @@
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">{{ $lead->intent_label }}</span>
                                                     <span class="meta-note">הפעולה הבאה: {{ $lead->next_step_label }}</span>
+                                                </div>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">עסק: {{ $lead->business_type_label }}</span>
+                                                    <span class="status-pill is-neutral">צוות: {{ $lead->team_size_label }}</span>
                                                 </div>
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">זמן: {{ $lead->timeframe_label }}</span>
@@ -956,6 +960,18 @@
                                     </div>
                                     <div class="domain-info-list">
                                         @foreach ($serviceLeadOpportunitySummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach ($serviceLeadBusinessSummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach ($serviceLeadTeamSummary as $item)
                                             <div class="domain-info-row">
                                                 <span>{{ $item['label'] }}</span>
                                                 <strong>{{ $item['count'] }}</strong>

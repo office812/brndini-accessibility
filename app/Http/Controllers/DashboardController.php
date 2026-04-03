@@ -432,6 +432,8 @@ class DashboardController extends Controller
             'service_type' => ['required', Rule::in(array_keys($this->serviceCatalog()))],
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
+            'business_type' => ['nullable', Rule::in(array_keys(ServiceLead::businessTypeOptions()))],
+            'team_size' => ['nullable', Rule::in(array_keys(ServiceLead::teamSizeOptions()))],
             'timeframe' => ['nullable', Rule::in(array_keys(ServiceLead::timeframeOptions()))],
             'budget_range' => ['nullable', Rule::in(array_keys(ServiceLead::budgetRangeOptions()))],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
@@ -458,6 +460,8 @@ class DashboardController extends Controller
             'service_type' => ['required', Rule::in(array_keys($this->serviceCatalog()))],
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
+            'business_type' => ['nullable', Rule::in(array_keys(ServiceLead::businessTypeOptions()))],
+            'team_size' => ['nullable', Rule::in(array_keys(ServiceLead::teamSizeOptions()))],
             'timeframe' => ['nullable', Rule::in(array_keys(ServiceLead::timeframeOptions()))],
             'budget_range' => ['nullable', Rule::in(array_keys(ServiceLead::budgetRangeOptions()))],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
@@ -743,6 +747,8 @@ class DashboardController extends Controller
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
+            'serviceLeadBusinessTypeLabels' => ServiceLead::businessTypeOptions(),
+            'serviceLeadTeamSizeLabels' => ServiceLead::teamSizeOptions(),
             'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
             'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
             'serviceLeads' => $serviceLeads,
@@ -752,6 +758,7 @@ class DashboardController extends Controller
                 'new' => $serviceLeads->where('status', 'new')->count(),
                 'proposal' => $serviceLeads->where('status', 'proposal')->count(),
                 'won' => $serviceLeads->where('status', 'won')->count(),
+                'qualifiedBusinesses' => $serviceLeads->filter(fn ($lead) => ! in_array($lead->business_type ?? null, [null, ''], true))->count(),
                 'urgent' => $serviceLeads->where('timeframe', 'urgent')->count(),
                 'budgeted' => $serviceLeads->filter(fn ($lead) => ! in_array($lead->budget_range ?? null, [null, '', 'unknown'], true))->count(),
                 'lastActivity' => $serviceLeads->first()?->last_activity_label ?? 'עדיין לא נשלחה פנייה',
@@ -878,6 +885,22 @@ class DashboardController extends Controller
             ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadBusinessSummary = collect(ServiceLead::businessTypeOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('business_type', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
+        $serviceLeadTeamSummary = collect(ServiceLead::teamSizeOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('team_size', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
         $serviceLeadBudgetSummary = collect(ServiceLead::budgetRangeOptions())
             ->map(fn (string $label, string $key) => [
                 'key' => $key,
@@ -908,11 +931,15 @@ class DashboardController extends Controller
             'serviceLeadEntrySummary' => $serviceLeadEntrySummary,
             'serviceLeadMarketingSummary' => $serviceLeadMarketingSummary,
             'serviceLeadOpportunitySummary' => $serviceLeadOpportunitySummary,
+            'serviceLeadBusinessSummary' => $serviceLeadBusinessSummary,
+            'serviceLeadTeamSummary' => $serviceLeadTeamSummary,
             'serviceLeadTimeframeSummary' => $serviceLeadTimeframeSummary,
             'serviceLeadBudgetSummary' => $serviceLeadBudgetSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
+            'serviceLeadBusinessTypeLabels' => ServiceLead::businessTypeOptions(),
+            'serviceLeadTeamSizeLabels' => ServiceLead::teamSizeOptions(),
             'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
             'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
             'superAdminUsersCount' => $superAdminUsersCount,

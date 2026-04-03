@@ -20,6 +20,8 @@ class ServiceLead extends Model
         'contact_phone',
         'goal',
         'message',
+        'business_type',
+        'team_size',
         'timeframe',
         'budget_range',
         'preferred_contact',
@@ -78,6 +80,8 @@ class ServiceLead extends Model
             'contact_phone' => static::normalizePhone($validated['contact_phone'] ?? null),
             'goal' => trim((string) $validated['goal']),
             'message' => trim((string) $validated['message']),
+            'business_type' => static::normalizeText($validated['business_type'] ?? null),
+            'team_size' => static::normalizeText($validated['team_size'] ?? null),
             'timeframe' => static::normalizeText($validated['timeframe'] ?? null),
             'budget_range' => static::normalizeText($validated['budget_range'] ?? null),
             'preferred_contact' => $validated['preferred_contact'],
@@ -122,6 +126,8 @@ class ServiceLead extends Model
             'service_type' => $validated['service_type'],
             'goal' => trim((string) $validated['goal']),
             'message' => trim((string) $validated['message']),
+            'business_type' => static::normalizeText($validated['business_type'] ?? null),
+            'team_size' => static::normalizeText($validated['team_size'] ?? null),
             'timeframe' => static::normalizeText($validated['timeframe'] ?? null),
             'budget_range' => static::normalizeText($validated['budget_range'] ?? null),
             'preferred_contact' => $validated['preferred_contact'],
@@ -172,6 +178,8 @@ class ServiceLead extends Model
         $utmCampaign = static::normalizeText($lead['utm_campaign'] ?? null);
         $referrerUrl = static::normalizeUrl($lead['referrer_url'] ?? null);
         $referrerHost = $referrerUrl ? (parse_url($referrerUrl, PHP_URL_HOST) ?: null) : null;
+        $businessType = static::normalizeText($lead['business_type'] ?? null);
+        $teamSize = static::normalizeText($lead['team_size'] ?? null);
         $timeframe = static::normalizeText($lead['timeframe'] ?? null);
         $budgetRange = static::normalizeText($lead['budget_range'] ?? null);
         $opportunity = static::opportunityMeta(
@@ -185,6 +193,8 @@ class ServiceLead extends Model
             $utmMedium,
             $utmCampaign,
             $referrerHost,
+            $businessType,
+            $teamSize,
             $timeframe,
             $budgetRange
         );
@@ -215,6 +225,10 @@ class ServiceLead extends Model
             'service_type' => $lead['service_type'] ?? 'general',
             'goal' => $lead['goal'] ?? '',
             'message' => $lead['message'] ?? '',
+            'business_type' => $businessType,
+            'business_type_label' => static::businessTypeOptions()[$businessType] ?? 'לא צוין',
+            'team_size' => $teamSize,
+            'team_size_label' => static::teamSizeOptions()[$teamSize] ?? 'לא צוין',
             'timeframe' => $timeframe,
             'timeframe_label' => static::timeframeOptions()[$timeframe] ?? 'לא צוין',
             'budget_range' => $budgetRange,
@@ -323,6 +337,31 @@ class ServiceLead extends Model
         ];
     }
 
+    public static function businessTypeOptions(): array
+    {
+        return [
+            'local_business' => 'עסק מקומי',
+            'ecommerce' => 'איקומרס / חנות',
+            'agency' => 'סוכנות / סטודיו',
+            'saas' => 'SaaS / מוצר דיגיטלי',
+            'content' => 'תוכן / מדיה',
+            'service_provider' => 'נותן שירותים',
+            'nonprofit' => 'עמותה / ארגון',
+            'other' => 'אחר',
+        ];
+    }
+
+    public static function teamSizeOptions(): array
+    {
+        return [
+            'solo' => 'אדם אחד',
+            'small' => '2–5 עובדים',
+            'medium' => '6–20 עובדים',
+            'large' => '21–50 עובדים',
+            'enterprise' => '50+ עובדים',
+        ];
+    }
+
     public static function budgetRangeOptions(): array
     {
         return [
@@ -375,6 +414,8 @@ class ServiceLead extends Model
         ?string $utmMedium,
         ?string $utmCampaign,
         ?string $referrerHost,
+        ?string $businessType,
+        ?string $teamSize,
         ?string $timeframe,
         ?string $budgetRange
     ): array {
@@ -416,6 +457,22 @@ class ServiceLead extends Model
         if (filled($referrerHost)) {
             $score += 6;
         }
+
+        $score += match ($businessType) {
+            'ecommerce', 'agency', 'saas' => 10,
+            'service_provider', 'content' => 7,
+            'local_business', 'nonprofit', 'other' => 4,
+            default => 0,
+        };
+
+        $score += match ($teamSize) {
+            'enterprise' => 12,
+            'large' => 10,
+            'medium' => 8,
+            'small' => 5,
+            'solo' => 2,
+            default => 0,
+        };
 
         $score += match ($timeframe) {
             'urgent' => 16,

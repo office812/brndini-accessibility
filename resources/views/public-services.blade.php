@@ -181,6 +181,27 @@
 
                     <div class="support-form-row">
                         <div>
+                            <label for="public_service_business_type">איזה סוג עסק אתה?</label>
+                            <select id="public_service_business_type" name="business_type">
+                                <option value="">בחר סוג עסק</option>
+                                @foreach ($serviceLeadBusinessTypeLabels as $businessKey => $businessLabel)
+                                    <option value="{{ $businessKey }}" @selected(old('business_type') === $businessKey)>{{ $businessLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="public_service_team_size">מה גודל הצוות?</label>
+                            <select id="public_service_team_size" name="team_size">
+                                <option value="">בחר גודל צוות</option>
+                                @foreach ($serviceLeadTeamSizeLabels as $teamKey => $teamLabel)
+                                    <option value="{{ $teamKey }}" @selected(old('team_size') === $teamKey)>{{ $teamLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="support-form-row">
+                        <div>
                             <label for="public_service_timeframe">מתי תרצה להתחיל?</label>
                             <select id="public_service_timeframe" name="timeframe">
                                 <option value="">בחר טווח זמן</option>

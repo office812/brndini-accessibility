@@ -104,6 +104,27 @@
 
                                     <div class="support-form-row">
                                         <div>
+                                            <label for="service_business_type">איזה סוג עסק אתה?</label>
+                                            <select id="service_business_type" name="business_type">
+                                                <option value="">בחר סוג עסק</option>
+                                                @foreach ($serviceLeadBusinessTypeLabels as $businessKey => $businessLabel)
+                                                    <option value="{{ $businessKey }}" @selected(old('business_type') === $businessKey)>{{ $businessLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="service_team_size">מה גודל הצוות?</label>
+                                            <select id="service_team_size" name="team_size">
+                                                <option value="">בחר גודל צוות</option>
+                                                @foreach ($serviceLeadTeamSizeLabels as $teamKey => $teamLabel)
+                                                    <option value="{{ $teamKey }}" @selected(old('team_size') === $teamKey)>{{ $teamLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="support-form-row">
+                                        <div>
                                             <label for="service_timeframe">מתי תרצה להתחיל?</label>
                                             <select id="service_timeframe" name="timeframe">
                                                 <option value="">בחר טווח זמן</option>
@@ -159,6 +180,10 @@
                                         <div class="domain-info-row">
                                             <span>פניות שנשלחו</span>
                                             <strong>{{ $serviceLeadSummary['total'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>עם פרופיל עסקי</span>
+                                            <strong>{{ $serviceLeadSummary['qualifiedBusinesses'] }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>צריכים להתחיל מהר</span>
@@ -223,7 +248,7 @@
                                         <article
                                             class="support-ticket-card"
                                             data-filter-item
-                                            data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '')) }}"
+                                            data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->business_type_label ?? '') . ' ' . ($lead->team_size_label ?? '')) }}"
                                             data-filter-service="{{ $lead->service_type }}"
                                             data-filter-status="{{ $lead->status }}"
                                         >
@@ -250,6 +275,10 @@
                                                 <p class="support-ticket-meta">
                                                     {{ $lead->goal }} · {{ $lead->last_activity_label }}
                                                 </p>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">עסק: {{ $lead->business_type_label }}</span>
+                                                    <span class="status-pill is-neutral">צוות: {{ $lead->team_size_label }}</span>
+                                                </div>
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">זמן: {{ $lead->timeframe_label }}</span>
                                                     <span class="status-pill is-neutral">תקציב: {{ $lead->budget_range_label }}</span>
