@@ -336,6 +336,22 @@ document.addEventListener('DOMContentLoaded', function () {
     applyFilters();
   });
 
+  document.querySelectorAll('[data-leads-status-jump]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var status = button.getAttribute('data-leads-status-jump');
+      var statusSelect = document.getElementById('super_admin_leads_status');
+
+      if (!statusSelect) {
+        return;
+      }
+
+      statusSelect.value = status || '';
+      statusSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      statusSelect.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      statusSelect.focus({ preventScroll: true });
+    });
+  });
+
   document.querySelectorAll('[data-widget-pane-root]').forEach(function (root) {
     var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-widget-pane-button]'));
     var panes = Array.prototype.slice.call(root.querySelectorAll('[data-widget-pane]'));

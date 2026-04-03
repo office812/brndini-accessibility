@@ -1090,6 +1090,36 @@ class DashboardController extends Controller
             ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadPipelineBoard = collect($this->serviceLeadStatusLabels())
+            ->map(function (string $label, string $key) use ($serviceLeads, $serviceCatalog) {
+                $stageLeads = $serviceLeads
+                    ->where('status', $key)
+                    ->sortByDesc(fn ($lead) => $this->serviceLeadActionPriority($lead) + (int) ($lead->weighted_estimate_amount ?? 0))
+                    ->values();
+
+                return [
+                    'key' => $key,
+                    'label' => $label,
+                    'count' => $stageLeads->count(),
+                    'weighted_value_label' => ServiceLead::formatCurrencyShort($stageLeads->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0))),
+                    'value_label' => ServiceLead::formatCurrencyShort($stageLeads->sum(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0))),
+                    'hot_count' => $stageLeads->where('opportunity_key', 'hot')->count(),
+                    'due_today_count' => $stageLeads->where('follow_up_tone', 'good')->count(),
+                    'leads' => $stageLeads->take(3)->map(function ($lead) use ($serviceCatalog) {
+                        return [
+                            'reference_code' => $lead->reference_code,
+                            'service_label' => $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type,
+                            'contact_name' => $lead->user_name ?? 'ללא שם',
+                            'site_name' => $lead->site_name ?: 'ללא אתר',
+                            'weighted_estimate_label' => $lead->weighted_estimate_label ?? 'לא הוגדר',
+                            'opportunity_label' => $lead->opportunity_label ?? 'עניין ראשוני',
+                            'follow_up_label' => $lead->follow_up_label ?? 'ללא מועד חזרה',
+                            'assigned_label' => $lead->assigned_label ?? 'לא משויך',
+                        ];
+                    })->values(),
+                ];
+            })
+            ->values();
         $serviceLeadServiceSummary = collect($serviceCatalog)
             ->map(fn (array $service, string $key) => [
                 'key' => $key,
@@ -1397,6 +1427,7 @@ class DashboardController extends Controller
             'serviceLeadCallbackWindowSummary' => $serviceLeadCallbackWindowSummary,
             'serviceLeadAssigneeSummary' => $serviceLeadAssigneeSummary,
             'serviceLeadStageSummary' => $serviceLeadStageSummary,
+            'serviceLeadPipelineBoard' => $serviceLeadPipelineBoard,
             'serviceLeadServiceSummary' => $serviceLeadServiceSummary,
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
             'serviceLeadRepeatSummary' => $serviceLeadRepeatSummary,

@@ -858,6 +858,65 @@
                                     </div>
                                 </div>
 
+                                <section class="super-admin-pipeline-board" aria-label="צנרת לידים">
+                                    @foreach (($serviceLeadPipelineBoard ?? collect()) as $stage)
+                                        <article class="super-admin-pipeline-column">
+                                            <div class="super-admin-pipeline-head">
+                                                <div>
+                                                    <p class="eyebrow">{{ $stage['count'] }} לידים</p>
+                                                    <h3>{{ $stage['label'] }}</h3>
+                                                </div>
+                                                <span class="status-pill {{ $stage['hot_count'] > 0 ? 'is-warn' : 'is-neutral' }}">
+                                                    חמים: {{ $stage['hot_count'] }}
+                                                </span>
+                                            </div>
+                                            <div class="super-admin-pipeline-metrics">
+                                                <div>
+                                                    <span>שווי כולל</span>
+                                                    <strong>{{ $stage['value_label'] }}</strong>
+                                                </div>
+                                                <div>
+                                                    <span>שווי משוקלל</span>
+                                                    <strong>{{ $stage['weighted_value_label'] }}</strong>
+                                                </div>
+                                                <div>
+                                                    <span>לחזור היום</span>
+                                                    <strong>{{ $stage['due_today_count'] }}</strong>
+                                                </div>
+                                            </div>
+                                            @if (collect($stage['leads'])->isEmpty())
+                                                <div class="super-admin-pipeline-empty">
+                                                    <strong>אין כרגע לידים בשלב הזה</strong>
+                                                    <p>ברגע שליד יעבור ל־{{ $stage['label'] }}, הוא יופיע כאן מיד.</p>
+                                                </div>
+                                            @else
+                                                <div class="super-admin-pipeline-list">
+                                                    @foreach ($stage['leads'] as $pipelineLead)
+                                                        <article class="super-admin-pipeline-lead">
+                                                            <div class="super-admin-pipeline-lead-head">
+                                                                <strong>{{ $pipelineLead['service_label'] }}</strong>
+                                                                <span>{{ $pipelineLead['reference_code'] }}</span>
+                                                            </div>
+                                                            <p>{{ $pipelineLead['contact_name'] }} · {{ $pipelineLead['site_name'] }}</p>
+                                                            <div class="lead-intel-row">
+                                                                <span class="status-pill is-neutral">{{ $pipelineLead['opportunity_label'] }}</span>
+                                                                <span class="status-pill is-good">{{ $pipelineLead['weighted_estimate_label'] }}</span>
+                                                            </div>
+                                                            <div class="lead-intel-row">
+                                                                <span class="meta-note">{{ $pipelineLead['follow_up_label'] }}</span>
+                                                                <span class="meta-note">מטפל: {{ $pipelineLead['assigned_label'] }}</span>
+                                                            </div>
+                                                        </article>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                            <button class="secondary-button super-admin-pipeline-filter" type="button" data-leads-status-jump="{{ $stage['key'] }}">
+                                                הצג את כל {{ $stage['label'] }}
+                                            </button>
+                                        </article>
+                                    @endforeach
+                                </section>
+
                                 <div class="super-admin-toolbar" data-filter-root>
                                     <div class="super-admin-toolbar-field">
                                         <label for="super_admin_leads_search">חיפוש ליד</label>
