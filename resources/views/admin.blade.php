@@ -794,6 +794,16 @@
                                 <strong>{{ $adminServiceLeads->where('follow_up_tone', 'good')->count() }}</strong>
                                 <p>חזרות שמתוזמנות להיום</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🧑‍💼</span>
+                                <strong>{{ $adminServiceLeads->filter(fn ($lead) => filled($lead->assigned_admin_email ?? null))->count() }}</strong>
+                                <p>לידים שכבר שויכו למטפל</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">📌</span>
+                                <strong>{{ $adminServiceLeads->filter(fn ($lead) => blank($lead->assigned_admin_email ?? null))->count() }}</strong>
+                                <p>לידים שעדיין לא משויכים</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -849,6 +859,17 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="super-admin-toolbar-field">
+                                        <label for="super_admin_leads_assignee">סינון מטפל</label>
+                                        <select id="super_admin_leads_assignee" data-filter-field="assignee">
+                                            <option value="">כל המטפלים</option>
+                                            <option value="unassigned">לא משויך</option>
+                                            @foreach ($serviceLeadAssigneeSummary as $item)
+                                                @continue($item['key'] === 'unassigned')
+                                                <option value="{{ $item['key'] }}">{{ $item['label'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
 
                                 @if ($adminServiceLeads->isEmpty())
@@ -867,6 +888,7 @@
                                                 data-filter-source="{{ $lead->source ?? 'dashboard' }}"
                                                 data-filter-entry="{{ $lead->entry_point ?? '' }}"
                                                 data-filter-status="{{ $lead->status }}"
+                                                data-filter-assignee="{{ $lead->assigned_admin_email ?? 'unassigned' }}"
                                             >
                                                 <div class="support-ticket-head">
                                                     <div>
