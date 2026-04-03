@@ -839,6 +839,11 @@
                                 <strong>{{ $adminSummary['service_leads_with_recommendation'] ?? 0 }}</strong>
                                 <p>לידים עם הצעת המשך</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🧭</span>
+                                <strong>{{ $adminSummary['service_leads_with_playbook'] ?? 0 }}</strong>
+                                <p>לידים עם דרך גישה מומלצת</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -983,6 +988,29 @@
                                                 @if (!empty($lead->recommended_service_label))
                                                     <div class="lead-intel-row">
                                                         <span class="status-pill is-good">המשך מומלץ: {{ $lead->recommended_service_label }}</span>
+                                                    </div>
+                                                @endif
+                                                @if (!empty($lead->playbook_label) || !empty($lead->recommended_contact_channel_label))
+                                                    <div class="lead-intel-row">
+                                                        @if (!empty($lead->recommended_contact_channel_label))
+                                                            <span class="status-pill is-neutral">ערוץ פנייה: {{ $lead->recommended_contact_channel_label }}</span>
+                                                        @endif
+                                                        @if (!empty($lead->playbook_label))
+                                                            <span class="status-pill is-good">דרך גישה: {{ $lead->playbook_label }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                                @if (!empty($lead->playbook_note))
+                                                    <p class="support-ticket-message"><strong>המלצת גישה:</strong> {{ $lead->playbook_note }}</p>
+                                                @endif
+                                                @if (!empty($lead->opening_line))
+                                                    @php($openingLineId = 'lead-opening-' . md5((string) $lead->update_key))
+                                                    <div class="lead-opening-box">
+                                                        <div class="lead-opening-head">
+                                                            <strong>נוסח פתיחה מוצע</strong>
+                                                            <button class="secondary-button" type="button" data-copy-target="{{ $openingLineId }}">העתק נוסח</button>
+                                                        </div>
+                                                        <p class="support-ticket-message" id="{{ $openingLineId }}">{{ $lead->opening_line }}</p>
                                                     </div>
                                                 @endif
                                                 @if (!empty($lead->repeat_contact_label) || !empty($lead->repeat_site_label))
@@ -1224,6 +1252,54 @@
                                     @else
                                         <div class="domain-info-list">
                                             @foreach (($serviceLeadNextServiceSummary ?? collect())->take(6) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">איך נכון לגשת</p>
+                                            <h2>דרכי גישה שחוזרות הכי הרבה</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadPlaybookSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין מספיק מידע לדרכי גישה</strong>
+                                            <p>ככל שיצטברו יותר לידים, המערכת תציע אם נכון להתחיל בשיחת גילוי, הצעה מהירה, חימום או הרחבה.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadPlaybookSummary ?? collect())->take(6) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">מאיזה ערוץ להתחיל</p>
+                                            <h2>ערוצי פנייה מומלצים</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadChannelSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין מספיק מידע על ערוצי פנייה</strong>
+                                            <p>ברגע שיהיו לידים עם ערוץ מועדף, דחיפות וקשר עסקי, תראה כאן אם נכון להתחיל בטלפון, ווטסאפ או מייל.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadChannelSummary ?? collect())->take(6) as $item)
                                                 <div class="domain-info-row">
                                                     <span>{{ $item['label'] }}</span>
                                                     <strong>{{ $item['count'] }}</strong>

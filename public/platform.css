@@ -3073,6 +3073,26 @@ body.page-is-ready .auth-shell {
     font-weight: 700;
 }
 
+.lead-opening-box {
+    display: grid;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(244, 247, 255, 0.94);
+    border: 1px solid rgba(52, 101, 236, 0.12);
+}
+
+.lead-opening-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.lead-opening-head strong {
+    color: #173056;
+}
+
 .lead-activity-timeline {
     display: grid;
     gap: 10px;

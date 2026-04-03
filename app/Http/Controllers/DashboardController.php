@@ -132,6 +132,9 @@ class DashboardController extends Controller
                 'זכיות קודמות',
                 'פניות חוזרות מאותו איש קשר',
                 'פניות חוזרות מאותו אתר',
+                'ערוץ פנייה מומלץ',
+                'דרך גישה מומלצת',
+                'נוסח פתיחה',
                 'שווי משוער',
                 'שווי משוקלל',
                 'מקור',
@@ -177,6 +180,9 @@ class DashboardController extends Controller
                     $lead->prior_won_count ?? 0,
                     $lead->repeat_contact_count ?? 1,
                     $lead->repeat_site_count ?? 1,
+                    $lead->recommended_contact_channel_label,
+                    $lead->playbook_label,
+                    $lead->opening_line,
                     $lead->budget_estimate_label,
                     $lead->weighted_estimate_label,
                     $lead->source_label,
@@ -1137,6 +1143,36 @@ class DashboardController extends Controller
             ->filter(fn (array $item) => $item['count'] > 0)
             ->sortByDesc('count')
             ->values();
+        $serviceLeadPlaybookSummary = collect([
+            'discovery_call' => 'שיחת גילוי קצרה',
+            'quick_quote' => 'הצעה מהירה',
+            'technical_review' => 'בדיקה טכנית קצרה',
+            'upsell_bundle' => 'הצעת המשך / הרחבה',
+            'nurture_track' => 'חימום ועדכון',
+        ])->map(function (string $label, string $key) use ($serviceLeads) {
+            return [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('playbook_key', $key)->count(),
+            ];
+        })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
+        $serviceLeadChannelSummary = collect([
+            'phone' => 'טלפון',
+            'whatsapp' => 'ווטסאפ',
+            'email' => 'מייל',
+        ])->map(function (string $label, string $key) use ($serviceLeads) {
+            return [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('recommended_contact_channel_key', $key)->count(),
+            ];
+        })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadValueSummary = [
             'pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0)),
             'weighted_pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0)),
@@ -1298,6 +1334,8 @@ class DashboardController extends Controller
             'serviceLeadRepeatSummary' => $serviceLeadRepeatSummary,
             'serviceLeadRelationshipSummary' => $serviceLeadRelationshipSummary,
             'serviceLeadNextServiceSummary' => $serviceLeadNextServiceSummary,
+            'serviceLeadPlaybookSummary' => $serviceLeadPlaybookSummary,
+            'serviceLeadChannelSummary' => $serviceLeadChannelSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
             'serviceLeadPerformanceSummary' => $serviceLeadPerformanceSummary,
             'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
@@ -1350,6 +1388,7 @@ class DashboardController extends Controller
                 'service_leads_existing_customers' => $serviceLeads->filter(fn ($lead) => ($lead->relationship_key ?? null) === 'existing_customer')->count(),
                 'service_leads_cross_sell' => $serviceLeads->filter(fn ($lead) => (int) ($lead->distinct_service_count ?? 1) > 1)->count(),
                 'service_leads_with_recommendation' => $serviceLeads->filter(fn ($lead) => filled($lead->recommended_service_type ?? null))->count(),
+                'service_leads_with_playbook' => $serviceLeads->filter(fn ($lead) => filled($lead->playbook_key ?? null))->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
@@ -1569,6 +1608,17 @@ class DashboardController extends Controller
                 $lead->recommended_service_label = $lead->recommended_service_type
                     ? ($serviceCatalog[$lead->recommended_service_type]['label'] ?? $lead->recommended_service_type)
                     : null;
+                $lead->recommended_contact_channel_key = $this->recommendedLeadContactChannel($lead);
+                $lead->recommended_contact_channel_label = match ($lead->recommended_contact_channel_key) {
+                    'phone' => 'טלפון',
+                    'whatsapp' => 'ווטסאפ',
+                    default => 'מייל',
+                };
+                $playbook = $this->recommendedLeadPlaybook($lead);
+                $lead->playbook_key = $playbook['key'];
+                $lead->playbook_label = $playbook['label'];
+                $lead->playbook_note = $playbook['note'];
+                $lead->opening_line = $this->buildLeadOpeningLine($lead, $serviceCatalog);
 
                 if ($priorWonCount > 0) {
                     $lead->relationship_key = 'existing_customer';
@@ -1673,6 +1723,105 @@ class DashboardController extends Controller
         }
 
         return null;
+    }
+
+    private function recommendedLeadContactChannel(object $lead): string
+    {
+        if (($lead->urgency_level ?? null) === 'urgent' && filled($lead->contact_phone ?? null)) {
+            return ($lead->preferred_contact_key ?? $lead->preferred_contact ?? null) === 'whatsapp'
+                ? 'whatsapp'
+                : 'phone';
+        }
+
+        if (($lead->relationship_key ?? null) === 'existing_customer' && filled($lead->contact_phone ?? null)) {
+            return ($lead->preferred_contact_key ?? $lead->preferred_contact ?? null) === 'phone'
+                ? 'phone'
+                : 'whatsapp';
+        }
+
+        if (($lead->preferred_contact_key ?? $lead->preferred_contact ?? null) === 'phone' && filled($lead->contact_phone ?? null)) {
+            return 'phone';
+        }
+
+        if (($lead->preferred_contact_key ?? $lead->preferred_contact ?? null) === 'whatsapp' && filled($lead->contact_phone ?? null)) {
+            return 'whatsapp';
+        }
+
+        return 'email';
+    }
+
+    private function recommendedLeadPlaybook(object $lead): array
+    {
+        if (($lead->service_type ?? null) === 'ecosystem_access') {
+            return [
+                'key' => 'nurture_track',
+                'label' => 'חימום ועדכון',
+                'note' => 'להכניס לרשימת המתנה, לשלוח עדכון קצר ולבדוק עניין מחודש בהמשך.',
+            ];
+        }
+
+        if (($lead->relationship_key ?? null) === 'existing_customer' || (int) ($lead->distinct_service_count ?? 1) > 1) {
+            return [
+                'key' => 'upsell_bundle',
+                'label' => 'הצעת המשך / הרחבה',
+                'note' => 'להציג המשך הגיוני לשירות קיים או חבילה רחבה יותר במקום להתחיל מאפס.',
+            ];
+        }
+
+        if (in_array(($lead->service_type ?? null), ['website_upgrade', 'hosting', 'maintenance'], true)) {
+            return [
+                'key' => 'technical_review',
+                'label' => 'בדיקה טכנית קצרה',
+                'note' => 'להתחיל באבחון טכני קצר של האתר ואז להציע טיפול/שדרוג מדויק.',
+            ];
+        }
+
+        if (in_array(($lead->service_type ?? null), ['seo', 'campaigns', 'landing_pages', 'automations'], true)
+            && in_array(($lead->urgency_level ?? null), ['urgent', 'high'], true)
+        ) {
+            return [
+                'key' => 'quick_quote',
+                'label' => 'הצעה מהירה',
+                'note' => 'הלקוח כנראה כבר בשל. עדיף לשלוח כיוון מהיר ותמחור ראשוני במקום להכביד.',
+            ];
+        }
+
+        return [
+            'key' => 'discovery_call',
+            'label' => 'שיחת גילוי קצרה',
+            'note' => 'להבין צרכים, תקציב ודחיפות לפני הצעה מסודרת.',
+        ];
+    }
+
+    private function buildLeadOpeningLine(object $lead, array $serviceCatalog): string
+    {
+        $name = trim((string) ($lead->contact_name ?? $lead->user_name ?? ''));
+        $firstName = $name !== '' ? preg_split('/\s+/u', $name)[0] : 'היי';
+        $serviceLabel = $serviceCatalog[$lead->service_type]['label'] ?? 'השירות';
+        $goal = trim((string) ($lead->goal ?? ''));
+        $goalSnippet = $goal !== '' ? ' לגבי ' . $goal : '';
+
+        if (($lead->service_type ?? null) === 'ecosystem_access') {
+            return $firstName . ', תודה על העניין במוצרים הבאים של Brndini. רציתי לעדכן איך נוכל לצרף אותך מוקדם ולבדוק מה הכי רלוונטי עבורך בהמשך.';
+        }
+
+        if (($lead->relationship_key ?? null) === 'existing_customer') {
+            return $firstName . ', ראיתי שחזרת אלינו הפעם סביב ' . $serviceLabel . $goalSnippet . '. יש לנו כבר היכרות טובה, אז אפשר להתקדם מהר ולבדוק אם נכון להרחיב את מה שכבר בנינו.';
+        }
+
+        if (($lead->playbook_key ?? null) === 'technical_review') {
+            return $firstName . ', תודה על הפנייה לגבי ' . $serviceLabel . $goalSnippet . '. לפני שמציעים כיוון, הייתי פותח איתך בדיקה טכנית קצרה כדי להבין מה הכי נכון לאתר שלך.';
+        }
+
+        if (($lead->playbook_key ?? null) === 'quick_quote') {
+            return $firstName . ', ראיתי את הפנייה לגבי ' . $serviceLabel . $goalSnippet . '. כדי לחסוך זמן, אפשר לשלוח לך כבר כיוון ראשוני והצעת מסגרת מהירה להמשך.';
+        }
+
+        if (($lead->playbook_key ?? null) === 'upsell_bundle') {
+            return $firstName . ', ראיתי שהפנייה הנוכחית נוגעת ל־' . $serviceLabel . $goalSnippet . '. נראה שיש פה מקום להרחבה חכמה למה שכבר ביקשת או למה שכבר עשינו יחד.';
+        }
+
+        return $firstName . ', תודה על הפנייה לגבי ' . $serviceLabel . $goalSnippet . '. אשמח לעשות איתך שיחת היכרות קצרה כדי להבין מה הכי נכון לצעד הבא.';
     }
 
     private function siteColumnsAvailable(array $columns): bool
