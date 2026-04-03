@@ -137,6 +137,7 @@ class DashboardController extends Controller
                 'נוסח פתיחה',
                 'כותרת מוצעת',
                 'הצעה ראשונית מומלצת',
+                'מה צריך לברר עכשיו',
                 'שווי משוער',
                 'שווי משוקלל',
                 'מקור',
@@ -187,6 +188,7 @@ class DashboardController extends Controller
                     $lead->opening_line,
                     $lead->opening_subject,
                     $lead->offer_outline_label,
+                    collect($lead->discovery_checklist ?? [])->pluck('label')->implode(' | '),
                     $lead->budget_estimate_label,
                     $lead->weighted_estimate_label,
                     $lead->source_label,
@@ -1161,6 +1163,28 @@ class DashboardController extends Controller
             })
             ->sortByDesc('count')
             ->values();
+        $serviceLeadDiscoverySummary = $serviceLeads
+            ->flatMap(function ($lead) {
+                return collect($lead->discovery_checklist ?? [])->map(function ($item) {
+                    return [
+                        'key' => $item['key'] ?? null,
+                        'label' => $item['label'] ?? null,
+                    ];
+                });
+            })
+            ->filter(fn (array $item) => filled($item['key'] ?? null) && filled($item['label'] ?? null))
+            ->groupBy('key')
+            ->map(function ($group) {
+                $first = $group->first();
+
+                return [
+                    'key' => $first['key'],
+                    'label' => $first['label'],
+                    'count' => $group->count(),
+                ];
+            })
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadPlaybookSummary = collect([
             'discovery_call' => 'שיחת גילוי קצרה',
             'quick_quote' => 'הצעה מהירה',
@@ -1353,6 +1377,7 @@ class DashboardController extends Controller
             'serviceLeadRelationshipSummary' => $serviceLeadRelationshipSummary,
             'serviceLeadNextServiceSummary' => $serviceLeadNextServiceSummary,
             'serviceLeadOfferSummary' => $serviceLeadOfferSummary,
+            'serviceLeadDiscoverySummary' => $serviceLeadDiscoverySummary,
             'serviceLeadPlaybookSummary' => $serviceLeadPlaybookSummary,
             'serviceLeadChannelSummary' => $serviceLeadChannelSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
@@ -1645,6 +1670,7 @@ class DashboardController extends Controller
                 $lead->offer_outline_key = $offer['key'];
                 $lead->offer_outline_label = $offer['label'];
                 $lead->offer_outline_note = $offer['note'];
+                $lead->discovery_checklist = $this->leadDiscoveryChecklist($lead, $serviceCatalog);
 
                 if ($priorWonCount > 0) {
                     $lead->relationship_key = 'existing_customer';
@@ -1962,6 +1988,103 @@ class DashboardController extends Controller
                 'note' => 'להתחיל ממסגרת ברורה וקלה להבנה לפני שנכנסים להצעה מלאה.',
             ],
         };
+    }
+
+    private function leadDiscoveryChecklist(object $lead, array $serviceCatalog): array
+    {
+        $items = collect();
+        $serviceType = (string) ($lead->service_type ?? 'general');
+        $serviceLabel = $serviceCatalog[$serviceType]['label'] ?? 'השירות';
+
+        if (! filled($lead->site_domain ?? null)) {
+            $items->push([
+                'key' => 'site_domain',
+                'label' => 'מה כתובת האתר ומה מצבו הנוכחי?',
+            ]);
+        }
+
+        if (in_array(($lead->budget_range ?? null), [null, '', 'unknown'], true)) {
+            $items->push([
+                'key' => 'budget',
+                'label' => 'מה סדר הגודל התקציבי שמתאים עכשיו?',
+            ]);
+        }
+
+        if (in_array(($lead->timeframe ?? null), [null, '', 'exploring'], true)) {
+            $items->push([
+                'key' => 'timeframe',
+                'label' => 'מתי נכון להם להתחיל בפועל?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'hosting') {
+            $items->push([
+                'key' => 'hosting_scope',
+                'label' => 'האם מדובר במעבר אחסון בלבד או גם בתחזוקה שוטפת?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'maintenance') {
+            $items->push([
+                'key' => 'maintenance_scope',
+                'label' => 'איזה סוג עדכונים ותחזוקה חשוב להם לכלול במסלול?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'website_upgrade') {
+            $items->push([
+                'key' => 'upgrade_scope',
+                'label' => 'מה הכי כואב היום באתר: עיצוב, מהירות, המרות או ניהול?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'seo') {
+            $items->push([
+                'key' => 'seo_goal',
+                'label' => 'מה היעד המרכזי של ' . $serviceLabel . ': תנועה, לידים או מכירות?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'campaigns') {
+            $items->push([
+                'key' => 'campaign_goal',
+                'label' => 'על מה הכי חשוב למדוד הצלחה בקמפיינים: לידים, מכירות או מודעות?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'landing_pages') {
+            $items->push([
+                'key' => 'landing_goal',
+                'label' => 'לאיזה קמפיין או מוצר עמוד הנחיתה אמור לשרת?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'automations') {
+            $items->push([
+                'key' => 'automation_flow',
+                'label' => 'איזה תהליך רוצים להפוך לאוטומטי קודם?',
+            ]);
+        }
+
+        if (($lead->service_type ?? null) === 'ecosystem_access') {
+            $items->push([
+                'key' => 'ecosystem_interest',
+                'label' => 'איזה סוג כלי עתידי הכי מעניין אותם כרגע?',
+            ]);
+        }
+
+        if (($lead->relationship_key ?? null) === 'existing_customer') {
+            $items->push([
+                'key' => 'existing_customer_expand',
+                'label' => 'מה הכי נכון להרחיב עבור הלקוח הקיים בלי להעמיס?',
+            ]);
+        }
+
+        return $items
+            ->unique(fn (array $item) => $item['key'])
+            ->take(4)
+            ->values()
+            ->all();
     }
 
     private function siteColumnsAvailable(array $columns): bool

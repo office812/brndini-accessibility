@@ -1011,6 +1011,16 @@
                                                 @if (!empty($lead->offer_outline_note))
                                                     <p class="support-ticket-message"><strong>מה להציע עכשיו:</strong> {{ $lead->offer_outline_note }}</p>
                                                 @endif
+                                                @if (!empty($lead->discovery_checklist))
+                                                    <div class="lead-discovery-box">
+                                                        <strong>מה צריך לברר עכשיו</strong>
+                                                        <ul class="lead-discovery-list">
+                                                            @foreach ($lead->discovery_checklist as $question)
+                                                                <li>{{ $question['label'] }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                @endif
                                                 @if (!empty($lead->opening_line))
                                                     @php($openingLineId = 'lead-opening-' . md5((string) $lead->update_key))
                                                     <div class="lead-opening-box">
@@ -1299,6 +1309,30 @@
                                     @else
                                         <div class="domain-info-list">
                                             @foreach (($serviceLeadOfferSummary ?? collect())->take(6) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">מה חסר כדי להתקדם</p>
+                                            <h2>שאלות גילוי שחוזרות הכי הרבה</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadDiscoverySummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין מספיק מידע לגילוי</strong>
+                                            <p>ככל שיצטברו לידים עם שירות, תקציב, דומיין והקשר עסקי, תראה כאן מה הכי חשוב לברר מהר.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadDiscoverySummary ?? collect())->take(6) as $item)
                                                 <div class="domain-info-row">
                                                     <span>{{ $item['label'] }}</span>
                                                     <strong>{{ $item['count'] }}</strong>

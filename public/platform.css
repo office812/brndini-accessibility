@@ -3099,6 +3099,28 @@ body.page-is-ready .auth-shell {
     color: #173056;
 }
 
+.lead-discovery-box {
+    display: grid;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255, 249, 238, 0.94);
+    border: 1px solid rgba(221, 140, 37, 0.12);
+}
+
+.lead-discovery-box strong {
+    color: #7a4a12;
+}
+
+.lead-discovery-list {
+    margin: 0;
+    padding-right: 18px;
+    color: #21354f;
+    display: grid;
+    gap: 6px;
+    line-height: 1.7;
+}
+
 .lead-activity-timeline {
     display: grid;
     gap: 10px;
