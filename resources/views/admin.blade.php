@@ -976,6 +976,27 @@
                                                 <p class="support-ticket-message"><strong>הערה פנימית:</strong> {{ $lead->internal_note }}</p>
                                             @endif
 
+                                            @if (($lead->activity_history ?? collect())->isNotEmpty())
+                                                <div class="lead-activity-timeline">
+                                                    @foreach ($lead->activity_history->take(3) as $activity)
+                                                        <div class="lead-activity-item">
+                                                            <div>
+                                                                <strong>{{ $activity->label }}</strong>
+                                                                <p>{{ $activity->details }}</p>
+                                                            </div>
+                                                            <div class="lead-activity-meta">
+                                                                @if (!empty($activity->actor))
+                                                                    <span>{{ $activity->actor }}</span>
+                                                                @endif
+                                                                @if (!empty($activity->time_label))
+                                                                    <small>{{ $activity->time_label }}</small>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+
                                             <form class="support-admin-form" method="POST" action="{{ route('dashboard.super-admin.leads.update', $lead->update_key) }}">
                                                 @csrf
                                                 <div class="support-admin-grid">

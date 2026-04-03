@@ -103,6 +103,9 @@ class ServiceLead extends Model
             'assigned_admin_email' => null,
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
+            'activity_history' => [
+                static::activityEntry($user->name, 'ליד נוצר', 'הפנייה נפתחה מתוך הדשבורד', $now, 'good'),
+            ],
         ];
 
         RuntimeStore::putMany($scope, [
@@ -153,6 +156,9 @@ class ServiceLead extends Model
             'assigned_admin_email' => null,
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
+            'activity_history' => [
+                static::activityEntry($validated['name'], 'ליד נוצר', 'הפנייה נפתחה מהאתר הציבורי', $now, 'good'),
+            ],
         ];
 
         RuntimeStore::putMany($scope, [
@@ -198,6 +204,32 @@ class ServiceLead extends Model
         $callbackWindow = static::normalizeText($lead['callback_window'] ?? null);
         $assignedAdminName = static::normalizeText($lead['assigned_admin_name'] ?? null);
         $assignedAdminEmail = static::normalizeText($lead['assigned_admin_email'] ?? null);
+        $activityHistory = collect($lead['activity_history'] ?? [])
+            ->filter(fn ($item) => is_array($item))
+            ->map(fn (array $item) => (object) [
+                'label' => $item['label'] ?? 'עודכן',
+                'details' => $item['details'] ?? '',
+                'actor' => $item['actor'] ?? null,
+                'timestamp' => $item['timestamp'] ?? null,
+                'time_label' => isset($item['timestamp']) ? Carbon::parse($item['timestamp'])->diffForHumans() : null,
+                'tone' => $item['tone'] ?? 'neutral',
+            ])
+            ->sortByDesc(fn ($item) => $item->timestamp ?? '')
+            ->values();
+
+        if ($activityHistory->isEmpty() && isset($lead['created_at'])) {
+            $createdAt = Carbon::parse($lead['created_at']);
+            $activityHistory = collect([
+                (object) [
+                    'label' => 'ליד נוצר',
+                    'details' => 'הפנייה נוצרה במערכת',
+                    'actor' => $contactName,
+                    'timestamp' => $createdAt->toIso8601String(),
+                    'time_label' => $createdAt->diffForHumans(),
+                    'tone' => 'good',
+                ],
+            ]);
+        }
         $opportunity = static::opportunityMeta(
             (string) ($lead['service_type'] ?? 'general'),
             (string) ($lead['goal'] ?? ''),
@@ -261,6 +293,8 @@ class ServiceLead extends Model
             'assigned_admin_name' => $assignedAdminName,
             'assigned_admin_email' => $assignedAdminEmail,
             'assigned_label' => $assignedAdminName ?: 'לא משויך',
+            'activity_history' => $activityHistory,
+            'latest_activity_note' => $activityHistory->first()?->details,
             'source' => $source,
             'source_label' => static::sourceLabel($source, $entryPoint),
             'entry_point' => $entryPoint,
@@ -667,20 +701,69 @@ class ServiceLead extends Model
                 return $lead;
             }
 
-            $lead['status'] = $validated['status'];
-            $lead['internal_note'] = trim((string) ($validated['internal_note'] ?? ''));
-            $lead['follow_up_at'] = filled($validated['follow_up_at'] ?? null)
+            $previousStatus = $lead['status'] ?? 'new';
+            $previousAssignee = static::normalizeText($lead['assigned_admin_name'] ?? null);
+            $previousFollowUp = filled($lead['follow_up_at'] ?? null)
+                ? Carbon::parse($lead['follow_up_at'])->toDateString()
+                : null;
+            $previousNote = trim((string) ($lead['internal_note'] ?? ''));
+            $nextFollowUp = filled($validated['follow_up_at'] ?? null)
                 ? Carbon::parse($validated['follow_up_at'])->toDateString()
                 : null;
+            $nextAssignee = $assignedAdmin?->name;
+
+            $lead['status'] = $validated['status'];
+            $lead['internal_note'] = trim((string) ($validated['internal_note'] ?? ''));
+            $lead['follow_up_at'] = $nextFollowUp;
             $lead['assigned_admin_name'] = $assignedAdmin?->name;
             $lead['assigned_admin_email'] = $assignedAdmin?->email;
             $lead['updated_by_name'] = $admin->name;
             $lead['updated_by_email'] = $admin->email;
-            $lead['last_activity_at'] = Carbon::now()->toIso8601String();
+            $now = Carbon::now();
+            $lead['last_activity_at'] = $now->toIso8601String();
+
+            $changes = [];
+
+            if ($previousStatus !== $validated['status']) {
+                $changes[] = 'סטטוס עודכן';
+            }
+
+            if ($previousAssignee !== $nextAssignee) {
+                $changes[] = $nextAssignee ? 'שויך ל־' . $nextAssignee : 'השיוך הוסר';
+            }
+
+            if ($previousFollowUp !== $nextFollowUp) {
+                $changes[] = $nextFollowUp ? 'מועד חזרה ל־' . Carbon::parse($nextFollowUp)->format('d/m') : 'מועד החזרה הוסר';
+            }
+
+            if ($previousNote !== $lead['internal_note']) {
+                $changes[] = filled($lead['internal_note']) ? 'הערה פנימית עודכנה' : 'הערה פנימית נוקתה';
+            }
+
+            $details = $changes !== [] ? implode(' · ', $changes) : 'בוצע עדכון ליד';
+            $history = collect($lead['activity_history'] ?? [])
+                ->filter(fn ($item) => is_array($item))
+                ->push(static::activityEntry($admin->name, 'המערכת עודכנה', $details, $now, 'neutral'))
+                ->take(-12)
+                ->values()
+                ->all();
+
+            $lead['activity_history'] = $history;
 
             return $lead;
         })->values()->all();
 
         RuntimeStore::put($scope, 'items', $updated);
+    }
+
+    protected static function activityEntry(?string $actor, string $label, string $details, Carbon $timestamp, string $tone = 'neutral'): array
+    {
+        return [
+            'actor' => filled($actor) ? trim((string) $actor) : null,
+            'label' => $label,
+            'details' => $details,
+            'timestamp' => $timestamp->toIso8601String(),
+            'tone' => $tone,
+        ];
     }
 }

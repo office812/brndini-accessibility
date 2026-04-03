@@ -3073,6 +3073,43 @@ body.page-is-ready .auth-shell {
     font-weight: 700;
 }
 
+.lead-activity-timeline {
+    display: grid;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.lead-activity-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(245, 248, 253, 0.92);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.lead-activity-item strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.lead-activity-item p,
+.lead-activity-meta span,
+.lead-activity-meta small {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.5;
+}
+
+.lead-activity-meta {
+    display: grid;
+    gap: 4px;
+    justify-items: end;
+    text-align: left;
+    min-width: 96px;
+}
+
 .support-admin-response {
     display: grid;
     gap: 6px;
