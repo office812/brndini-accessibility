@@ -35,6 +35,8 @@ class ServiceLead extends Model
         'utm_campaign',
         'referrer_url',
         'internal_note',
+        'assigned_admin_name',
+        'assigned_admin_email',
         'follow_up_at',
         'last_activity_at',
     ];
@@ -97,6 +99,8 @@ class ServiceLead extends Model
             'utm_campaign' => null,
             'referrer_url' => null,
             'internal_note' => '',
+            'assigned_admin_name' => null,
+            'assigned_admin_email' => null,
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
         ];
@@ -145,6 +149,8 @@ class ServiceLead extends Model
             'utm_campaign' => static::normalizeText($validated['utm_campaign'] ?? null),
             'referrer_url' => static::normalizeUrl($validated['referrer_url'] ?? null),
             'internal_note' => '',
+            'assigned_admin_name' => null,
+            'assigned_admin_email' => null,
             'created_at' => $now->toIso8601String(),
             'last_activity_at' => $now->toIso8601String(),
         ];
@@ -190,6 +196,8 @@ class ServiceLead extends Model
         $budgetRange = static::normalizeText($lead['budget_range'] ?? null);
         $urgencyLevel = static::normalizeText($lead['urgency_level'] ?? null);
         $callbackWindow = static::normalizeText($lead['callback_window'] ?? null);
+        $assignedAdminName = static::normalizeText($lead['assigned_admin_name'] ?? null);
+        $assignedAdminEmail = static::normalizeText($lead['assigned_admin_email'] ?? null);
         $opportunity = static::opportunityMeta(
             (string) ($lead['service_type'] ?? 'general'),
             (string) ($lead['goal'] ?? ''),
@@ -250,6 +258,9 @@ class ServiceLead extends Model
             'preferred_contact' => $lead['preferred_contact'] ?? 'email',
             'status' => $lead['status'] ?? 'new',
             'internal_note' => $lead['internal_note'] ?? '',
+            'assigned_admin_name' => $assignedAdminName,
+            'assigned_admin_email' => $assignedAdminEmail,
+            'assigned_label' => $assignedAdminName ?: 'לא משויך',
             'source' => $source,
             'source_label' => static::sourceLabel($source, $entryPoint),
             'entry_point' => $entryPoint,
@@ -641,8 +652,15 @@ class ServiceLead extends Model
     public static function updateRuntime(string $leadKey, User $admin, array $validated): void
     {
         $scope = static::runtimeScope();
+        $assignedAdmin = null;
 
-        $updated = static::runtimeLeads()->map(function (array $lead) use ($leadKey, $admin, $validated) {
+        if (filled($validated['assigned_admin_email'] ?? null)) {
+            $assignedAdmin = User::query()
+                ->where('email', trim((string) $validated['assigned_admin_email']))
+                ->first();
+        }
+
+        $updated = static::runtimeLeads()->map(function (array $lead) use ($leadKey, $admin, $validated, $assignedAdmin) {
             $currentKey = (string) ($lead['key'] ?? ('service-' . ($lead['id'] ?? 'x')));
 
             if ($currentKey !== $leadKey) {
@@ -654,6 +672,8 @@ class ServiceLead extends Model
             $lead['follow_up_at'] = filled($validated['follow_up_at'] ?? null)
                 ? Carbon::parse($validated['follow_up_at'])->toDateString()
                 : null;
+            $lead['assigned_admin_name'] = $assignedAdmin?->name;
+            $lead['assigned_admin_email'] = $assignedAdmin?->email;
             $lead['updated_by_name'] = $admin->name;
             $lead['updated_by_email'] = $admin->email;
             $lead['last_activity_at'] = Carbon::now()->toIso8601String();

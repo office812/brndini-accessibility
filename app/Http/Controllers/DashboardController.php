@@ -633,6 +633,7 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'status' => ['required', Rule::in(array_keys($this->serviceLeadStatusLabels()))],
             'internal_note' => ['nullable', 'string', 'max:4000'],
+            'assigned_admin_email' => ['nullable', 'email'],
             'follow_up_at' => ['nullable', 'date'],
         ]);
 
@@ -1024,6 +1025,19 @@ class DashboardController extends Controller
             ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadAssigneeSummary = $serviceLeads
+            ->groupBy(fn ($lead) => $lead->assigned_admin_email ?: 'unassigned')
+            ->map(function ($group, $key) {
+                $first = $group->first();
+
+                return [
+                    'key' => $key,
+                    'label' => $key === 'unassigned' ? 'לא משויך' : ($first->assigned_admin_name ?? $first->assigned_admin_email ?? 'לא משויך'),
+                    'count' => $group->count(),
+                ];
+            })
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadStageSummary = collect($this->serviceLeadStatusLabels())
             ->map(fn (string $label, string $key) => [
                 'key' => $key,
@@ -1074,6 +1088,7 @@ class DashboardController extends Controller
             'serviceLeadBudgetSummary' => $serviceLeadBudgetSummary,
             'serviceLeadUrgencySummary' => $serviceLeadUrgencySummary,
             'serviceLeadCallbackWindowSummary' => $serviceLeadCallbackWindowSummary,
+            'serviceLeadAssigneeSummary' => $serviceLeadAssigneeSummary,
             'serviceLeadStageSummary' => $serviceLeadStageSummary,
             'serviceLeadServiceSummary' => $serviceLeadServiceSummary,
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
@@ -1095,6 +1110,13 @@ class DashboardController extends Controller
             'supportCategories' => $this->supportCategories(),
             'supportPriorityLabels' => $this->supportPriorityLabels(),
             'supportStatusLabels' => $this->supportStatusLabels(),
+            'adminAssignableUsers' => $users
+                ->filter(fn (User $adminUser) => $adminUser->is_admin || $adminUser->isSuperAdmin())
+                ->map(fn (User $adminUser) => [
+                    'name' => $adminUser->name,
+                    'email' => $adminUser->email,
+                ])
+                ->values(),
             'supportAvailable' => true,
             'supportUsesRuntimeFallback' => ! $supportAvailable,
             'adminSummary' => [

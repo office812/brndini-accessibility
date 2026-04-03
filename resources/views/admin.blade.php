@@ -913,6 +913,9 @@
                                                     <span class="status-pill is-neutral">חזרה: {{ $lead->callback_window_label }}</span>
                                                 </div>
                                                 <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">מטפל: {{ $lead->assigned_label }}</span>
+                                                </div>
+                                                <div class="lead-intel-row">
                                                     <span class="meta-note">איכות ליד: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</span>
                                                 </div>
                                                 @if (!empty($lead->marketing_label) || !empty($lead->referrer_host))
@@ -969,6 +972,15 @@
                                                     <label>
                                                         <span>מועד חזרה</span>
                                                         <input type="date" name="follow_up_at" value="{{ $lead->follow_up_at }}">
+                                                    </label>
+                                                    <label>
+                                                        <span>בעל טיפול</span>
+                                                        <select name="assigned_admin_email">
+                                                            <option value="">לא משויך</option>
+                                                            @foreach ($adminAssignableUsers as $assignableUser)
+                                                                <option value="{{ $assignableUser['email'] }}" @selected(($lead->assigned_admin_email ?? null) === $assignableUser['email'])>{{ $assignableUser['name'] }} · {{ $assignableUser['email'] }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </label>
                                                 </div>
                                                 <div class="support-form-actions">
@@ -1111,6 +1123,23 @@
                                     </div>
                                     <div class="domain-info-list">
                                         @foreach ($serviceLeadServiceSummary->take(6) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">חלוקת עבודה</p>
+                                            <h2>כמה לידים יש לכל מטפל</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach ($serviceLeadAssigneeSummary->take(6) as $item)
                                             <div class="domain-info-row">
                                                 <span>{{ $item['label'] }}</span>
                                                 <strong>{{ $item['count'] }}</strong>
