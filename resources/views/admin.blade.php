@@ -824,6 +824,16 @@
                                 <strong>{{ $adminSummary['service_leads_repeat_sites'] ?? 0 }}</strong>
                                 <p>אתרים שחזרו שוב</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🤝</span>
+                                <strong>{{ $adminSummary['service_leads_existing_customers'] ?? 0 }}</strong>
+                                <p>לקוחות קיימים שחזרו</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🧠</span>
+                                <strong>{{ $adminSummary['service_leads_cross_sell'] ?? 0 }}</strong>
+                                <p>הזדמנויות Cross-sell</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -956,6 +966,14 @@
                                                 </div>
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">מטפל: {{ $lead->assigned_label }}</span>
+                                                </div>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill {{ ($lead->relationship_tone ?? 'neutral') === 'good' ? 'is-good' : (($lead->relationship_tone ?? 'neutral') === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                        {{ $lead->relationship_label }}
+                                                    </span>
+                                                    @if (!empty($lead->related_services_label))
+                                                        <span class="meta-note">{{ $lead->related_services_label }}</span>
+                                                    @endif
                                                 </div>
                                                 @if (!empty($lead->repeat_contact_label) || !empty($lead->repeat_site_label))
                                                     <div class="lead-intel-row">
@@ -1148,6 +1166,30 @@
                                     @else
                                         <div class="domain-info-list">
                                             @foreach (($serviceLeadRepeatSummary ?? collect()) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">קשר עסקי קיים</p>
+                                            <h2>לקוחות חוזרים והזדמנויות הרחבה</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadRelationshipSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין היסטוריה עסקית חוזרת</strong>
+                                            <p>כשלידים יחזרו אחרי זכייה או יבקשו יותר משירות אחד, תראה כאן מיד את הזדמנויות ההרחבה.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadRelationshipSummary ?? collect()) as $item)
                                                 <div class="domain-info-row">
                                                     <span>{{ $item['label'] }}</span>
                                                     <strong>{{ $item['count'] }}</strong>

@@ -127,6 +127,9 @@ class DashboardController extends Controller
                 'סטטוס',
                 'איכות ליד',
                 'ציון',
+                'קשר עסקי',
+                'שירותים נוספים שביקש',
+                'זכיות קודמות',
                 'פניות חוזרות מאותו איש קשר',
                 'פניות חוזרות מאותו אתר',
                 'שווי משוער',
@@ -169,6 +172,9 @@ class DashboardController extends Controller
                     $statusLabels[$lead->status] ?? $lead->status,
                     $lead->opportunity_label,
                     $lead->opportunity_score,
+                    $lead->relationship_label,
+                    $lead->related_services_label,
+                    $lead->prior_won_count ?? 0,
                     $lead->repeat_contact_count ?? 1,
                     $lead->repeat_site_count ?? 1,
                     $lead->budget_estimate_label,
@@ -947,6 +953,7 @@ class DashboardController extends Controller
             ->concat($runtimeTickets->map(fn (array $ticket) => SupportTicket::presentRuntime($ticket)))
             ->sortByDesc('sort_timestamp')
             ->values();
+        $serviceCatalog = $this->serviceCatalog();
         $serviceLeads = $this->collectAdminServiceLeads();
         $serviceLeadSourceSummary = collect(ServiceLead::sourceOptions())
             ->map(fn (string $label, string $key) => [
@@ -1067,7 +1074,7 @@ class DashboardController extends Controller
             ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
-        $serviceLeadServiceSummary = collect($this->serviceCatalog())
+        $serviceLeadServiceSummary = collect($serviceCatalog)
             ->map(fn (array $service, string $key) => [
                 'key' => $key,
                 'label' => $service['label'],
@@ -1096,6 +1103,25 @@ class DashboardController extends Controller
                 'key' => 'hot_repeat_contacts',
                 'label' => 'חוזרים חמים',
                 'count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_contact_count ?? 1) > 1 && ($lead->opportunity_key ?? null) === 'hot')->count(),
+            ],
+        ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
+        $serviceLeadRelationshipSummary = collect([
+            [
+                'key' => 'existing_customers',
+                'label' => 'לקוחות קיימים שחזרו',
+                'count' => $serviceLeads->filter(fn ($lead) => ($lead->relationship_key ?? null) === 'existing_customer')->count(),
+            ],
+            [
+                'key' => 'cross_sell',
+                'label' => 'הזדמנויות Cross-sell',
+                'count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->distinct_service_count ?? 1) > 1)->count(),
+            ],
+            [
+                'key' => 'returning_after_win',
+                'label' => 'חזרו אחרי זכייה',
+                'count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->prior_won_count ?? 0) > 0)->count(),
             ],
         ])
             ->filter(fn (array $item) => $item['count'] > 0)
@@ -1259,6 +1285,7 @@ class DashboardController extends Controller
             'serviceLeadServiceSummary' => $serviceLeadServiceSummary,
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
             'serviceLeadRepeatSummary' => $serviceLeadRepeatSummary,
+            'serviceLeadRelationshipSummary' => $serviceLeadRelationshipSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
             'serviceLeadPerformanceSummary' => $serviceLeadPerformanceSummary,
             'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
@@ -1268,7 +1295,7 @@ class DashboardController extends Controller
             'serviceLeadInactivitySummary' => $serviceLeadInactivitySummary,
             'serviceLeadFirstTouchSummary' => $serviceLeadFirstTouchSummary,
             'serviceLeadOperationalBlockerSummary' => $serviceLeadOperationalBlockerSummary,
-            'serviceCatalog' => $this->serviceCatalog(),
+            'serviceCatalog' => $serviceCatalog,
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
             'serviceLeadBusinessTypeLabels' => ServiceLead::businessTypeOptions(),
@@ -1308,6 +1335,8 @@ class DashboardController extends Controller
                 'service_leads_overdue_first_touch' => $serviceLeads->where('first_touch_key', 'overdue')->count(),
                 'service_leads_repeat_contacts' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_contact_count ?? 1) > 1)->count(),
                 'service_leads_repeat_sites' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_site_count ?? 1) > 1)->count(),
+                'service_leads_existing_customers' => $serviceLeads->filter(fn ($lead) => ($lead->relationship_key ?? null) === 'existing_customer')->count(),
+                'service_leads_cross_sell' => $serviceLeads->filter(fn ($lead) => (int) ($lead->distinct_service_count ?? 1) > 1)->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
@@ -1366,6 +1395,14 @@ class DashboardController extends Controller
             $priority += 12;
         }
 
+        if ((int) ($lead->prior_won_count ?? 0) > 0) {
+            $priority += 22;
+        }
+
+        if ((int) ($lead->distinct_service_count ?? 1) > 1) {
+            $priority += 16;
+        }
+
         return $priority + (int) ($lead->opportunity_score ?? 0);
     }
 
@@ -1393,6 +1430,7 @@ class DashboardController extends Controller
             ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
             ->sortByDesc('sort_timestamp')
             ->values();
+        $serviceCatalog = $this->serviceCatalog();
 
         $repeatContactCounts = $serviceLeads
             ->flatMap(function ($lead) {
@@ -1453,6 +1491,93 @@ class DashboardController extends Controller
                     $leadTags->push([
                         'label' => 'אתר חוזר',
                         'tone' => 'neutral',
+                    ]);
+                }
+                $lead->lead_tags = $leadTags
+                    ->unique(fn ($tag) => ($tag['label'] ?? '') . '|' . ($tag['tone'] ?? ''))
+                    ->values()
+                    ->all();
+
+                return $lead;
+            })
+            ->map(function ($lead) use ($serviceLeads, $serviceCatalog) {
+                $lead = clone $lead;
+
+                $contactKeySet = array_filter([
+                    $this->normalizeLeadEmailKey($lead->contact_email ?? $lead->user_email ?? null),
+                    $this->normalizeLeadPhoneKey($lead->contact_phone ?? null),
+                ]);
+                $siteKey = $this->normalizeLeadSiteKey($lead->site_domain ?? null);
+
+                $relatedLeads = $serviceLeads
+                    ->filter(function ($candidate) use ($lead, $contactKeySet, $siteKey) {
+                        if (($candidate->update_key ?? null) === ($lead->update_key ?? null)) {
+                            return false;
+                        }
+
+                        $candidateContactKeys = collect([
+                            $this->normalizeLeadEmailKey($candidate->contact_email ?? $candidate->user_email ?? null),
+                            $this->normalizeLeadPhoneKey($candidate->contact_phone ?? null),
+                        ])->filter();
+
+                        $candidateMatchesContact = $candidateContactKeys->intersect($contactKeySet)->isNotEmpty();
+                        $candidateMatchesSite = $siteKey && $this->normalizeLeadSiteKey($candidate->site_domain ?? null) === $siteKey;
+
+                        return $candidateMatchesContact || $candidateMatchesSite;
+                    })
+                    ->values();
+
+                $currentServiceLabel = $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type;
+                $relatedServiceLabels = $relatedLeads
+                    ->pluck('service_type')
+                    ->filter()
+                    ->push($lead->service_type)
+                    ->unique()
+                    ->map(fn ($serviceType) => $serviceCatalog[$serviceType]['label'] ?? $serviceType)
+                    ->values();
+
+                $crossSellLabels = $relatedServiceLabels
+                    ->reject(fn ($label) => $label === $currentServiceLabel)
+                    ->values();
+
+                $priorWonCount = $relatedLeads->where('status', 'won')->count();
+
+                $lead->distinct_service_count = $relatedServiceLabels->count();
+                $lead->related_service_labels = $relatedServiceLabels->all();
+                $lead->related_services_label = $crossSellLabels->isNotEmpty()
+                    ? 'ביקש גם: ' . $crossSellLabels->take(3)->implode(' · ')
+                    : null;
+                $lead->prior_won_count = $priorWonCount;
+
+                if ($priorWonCount > 0) {
+                    $lead->relationship_key = 'existing_customer';
+                    $lead->relationship_label = 'לקוח קיים · ' . $priorWonCount . ' זכיות קודמות';
+                    $lead->relationship_tone = 'good';
+                } elseif (($lead->repeat_contact_count ?? 1) > 1) {
+                    $lead->relationship_key = 'returning_contact';
+                    $lead->relationship_label = 'קשר חוזר';
+                    $lead->relationship_tone = 'warn';
+                } elseif (($lead->repeat_site_count ?? 1) > 1) {
+                    $lead->relationship_key = 'returning_site';
+                    $lead->relationship_label = 'אתר חוזר';
+                    $lead->relationship_tone = 'neutral';
+                } else {
+                    $lead->relationship_key = 'new_relationship';
+                    $lead->relationship_label = 'קשר חדש';
+                    $lead->relationship_tone = 'neutral';
+                }
+
+                $leadTags = collect($lead->lead_tags ?? []);
+                if ($priorWonCount > 0) {
+                    $leadTags->push([
+                        'label' => 'לקוח קיים',
+                        'tone' => 'good',
+                    ]);
+                }
+                if ($crossSellLabels->isNotEmpty()) {
+                    $leadTags->push([
+                        'label' => 'Cross-sell',
+                        'tone' => 'warn',
                     ]);
                 }
                 $lead->lead_tags = $leadTags
