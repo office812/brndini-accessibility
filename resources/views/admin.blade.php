@@ -1088,6 +1088,40 @@
                                 <article class="portal-content-card">
                                     <div class="portal-card-head">
                                         <div>
+                                            <p class="eyebrow">צנרת מכירה</p>
+                                            <h2>איפה הלידים עומדים עכשיו</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach ($serviceLeadStageSummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">שירותים מבוקשים</p>
+                                            <h2>מה הכי מביא עניין עכשיו</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach ($serviceLeadServiceSummary->take(6) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
                                             <p class="eyebrow">איכות שיווקית</p>
                                             <h2>כמה לידים באמת מדידים</h2>
                                         </div>

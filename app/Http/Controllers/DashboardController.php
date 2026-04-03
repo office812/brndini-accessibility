@@ -1024,6 +1024,23 @@ class DashboardController extends Controller
             ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadStageSummary = collect($this->serviceLeadStatusLabels())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('status', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
+        $serviceLeadServiceSummary = collect($this->serviceCatalog())
+            ->map(fn (array $service, string $key) => [
+                'key' => $key,
+                'label' => $service['label'],
+                'count' => $serviceLeads->where('service_type', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadActionQueue = $serviceLeads
             ->filter(fn ($lead) => in_array($lead->status, ['new', 'contacted', 'qualified', 'proposal'], true))
             ->filter(fn ($lead) => $this->serviceLeadNeedsActionNow($lead))
@@ -1057,6 +1074,8 @@ class DashboardController extends Controller
             'serviceLeadBudgetSummary' => $serviceLeadBudgetSummary,
             'serviceLeadUrgencySummary' => $serviceLeadUrgencySummary,
             'serviceLeadCallbackWindowSummary' => $serviceLeadCallbackWindowSummary,
+            'serviceLeadStageSummary' => $serviceLeadStageSummary,
+            'serviceLeadServiceSummary' => $serviceLeadServiceSummary,
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
