@@ -1107,6 +1107,45 @@
                                 <article class="portal-content-card">
                                     <div class="portal-card-head">
                                         <div>
+                                            <p class="eyebrow">ביצועי צנרת</p>
+                                            <h2>המרה לפי מקור ושירות</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        <div class="domain-info-row">
+                                            <span>אחוז סגירה כולל</span>
+                                            <strong>{{ $serviceLeadPerformanceSummary['win_rate'] ?? '0%' }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>הגיעו לשלב רלוונטי+</span>
+                                            <strong>{{ $serviceLeadPerformanceSummary['qualified_rate'] ?? '0%' }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>הגיעו להצעה+</span>
+                                            <strong>{{ $serviceLeadPerformanceSummary['proposal_rate'] ?? '0%' }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>חלק האתר הציבורי</span>
+                                            <strong>{{ $serviceLeadPerformanceSummary['public_share'] ?? '0%' }}</strong>
+                                        </div>
+                                        @foreach (($serviceLeadSourcePerformance ?? collect())->take(2) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }} · {{ $item['count'] }} לידים</span>
+                                                <strong>{{ $item['rate'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach (($serviceLeadServicePerformance ?? collect())->take(2) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }} · {{ $item['count'] }}</span>
+                                                <strong>{{ $item['rate'] }} · {{ \App\Models\ServiceLead::formatCurrencyShort($item['weighted']) }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
                                             <p class="eyebrow">מקורות צמיחה</p>
                                             <h2>מאיפה הלידים מגיעים</h2>
                                         </div>

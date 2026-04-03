@@ -1075,6 +1075,49 @@ class DashboardController extends Controller
                 ->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0)),
             'budgeted_count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0) > 0)->count(),
         ];
+        $serviceLeadPerformanceSummary = [
+            'win_rate' => $this->formatLeadRate($serviceLeads->where('status', 'won')->count(), $serviceLeads->count()),
+            'qualified_rate' => $this->formatLeadRate(
+                $serviceLeads->filter(fn ($lead) => in_array($lead->status, ['qualified', 'proposal', 'won'], true))->count(),
+                $serviceLeads->count()
+            ),
+            'proposal_rate' => $this->formatLeadRate(
+                $serviceLeads->filter(fn ($lead) => in_array($lead->status, ['proposal', 'won'], true))->count(),
+                $serviceLeads->count()
+            ),
+            'public_share' => $this->formatLeadRate($serviceLeads->where('source', 'public')->count(), $serviceLeads->count()),
+        ];
+        $serviceLeadSourcePerformance = collect(ServiceLead::sourceOptions())
+            ->map(function (string $label, string $key) use ($serviceLeads) {
+                $subset = $serviceLeads->where('source', $key)->values();
+
+                return [
+                    'key' => $key,
+                    'label' => $label,
+                    'count' => $subset->count(),
+                    'won' => $subset->where('status', 'won')->count(),
+                    'rate' => $this->formatLeadRate($subset->where('status', 'won')->count(), $subset->count()),
+                ];
+            })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
+        $serviceLeadServicePerformance = collect($this->serviceCatalog())
+            ->map(function (array $service, string $key) use ($serviceLeads) {
+                $subset = $serviceLeads->where('service_type', $key)->values();
+
+                return [
+                    'key' => $key,
+                    'label' => $service['label'],
+                    'count' => $subset->count(),
+                    'won' => $subset->where('status', 'won')->count(),
+                    'weighted' => $subset->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0)),
+                    'rate' => $this->formatLeadRate($subset->where('status', 'won')->count(), $subset->count()),
+                ];
+            })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('weighted')
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -1108,6 +1151,9 @@ class DashboardController extends Controller
             'serviceLeadServiceSummary' => $serviceLeadServiceSummary,
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
+            'serviceLeadPerformanceSummary' => $serviceLeadPerformanceSummary,
+            'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
+            'serviceLeadServicePerformance' => $serviceLeadServicePerformance,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
@@ -1187,6 +1233,15 @@ class DashboardController extends Controller
         }
 
         return $priority + (int) ($lead->opportunity_score ?? 0);
+    }
+
+    private function formatLeadRate(int $part, int $total): string
+    {
+        if ($total <= 0) {
+            return '0%';
+        }
+
+        return (string) round(($part / $total) * 100) . '%';
     }
 
     private function serviceModes(): array
