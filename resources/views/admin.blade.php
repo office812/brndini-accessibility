@@ -1031,6 +1031,16 @@
                                                         </ul>
                                                     </div>
                                                 @endif
+                                                @if (!empty($lead->proposal_intro))
+                                                    @php($proposalIntroId = 'lead-proposal-' . md5((string) $lead->update_key))
+                                                    <div class="lead-proposal-box">
+                                                        <div class="lead-opening-head">
+                                                            <strong>תקציר הצעה מוצע</strong>
+                                                            <button class="secondary-button" type="button" data-copy-target="{{ $proposalIntroId }}">העתק תקציר</button>
+                                                        </div>
+                                                        <p class="support-ticket-message" id="{{ $proposalIntroId }}">{{ $lead->proposal_intro }}</p>
+                                                    </div>
+                                                @endif
                                                 @if (!empty($lead->opening_line))
                                                     @php($openingLineId = 'lead-opening-' . md5((string) $lead->update_key))
                                                     <div class="lead-opening-box">

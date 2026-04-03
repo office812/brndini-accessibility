@@ -139,6 +139,7 @@ class DashboardController extends Controller
                 'הצעה ראשונית מומלצת',
                 'מה צריך לברר עכשיו',
                 'מה לכלול בהצעה',
+                'תקציר הצעה מוצע',
                 'שווי משוער',
                 'שווי משוקלל',
                 'מקור',
@@ -191,6 +192,7 @@ class DashboardController extends Controller
                     $lead->offer_outline_label,
                     collect($lead->discovery_checklist ?? [])->pluck('label')->implode(' | '),
                     collect($lead->proposal_outline ?? [])->pluck('label')->implode(' | '),
+                    $lead->proposal_intro,
                     $lead->budget_estimate_label,
                     $lead->weighted_estimate_label,
                     $lead->source_label,
@@ -1697,6 +1699,7 @@ class DashboardController extends Controller
                 $lead->offer_outline_note = $offer['note'];
                 $lead->discovery_checklist = $this->leadDiscoveryChecklist($lead, $serviceCatalog);
                 $lead->proposal_outline = $this->leadProposalOutline($lead);
+                $lead->proposal_intro = $this->buildLeadProposalIntro($lead, $serviceCatalog);
 
                 if ($priorWonCount > 0) {
                     $lead->relationship_key = 'existing_customer';
@@ -2194,6 +2197,37 @@ class DashboardController extends Controller
             ->take(5)
             ->values()
             ->all();
+    }
+
+    private function buildLeadProposalIntro(object $lead, array $serviceCatalog): string
+    {
+        $serviceLabel = $serviceCatalog[$lead->service_type]['label'] ?? 'השירות';
+        $siteName = trim((string) ($lead->site_name ?? ''));
+        $siteFragment = $siteName !== '' ? ' עבור ' . $siteName : '';
+        $offerLabel = trim((string) ($lead->offer_outline_label ?? 'מסגרת עבודה ראשונית'));
+        $valueLabel = trim((string) ($lead->budget_estimate_label ?? ''));
+        $weightedLabel = trim((string) ($lead->weighted_estimate_label ?? ''));
+        $playbookLabel = trim((string) ($lead->playbook_label ?? ''));
+
+        $intro = 'בהתאם למה שעלה עד עכשיו, הכיוון הנכון ביותר ל' . $serviceLabel . $siteFragment . ' הוא ' . $offerLabel . '.';
+
+        if ($playbookLabel !== '') {
+            $intro .= ' הצעד הנכון לפתיחה הוא ' . $playbookLabel . ', כדי ליישר ציפיות מהר ולאסוף את המידע שחסר.';
+        }
+
+        if ($valueLabel !== '' && $valueLabel !== 'לא הוגדר') {
+            $intro .= ' מסגרת ההשקעה הראשונית שסביר להציע כאן היא סביב ' . $valueLabel . '.';
+        }
+
+        if ($weightedLabel !== '' && $weightedLabel !== 'לא הוגדר' && $weightedLabel !== $valueLabel) {
+            $intro .= ' מבחינת בשלות, השווי המשוקלל כרגע נראה כמו ' . $weightedLabel . '.';
+        }
+
+        if (($lead->relationship_key ?? null) === 'existing_customer') {
+            $intro .= ' בגלל שיש כבר היכרות קודמת, כדאי לנסח את ההצעה כהמשך טבעי ולא כפרויקט מאפס.';
+        }
+
+        return $intro;
     }
 
     private function siteColumnsAvailable(array $columns): bool
