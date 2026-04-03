@@ -135,6 +135,7 @@ class DashboardController extends Controller
                 'ערוץ פנייה מומלץ',
                 'דרך גישה מומלצת',
                 'נוסח פתיחה',
+                'כותרת מוצעת',
                 'שווי משוער',
                 'שווי משוקלל',
                 'מקור',
@@ -183,6 +184,7 @@ class DashboardController extends Controller
                     $lead->recommended_contact_channel_label,
                     $lead->playbook_label,
                     $lead->opening_line,
+                    $lead->opening_subject,
                     $lead->budget_estimate_label,
                     $lead->weighted_estimate_label,
                     $lead->source_label,
@@ -1619,6 +1621,9 @@ class DashboardController extends Controller
                 $lead->playbook_label = $playbook['label'];
                 $lead->playbook_note = $playbook['note'];
                 $lead->opening_line = $this->buildLeadOpeningLine($lead, $serviceCatalog);
+                $lead->opening_subject = $this->buildLeadOpeningSubject($lead, $serviceCatalog);
+                $lead->opening_mailto = $this->buildLeadOpeningMailto($lead);
+                $lead->opening_whatsapp_href = $this->buildLeadOpeningWhatsappHref($lead);
 
                 if ($priorWonCount > 0) {
                     $lead->relationship_key = 'existing_customer';
@@ -1822,6 +1827,50 @@ class DashboardController extends Controller
         }
 
         return $firstName . ', תודה על הפנייה לגבי ' . $serviceLabel . $goalSnippet . '. אשמח לעשות איתך שיחת היכרות קצרה כדי להבין מה הכי נכון לצעד הבא.';
+    }
+
+    private function buildLeadOpeningSubject(object $lead, array $serviceCatalog): string
+    {
+        $serviceLabel = $serviceCatalog[$lead->service_type]['label'] ?? 'השירות';
+        $siteName = trim((string) ($lead->site_name ?? ''));
+
+        if (($lead->service_type ?? null) === 'ecosystem_access') {
+            return 'עדכון לגבי הגישה המוקדמת למוצרי Brndini';
+        }
+
+        if ($siteName !== '') {
+            return 'המשך לגבי ' . $serviceLabel . ' עבור ' . $siteName;
+        }
+
+        return 'המשך לגבי ' . $serviceLabel . ' מ־Brndini';
+    }
+
+    private function buildLeadOpeningMailto(object $lead): ?string
+    {
+        $email = trim((string) ($lead->contact_email ?? $lead->user_email ?? ''));
+        if ($email === '') {
+            return null;
+        }
+
+        return 'mailto:' . rawurlencode($email)
+            . '?subject=' . rawurlencode((string) ($lead->opening_subject ?? ''))
+            . '&body=' . rawurlencode((string) ($lead->opening_line ?? ''));
+    }
+
+    private function buildLeadOpeningWhatsappHref(object $lead): ?string
+    {
+        if (! filled($lead->contact_phone ?? null)) {
+            return null;
+        }
+
+        $digits = preg_replace('/\D+/', '', (string) $lead->contact_phone);
+        if ($digits === '') {
+            return null;
+        }
+
+        $whatsAppDigits = str_starts_with($digits, '0') ? '972' . substr($digits, 1) : $digits;
+
+        return 'https://wa.me/' . $whatsAppDigits . '?text=' . rawurlencode((string) ($lead->opening_line ?? ''));
     }
 
     private function siteColumnsAvailable(array $columns): bool

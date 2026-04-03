@@ -1008,8 +1008,19 @@
                                                     <div class="lead-opening-box">
                                                         <div class="lead-opening-head">
                                                             <strong>נוסח פתיחה מוצע</strong>
-                                                            <button class="secondary-button" type="button" data-copy-target="{{ $openingLineId }}">העתק נוסח</button>
+                                                            <div class="lead-opening-actions">
+                                                                <button class="secondary-button" type="button" data-copy-target="{{ $openingLineId }}">העתק נוסח</button>
+                                                                @if (!empty($lead->opening_mailto))
+                                                                    <a class="secondary-button" href="{{ $lead->opening_mailto }}">פתח מייל</a>
+                                                                @endif
+                                                                @if (!empty($lead->opening_whatsapp_href))
+                                                                    <a class="secondary-button" href="{{ $lead->opening_whatsapp_href }}" target="_blank" rel="noreferrer">פתח ווטסאפ</a>
+                                                                @endif
+                                                            </div>
                                                         </div>
+                                                        @if (!empty($lead->opening_subject))
+                                                            <p class="meta-note"><strong>כותרת:</strong> {{ $lead->opening_subject }}</p>
+                                                        @endif
                                                         <p class="support-ticket-message" id="{{ $openingLineId }}">{{ $lead->opening_line }}</p>
                                                     </div>
                                                 @endif
@@ -1072,10 +1083,14 @@
                                                     </div>
                                                 @endif
                                                 <div class="lead-quick-actions">
-                                                    @if (!empty($lead->mail_to))
+                                                    @if (!empty($lead->opening_mailto))
+                                                        <a class="secondary-button" href="{{ $lead->opening_mailto }}">שלח פתיחה במייל</a>
+                                                    @elseif (!empty($lead->mail_to))
                                                         <a class="secondary-button" href="{{ $lead->mail_to }}">שלח מייל</a>
                                                     @endif
-                                                    @if (!empty($lead->whatsapp_href))
+                                                    @if (!empty($lead->opening_whatsapp_href))
+                                                        <a class="secondary-button" href="{{ $lead->opening_whatsapp_href }}" target="_blank" rel="noreferrer">שלח פתיחה בווטסאפ</a>
+                                                    @elseif (!empty($lead->whatsapp_href))
                                                         <a class="secondary-button" href="{{ $lead->whatsapp_href }}" target="_blank" rel="noreferrer">ווטסאפ</a>
                                                     @endif
                                                     @if (!empty($lead->phone_href))

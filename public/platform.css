@@ -3089,6 +3089,12 @@ body.page-is-ready .auth-shell {
     gap: 12px;
 }
 
+.lead-opening-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 .lead-opening-head strong {
     color: #173056;
 }
