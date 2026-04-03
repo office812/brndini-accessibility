@@ -274,6 +274,18 @@ class ServiceLead extends Model
             $freshnessTone = 'neutral';
         }
 
+        $operationalBlockers = static::operationalBlockers(
+            $assignedAdminName,
+            $followUpStatus['label'],
+            $followUpStatus['tone'],
+            $contactPhone,
+            $preferredContact,
+            (string) ($lead['site_domain'] ?? ''),
+            $budgetRange,
+            $freshnessKey,
+            $inactivityStatus['key']
+        );
+
         return (object) [
             'intent_key' => ($lead['service_type'] ?? null) === 'ecosystem_access' ? 'ecosystem' : 'service',
             'intent_label' => ($lead['service_type'] ?? null) === 'ecosystem_access' ? 'עניין במוצרים הבאים' : 'ליד שירות',
@@ -336,6 +348,8 @@ class ServiceLead extends Model
                 $budgetRange,
                 (string) ($lead['status'] ?? 'new')
             ),
+            'operational_blockers' => $operationalBlockers,
+            'operational_blockers_count' => count($operationalBlockers),
             'lead_tags' => static::buildLeadTags(
                 (string) ($lead['service_type'] ?? 'general'),
                 $opportunity['key'],
@@ -1075,5 +1089,47 @@ class ServiceLead extends Model
         }
 
         return collect($tags)->take(6)->values()->all();
+    }
+
+    protected static function operationalBlockers(
+        ?string $assignedAdminName,
+        string $followUpLabel,
+        string $followUpTone,
+        ?string $contactPhone,
+        string $preferredContact,
+        string $siteDomain,
+        ?string $budgetRange,
+        string $freshnessKey,
+        string $inactiveBucket
+    ): array {
+        $items = [];
+
+        if (! filled($assignedAdminName)) {
+            $items[] = ['key' => 'no_assignee', 'label' => 'לא משויך למטפל', 'tone' => 'warn'];
+        }
+
+        if ($followUpLabel === 'ללא מועד חזרה') {
+            $items[] = ['key' => 'no_follow_up', 'label' => 'אין מועד חזרה', 'tone' => 'warn'];
+        } elseif ($followUpTone === 'warn') {
+            $items[] = ['key' => 'overdue_follow_up', 'label' => 'מועד חזרה עבר', 'tone' => 'warn'];
+        }
+
+        if (in_array($preferredContact, ['phone', 'whatsapp'], true) && ! filled($contactPhone)) {
+            $items[] = ['key' => 'missing_phone', 'label' => 'חסר טלפון לחזרה', 'tone' => 'warn'];
+        }
+
+        if (! filled(trim($siteDomain))) {
+            $items[] = ['key' => 'missing_domain', 'label' => 'חסר דומיין', 'tone' => 'neutral'];
+        }
+
+        if (in_array($budgetRange, [null, '', 'unknown'], true)) {
+            $items[] = ['key' => 'missing_budget', 'label' => 'אין תקציב מוגדר', 'tone' => 'neutral'];
+        }
+
+        if ($freshnessKey === 'stale' || $inactiveBucket === 'stuck') {
+            $items[] = ['key' => 'inactive', 'label' => 'תקוע בלי נגיעה', 'tone' => 'warn'];
+        }
+
+        return collect($items)->unique('key')->values()->all();
     }
 }

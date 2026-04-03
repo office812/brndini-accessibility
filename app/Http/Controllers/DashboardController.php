@@ -150,6 +150,7 @@ class DashboardController extends Controller
                 'נוצר',
                 'גיל ליד',
                 'ימים בלי נגיעה',
+                'חסמים תפעוליים',
                 'סיבת סגירה',
                 'עודכן לאחרונה',
                 'UTM',
@@ -188,6 +189,7 @@ class DashboardController extends Controller
                     $lead->created_at_label,
                     $lead->age_bucket_label,
                     $lead->inactive_bucket_label,
+                    collect($lead->operational_blockers ?? [])->pluck('label')->implode(' | '),
                     $lead->close_reason_label,
                     $lead->last_activity_label,
                     $lead->marketing_label,
@@ -1138,6 +1140,26 @@ class DashboardController extends Controller
             ->filter(fn (array $item) => $item['count'] > 0)
             ->sortByDesc('count')
             ->values();
+        $serviceLeadOperationalBlockerSummary = collect([
+            'no_assignee' => 'לא משויכים למטפל',
+            'no_follow_up' => 'אין מועד חזרה',
+            'overdue_follow_up' => 'מועד חזרה עבר',
+            'missing_phone' => 'חסר טלפון לחזרה',
+            'missing_domain' => 'חסר דומיין',
+            'missing_budget' => 'אין תקציב מוגדר',
+            'inactive' => 'תקועים בלי נגיעה',
+        ])->map(function (string $label, string $key) use ($serviceLeads) {
+            return [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->filter(function ($lead) use ($key) {
+                    return collect($lead->operational_blockers ?? [])->contains(fn ($item) => ($item['key'] ?? null) === $key);
+                })->count(),
+            ];
+        })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadAgeSummary = collect([
             'today' => 'נוצרו היום',
             'recent' => 'חדשים 1–3 ימים',
@@ -1205,6 +1227,7 @@ class DashboardController extends Controller
             'serviceLeadCloseReasonSummary' => $serviceLeadCloseReasonSummary,
             'serviceLeadAgeSummary' => $serviceLeadAgeSummary,
             'serviceLeadInactivitySummary' => $serviceLeadInactivitySummary,
+            'serviceLeadOperationalBlockerSummary' => $serviceLeadOperationalBlockerSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),

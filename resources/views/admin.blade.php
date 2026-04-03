@@ -978,6 +978,15 @@
                                                         <span class="status-pill is-warn">חסם: {{ $lead->close_reason_label }}</span>
                                                     @endif
                                                 </div>
+                                                @if (!empty($lead->operational_blockers))
+                                                    <div class="lead-intel-row">
+                                                        @foreach ($lead->operational_blockers as $blocker)
+                                                            <span class="status-pill {{ ($blocker['tone'] ?? 'neutral') === 'warn' ? 'is-warn' : 'is-neutral' }}">
+                                                                {{ $blocker['label'] }}
+                                                            </span>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
                                                 <div class="lead-quick-actions">
                                                     @if (!empty($lead->mail_to))
                                                         <a class="secondary-button" href="{{ $lead->mail_to }}">שלח מייל</a>
@@ -1204,6 +1213,30 @@
                                     @else
                                         <div class="domain-info-list">
                                             @foreach (($serviceLeadCloseReasonSummary ?? collect()) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">מה עוצר טיפול</p>
+                                            <h2>חסמים תפעוליים חוזרים</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadOperationalBlockerSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>אין כרגע חסמים תפעוליים בולטים</strong>
+                                            <p>ברגע שיצטברו לידים בלי מטפל, בלי תקציב, בלי דומיין או בלי מועד חזרה, תראה אותם כאן.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadOperationalBlockerSummary ?? collect()) as $item)
                                                 <div class="domain-info-row">
                                                     <span>{{ $item['label'] }}</span>
                                                     <strong>{{ $item['count'] }}</strong>
