@@ -1024,6 +1024,11 @@ class DashboardController extends Controller
             ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadActionQueue = $serviceLeads
+            ->filter(fn ($lead) => in_array($lead->status, ['new', 'contacted', 'qualified', 'proposal'], true))
+            ->filter(fn ($lead) => $this->serviceLeadNeedsActionNow($lead))
+            ->sortByDesc(fn ($lead) => $this->serviceLeadActionPriority($lead))
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -1052,6 +1057,7 @@ class DashboardController extends Controller
             'serviceLeadBudgetSummary' => $serviceLeadBudgetSummary,
             'serviceLeadUrgencySummary' => $serviceLeadUrgencySummary,
             'serviceLeadCallbackWindowSummary' => $serviceLeadCallbackWindowSummary,
+            'serviceLeadActionQueue' => $serviceLeadActionQueue,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
@@ -1078,9 +1084,52 @@ class DashboardController extends Controller
                 'active_sites' => $sites->filter(fn (Site $site) => $site->licenseActive())->count(),
                 'tickets_open' => $tickets->whereIn('status', ['open', 'pending'])->count(),
                 'service_leads' => $serviceLeads->count(),
+                'service_leads_needing_action' => $serviceLeadActionQueue->count(),
+                'service_leads_due_today' => $serviceLeads->where('follow_up_tone', 'good')->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
+    }
+
+    private function serviceLeadNeedsActionNow(object $lead): bool
+    {
+        return in_array($lead->follow_up_tone ?? null, ['good', 'warn'], true)
+            || ($lead->urgency_level ?? null) === 'urgent'
+            || ($lead->opportunity_key ?? null) === 'hot'
+            || ($lead->freshness_key ?? null) === 'stale';
+    }
+
+    private function serviceLeadActionPriority(object $lead): int
+    {
+        $priority = 0;
+
+        if (($lead->urgency_level ?? null) === 'urgent') {
+            $priority += 60;
+        }
+
+        if (($lead->follow_up_tone ?? null) === 'good') {
+            $priority += 45;
+        } elseif (($lead->follow_up_tone ?? null) === 'warn') {
+            $priority += 25;
+        }
+
+        if (($lead->opportunity_key ?? null) === 'hot') {
+            $priority += 35;
+        } elseif (($lead->opportunity_key ?? null) === 'warm') {
+            $priority += 15;
+        }
+
+        if (($lead->freshness_key ?? null) === 'stale') {
+            $priority += 20;
+        }
+
+        if (($lead->status ?? null) === 'new') {
+            $priority += 10;
+        } elseif (($lead->status ?? null) === 'proposal') {
+            $priority += 5;
+        }
+
+        return $priority + (int) ($lead->opportunity_score ?? 0);
     }
 
     private function serviceModes(): array

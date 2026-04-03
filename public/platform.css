@@ -3402,6 +3402,20 @@ body.page-is-ready .auth-shell {
     line-height: 1.6;
 }
 
+.super-admin-mini-lead .support-ticket-pills {
+    gap: 8px;
+}
+
+.domain-info-row-stack {
+    align-items: start;
+    gap: 12px;
+}
+
+.domain-info-row-stack small {
+    display: block;
+    margin-top: 4px;
+}
+
 .portal-welcome {
     margin-bottom: 18px;
 }

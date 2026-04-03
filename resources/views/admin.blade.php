@@ -98,6 +98,16 @@
                                 <strong>{{ $adminSummary['tickets_open'] }}</strong>
                                 <p>פניות פתוחות לטיפול</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">⚡</span>
+                                <strong>{{ $adminSummary['service_leads_needing_action'] }}</strong>
+                                <p>לידים שדורשים טיפול עכשיו</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">📅</span>
+                                <strong>{{ $adminSummary['service_leads_due_today'] }}</strong>
+                                <p>חזרות שתוכננו להיום</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid">
@@ -149,6 +159,43 @@
                                                         </span>
                                                         <span class="status-pill {{ in_array($ticket->priority, ['high', 'urgent'], true) ? 'is-warn' : 'is-neutral' }}">
                                                             {{ $supportPriorityLabels[$ticket->priority] ?? $ticket->priority }}
+                                                        </span>
+                                                    </div>
+                                                </article>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">תור עבודה להיום</p>
+                                            <h2>מה דורש טיפול עכשיו</h2>
+                                        </div>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="leads">פתח לידים</button>
+                                    </div>
+
+                                    @if ($serviceLeadActionQueue->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>אין כרגע לידים דחופים</strong>
+                                            <p>ברגע שליד ידרוש חזרה, יהיה חם או יתקרב מועד טיפול, הוא יופיע כאן כדי שתדע מה לעשות קודם.</p>
+                                        </div>
+                                    @else
+                                        <div class="super-admin-ticket-stack">
+                                            @foreach ($serviceLeadActionQueue->take(5) as $lead)
+                                                <article class="super-admin-mini-ticket super-admin-mini-lead">
+                                                    <div>
+                                                        <strong>{{ $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type }}</strong>
+                                                        <p>{{ $lead->user_name ?? 'ללא שם' }} · {{ $lead->site_name ?? 'ללא אתר' }}</p>
+                                                        <p class="meta-note">{{ $lead->next_step_label }}</p>
+                                                    </div>
+                                                    <div class="support-ticket-pills">
+                                                        <span class="status-pill {{ $lead->follow_up_tone === 'good' ? 'is-good' : ($lead->follow_up_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                            {{ $lead->follow_up_label }}
+                                                        </span>
+                                                        <span class="status-pill {{ $lead->opportunity_tone === 'good' ? 'is-good' : ($lead->opportunity_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                            {{ $lead->opportunity_label }}
                                                         </span>
                                                     </div>
                                                 </article>
@@ -935,6 +982,33 @@
                             </article>
 
                             <aside class="super-admin-side-stack">
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">לטפל עכשיו</p>
+                                            <h2>תור עבודה להיום</h2>
+                                        </div>
+                                    </div>
+                                    @if ($serviceLeadActionQueue->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>אין כרגע תור עבודה פתוח</strong>
+                                            <p>לידים דחופים, חזרות של היום ולידים חמים יופיעו כאן אוטומטית.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach ($serviceLeadActionQueue->take(6) as $lead)
+                                                <div class="domain-info-row domain-info-row-stack">
+                                                    <div>
+                                                        <span>{{ $lead->user_name ?? 'ללא שם' }} · {{ $serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type }}</span>
+                                                        <small class="meta-note">{{ $lead->next_step_label }}</small>
+                                                    </div>
+                                                    <strong>{{ $lead->follow_up_label }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
                                 <article class="portal-content-card">
                                     <div class="portal-card-head">
                                         <div>
