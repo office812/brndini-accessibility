@@ -37,8 +37,12 @@ class DashboardController extends Controller
             'metaDescription' => 'שירותי Brndini לעסקים: אחסון, SEO, קמפיינים, תחזוקת אתר, שדרוג אתר קיים, דפי נחיתה ואוטומציות. הווידג׳ט נשאר חינמי, והשירותים זמינים כשצריך צמיחה ותפעול חכם.',
             'canonicalUrl' => route('brndini.services'),
             'serviceCatalog' => $this->serviceCatalog(),
+            'serviceLeadBusinessTypeLabels' => ServiceLead::businessTypeOptions(),
+            'serviceLeadTeamSizeLabels' => ServiceLead::teamSizeOptions(),
             'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
             'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
+            'serviceLeadUrgencyLabels' => ServiceLead::urgencyOptions(),
+            'serviceLeadCallbackWindowLabels' => ServiceLead::callbackWindowOptions(),
         ]);
     }
 
@@ -436,6 +440,8 @@ class DashboardController extends Controller
             'team_size' => ['nullable', Rule::in(array_keys(ServiceLead::teamSizeOptions()))],
             'timeframe' => ['nullable', Rule::in(array_keys(ServiceLead::timeframeOptions()))],
             'budget_range' => ['nullable', Rule::in(array_keys(ServiceLead::budgetRangeOptions()))],
+            'urgency_level' => ['nullable', Rule::in(array_keys(ServiceLead::urgencyOptions()))],
+            'callback_window' => ['nullable', Rule::in(array_keys(ServiceLead::callbackWindowOptions()))],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
             'contact_phone' => ['nullable', 'required_if:preferred_contact,phone,whatsapp', 'string', 'max:40'],
             'entry_point' => ['nullable', Rule::in(['dashboard-services', 'dashboard-recommendations'])],
@@ -464,6 +470,8 @@ class DashboardController extends Controller
             'team_size' => ['nullable', Rule::in(array_keys(ServiceLead::teamSizeOptions()))],
             'timeframe' => ['nullable', Rule::in(array_keys(ServiceLead::timeframeOptions()))],
             'budget_range' => ['nullable', Rule::in(array_keys(ServiceLead::budgetRangeOptions()))],
+            'urgency_level' => ['nullable', Rule::in(array_keys(ServiceLead::urgencyOptions()))],
+            'callback_window' => ['nullable', Rule::in(array_keys(ServiceLead::callbackWindowOptions()))],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
             'contact_phone' => ['nullable', 'required_if:preferred_contact,phone,whatsapp', 'string', 'max:40'],
             'entry_point' => ['nullable', Rule::in(['public-services', 'home-ecosystem', 'products-page', 'services-cards'])],
@@ -751,6 +759,8 @@ class DashboardController extends Controller
             'serviceLeadTeamSizeLabels' => ServiceLead::teamSizeOptions(),
             'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
             'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
+            'serviceLeadUrgencyLabels' => ServiceLead::urgencyOptions(),
+            'serviceLeadCallbackWindowLabels' => ServiceLead::callbackWindowOptions(),
             'serviceLeads' => $serviceLeads,
             'serviceRecommendations' => $serviceRecommendations,
             'serviceLeadSummary' => [
@@ -761,6 +771,8 @@ class DashboardController extends Controller
                 'qualifiedBusinesses' => $serviceLeads->filter(fn ($lead) => ! in_array($lead->business_type ?? null, [null, ''], true))->count(),
                 'urgent' => $serviceLeads->where('timeframe', 'urgent')->count(),
                 'budgeted' => $serviceLeads->filter(fn ($lead) => ! in_array($lead->budget_range ?? null, [null, '', 'unknown'], true))->count(),
+                'needsFastReply' => $serviceLeads->where('urgency_level', 'urgent')->count(),
+                'scheduledToday' => $serviceLeads->where('follow_up_tone', 'good')->count(),
                 'lastActivity' => $serviceLeads->first()?->last_activity_label ?? 'עדיין לא נשלחה פנייה',
             ],
             'platformReadiness' => $platformReadiness,
@@ -909,6 +921,22 @@ class DashboardController extends Controller
             ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadUrgencySummary = collect(ServiceLead::urgencyOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('urgency_level', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
+        $serviceLeadCallbackWindowSummary = collect(ServiceLead::callbackWindowOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('callback_window', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -935,6 +963,8 @@ class DashboardController extends Controller
             'serviceLeadTeamSummary' => $serviceLeadTeamSummary,
             'serviceLeadTimeframeSummary' => $serviceLeadTimeframeSummary,
             'serviceLeadBudgetSummary' => $serviceLeadBudgetSummary,
+            'serviceLeadUrgencySummary' => $serviceLeadUrgencySummary,
+            'serviceLeadCallbackWindowSummary' => $serviceLeadCallbackWindowSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
@@ -942,6 +972,8 @@ class DashboardController extends Controller
             'serviceLeadTeamSizeLabels' => ServiceLead::teamSizeOptions(),
             'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
             'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
+            'serviceLeadUrgencyLabels' => ServiceLead::urgencyOptions(),
+            'serviceLeadCallbackWindowLabels' => ServiceLead::callbackWindowOptions(),
             'superAdminUsersCount' => $superAdminUsersCount,
             'adminUsersCount' => $adminUsersCount,
             'clientUsersCount' => $clientUsersCount,

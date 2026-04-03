@@ -812,7 +812,7 @@
                                             <article
                                                 class="support-ticket-card"
                                                 data-filter-item
-                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->contact_phone ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->business_type_label ?? '') . ' ' . ($lead->team_size_label ?? '') . ' ' . ($lead->utm_source ?? '') . ' ' . ($lead->utm_medium ?? '') . ' ' . ($lead->utm_campaign ?? '') . ' ' . ($lead->referrer_host ?? '')) }}"
+                                                data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->user_email ?? '') . ' ' . ($lead->contact_phone ?? '') . ' ' . ($lead->site_name ?? '') . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->business_type_label ?? '') . ' ' . ($lead->team_size_label ?? '') . ' ' . ($lead->timeframe_label ?? '') . ' ' . ($lead->budget_range_label ?? '') . ' ' . ($lead->urgency_level_label ?? '') . ' ' . ($lead->callback_window_label ?? '') . ' ' . ($lead->utm_source ?? '') . ' ' . ($lead->utm_medium ?? '') . ' ' . ($lead->utm_campaign ?? '') . ' ' . ($lead->referrer_host ?? '')) }}"
                                                 data-filter-service="{{ $lead->service_type }}"
                                                 data-filter-source="{{ $lead->source ?? 'dashboard' }}"
                                                 data-filter-entry="{{ $lead->entry_point ?? '' }}"
@@ -857,6 +857,10 @@
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">זמן: {{ $lead->timeframe_label }}</span>
                                                     <span class="status-pill is-neutral">תקציב: {{ $lead->budget_range_label }}</span>
+                                                </div>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">דחיפות: {{ $lead->urgency_level_label }}</span>
+                                                    <span class="status-pill is-neutral">חזרה: {{ $lead->callback_window_label }}</span>
                                                 </div>
                                                 <div class="lead-intel-row">
                                                     <span class="meta-note">איכות ליד: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</span>
@@ -984,6 +988,18 @@
                                             </div>
                                         @endforeach
                                         @foreach ($serviceLeadBudgetSummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach ($serviceLeadUrgencySummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach ($serviceLeadCallbackWindowSummary as $item)
                                             <div class="domain-info-row">
                                                 <span>{{ $item['label'] }}</span>
                                                 <strong>{{ $item['count'] }}</strong>

@@ -144,6 +144,27 @@
                                         </div>
                                     </div>
 
+                                    <div class="support-form-row">
+                                        <div>
+                                            <label for="service_urgency_level">מה רמת הדחיפות?</label>
+                                            <select id="service_urgency_level" name="urgency_level">
+                                                <option value="">בחר רמת דחיפות</option>
+                                                @foreach ($serviceLeadUrgencyLabels as $urgencyKey => $urgencyLabel)
+                                                    <option value="{{ $urgencyKey }}" @selected(old('urgency_level') === $urgencyKey)>{{ $urgencyLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="service_callback_window">מתי הכי נוח לחזור אליך?</label>
+                                            <select id="service_callback_window" name="callback_window">
+                                                <option value="">בחר חלון חזרה</option>
+                                                @foreach ($serviceLeadCallbackWindowLabels as $windowKey => $windowLabel)
+                                                    <option value="{{ $windowKey }}" @selected(old('callback_window') === $windowKey)>{{ $windowLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <label for="service_message">פרטים חשובים</label>
                                     <textarea id="service_message" name="message" rows="7" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה תרצה להשיג.">{{ old('message') }}</textarea>
 
@@ -192,6 +213,14 @@
                                         <div class="domain-info-row">
                                             <span>עם תקציב מוגדר</span>
                                             <strong>{{ $serviceLeadSummary['budgeted'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>דורשים טיפול מהיר</span>
+                                            <strong>{{ $serviceLeadSummary['needsFastReply'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>לחזור אליהם היום</span>
+                                            <strong>{{ $serviceLeadSummary['scheduledToday'] }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>גישה מוקדמת</span>
@@ -248,7 +277,7 @@
                                         <article
                                             class="support-ticket-card"
                                             data-filter-item
-                                            data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->business_type_label ?? '') . ' ' . ($lead->team_size_label ?? '')) }}"
+                                            data-filter-search-text="{{ Str::lower(($serviceCatalog[$lead->service_type]['label'] ?? $lead->service_type) . ' ' . ($lead->goal ?? '') . ' ' . ($lead->message ?? '') . ' ' . ($lead->business_type_label ?? '') . ' ' . ($lead->team_size_label ?? '') . ' ' . ($lead->timeframe_label ?? '') . ' ' . ($lead->budget_range_label ?? '') . ' ' . ($lead->urgency_level_label ?? '') . ' ' . ($lead->callback_window_label ?? '')) }}"
                                             data-filter-service="{{ $lead->service_type }}"
                                             data-filter-status="{{ $lead->status }}"
                                         >
@@ -282,6 +311,10 @@
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">זמן: {{ $lead->timeframe_label }}</span>
                                                     <span class="status-pill is-neutral">תקציב: {{ $lead->budget_range_label }}</span>
+                                                </div>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">דחיפות: {{ $lead->urgency_level_label }}</span>
+                                                    <span class="status-pill is-neutral">חזרה: {{ $lead->callback_window_label }}</span>
                                                 </div>
 
                                                 @if (!empty($lead->contact_phone))

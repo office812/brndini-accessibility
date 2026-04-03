@@ -24,6 +24,8 @@ class ServiceLead extends Model
         'team_size',
         'timeframe',
         'budget_range',
+        'urgency_level',
+        'callback_window',
         'preferred_contact',
         'status',
         'source',
@@ -84,6 +86,8 @@ class ServiceLead extends Model
             'team_size' => static::normalizeText($validated['team_size'] ?? null),
             'timeframe' => static::normalizeText($validated['timeframe'] ?? null),
             'budget_range' => static::normalizeText($validated['budget_range'] ?? null),
+            'urgency_level' => static::normalizeText($validated['urgency_level'] ?? null),
+            'callback_window' => static::normalizeText($validated['callback_window'] ?? null),
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
             'source' => 'dashboard',
@@ -130,6 +134,8 @@ class ServiceLead extends Model
             'team_size' => static::normalizeText($validated['team_size'] ?? null),
             'timeframe' => static::normalizeText($validated['timeframe'] ?? null),
             'budget_range' => static::normalizeText($validated['budget_range'] ?? null),
+            'urgency_level' => static::normalizeText($validated['urgency_level'] ?? null),
+            'callback_window' => static::normalizeText($validated['callback_window'] ?? null),
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
             'source' => 'public',
@@ -182,6 +188,8 @@ class ServiceLead extends Model
         $teamSize = static::normalizeText($lead['team_size'] ?? null);
         $timeframe = static::normalizeText($lead['timeframe'] ?? null);
         $budgetRange = static::normalizeText($lead['budget_range'] ?? null);
+        $urgencyLevel = static::normalizeText($lead['urgency_level'] ?? null);
+        $callbackWindow = static::normalizeText($lead['callback_window'] ?? null);
         $opportunity = static::opportunityMeta(
             (string) ($lead['service_type'] ?? 'general'),
             (string) ($lead['goal'] ?? ''),
@@ -196,7 +204,9 @@ class ServiceLead extends Model
             $businessType,
             $teamSize,
             $timeframe,
-            $budgetRange
+            $budgetRange,
+            $urgencyLevel,
+            $callbackWindow
         );
 
         $freshnessKey = 'fresh';
@@ -233,6 +243,10 @@ class ServiceLead extends Model
             'timeframe_label' => static::timeframeOptions()[$timeframe] ?? 'לא צוין',
             'budget_range' => $budgetRange,
             'budget_range_label' => static::budgetRangeOptions()[$budgetRange] ?? 'לא צוין',
+            'urgency_level' => $urgencyLevel,
+            'urgency_level_label' => static::urgencyOptions()[$urgencyLevel] ?? 'לא צוין',
+            'callback_window' => $callbackWindow,
+            'callback_window_label' => static::callbackWindowOptions()[$callbackWindow] ?? 'לא צוין',
             'preferred_contact' => $lead['preferred_contact'] ?? 'email',
             'status' => $lead['status'] ?? 'new',
             'internal_note' => $lead['internal_note'] ?? '',
@@ -271,14 +285,15 @@ class ServiceLead extends Model
             'next_step_label' => static::nextStepLabel(
                 $lead['status'] ?? 'new',
                 $preferredContact,
-                $lead['service_type'] ?? null
+                $lead['service_type'] ?? null,
+                $urgencyLevel
             ),
             'last_activity_label' => $lastActivityAt?->diffForHumans() ?? 'נוצר עכשיו',
             'sort_timestamp' => $lastActivityAt?->timestamp ?? 0,
         ];
     }
 
-    protected static function nextStepLabel(string $status, string $preferredContact, ?string $serviceType): string
+    protected static function nextStepLabel(string $status, string $preferredContact, ?string $serviceType, ?string $urgencyLevel): string
     {
         if ($status === 'won') {
             return 'להעביר לטיפול ומסירה';
@@ -298,6 +313,14 @@ class ServiceLead extends Model
 
         if ($status === 'contacted') {
             return $serviceType === 'ecosystem_access' ? 'לבדוק עניין במוצר הבא' : 'להבין התאמה עסקית';
+        }
+
+        if ($urgencyLevel === 'urgent') {
+            return match ($preferredContact) {
+                'phone' => 'לחזור עוד היום בטלפון',
+                'whatsapp' => 'לחזור עוד היום בווטסאפ',
+                default => 'לחזור עוד היום במייל',
+            };
         }
 
         return match ($preferredContact) {
@@ -373,6 +396,26 @@ class ServiceLead extends Model
         ];
     }
 
+    public static function urgencyOptions(): array
+    {
+        return [
+            'info' => 'רק בודק כרגע',
+            'soon' => 'רוצה להתקדם בקרוב',
+            'urgent' => 'צריך טיפול מהיר',
+        ];
+    }
+
+    public static function callbackWindowOptions(): array
+    {
+        return [
+            'morning' => 'בוקר',
+            'noon' => 'צהריים',
+            'afternoon' => 'אחר הצהריים',
+            'evening' => 'ערב',
+            'anytime' => 'כל שעה נוחה',
+        ];
+    }
+
     public static function sourceLabel(string $source, string $entryPoint): string
     {
         if ($source === 'dashboard') {
@@ -417,7 +460,9 @@ class ServiceLead extends Model
         ?string $businessType,
         ?string $teamSize,
         ?string $timeframe,
-        ?string $budgetRange
+        ?string $budgetRange,
+        ?string $urgencyLevel,
+        ?string $callbackWindow
     ): array {
         $score = 0;
 
@@ -488,6 +533,19 @@ class ServiceLead extends Model
             'medium' => 8,
             'small' => 4,
             'unknown' => 2,
+            default => 0,
+        };
+
+        $score += match ($urgencyLevel) {
+            'urgent' => 14,
+            'soon' => 8,
+            'info' => 2,
+            default => 0,
+        };
+
+        $score += match ($callbackWindow) {
+            'morning', 'noon', 'afternoon', 'evening' => 4,
+            'anytime' => 6,
             default => 0,
         };
 

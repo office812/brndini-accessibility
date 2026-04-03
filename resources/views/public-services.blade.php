@@ -221,6 +221,27 @@
                         </div>
                     </div>
 
+                    <div class="support-form-row">
+                        <div>
+                            <label for="public_service_urgency">מה רמת הדחיפות?</label>
+                            <select id="public_service_urgency" name="urgency_level">
+                                <option value="">בחר רמת דחיפות</option>
+                                @foreach ($serviceLeadUrgencyLabels as $urgencyKey => $urgencyLabel)
+                                    <option value="{{ $urgencyKey }}" @selected(old('urgency_level') === $urgencyKey)>{{ $urgencyLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="public_service_callback_window">מתי הכי נוח לחזור אליך?</label>
+                            <select id="public_service_callback_window" name="callback_window">
+                                <option value="">בחר חלון חזרה</option>
+                                @foreach ($serviceLeadCallbackWindowLabels as $windowKey => $windowLabel)
+                                    <option value="{{ $windowKey }}" @selected(old('callback_window') === $windowKey)>{{ $windowLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <label for="public_service_message">פרטים חשובים</label>
                     <textarea id="public_service_message" name="message" rows="6" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה היית רוצה שיקרה בחודש הקרוב.">{{ old('message') }}</textarea>
 
