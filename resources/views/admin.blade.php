@@ -800,6 +800,11 @@
                                 <p>לידים תקועים בלי נגיעה</p>
                             </article>
                             <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🚨</span>
+                                <strong>{{ $adminSummary['service_leads_overdue_first_touch'] ?? 0 }}</strong>
+                                <p>חרגו מזמן תגובה ראשונית</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🧑‍💼</span>
                                 <strong>{{ $adminServiceLeads->filter(fn ($lead) => filled($lead->assigned_admin_email ?? null))->count() }}</strong>
                                 <p>לידים שכבר שויכו למטפל</p>
@@ -968,6 +973,9 @@
                                                     <span class="status-pill {{ $lead->follow_up_tone === 'good' ? 'is-good' : ($lead->follow_up_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
                                                         {{ $lead->follow_up_label }}
                                                     </span>
+                                                    <span class="status-pill {{ $lead->first_touch_tone === 'good' ? 'is-good' : ($lead->first_touch_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                        {{ $lead->first_touch_label }}
+                                                    </span>
                                                     <span class="status-pill {{ $lead->age_bucket_tone === 'good' ? 'is-good' : ($lead->age_bucket_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
                                                         {{ $lead->age_bucket_label }}
                                                     </span>
@@ -1120,6 +1128,23 @@
                                             </div>
                                         @endforeach
                                         @foreach (($serviceLeadInactivitySummary ?? collect()) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">SLA תגובה</p>
+                                            <h2>מגע ראשון בלידים</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach (($serviceLeadFirstTouchSummary ?? collect()) as $item)
                                             <div class="domain-info-row">
                                                 <span>{{ $item['label'] }}</span>
                                                 <strong>{{ $item['count'] }}</strong>

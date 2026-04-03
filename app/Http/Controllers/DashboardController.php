@@ -150,6 +150,7 @@ class DashboardController extends Controller
                 'נוצר',
                 'גיל ליד',
                 'ימים בלי נגיעה',
+                'תגובה ראשונית',
                 'חסמים תפעוליים',
                 'סיבת סגירה',
                 'עודכן לאחרונה',
@@ -189,6 +190,7 @@ class DashboardController extends Controller
                     $lead->created_at_label,
                     $lead->age_bucket_label,
                     $lead->inactive_bucket_label,
+                    $lead->first_touch_label,
                     collect($lead->operational_blockers ?? [])->pluck('label')->implode(' | '),
                     $lead->close_reason_label,
                     $lead->last_activity_label,
@@ -1160,6 +1162,19 @@ class DashboardController extends Controller
             ->filter(fn (array $item) => $item['count'] > 0)
             ->sortByDesc('count')
             ->values();
+        $serviceLeadFirstTouchSummary = collect([
+            'touched' => 'טופלו ראשונית',
+            'waiting' => 'ממתינים למגע ראשון',
+            'overdue' => 'חרגו SLA למגע ראשון',
+        ])->map(function (string $label, string $key) use ($serviceLeads) {
+            return [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('first_touch_key', $key)->count(),
+            ];
+        })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
         $serviceLeadAgeSummary = collect([
             'today' => 'נוצרו היום',
             'recent' => 'חדשים 1–3 ימים',
@@ -1227,6 +1242,7 @@ class DashboardController extends Controller
             'serviceLeadCloseReasonSummary' => $serviceLeadCloseReasonSummary,
             'serviceLeadAgeSummary' => $serviceLeadAgeSummary,
             'serviceLeadInactivitySummary' => $serviceLeadInactivitySummary,
+            'serviceLeadFirstTouchSummary' => $serviceLeadFirstTouchSummary,
             'serviceLeadOperationalBlockerSummary' => $serviceLeadOperationalBlockerSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
@@ -1265,6 +1281,7 @@ class DashboardController extends Controller
                 'service_leads_needing_action' => $serviceLeadActionQueue->count(),
                 'service_leads_due_today' => $serviceLeads->where('follow_up_tone', 'good')->count(),
                 'service_leads_stuck' => $serviceLeads->where('inactive_bucket', 'stuck')->count(),
+                'service_leads_overdue_first_touch' => $serviceLeads->where('first_touch_key', 'overdue')->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];

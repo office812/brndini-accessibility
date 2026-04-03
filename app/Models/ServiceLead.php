@@ -263,6 +263,13 @@ class ServiceLead extends Model
             ? Carbon::parse($lead['follow_up_at'])
             : null;
         $followUpStatus = static::followUpMeta($followUpAt);
+        $firstTouchStatus = static::firstTouchMeta(
+            $activityHistory->count(),
+            (string) ($lead['status'] ?? 'new'),
+            $assignedAdminName,
+            $followUpAt,
+            $createdAt
+        );
 
         if ($lastActivityAt && $lastActivityAt->lt(now()->subDays(3))) {
             $freshnessKey = 'stale';
@@ -391,6 +398,9 @@ class ServiceLead extends Model
             'inactive_bucket_label' => $inactivityStatus['label'],
             'inactive_bucket_tone' => $inactivityStatus['tone'],
             'inactive_bucket_days' => $inactivityStatus['days'],
+            'first_touch_key' => $firstTouchStatus['key'],
+            'first_touch_label' => $firstTouchStatus['label'],
+            'first_touch_tone' => $firstTouchStatus['tone'],
             'next_step_label' => static::nextStepLabel(
                 $lead['status'] ?? 'new',
                 $preferredContact,
@@ -854,6 +864,51 @@ class ServiceLead extends Model
             'label' => 'תקוע 6+ ימים',
             'tone' => 'warn',
             'days' => $days,
+        ];
+    }
+
+    protected static function firstTouchMeta(
+        int $activityCount,
+        string $status,
+        ?string $assignedAdminName,
+        ?Carbon $followUpAt,
+        ?Carbon $createdAt
+    ): array {
+        $touched = $activityCount > 1
+            || $status !== 'new'
+            || filled($assignedAdminName)
+            || $followUpAt !== null;
+
+        if ($touched) {
+            return [
+                'key' => 'touched',
+                'label' => 'טופל ראשונית',
+                'tone' => 'good',
+            ];
+        }
+
+        if (! $createdAt) {
+            return [
+                'key' => 'unknown',
+                'label' => 'ללא מידע על תגובה',
+                'tone' => 'neutral',
+            ];
+        }
+
+        $hours = $createdAt->diffInHours(now());
+
+        if ($hours >= 24) {
+            return [
+                'key' => 'overdue',
+                'label' => 'טרם טופל · חרג SLA',
+                'tone' => 'warn',
+            ];
+        }
+
+        return [
+            'key' => 'waiting',
+            'label' => 'ממתין למגע ראשון',
+            'tone' => 'neutral',
         ];
     }
 
