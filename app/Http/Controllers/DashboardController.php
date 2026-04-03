@@ -1126,6 +1126,17 @@ class DashboardController extends Controller
         ])
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadNextServiceSummary = collect($serviceCatalog)
+            ->map(function (array $service, string $key) use ($serviceLeads) {
+                return [
+                    'key' => $key,
+                    'label' => $service['label'],
+                    'count' => $serviceLeads->where('recommended_service_type', $key)->count(),
+                ];
+            })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
         $serviceLeadValueSummary = [
             'pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0)),
             'weighted_pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0)),
@@ -1286,6 +1297,7 @@ class DashboardController extends Controller
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
             'serviceLeadRepeatSummary' => $serviceLeadRepeatSummary,
             'serviceLeadRelationshipSummary' => $serviceLeadRelationshipSummary,
+            'serviceLeadNextServiceSummary' => $serviceLeadNextServiceSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
             'serviceLeadPerformanceSummary' => $serviceLeadPerformanceSummary,
             'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
@@ -1337,6 +1349,7 @@ class DashboardController extends Controller
                 'service_leads_repeat_sites' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_site_count ?? 1) > 1)->count(),
                 'service_leads_existing_customers' => $serviceLeads->filter(fn ($lead) => ($lead->relationship_key ?? null) === 'existing_customer')->count(),
                 'service_leads_cross_sell' => $serviceLeads->filter(fn ($lead) => (int) ($lead->distinct_service_count ?? 1) > 1)->count(),
+                'service_leads_with_recommendation' => $serviceLeads->filter(fn ($lead) => filled($lead->recommended_service_type ?? null))->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
@@ -1548,6 +1561,14 @@ class DashboardController extends Controller
                     ? 'ביקש גם: ' . $crossSellLabels->take(3)->implode(' · ')
                     : null;
                 $lead->prior_won_count = $priorWonCount;
+                $lead->recommended_service_type = $this->recommendedNextServiceType(
+                    $lead->service_type,
+                    $relatedLeads->pluck('service_type')->filter()->push($lead->service_type)->unique()->values()->all(),
+                    $priorWonCount
+                );
+                $lead->recommended_service_label = $lead->recommended_service_type
+                    ? ($serviceCatalog[$lead->recommended_service_type]['label'] ?? $lead->recommended_service_type)
+                    : null;
 
                 if ($priorWonCount > 0) {
                     $lead->relationship_key = 'existing_customer';
@@ -1622,6 +1643,36 @@ class DashboardController extends Controller
         }
 
         return strtolower(preg_replace('/^www\./', '', $host));
+    }
+
+    private function recommendedNextServiceType(string $currentServiceType, array $seenServiceTypes, int $priorWonCount): ?string
+    {
+        $seen = collect($seenServiceTypes)->filter()->unique()->values();
+
+        $paths = [
+            'hosting' => ['maintenance', 'website_upgrade', 'seo'],
+            'maintenance' => ['hosting', 'website_upgrade', 'seo'],
+            'website_upgrade' => ['seo', 'campaigns', 'hosting'],
+            'seo' => ['campaigns', 'landing_pages', 'automations'],
+            'campaigns' => ['landing_pages', 'automations', 'seo'],
+            'landing_pages' => ['campaigns', 'automations', 'seo'],
+            'automations' => ['campaigns', 'seo', 'hosting'],
+            'ecosystem_access' => ['hosting', 'seo', 'campaigns'],
+        ];
+
+        $candidates = $paths[$currentServiceType] ?? ['website_upgrade', 'seo', 'hosting'];
+
+        if ($priorWonCount > 0) {
+            array_unshift($candidates, 'automations');
+        }
+
+        foreach (collect($candidates)->unique() as $candidate) {
+            if (! $seen->contains($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
 
     private function siteColumnsAvailable(array $columns): bool

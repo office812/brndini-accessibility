@@ -834,6 +834,11 @@
                                 <strong>{{ $adminSummary['service_leads_cross_sell'] ?? 0 }}</strong>
                                 <p>הזדמנויות Cross-sell</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">➡️</span>
+                                <strong>{{ $adminSummary['service_leads_with_recommendation'] ?? 0 }}</strong>
+                                <p>לידים עם הצעת המשך</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -975,6 +980,11 @@
                                                         <span class="meta-note">{{ $lead->related_services_label }}</span>
                                                     @endif
                                                 </div>
+                                                @if (!empty($lead->recommended_service_label))
+                                                    <div class="lead-intel-row">
+                                                        <span class="status-pill is-good">המשך מומלץ: {{ $lead->recommended_service_label }}</span>
+                                                    </div>
+                                                @endif
                                                 @if (!empty($lead->repeat_contact_label) || !empty($lead->repeat_site_label))
                                                     <div class="lead-intel-row">
                                                         @if (!empty($lead->repeat_contact_label))
@@ -1190,6 +1200,30 @@
                                     @else
                                         <div class="domain-info-list">
                                             @foreach (($serviceLeadRelationshipSummary ?? collect()) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">מה למכור עכשיו</p>
+                                            <h2>הצעות המשך שחוזרות הכי הרבה</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadNextServiceSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין מספיק מידע להצעות המשך</strong>
+                                            <p>כשיצטברו יותר לידים חוזרים ושירותים שונים לכל קשר, תראה כאן מה הכי נכון להציע הלאה.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadNextServiceSummary ?? collect())->take(6) as $item)
                                                 <div class="domain-info-row">
                                                     <span>{{ $item['label'] }}</span>
                                                     <strong>{{ $item['count'] }}</strong>
