@@ -127,6 +127,8 @@ class DashboardController extends Controller
                 'סטטוס',
                 'איכות ליד',
                 'ציון',
+                'פניות חוזרות מאותו איש קשר',
+                'פניות חוזרות מאותו אתר',
                 'שווי משוער',
                 'שווי משוקלל',
                 'מקור',
@@ -167,6 +169,8 @@ class DashboardController extends Controller
                     $statusLabels[$lead->status] ?? $lead->status,
                     $lead->opportunity_label,
                     $lead->opportunity_score,
+                    $lead->repeat_contact_count ?? 1,
+                    $lead->repeat_site_count ?? 1,
                     $lead->budget_estimate_label,
                     $lead->weighted_estimate_label,
                     $lead->source_label,
@@ -1077,6 +1081,25 @@ class DashboardController extends Controller
             ->filter(fn ($lead) => $this->serviceLeadNeedsActionNow($lead))
             ->sortByDesc(fn ($lead) => $this->serviceLeadActionPriority($lead))
             ->values();
+        $serviceLeadRepeatSummary = collect([
+            [
+                'key' => 'repeat_contacts',
+                'label' => 'פניות חוזרות מאותו איש קשר',
+                'count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_contact_count ?? 1) > 1)->count(),
+            ],
+            [
+                'key' => 'repeat_sites',
+                'label' => 'אתרים שחוזרים שוב',
+                'count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_site_count ?? 1) > 1)->count(),
+            ],
+            [
+                'key' => 'hot_repeat_contacts',
+                'label' => 'חוזרים חמים',
+                'count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_contact_count ?? 1) > 1 && ($lead->opportunity_key ?? null) === 'hot')->count(),
+            ],
+        ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
         $serviceLeadValueSummary = [
             'pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0)),
             'weighted_pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0)),
@@ -1235,6 +1258,7 @@ class DashboardController extends Controller
             'serviceLeadStageSummary' => $serviceLeadStageSummary,
             'serviceLeadServiceSummary' => $serviceLeadServiceSummary,
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
+            'serviceLeadRepeatSummary' => $serviceLeadRepeatSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
             'serviceLeadPerformanceSummary' => $serviceLeadPerformanceSummary,
             'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
@@ -1282,6 +1306,8 @@ class DashboardController extends Controller
                 'service_leads_due_today' => $serviceLeads->where('follow_up_tone', 'good')->count(),
                 'service_leads_stuck' => $serviceLeads->where('inactive_bucket', 'stuck')->count(),
                 'service_leads_overdue_first_touch' => $serviceLeads->where('first_touch_key', 'overdue')->count(),
+                'service_leads_repeat_contacts' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_contact_count ?? 1) > 1)->count(),
+                'service_leads_repeat_sites' => $serviceLeads->filter(fn ($lead) => (int) ($lead->repeat_site_count ?? 1) > 1)->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
@@ -1332,6 +1358,14 @@ class DashboardController extends Controller
             $priority += 5;
         }
 
+        if ((int) ($lead->repeat_contact_count ?? 1) > 1) {
+            $priority += 20;
+        }
+
+        if ((int) ($lead->repeat_site_count ?? 1) > 1) {
+            $priority += 12;
+        }
+
         return $priority + (int) ($lead->opportunity_score ?? 0);
     }
 
@@ -1355,10 +1389,114 @@ class DashboardController extends Controller
 
     private function collectAdminServiceLeads()
     {
-        return ServiceLead::runtimeLeads()
+        $serviceLeads = ServiceLead::runtimeLeads()
             ->map(fn (array $lead) => ServiceLead::presentRuntime($lead))
             ->sortByDesc('sort_timestamp')
             ->values();
+
+        $repeatContactCounts = $serviceLeads
+            ->flatMap(function ($lead) {
+                $keys = array_filter([
+                    $this->normalizeLeadEmailKey($lead->contact_email ?? $lead->user_email ?? null),
+                    $this->normalizeLeadPhoneKey($lead->contact_phone ?? null),
+                ]);
+
+                return collect(array_unique($keys))->map(fn ($key) => ['key' => $key, 'lead' => $lead]);
+            })
+            ->groupBy('key')
+            ->map(fn ($group) => $group->pluck('lead.update_key')->unique()->count());
+
+        $repeatSiteCounts = $serviceLeads
+            ->mapWithKeys(function ($lead) {
+                $key = $this->normalizeLeadSiteKey($lead->site_domain ?? null);
+
+                return $key ? [$lead->update_key => $key] : [];
+            });
+
+        $repeatSiteCounts = $repeatSiteCounts
+            ->groupBy(fn ($siteKey) => $siteKey)
+            ->map(fn ($group) => $group->count());
+
+        return $serviceLeads
+            ->map(function ($lead) use ($repeatContactCounts, $repeatSiteCounts) {
+                $lead = clone $lead;
+
+                $contactKeys = array_filter([
+                    $this->normalizeLeadEmailKey($lead->contact_email ?? $lead->user_email ?? null),
+                    $this->normalizeLeadPhoneKey($lead->contact_phone ?? null),
+                ]);
+                $contactCount = collect(array_unique($contactKeys))
+                    ->map(fn ($key) => (int) ($repeatContactCounts[$key] ?? 1))
+                    ->max() ?: 1;
+
+                $siteCount = 1;
+                $siteKey = $this->normalizeLeadSiteKey($lead->site_domain ?? null);
+                if ($siteKey) {
+                    $siteCount = (int) ($repeatSiteCounts[$siteKey] ?? 1);
+                }
+
+                $lead->repeat_contact_count = $contactCount;
+                $lead->repeat_site_count = $siteCount;
+                $lead->repeat_contact_label = $contactCount > 1 ? 'פנייה חוזרת · ' . $contactCount . ' פניות' : null;
+                $lead->repeat_site_label = $siteCount > 1 ? 'אתר חוזר · ' . $siteCount . ' פניות' : null;
+                $lead->repeat_contact_tone = $contactCount > 1 ? 'warn' : 'neutral';
+                $lead->repeat_site_tone = $siteCount > 1 ? 'warn' : 'neutral';
+
+                $leadTags = collect($lead->lead_tags ?? []);
+                if ($contactCount > 1) {
+                    $leadTags->push([
+                        'label' => 'פנייה חוזרת',
+                        'tone' => 'warn',
+                    ]);
+                }
+                if ($siteCount > 1) {
+                    $leadTags->push([
+                        'label' => 'אתר חוזר',
+                        'tone' => 'neutral',
+                    ]);
+                }
+                $lead->lead_tags = $leadTags
+                    ->unique(fn ($tag) => ($tag['label'] ?? '') . '|' . ($tag['tone'] ?? ''))
+                    ->values()
+                    ->all();
+
+                return $lead;
+            })
+            ->values();
+    }
+
+    private function normalizeLeadEmailKey(?string $email): ?string
+    {
+        $email = strtolower(trim((string) ($email ?? '')));
+
+        return filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : null;
+    }
+
+    private function normalizeLeadPhoneKey(?string $phone): ?string
+    {
+        $digits = preg_replace('/\D+/', '', (string) ($phone ?? ''));
+
+        return strlen($digits) >= 7 ? $digits : null;
+    }
+
+    private function normalizeLeadSiteKey(?string $siteDomain): ?string
+    {
+        $siteDomain = trim((string) ($siteDomain ?? ''));
+
+        if ($siteDomain === '') {
+            return null;
+        }
+
+        if (! str_starts_with($siteDomain, 'http://') && ! str_starts_with($siteDomain, 'https://')) {
+            $siteDomain = 'https://' . ltrim($siteDomain, '/');
+        }
+
+        $host = parse_url($siteDomain, PHP_URL_HOST);
+        if (! is_string($host) || $host === '') {
+            return null;
+        }
+
+        return strtolower(preg_replace('/^www\./', '', $host));
     }
 
     private function siteColumnsAvailable(array $columns): bool

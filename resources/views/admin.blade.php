@@ -814,6 +814,16 @@
                                 <strong>{{ $adminServiceLeads->filter(fn ($lead) => blank($lead->assigned_admin_email ?? null))->count() }}</strong>
                                 <p>לידים שעדיין לא משויכים</p>
                             </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🔁</span>
+                                <strong>{{ $adminSummary['service_leads_repeat_contacts'] ?? 0 }}</strong>
+                                <p>פניות חוזרות מאותו איש קשר</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🌍</span>
+                                <strong>{{ $adminSummary['service_leads_repeat_sites'] ?? 0 }}</strong>
+                                <p>אתרים שחזרו שוב</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-content-grid super-admin-content-grid-wide">
@@ -947,6 +957,16 @@
                                                 <div class="lead-intel-row">
                                                     <span class="status-pill is-neutral">מטפל: {{ $lead->assigned_label }}</span>
                                                 </div>
+                                                @if (!empty($lead->repeat_contact_label) || !empty($lead->repeat_site_label))
+                                                    <div class="lead-intel-row">
+                                                        @if (!empty($lead->repeat_contact_label))
+                                                            <span class="status-pill is-warn">{{ $lead->repeat_contact_label }}</span>
+                                                        @endif
+                                                        @if (!empty($lead->repeat_site_label))
+                                                            <span class="status-pill is-neutral">{{ $lead->repeat_site_label }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                                 <div class="lead-intel-row">
                                                     <span class="meta-note">איכות ליד: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</span>
                                                     <span class="status-pill is-good">שווי: {{ $lead->budget_estimate_label }}</span>
@@ -1107,6 +1127,30 @@
                                                         <small class="meta-note">{{ $lead->next_step_label }}</small>
                                                     </div>
                                                     <strong>{{ $lead->follow_up_label }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">חוזרים ומתחממים</p>
+                                            <h2>פניות חוזרות שצריך לזהות מהר</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadRepeatSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין דפוסי חזרה בולטים</strong>
+                                            <p>כשאותו איש קשר או אותו אתר יחזרו יותר מפעם אחת, תראה את זה כאן וגם על כרטיסי הלידים עצמם.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadRepeatSummary ?? collect()) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
                                                 </div>
                                             @endforeach
                                         </div>
