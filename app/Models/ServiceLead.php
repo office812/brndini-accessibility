@@ -309,6 +309,24 @@ class ServiceLead extends Model
             'opportunity_key' => $opportunity['key'],
             'opportunity_label' => $opportunity['label'],
             'opportunity_tone' => $opportunity['tone'],
+            'budget_estimate_amount' => static::estimatedDealValue(
+                (string) ($lead['service_type'] ?? 'general'),
+                $budgetRange
+            ),
+            'budget_estimate_label' => static::estimatedDealValueLabel(
+                (string) ($lead['service_type'] ?? 'general'),
+                $budgetRange
+            ),
+            'weighted_estimate_amount' => static::weightedDealValue(
+                (string) ($lead['service_type'] ?? 'general'),
+                $budgetRange,
+                (string) ($lead['status'] ?? 'new')
+            ),
+            'weighted_estimate_label' => static::weightedDealValueLabel(
+                (string) ($lead['service_type'] ?? 'general'),
+                $budgetRange,
+                (string) ($lead['status'] ?? 'new')
+            ),
             'lead_tags' => static::buildLeadTags(
                 (string) ($lead['service_type'] ?? 'general'),
                 $opportunity['key'],
@@ -777,6 +795,73 @@ class ServiceLead extends Model
             'timestamp' => $timestamp->toIso8601String(),
             'tone' => $tone,
         ];
+    }
+
+    public static function estimatedDealValue(string $serviceType, ?string $budgetRange): int
+    {
+        $budgetMap = [
+            'small' => 1250,
+            'medium' => 5000,
+            'large' => 13750,
+            'enterprise' => 30000,
+        ];
+
+        if (isset($budgetMap[$budgetRange ?? ''])) {
+            return $budgetMap[$budgetRange];
+        }
+
+        return match ($serviceType) {
+            'hosting' => 1500,
+            'maintenance' => 2500,
+            'seo' => 6500,
+            'campaigns' => 8500,
+            'site_upgrade' => 12000,
+            'landing_pages' => 5000,
+            'automations' => 7000,
+            default => 0,
+        };
+    }
+
+    public static function estimatedDealValueLabel(string $serviceType, ?string $budgetRange): string
+    {
+        return static::formatCurrencyShort(static::estimatedDealValue($serviceType, $budgetRange));
+    }
+
+    public static function weightedDealValue(string $serviceType, ?string $budgetRange, string $status): int
+    {
+        $probabilityMap = [
+            'new' => 20,
+            'contacted' => 35,
+            'qualified' => 55,
+            'proposal' => 75,
+            'won' => 100,
+            'closed' => 0,
+        ];
+
+        $baseValue = static::estimatedDealValue($serviceType, $budgetRange);
+        $probability = $probabilityMap[$status] ?? 20;
+
+        return (int) round($baseValue * ($probability / 100));
+    }
+
+    public static function weightedDealValueLabel(string $serviceType, ?string $budgetRange, string $status): string
+    {
+        return static::formatCurrencyShort(static::weightedDealValue($serviceType, $budgetRange, $status));
+    }
+
+    public static function formatCurrencyShort(int $amount): string
+    {
+        if ($amount <= 0) {
+            return 'לא הוגדר';
+        }
+
+        if ($amount >= 1000) {
+            $formatted = number_format($amount / 1000, $amount % 1000 === 0 ? 0 : 1);
+
+            return '₪' . $formatted . 'K';
+        }
+
+        return '₪' . number_format($amount);
     }
 
     protected static function buildLeadTags(

@@ -127,6 +127,8 @@ class DashboardController extends Controller
                 'סטטוס',
                 'איכות ליד',
                 'ציון',
+                'שווי משוער',
+                'שווי משוקלל',
                 'מקור',
                 'נקודת כניסה',
                 'שם',
@@ -159,6 +161,8 @@ class DashboardController extends Controller
                     $statusLabels[$lead->status] ?? $lead->status,
                     $lead->opportunity_label,
                     $lead->opportunity_score,
+                    $lead->budget_estimate_label,
+                    $lead->weighted_estimate_label,
                     $lead->source_label,
                     $lead->entry_label,
                     $lead->user_name ?? $lead->contact_name,
@@ -1060,6 +1064,17 @@ class DashboardController extends Controller
             ->filter(fn ($lead) => $this->serviceLeadNeedsActionNow($lead))
             ->sortByDesc(fn ($lead) => $this->serviceLeadActionPriority($lead))
             ->values();
+        $serviceLeadValueSummary = [
+            'pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0)),
+            'weighted_pipeline_total' => $serviceLeads->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0)),
+            'won_total' => $serviceLeads
+                ->where('status', 'won')
+                ->sum(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0)),
+            'hot_total' => $serviceLeads
+                ->where('opportunity_key', 'hot')
+                ->sum(fn ($lead) => (int) ($lead->weighted_estimate_amount ?? 0)),
+            'budgeted_count' => $serviceLeads->filter(fn ($lead) => (int) ($lead->budget_estimate_amount ?? 0) > 0)->count(),
+        ];
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -1092,6 +1107,7 @@ class DashboardController extends Controller
             'serviceLeadStageSummary' => $serviceLeadStageSummary,
             'serviceLeadServiceSummary' => $serviceLeadServiceSummary,
             'serviceLeadActionQueue' => $serviceLeadActionQueue,
+            'serviceLeadValueSummary' => $serviceLeadValueSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),

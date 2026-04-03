@@ -939,6 +939,8 @@
                                                 </div>
                                                 <div class="lead-intel-row">
                                                     <span class="meta-note">איכות ליד: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</span>
+                                                    <span class="status-pill is-good">שווי: {{ $lead->budget_estimate_label }}</span>
+                                                    <span class="status-pill is-neutral">משוקלל: {{ $lead->weighted_estimate_label }}</span>
                                                 </div>
                                                 @if (!empty($lead->lead_tags))
                                                     <div class="lead-intel-row">
@@ -1069,6 +1071,37 @@
                                             @endforeach
                                         </div>
                                     @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">שווי צנרת</p>
+                                            <h2>פוטנציאל עסקי משוער</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        <div class="domain-info-row">
+                                            <span>שווי לידים כולל</span>
+                                            <strong>{{ \App\Models\ServiceLead::formatCurrencyShort($serviceLeadValueSummary['pipeline_total'] ?? 0) }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>שווי משוקלל</span>
+                                            <strong>{{ \App\Models\ServiceLead::formatCurrencyShort($serviceLeadValueSummary['weighted_pipeline_total'] ?? 0) }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>נסגרו כלקוח</span>
+                                            <strong>{{ \App\Models\ServiceLead::formatCurrencyShort($serviceLeadValueSummary['won_total'] ?? 0) }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>חם כרגע</span>
+                                            <strong>{{ \App\Models\ServiceLead::formatCurrencyShort($serviceLeadValueSummary['hot_total'] ?? 0) }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>לידים עם שווי</span>
+                                            <strong>{{ $serviceLeadValueSummary['budgeted_count'] ?? 0 }}</strong>
+                                        </div>
+                                    </div>
                                 </article>
 
                                 <article class="portal-content-card">
