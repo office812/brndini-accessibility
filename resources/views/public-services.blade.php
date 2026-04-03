@@ -179,6 +179,27 @@
                     <label for="public_service_goal">מה אתה רוצה להשיג?</label>
                     <input id="public_service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להגדיל לידים, להעביר לאחסון יציב">
 
+                    <div class="support-form-row">
+                        <div>
+                            <label for="public_service_timeframe">מתי תרצה להתחיל?</label>
+                            <select id="public_service_timeframe" name="timeframe">
+                                <option value="">בחר טווח זמן</option>
+                                @foreach ($serviceLeadTimeframeLabels as $timeframeKey => $timeframeLabel)
+                                    <option value="{{ $timeframeKey }}" @selected(old('timeframe') === $timeframeKey)>{{ $timeframeLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="public_service_budget">מה סדר הגודל התקציבי?</label>
+                            <select id="public_service_budget" name="budget_range">
+                                <option value="">בחר תקציב משוער</option>
+                                @foreach ($serviceLeadBudgetLabels as $budgetKey => $budgetLabel)
+                                    <option value="{{ $budgetKey }}" @selected(old('budget_range') === $budgetKey)>{{ $budgetLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <label for="public_service_message">פרטים חשובים</label>
                     <textarea id="public_service_message" name="message" rows="6" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה היית רוצה שיקרה בחודש הקרוב.">{{ old('message') }}</textarea>
 

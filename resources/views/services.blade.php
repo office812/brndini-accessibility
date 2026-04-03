@@ -102,6 +102,27 @@
                                     <label for="service_goal">מה המטרה שלך?</label>
                                     <input id="service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להעלות לידים, להעביר לאחסון יציב">
 
+                                    <div class="support-form-row">
+                                        <div>
+                                            <label for="service_timeframe">מתי תרצה להתחיל?</label>
+                                            <select id="service_timeframe" name="timeframe">
+                                                <option value="">בחר טווח זמן</option>
+                                                @foreach ($serviceLeadTimeframeLabels as $timeframeKey => $timeframeLabel)
+                                                    <option value="{{ $timeframeKey }}" @selected(old('timeframe') === $timeframeKey)>{{ $timeframeLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="service_budget_range">מה סדר הגודל התקציבי?</label>
+                                            <select id="service_budget_range" name="budget_range">
+                                                <option value="">בחר תקציב משוער</option>
+                                                @foreach ($serviceLeadBudgetLabels as $budgetKey => $budgetLabel)
+                                                    <option value="{{ $budgetKey }}" @selected(old('budget_range') === $budgetKey)>{{ $budgetLabel }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <label for="service_message">פרטים חשובים</label>
                                     <textarea id="service_message" name="message" rows="7" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה תרצה להשיג.">{{ old('message') }}</textarea>
 
@@ -138,6 +159,14 @@
                                         <div class="domain-info-row">
                                             <span>פניות שנשלחו</span>
                                             <strong>{{ $serviceLeadSummary['total'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>צריכים להתחיל מהר</span>
+                                            <strong>{{ $serviceLeadSummary['urgent'] }}</strong>
+                                        </div>
+                                        <div class="domain-info-row">
+                                            <span>עם תקציב מוגדר</span>
+                                            <strong>{{ $serviceLeadSummary['budgeted'] }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>גישה מוקדמת</span>
@@ -218,12 +247,16 @@
                                                 </div>
                                             </div>
 
-                                            <p class="support-ticket-meta">
-                                                {{ $lead->goal }} · {{ $lead->last_activity_label }}
-                                            </p>
+                                                <p class="support-ticket-meta">
+                                                    {{ $lead->goal }} · {{ $lead->last_activity_label }}
+                                                </p>
+                                                <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">זמן: {{ $lead->timeframe_label }}</span>
+                                                    <span class="status-pill is-neutral">תקציב: {{ $lead->budget_range_label }}</span>
+                                                </div>
 
-                                            @if (!empty($lead->contact_phone))
-                                                <p class="support-ticket-meta">טלפון לחזרה: {{ $lead->contact_phone }}</p>
+                                                @if (!empty($lead->contact_phone))
+                                                    <p class="support-ticket-meta">טלפון לחזרה: {{ $lead->contact_phone }}</p>
                                             @elseif (!empty($lead->missing_preferred_contact_detail))
                                                 <p class="support-ticket-meta">נבחר ערוץ חזרה טלפוני, אבל עדיין חסר מספר.</p>
                                             @endif

@@ -30,6 +30,18 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function publicServices(Request $request): View
+    {
+        return view('public-services', [
+            'title' => 'שירותי Brndini | אחסון, SEO, קמפיינים, תחזוקה ואוטומציות',
+            'metaDescription' => 'שירותי Brndini לעסקים: אחסון, SEO, קמפיינים, תחזוקת אתר, שדרוג אתר קיים, דפי נחיתה ואוטומציות. הווידג׳ט נשאר חינמי, והשירותים זמינים כשצריך צמיחה ותפעול חכם.',
+            'canonicalUrl' => route('brndini.services'),
+            'serviceCatalog' => $this->serviceCatalog(),
+            'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
+            'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
+        ]);
+    }
+
     public function show(Request $request): View
     {
         return view('dashboard', $this->buildDashboardData($request->user()));
@@ -420,6 +432,8 @@ class DashboardController extends Controller
             'service_type' => ['required', Rule::in(array_keys($this->serviceCatalog()))],
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
+            'timeframe' => ['nullable', Rule::in(array_keys(ServiceLead::timeframeOptions()))],
+            'budget_range' => ['nullable', Rule::in(array_keys(ServiceLead::budgetRangeOptions()))],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
             'contact_phone' => ['nullable', 'required_if:preferred_contact,phone,whatsapp', 'string', 'max:40'],
             'entry_point' => ['nullable', Rule::in(['dashboard-services', 'dashboard-recommendations'])],
@@ -444,6 +458,8 @@ class DashboardController extends Controller
             'service_type' => ['required', Rule::in(array_keys($this->serviceCatalog()))],
             'goal' => ['required', 'string', 'max:180'],
             'message' => ['required', 'string', 'min:20', 'max:4000'],
+            'timeframe' => ['nullable', Rule::in(array_keys(ServiceLead::timeframeOptions()))],
+            'budget_range' => ['nullable', Rule::in(array_keys(ServiceLead::budgetRangeOptions()))],
             'preferred_contact' => ['required', Rule::in(array_keys($this->servicePreferredContactLabels()))],
             'contact_phone' => ['nullable', 'required_if:preferred_contact,phone,whatsapp', 'string', 'max:40'],
             'entry_point' => ['nullable', Rule::in(['public-services', 'home-ecosystem', 'products-page', 'services-cards'])],
@@ -727,6 +743,8 @@ class DashboardController extends Controller
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
+            'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
+            'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
             'serviceLeads' => $serviceLeads,
             'serviceRecommendations' => $serviceRecommendations,
             'serviceLeadSummary' => [
@@ -734,6 +752,8 @@ class DashboardController extends Controller
                 'new' => $serviceLeads->where('status', 'new')->count(),
                 'proposal' => $serviceLeads->where('status', 'proposal')->count(),
                 'won' => $serviceLeads->where('status', 'won')->count(),
+                'urgent' => $serviceLeads->where('timeframe', 'urgent')->count(),
+                'budgeted' => $serviceLeads->filter(fn ($lead) => ! in_array($lead->budget_range ?? null, [null, '', 'unknown'], true))->count(),
                 'lastActivity' => $serviceLeads->first()?->last_activity_label ?? 'עדיין לא נשלחה פנייה',
             ],
             'platformReadiness' => $platformReadiness,
@@ -850,6 +870,22 @@ class DashboardController extends Controller
                 'count' => $serviceLeads->where('opportunity_key', 'cold')->count(),
             ],
         ])->values();
+        $serviceLeadTimeframeSummary = collect(ServiceLead::timeframeOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('timeframe', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
+        $serviceLeadBudgetSummary = collect(ServiceLead::budgetRangeOptions())
+            ->map(fn (string $label, string $key) => [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('budget_range', $key)->count(),
+            ])
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -872,9 +908,13 @@ class DashboardController extends Controller
             'serviceLeadEntrySummary' => $serviceLeadEntrySummary,
             'serviceLeadMarketingSummary' => $serviceLeadMarketingSummary,
             'serviceLeadOpportunitySummary' => $serviceLeadOpportunitySummary,
+            'serviceLeadTimeframeSummary' => $serviceLeadTimeframeSummary,
+            'serviceLeadBudgetSummary' => $serviceLeadBudgetSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
+            'serviceLeadTimeframeLabels' => ServiceLead::timeframeOptions(),
+            'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
             'superAdminUsersCount' => $superAdminUsersCount,
             'adminUsersCount' => $adminUsersCount,
             'clientUsersCount' => $clientUsersCount,

@@ -851,6 +851,10 @@
                                                     <span class="meta-note">הפעולה הבאה: {{ $lead->next_step_label }}</span>
                                                 </div>
                                                 <div class="lead-intel-row">
+                                                    <span class="status-pill is-neutral">זמן: {{ $lead->timeframe_label }}</span>
+                                                    <span class="status-pill is-neutral">תקציב: {{ $lead->budget_range_label }}</span>
+                                                </div>
+                                                <div class="lead-intel-row">
                                                     <span class="meta-note">איכות ליד: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</span>
                                                 </div>
                                                 @if (!empty($lead->marketing_label) || !empty($lead->referrer_host))
@@ -952,6 +956,18 @@
                                     </div>
                                     <div class="domain-info-list">
                                         @foreach ($serviceLeadOpportunitySummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach ($serviceLeadTimeframeSummary as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach ($serviceLeadBudgetSummary as $item)
                                             <div class="domain-info-row">
                                                 <span>{{ $item['label'] }}</span>
                                                 <strong>{{ $item['count'] }}</strong>

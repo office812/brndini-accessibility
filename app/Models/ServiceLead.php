@@ -20,6 +20,8 @@ class ServiceLead extends Model
         'contact_phone',
         'goal',
         'message',
+        'timeframe',
+        'budget_range',
         'preferred_contact',
         'status',
         'source',
@@ -76,6 +78,8 @@ class ServiceLead extends Model
             'contact_phone' => static::normalizePhone($validated['contact_phone'] ?? null),
             'goal' => trim((string) $validated['goal']),
             'message' => trim((string) $validated['message']),
+            'timeframe' => static::normalizeText($validated['timeframe'] ?? null),
+            'budget_range' => static::normalizeText($validated['budget_range'] ?? null),
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
             'source' => 'dashboard',
@@ -118,6 +122,8 @@ class ServiceLead extends Model
             'service_type' => $validated['service_type'],
             'goal' => trim((string) $validated['goal']),
             'message' => trim((string) $validated['message']),
+            'timeframe' => static::normalizeText($validated['timeframe'] ?? null),
+            'budget_range' => static::normalizeText($validated['budget_range'] ?? null),
             'preferred_contact' => $validated['preferred_contact'],
             'status' => 'new',
             'source' => 'public',
@@ -166,6 +172,8 @@ class ServiceLead extends Model
         $utmCampaign = static::normalizeText($lead['utm_campaign'] ?? null);
         $referrerUrl = static::normalizeUrl($lead['referrer_url'] ?? null);
         $referrerHost = $referrerUrl ? (parse_url($referrerUrl, PHP_URL_HOST) ?: null) : null;
+        $timeframe = static::normalizeText($lead['timeframe'] ?? null);
+        $budgetRange = static::normalizeText($lead['budget_range'] ?? null);
         $opportunity = static::opportunityMeta(
             (string) ($lead['service_type'] ?? 'general'),
             (string) ($lead['goal'] ?? ''),
@@ -176,7 +184,9 @@ class ServiceLead extends Model
             $utmSource,
             $utmMedium,
             $utmCampaign,
-            $referrerHost
+            $referrerHost,
+            $timeframe,
+            $budgetRange
         );
 
         $freshnessKey = 'fresh';
@@ -205,6 +215,10 @@ class ServiceLead extends Model
             'service_type' => $lead['service_type'] ?? 'general',
             'goal' => $lead['goal'] ?? '',
             'message' => $lead['message'] ?? '',
+            'timeframe' => $timeframe,
+            'timeframe_label' => static::timeframeOptions()[$timeframe] ?? 'לא צוין',
+            'budget_range' => $budgetRange,
+            'budget_range_label' => static::budgetRangeOptions()[$budgetRange] ?? 'לא צוין',
             'preferred_contact' => $lead['preferred_contact'] ?? 'email',
             'status' => $lead['status'] ?? 'new',
             'internal_note' => $lead['internal_note'] ?? '',
@@ -299,6 +313,27 @@ class ServiceLead extends Model
         ];
     }
 
+    public static function timeframeOptions(): array
+    {
+        return [
+            'urgent' => 'מיידית',
+            'month' => 'בחודש הקרוב',
+            'quarter' => 'ברבעון הקרוב',
+            'exploring' => 'רק בודק אפשרויות',
+        ];
+    }
+
+    public static function budgetRangeOptions(): array
+    {
+        return [
+            'unknown' => 'עדיין לא סגור',
+            'small' => 'עד 2,500 ש"ח',
+            'medium' => '2,500–7,500 ש"ח',
+            'large' => '7,500–20,000 ש"ח',
+            'enterprise' => '20,000+ ש"ח',
+        ];
+    }
+
     public static function sourceLabel(string $source, string $entryPoint): string
     {
         if ($source === 'dashboard') {
@@ -339,7 +374,9 @@ class ServiceLead extends Model
         ?string $utmSource,
         ?string $utmMedium,
         ?string $utmCampaign,
-        ?string $referrerHost
+        ?string $referrerHost,
+        ?string $timeframe,
+        ?string $budgetRange
     ): array {
         $score = 0;
 
@@ -379,6 +416,23 @@ class ServiceLead extends Model
         if (filled($referrerHost)) {
             $score += 6;
         }
+
+        $score += match ($timeframe) {
+            'urgent' => 16,
+            'month' => 12,
+            'quarter' => 7,
+            'exploring' => 2,
+            default => 0,
+        };
+
+        $score += match ($budgetRange) {
+            'enterprise' => 16,
+            'large' => 12,
+            'medium' => 8,
+            'small' => 4,
+            'unknown' => 2,
+            default => 0,
+        };
 
         $score = min(100, $score);
 
