@@ -940,6 +940,13 @@
                                                 <div class="lead-intel-row">
                                                     <span class="meta-note">איכות ליד: {{ $lead->opportunity_label }} · ציון {{ $lead->opportunity_score }}/100</span>
                                                 </div>
+                                                @if (!empty($lead->lead_tags))
+                                                    <div class="lead-intel-row">
+                                                        @foreach ($lead->lead_tags as $tag)
+                                                            <span class="status-pill {{ ($tag['tone'] ?? 'neutral') === 'good' ? 'is-good' : (($tag['tone'] ?? 'neutral') === 'warn' ? 'is-warn' : 'is-neutral') }}">{{ $tag['label'] }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
                                                 @if (!empty($lead->marketing_label) || !empty($lead->referrer_host))
                                                     <div class="lead-intel-row">
                                                         @if (!empty($lead->marketing_label))

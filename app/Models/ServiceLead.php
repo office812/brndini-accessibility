@@ -309,6 +309,18 @@ class ServiceLead extends Model
             'opportunity_key' => $opportunity['key'],
             'opportunity_label' => $opportunity['label'],
             'opportunity_tone' => $opportunity['tone'],
+            'lead_tags' => static::buildLeadTags(
+                (string) ($lead['service_type'] ?? 'general'),
+                $opportunity['key'],
+                $freshnessKey,
+                $source,
+                $businessType,
+                $budgetRange,
+                $urgencyLevel,
+                $assignedAdminName,
+                $followUpStatus['label'],
+                $followUpStatus['tone']
+            ),
             'user_name' => $lead['user_name'] ?? $contactName,
             'user_email' => $lead['user_email'] ?? $contactEmail,
             'contact_name' => $contactName,
@@ -765,5 +777,74 @@ class ServiceLead extends Model
             'timestamp' => $timestamp->toIso8601String(),
             'tone' => $tone,
         ];
+    }
+
+    protected static function buildLeadTags(
+        string $serviceType,
+        string $opportunityKey,
+        string $freshnessKey,
+        string $source,
+        ?string $businessType,
+        ?string $budgetRange,
+        ?string $urgencyLevel,
+        ?string $assignedAdminName,
+        string $followUpLabel,
+        string $followUpTone
+    ): array {
+        $tags = [];
+
+        $serviceLabel = match ($serviceType) {
+            'hosting' => 'אחסון',
+            'seo' => 'SEO',
+            'campaigns' => 'קמפיינים',
+            'maintenance' => 'תחזוקה',
+            'site_upgrade' => 'שדרוג אתר',
+            'landing_pages' => 'דפי נחיתה',
+            'automations' => 'אוטומציות',
+            'ecosystem_access' => 'מוצרים הבאים',
+            default => 'שירות',
+        };
+
+        $tags[] = ['label' => $serviceLabel, 'tone' => 'neutral'];
+
+        if ($opportunityKey === 'hot') {
+            $tags[] = ['label' => 'ליד חם', 'tone' => 'good'];
+        } elseif ($opportunityKey === 'warm') {
+            $tags[] = ['label' => 'איכותי', 'tone' => 'warn'];
+        }
+
+        if ($urgencyLevel === 'urgent') {
+            $tags[] = ['label' => 'דחוף', 'tone' => 'warn'];
+        }
+
+        if ($freshnessKey === 'stale') {
+            $tags[] = ['label' => 'דורש חזרה', 'tone' => 'warn'];
+        }
+
+        if ($followUpTone === 'good') {
+            $tags[] = ['label' => $followUpLabel, 'tone' => 'good'];
+        }
+
+        if ($source === 'public') {
+            $tags[] = ['label' => 'ציבורי', 'tone' => 'neutral'];
+        }
+
+        if ($businessType === 'ecommerce') {
+            $tags[] = ['label' => 'איקומרס', 'tone' => 'neutral'];
+        } elseif ($businessType === 'agency') {
+            $tags[] = ['label' => 'סוכנות', 'tone' => 'neutral'];
+        } elseif ($businessType === 'saas') {
+            $tags[] = ['label' => 'SaaS', 'tone' => 'neutral'];
+        }
+
+        if (in_array($budgetRange, ['large', 'enterprise'], true)) {
+            $tags[] = ['label' => 'תקציב גבוה', 'tone' => 'good'];
+        }
+
+        if (! filled($assignedAdminName)) {
+            $tags[] = ['label' => 'לא משויך', 'tone' => 'neutral'];
+        }
+
+        return collect($tags)->take(6)->values()->all();
     }
 }
