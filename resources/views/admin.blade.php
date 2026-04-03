@@ -963,6 +963,9 @@
                                                     <span class="status-pill {{ $lead->follow_up_tone === 'good' ? 'is-good' : ($lead->follow_up_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
                                                         {{ $lead->follow_up_label }}
                                                     </span>
+                                                    @if (!empty($lead->close_reason))
+                                                        <span class="status-pill is-warn">חסם: {{ $lead->close_reason_label }}</span>
+                                                    @endif
                                                 </div>
                                                 <div class="lead-quick-actions">
                                                     @if (!empty($lead->mail_to))
@@ -1031,6 +1034,15 @@
                                                             <option value="">לא משויך</option>
                                                             @foreach ($adminAssignableUsers as $assignableUser)
                                                                 <option value="{{ $assignableUser['email'] }}" @selected(($lead->assigned_admin_email ?? null) === $assignableUser['email'])>{{ $assignableUser['name'] }} · {{ $assignableUser['email'] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </label>
+                                                    <label>
+                                                        <span>סיבת סגירה / חסם</span>
+                                                        <select name="close_reason">
+                                                            <option value="">לא הוגדר</option>
+                                                            @foreach ($serviceLeadCloseReasonLabels as $reasonKey => $reasonLabel)
+                                                                <option value="{{ $reasonKey }}" @selected(($lead->close_reason ?? null) === $reasonKey)>{{ $reasonLabel }}</option>
                                                             @endforeach
                                                         </select>
                                                     </label>
@@ -1141,6 +1153,30 @@
                                             </div>
                                         @endforeach
                                     </div>
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">למה מאבדים לידים</p>
+                                            <h2>חסמים וסיבות סגירה</h2>
+                                        </div>
+                                    </div>
+                                    @if (($serviceLeadCloseReasonSummary ?? collect())->isEmpty())
+                                        <div class="support-empty-state compact-empty-state">
+                                            <strong>עדיין אין סיבות סגירה מתועדות</strong>
+                                            <p>ברגע שתתחיל לתייג חסמים על לידים, תראה כאן מה עוצר עסקאות באמת.</p>
+                                        </div>
+                                    @else
+                                        <div class="domain-info-list">
+                                            @foreach (($serviceLeadCloseReasonSummary ?? collect()) as $item)
+                                                <div class="domain-info-row">
+                                                    <span>{{ $item['label'] }}</span>
+                                                    <strong>{{ $item['count'] }}</strong>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </article>
 
                                 <article class="portal-content-card">

@@ -35,6 +35,7 @@ class ServiceLead extends Model
         'utm_campaign',
         'referrer_url',
         'internal_note',
+        'close_reason',
         'assigned_admin_name',
         'assigned_admin_email',
         'follow_up_at',
@@ -99,6 +100,7 @@ class ServiceLead extends Model
             'utm_campaign' => null,
             'referrer_url' => null,
             'internal_note' => '',
+            'close_reason' => null,
             'assigned_admin_name' => null,
             'assigned_admin_email' => null,
             'created_at' => $now->toIso8601String(),
@@ -152,6 +154,7 @@ class ServiceLead extends Model
             'utm_campaign' => static::normalizeText($validated['utm_campaign'] ?? null),
             'referrer_url' => static::normalizeUrl($validated['referrer_url'] ?? null),
             'internal_note' => '',
+            'close_reason' => null,
             'assigned_admin_name' => null,
             'assigned_admin_email' => null,
             'created_at' => $now->toIso8601String(),
@@ -202,6 +205,7 @@ class ServiceLead extends Model
         $budgetRange = static::normalizeText($lead['budget_range'] ?? null);
         $urgencyLevel = static::normalizeText($lead['urgency_level'] ?? null);
         $callbackWindow = static::normalizeText($lead['callback_window'] ?? null);
+        $closeReason = static::normalizeText($lead['close_reason'] ?? null);
         $assignedAdminName = static::normalizeText($lead['assigned_admin_name'] ?? null);
         $assignedAdminEmail = static::normalizeText($lead['assigned_admin_email'] ?? null);
         $activityHistory = collect($lead['activity_history'] ?? [])
@@ -290,6 +294,8 @@ class ServiceLead extends Model
             'preferred_contact' => $lead['preferred_contact'] ?? 'email',
             'status' => $lead['status'] ?? 'new',
             'internal_note' => $lead['internal_note'] ?? '',
+            'close_reason' => $closeReason,
+            'close_reason_label' => static::closeReasonOptions()[$closeReason] ?? 'לא צוין',
             'assigned_admin_name' => $assignedAdminName,
             'assigned_admin_email' => $assignedAdminEmail,
             'assigned_label' => $assignedAdminName ?: 'לא משויך',
@@ -488,6 +494,20 @@ class ServiceLead extends Model
             'afternoon' => 'אחר הצהריים',
             'evening' => 'ערב',
             'anytime' => 'כל שעה נוחה',
+        ];
+    }
+
+    public static function closeReasonOptions(): array
+    {
+        return [
+            'budget_mismatch' => 'תקציב לא מתאים',
+            'timing_not_right' => 'התזמון לא מתאים',
+            'no_response' => 'לא חזרו אלינו',
+            'not_relevant' => 'לא רלוונטי כרגע',
+            'went_elsewhere' => 'בחר ספק אחר',
+            'internal_pause' => 'הוקפא פנימית',
+            'just_exploring' => 'רק בדקו אפשרויות',
+            'other' => 'אחר',
         ];
     }
 
@@ -737,13 +757,16 @@ class ServiceLead extends Model
                 ? Carbon::parse($lead['follow_up_at'])->toDateString()
                 : null;
             $previousNote = trim((string) ($lead['internal_note'] ?? ''));
+            $previousCloseReason = static::normalizeText($lead['close_reason'] ?? null);
             $nextFollowUp = filled($validated['follow_up_at'] ?? null)
                 ? Carbon::parse($validated['follow_up_at'])->toDateString()
                 : null;
             $nextAssignee = $assignedAdmin?->name;
+            $nextCloseReason = static::normalizeText($validated['close_reason'] ?? null);
 
             $lead['status'] = $validated['status'];
             $lead['internal_note'] = trim((string) ($validated['internal_note'] ?? ''));
+            $lead['close_reason'] = $nextCloseReason;
             $lead['follow_up_at'] = $nextFollowUp;
             $lead['assigned_admin_name'] = $assignedAdmin?->name;
             $lead['assigned_admin_email'] = $assignedAdmin?->email;
@@ -768,6 +791,12 @@ class ServiceLead extends Model
 
             if ($previousNote !== $lead['internal_note']) {
                 $changes[] = filled($lead['internal_note']) ? 'הערה פנימית עודכנה' : 'הערה פנימית נוקתה';
+            }
+
+            if ($previousCloseReason !== $nextCloseReason) {
+                $changes[] = $nextCloseReason
+                    ? 'סיבת סגירה: ' . (static::closeReasonOptions()[$nextCloseReason] ?? 'עודכנה')
+                    : 'סיבת סגירה הוסרה';
             }
 
             $details = $changes !== [] ? implode(' · ', $changes) : 'בוצע עדכון ליד';

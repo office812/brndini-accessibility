@@ -147,6 +147,7 @@ class DashboardController extends Controller
                 'ערוץ חזרה',
                 'הפעולה הבאה',
                 'מועד חזרה',
+                'סיבת סגירה',
                 'עודכן לאחרונה',
                 'UTM',
                 'אתר מפנה',
@@ -181,6 +182,7 @@ class DashboardController extends Controller
                     $preferredContactLabels[$lead->preferred_contact_key ?? $lead->preferred_contact] ?? ($lead->preferred_contact ?? ''),
                     $lead->next_step_label,
                     $lead->follow_up_at,
+                    $lead->close_reason_label,
                     $lead->last_activity_label,
                     $lead->marketing_label,
                     $lead->referrer_host,
@@ -639,6 +641,7 @@ class DashboardController extends Controller
             'internal_note' => ['nullable', 'string', 'max:4000'],
             'assigned_admin_email' => ['nullable', 'email'],
             'follow_up_at' => ['nullable', 'date'],
+            'close_reason' => ['nullable', Rule::in(array_keys(ServiceLead::closeReasonOptions()))],
         ]);
 
         ServiceLead::updateRuntime($leadKey, $admin, $validated);
@@ -1118,6 +1121,17 @@ class DashboardController extends Controller
             ->filter(fn (array $item) => $item['count'] > 0)
             ->sortByDesc('weighted')
             ->values();
+        $serviceLeadCloseReasonSummary = collect(ServiceLead::closeReasonOptions())
+            ->map(function (string $label, string $key) use ($serviceLeads) {
+                return [
+                    'key' => $key,
+                    'label' => $label,
+                    'count' => $serviceLeads->where('close_reason', $key)->count(),
+                ];
+            })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->sortByDesc('count')
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -1154,6 +1168,7 @@ class DashboardController extends Controller
             'serviceLeadPerformanceSummary' => $serviceLeadPerformanceSummary,
             'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
             'serviceLeadServicePerformance' => $serviceLeadServicePerformance,
+            'serviceLeadCloseReasonSummary' => $serviceLeadCloseReasonSummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
@@ -1163,6 +1178,7 @@ class DashboardController extends Controller
             'serviceLeadBudgetLabels' => ServiceLead::budgetRangeOptions(),
             'serviceLeadUrgencyLabels' => ServiceLead::urgencyOptions(),
             'serviceLeadCallbackWindowLabels' => ServiceLead::callbackWindowOptions(),
+            'serviceLeadCloseReasonLabels' => ServiceLead::closeReasonOptions(),
             'superAdminUsersCount' => $superAdminUsersCount,
             'adminUsersCount' => $adminUsersCount,
             'clientUsersCount' => $clientUsersCount,
