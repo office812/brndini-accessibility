@@ -172,6 +172,7 @@ class ServiceLead extends Model
 
     public static function presentRuntime(array $lead): object
     {
+        $createdAt = isset($lead['created_at']) ? Carbon::parse($lead['created_at']) : null;
         $lastActivityAt = isset($lead['last_activity_at']) ? Carbon::parse($lead['last_activity_at']) : null;
         $source = $lead['source'] ?? 'dashboard';
         $contactName = $lead['contact_name'] ?? $lead['user_name'] ?? null;
@@ -252,6 +253,8 @@ class ServiceLead extends Model
             $urgencyLevel,
             $callbackWindow
         );
+        $ageStatus = static::ageMeta($createdAt);
+        $inactivityStatus = static::inactivityMeta($lastActivityAt);
 
         $freshnessKey = 'fresh';
         $freshnessLabel = 'חדש';
@@ -337,6 +340,7 @@ class ServiceLead extends Model
                 (string) ($lead['service_type'] ?? 'general'),
                 $opportunity['key'],
                 $freshnessKey,
+                $inactivityStatus['key'],
                 $source,
                 $businessType,
                 $budgetRange,
@@ -363,6 +367,16 @@ class ServiceLead extends Model
             'follow_up_tone' => $followUpStatus['tone'],
             'preferred_contact_key' => $preferredContact,
             'missing_preferred_contact_detail' => $missingPreferredContactDetail,
+            'created_at' => $createdAt?->toIso8601String(),
+            'created_at_label' => $createdAt?->diffForHumans() ?? 'לא ידוע',
+            'age_bucket' => $ageStatus['key'],
+            'age_bucket_label' => $ageStatus['label'],
+            'age_bucket_tone' => $ageStatus['tone'],
+            'age_bucket_days' => $ageStatus['days'],
+            'inactive_bucket' => $inactivityStatus['key'],
+            'inactive_bucket_label' => $inactivityStatus['label'],
+            'inactive_bucket_tone' => $inactivityStatus['tone'],
+            'inactive_bucket_days' => $inactivityStatus['days'],
             'next_step_label' => static::nextStepLabel(
                 $lead['status'] ?? 'new',
                 $preferredContact,
@@ -733,6 +747,102 @@ class ServiceLead extends Model
         ];
     }
 
+    protected static function ageMeta(?Carbon $createdAt): array
+    {
+        if (! $createdAt) {
+            return [
+                'key' => 'unknown',
+                'label' => 'גיל ליד לא ידוע',
+                'tone' => 'neutral',
+                'days' => null,
+            ];
+        }
+
+        $days = max(0, $createdAt->copy()->startOfDay()->diffInDays(now()->startOfDay()));
+
+        if ($days === 0) {
+            return [
+                'key' => 'today',
+                'label' => 'נוצר היום',
+                'tone' => 'good',
+                'days' => 0,
+            ];
+        }
+
+        if ($days <= 3) {
+            return [
+                'key' => 'recent',
+                'label' => 'חדש 1–3 ימים',
+                'tone' => 'good',
+                'days' => $days,
+            ];
+        }
+
+        if ($days <= 7) {
+            return [
+                'key' => 'aging',
+                'label' => 'יושב 4–7 ימים',
+                'tone' => 'warn',
+                'days' => $days,
+            ];
+        }
+
+        return [
+            'key' => 'stale',
+            'label' => 'וותיק 8+ ימים',
+            'tone' => 'warn',
+            'days' => $days,
+        ];
+    }
+
+    protected static function inactivityMeta(?Carbon $lastActivityAt): array
+    {
+        if (! $lastActivityAt) {
+            return [
+                'key' => 'unknown',
+                'label' => 'ללא היסטוריית נגיעה',
+                'tone' => 'neutral',
+                'days' => null,
+            ];
+        }
+
+        $days = max(0, $lastActivityAt->copy()->startOfDay()->diffInDays(now()->startOfDay()));
+
+        if ($days === 0) {
+            return [
+                'key' => 'today',
+                'label' => 'טופל היום',
+                'tone' => 'good',
+                'days' => 0,
+            ];
+        }
+
+        if ($days <= 2) {
+            return [
+                'key' => 'active',
+                'label' => 'נגיעה ב־48 שעות',
+                'tone' => 'good',
+                'days' => $days,
+            ];
+        }
+
+        if ($days <= 5) {
+            return [
+                'key' => 'waiting',
+                'label' => 'אין נגיעה 3–5 ימים',
+                'tone' => 'neutral',
+                'days' => $days,
+            ];
+        }
+
+        return [
+            'key' => 'stuck',
+            'label' => 'תקוע 6+ ימים',
+            'tone' => 'warn',
+            'days' => $days,
+        ];
+    }
+
     public static function updateRuntime(string $leadKey, User $admin, array $validated): void
     {
         $scope = static::runtimeScope();
@@ -897,6 +1007,7 @@ class ServiceLead extends Model
         string $serviceType,
         string $opportunityKey,
         string $freshnessKey,
+        string $inactiveBucket,
         string $source,
         ?string $businessType,
         ?string $budgetRange,
@@ -933,6 +1044,10 @@ class ServiceLead extends Model
 
         if ($freshnessKey === 'stale') {
             $tags[] = ['label' => 'דורש חזרה', 'tone' => 'warn'];
+        }
+
+        if ($inactiveBucket === 'stuck') {
+            $tags[] = ['label' => 'ללא נגיעה', 'tone' => 'warn'];
         }
 
         if ($followUpTone === 'good') {

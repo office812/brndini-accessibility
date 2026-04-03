@@ -795,6 +795,11 @@
                                 <p>חזרות שמתוזמנות להיום</p>
                             </article>
                             <article class="super-admin-kpi-card">
+                                <span class="super-admin-kpi-icon">🕒</span>
+                                <strong>{{ $adminSummary['service_leads_stuck'] ?? 0 }}</strong>
+                                <p>לידים תקועים בלי נגיעה</p>
+                            </article>
+                            <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🧑‍💼</span>
                                 <strong>{{ $adminServiceLeads->filter(fn ($lead) => filled($lead->assigned_admin_email ?? null))->count() }}</strong>
                                 <p>לידים שכבר שויכו למטפל</p>
@@ -963,6 +968,12 @@
                                                     <span class="status-pill {{ $lead->follow_up_tone === 'good' ? 'is-good' : ($lead->follow_up_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
                                                         {{ $lead->follow_up_label }}
                                                     </span>
+                                                    <span class="status-pill {{ $lead->age_bucket_tone === 'good' ? 'is-good' : ($lead->age_bucket_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                        {{ $lead->age_bucket_label }}
+                                                    </span>
+                                                    <span class="status-pill {{ $lead->inactive_bucket_tone === 'good' ? 'is-good' : ($lead->inactive_bucket_tone === 'warn' ? 'is-warn' : 'is-neutral') }}">
+                                                        {{ $lead->inactive_bucket_label }}
+                                                    </span>
                                                     @if (!empty($lead->close_reason))
                                                         <span class="status-pill is-warn">חסם: {{ $lead->close_reason_label }}</span>
                                                     @endif
@@ -1083,6 +1094,29 @@
                                             @endforeach
                                         </div>
                                     @endif
+                                </article>
+
+                                <article class="portal-content-card">
+                                    <div class="portal-card-head">
+                                        <div>
+                                            <p class="eyebrow">התיישנות ונגיעה</p>
+                                            <h2>גיל לידים ותקיעות בטיפול</h2>
+                                        </div>
+                                    </div>
+                                    <div class="domain-info-list">
+                                        @foreach (($serviceLeadAgeSummary ?? collect()) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                        @foreach (($serviceLeadInactivitySummary ?? collect()) as $item)
+                                            <div class="domain-info-row">
+                                                <span>{{ $item['label'] }}</span>
+                                                <strong>{{ $item['count'] }}</strong>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </article>
 
                                 <article class="portal-content-card">

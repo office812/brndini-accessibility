@@ -147,6 +147,9 @@ class DashboardController extends Controller
                 'ערוץ חזרה',
                 'הפעולה הבאה',
                 'מועד חזרה',
+                'נוצר',
+                'גיל ליד',
+                'ימים בלי נגיעה',
                 'סיבת סגירה',
                 'עודכן לאחרונה',
                 'UTM',
@@ -182,6 +185,9 @@ class DashboardController extends Controller
                     $preferredContactLabels[$lead->preferred_contact_key ?? $lead->preferred_contact] ?? ($lead->preferred_contact ?? ''),
                     $lead->next_step_label,
                     $lead->follow_up_at,
+                    $lead->created_at_label,
+                    $lead->age_bucket_label,
+                    $lead->inactive_bucket_label,
                     $lead->close_reason_label,
                     $lead->last_activity_label,
                     $lead->marketing_label,
@@ -1132,6 +1138,34 @@ class DashboardController extends Controller
             ->filter(fn (array $item) => $item['count'] > 0)
             ->sortByDesc('count')
             ->values();
+        $serviceLeadAgeSummary = collect([
+            'today' => 'נוצרו היום',
+            'recent' => 'חדשים 1–3 ימים',
+            'aging' => 'יושבים 4–7 ימים',
+            'stale' => 'וותיקים 8+ ימים',
+        ])->map(function (string $label, string $key) use ($serviceLeads) {
+            return [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('age_bucket', $key)->count(),
+            ];
+        })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
+        $serviceLeadInactivitySummary = collect([
+            'today' => 'טופלו היום',
+            'active' => 'נגיעה ב־48 שעות',
+            'waiting' => 'ללא נגיעה 3–5 ימים',
+            'stuck' => 'תקועים 6+ ימים',
+        ])->map(function (string $label, string $key) use ($serviceLeads) {
+            return [
+                'key' => $key,
+                'label' => $label,
+                'count' => $serviceLeads->where('inactive_bucket', $key)->count(),
+            ];
+        })
+            ->filter(fn (array $item) => $item['count'] > 0)
+            ->values();
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -1169,6 +1203,8 @@ class DashboardController extends Controller
             'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
             'serviceLeadServicePerformance' => $serviceLeadServicePerformance,
             'serviceLeadCloseReasonSummary' => $serviceLeadCloseReasonSummary,
+            'serviceLeadAgeSummary' => $serviceLeadAgeSummary,
+            'serviceLeadInactivitySummary' => $serviceLeadInactivitySummary,
             'serviceCatalog' => $this->serviceCatalog(),
             'servicePreferredContactLabels' => $this->servicePreferredContactLabels(),
             'serviceLeadStatusLabels' => $this->serviceLeadStatusLabels(),
@@ -1205,6 +1241,7 @@ class DashboardController extends Controller
                 'service_leads' => $serviceLeads->count(),
                 'service_leads_needing_action' => $serviceLeadActionQueue->count(),
                 'service_leads_due_today' => $serviceLeads->where('follow_up_tone', 'good')->count(),
+                'service_leads_stuck' => $serviceLeads->where('inactive_bucket', 'stuck')->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
         ];
@@ -1215,7 +1252,8 @@ class DashboardController extends Controller
         return in_array($lead->follow_up_tone ?? null, ['good', 'warn'], true)
             || ($lead->urgency_level ?? null) === 'urgent'
             || ($lead->opportunity_key ?? null) === 'hot'
-            || ($lead->freshness_key ?? null) === 'stale';
+            || ($lead->freshness_key ?? null) === 'stale'
+            || ($lead->inactive_bucket ?? null) === 'stuck';
     }
 
     private function serviceLeadActionPriority(object $lead): int
@@ -1240,6 +1278,12 @@ class DashboardController extends Controller
 
         if (($lead->freshness_key ?? null) === 'stale') {
             $priority += 20;
+        }
+
+        if (($lead->inactive_bucket ?? null) === 'stuck') {
+            $priority += 30;
+        } elseif (($lead->inactive_bucket ?? null) === 'waiting') {
+            $priority += 10;
         }
 
         if (($lead->status ?? null) === 'new') {
