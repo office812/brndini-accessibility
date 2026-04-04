@@ -533,6 +533,46 @@
         @include('partials.pricing-cards')
     </section>
 
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">למה זה חינמי</p>
+            <h2>המודל בנוי כך שהכלי עצמו יישאר פתוח, וברנדיני תצמח מסביב לשירותים ולמוצרים נוספים.</h2>
+            <p class="hero-text">
+                לא רצינו לבנות עוד מוצר שמסתיר את הערך מאחורי paywall. המטרה היא לתת לבעלי אתרים
+                כלי אמיתי שעובד כבר מהיום הראשון, ולחבר ממנו בהמשך רק את מי שבאמת צריך שכבת שירות
+                עסקית או מוצרים נוספים של Brndini.
+            </p>
+        </div>
+
+        <div class="transparency-grid">
+            <article class="transparency-card">
+                <span class="process-index">01</span>
+                <h3>פחות חיכוך, יותר התקנות</h3>
+                <p>כלי חינמי מאפשר לאנשים להתחיל מהר, להבין את הערך, ולהכניס את Brndini לעולם שלהם בלי חסם כניסה מיותר.</p>
+            </article>
+            <article class="transparency-card">
+                <span class="process-index">02</span>
+                <h3>דלת כניסה לאקו־סיסטם</h3>
+                <p>הווידג׳ט הוא נקודת פתיחה. אחריו אפשר להמשיך למוצרים נוספים או לשירותים עסקיים רק אם יש בזה צורך אמיתי.</p>
+            </article>
+            <article class="transparency-card">
+                <span class="process-index">03</span>
+                <h3>הפרדה ברורה בין מוצר לשירות</h3>
+                <p>הכלי נשאר self-service, ותמיכה טכנית נשארת טכנית. Brndini לא “מתחבאת” בתוך הווידג׳ט כשכבת שירות נגישות.</p>
+            </article>
+            <article class="transparency-card transparency-card-highlight">
+                <p class="eyebrow">מסר אחד ברור</p>
+                <h3>כלי חינמי שמייצר אמון, תנועה ולידים. שירותים רק כשצריך אותם באמת.</h3>
+                <ul class="compact-check-list">
+                    <li>אין פרימיום חובה כדי להתחיל</li>
+                    <li>אין שיחת מכירה כדי להפעיל את המוצר</li>
+                    <li>יש שכבת שירותים נפרדת למי שרוצה צמיחה</li>
+                    <li>יש שכבת מוצרים עתידית למי שרוצה להישאר קרוב ל־Brndini</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
     <section class="section-band section-band-plain" id="faq">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">שאלות נפוצות</p>
