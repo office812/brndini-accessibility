@@ -144,6 +144,48 @@
         </div>
     </section>
 
+    <section class="section-band">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">למי זה מתאים</p>
+            <h2>שלושה קהלים שמקבלים ערך מיידי מהמערכת בלי להתחיל מפרויקט מורכב.</h2>
+        </div>
+
+        <div class="audience-fit-grid">
+            <article class="audience-fit-card">
+                <span class="status-pill is-neutral">בעלי עסקים</span>
+                <h3>מי שרוצה להפעיל שכבת נגישות מהר, בלי להיתקע על טכני.</h3>
+                <p>חשבון אחד, אתר אחד, קוד אחד, ווידג׳ט מנוהל והצהרה בסיסית שאפשר להעלות תוך זמן קצר.</p>
+                <ul class="compact-check-list">
+                    <li>פתיחה מהירה של חשבון</li>
+                    <li>הטמעה פשוטה לאתר קיים</li>
+                    <li>שליטה בלי תלות במפתח</li>
+                </ul>
+            </article>
+
+            <article class="audience-fit-card">
+                <span class="status-pill is-neutral">סוכנויות</span>
+                <h3>מי שמנהל כמה אתרים ורוצה נקודת שליטה אחידה ולא עוד כאוס של תוספים.</h3>
+                <p>אותו תהליך התקנה, אותו דשבורד, אותה שכבת הצהרה ובקרה טכנית לכל לקוח או אתר.</p>
+                <ul class="compact-check-list">
+                    <li>ניהול כמה אתרים</li>
+                    <li>רישיונות והטמעות במקום אחד</li>
+                    <li>חוויית מוצר נוחה יותר ללקוחות</li>
+                </ul>
+            </article>
+
+            <article class="audience-fit-card">
+                <span class="status-pill is-neutral">צוותים פנימיים</span>
+                <h3>מי שצריך מערכת ברורה, שקופה וניתנת לניהול לאורך זמן.</h3>
+                <p>מעקב אחר מצב האתר, זיהוי התקנה, תמיכה טכנית וכלי בסיסי שנשאר זמין גם כשאין פרויקט שירות מלא מסביב.</p>
+                <ul class="compact-check-list">
+                    <li>בקרה טכנית פשוטה</li>
+                    <li>מסר ברור להנהלה ולצוות</li>
+                    <li>חיבור טבעי לאקו־סיסטם של Brndini</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
     <section class="cta-banner">
         <div>
             <p class="eyebrow">בדוק עכשיו אם האתר שלך נגיש</p>
@@ -446,6 +488,34 @@
             </a>
             <a class="ghost-button button-link" href="{{ route('products', $marketingParams) }}">לכל המוצרים הבאים</a>
             <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לכל שירותי Brndini</a>
+        </div>
+    </section>
+
+    <section class="section-band section-band-alt">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">מה עושים מכאן</p>
+            <h2>שלוש דרכים ברורות להמשיך מכאן, לפי מה שהעסק שלך צריך עכשיו.</h2>
+        </div>
+
+        <div class="ecosystem-route-grid">
+            <article class="ecosystem-route-card">
+                <span class="process-index">01</span>
+                <h3>רוצה רק את הכלי</h3>
+                <p>פותחים חשבון, מטמיעים את הקוד ומתחילים לעבוד עם הדשבורד והווידג׳ט.</p>
+                <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+            </article>
+            <article class="ecosystem-route-card">
+                <span class="process-index">02</span>
+                <h3>צריך שיפור עסקי באתר</h3>
+                <p>ממשיכים לשירותי Brndini לאחסון, SEO, קמפיינים, תחזוקה, שדרוג אתר או אוטומציות.</p>
+                <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לשירותי Brndini</a>
+            </article>
+            <article class="ecosystem-route-card">
+                <span class="process-index">03</span>
+                <h3>רוצה להיות ראשון בכלים הבאים</h3>
+                <p>נכנסים לרשימת הגישה המוקדמת של Brndini ועוקבים אחרי המוצרים החדשים שנפתחים.</p>
+                <a class="ghost-button button-link" href="{{ route('products', $marketingParams) }}">למוצרים הבאים</a>
+            </article>
         </div>
     </section>
 

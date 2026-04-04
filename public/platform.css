@@ -798,6 +798,43 @@ body.page-is-ready .auth-shell {
     box-shadow: var(--shadow-xs);
 }
 
+.audience-fit-grid,
+.ecosystem-route-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.audience-fit-card,
+.ecosystem-route-card {
+    display: grid;
+    gap: 12px;
+    padding: 24px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow-xs);
+}
+
+.audience-fit-card h3,
+.ecosystem-route-card h3 {
+    margin: 0;
+    font-size: 1.08rem;
+    font-family: var(--font-display);
+}
+
+.audience-fit-card p,
+.ecosystem-route-card p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.75;
+}
+
+.ecosystem-route-card .button-link {
+    margin-top: auto;
+    justify-self: start;
+}
+
 .enterprise-band-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);

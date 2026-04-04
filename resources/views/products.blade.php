@@ -59,6 +59,33 @@
         @include('partials.brndini-future-products')
     </section>
 
+    <section class="section-band section-band-alt">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">למי זה מתאים</p>
+            <h2>רשימת הגישה המוקדמת מיועדת לאנשים שרוצים להישאר קרובים למוצרים הבאים של Brndini.</h2>
+        </div>
+
+        <div class="audience-fit-grid">
+            <article class="audience-fit-card">
+                <span class="status-pill is-neutral">בעלי עסקים</span>
+                <h3>מי שרוצה להיחשף מוקדם לכלי צמיחה חדשים לפני כולם.</h3>
+                <p>אם האתר הוא מנוע עסקי אמיתי, יש יתרון בלהיות ברשימה מוקדם כשהכלים החדשים נפתחים.</p>
+            </article>
+
+            <article class="audience-fit-card">
+                <span class="status-pill is-neutral">סוכנויות</span>
+                <h3>מי שמחפש עוד שכבות מוצר שאפשר להכניס ללקוחות קיימים.</h3>
+                <p>גישה מוקדמת מאפשרת לזהות מהר כלים שיכולים להפוך להצעת ערך נוספת מול הלקוחות שלך.</p>
+            </article>
+
+            <article class="audience-fit-card">
+                <span class="status-pill is-neutral">מנהלי שיווק וצמיחה</span>
+                <h3>מי שרוצה סביבת עבודה חכמה יותר סביב תנועה, לידים ואוטומציה.</h3>
+                <p>לא עוד כלי בודד, אלא אקו־סיסטם שיכול להתרחב סביב העסק ולחבר כמה שכבות פעולה יחד.</p>
+            </article>
+        </div>
+    </section>
+
     <section class="section-band section-band-plain">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">למה להצטרף עכשיו</p>
@@ -87,6 +114,26 @@
             <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access', 'entry' => 'products-page'])) }}#public-service-form">
                 להצטרף לרשימת הגישה המוקדמת
             </a>
+        </div>
+    </section>
+
+    <section class="section-band">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">איך זה מתחבר למערכת הקיימת</p>
+            <h2>הווידג׳ט החינמי נשאר נקודת הכניסה, והכלים הבאים מרחיבים את סביבת העבודה של Brndini.</h2>
+        </div>
+
+        <div class="decision-grid">
+            <article class="decision-card decision-card-free">
+                <span class="status-pill is-neutral">מה קיים היום</span>
+                <strong>כלי חינמי, דשבורד, הצהרה בסיסית ושכבת ניהול טכנית.</strong>
+                <p>כבר עכשיו אפשר להטמיע, לנהל ולהישאר בתוך סביבת מוצר מסודרת בלי חיכוך.</p>
+            </article>
+            <article class="decision-card decision-card-services">
+                <span class="status-pill is-good">מה מתווסף בהמשך</span>
+                <strong>עוד מוצרים חכמים לצמיחה, תנועה, לידים, אוטומציה וביצועי אתר.</strong>
+                <p>המטרה היא לייצר אקו־סיסטם שמביא אנשים לברנדיני ונשאר רלוונטי גם אחרי התקנת הווידג׳ט.</p>
+            </article>
         </div>
     </section>
 @endsection
