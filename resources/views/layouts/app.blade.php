@@ -19,7 +19,11 @@
     {!! $globalTrackingScripts['meta_pixel_head'] ?? '' !!}
     {!! $globalTrackingScripts['custom_head_scripts'] ?? '' !!}
 </head>
-<body>
+@php($bodyClass = collect([
+    auth()->check() ? 'app-page' : 'public-page',
+    request()->routeIs('home') ? 'page-home' : null,
+])->filter()->implode(' '))
+<body class="{{ $bodyClass }}">
     {!! $globalTrackingScripts['google_tag_manager_body'] ?? '' !!}
     {!! $globalTrackingScripts['custom_body_scripts'] ?? '' !!}
     @php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
@@ -29,7 +33,7 @@
     <a class="skip-link" href="#main-content">דלג לתוכן הראשי</a>
     @php($siteRouteParams = isset($site) ? ['site' => $site->id] : [])
 
-    <div class="page-shell {{ auth()->check() ? 'page-shell-app' : '' }}">
+    <div class="page-shell {{ auth()->check() ? 'page-shell-app' : 'page-shell-public' }} {{ request()->routeIs('home') ? 'page-shell-home' : '' }}">
         @auth
             <header class="app-header">
                 <div class="app-header-brand">
