@@ -100,6 +100,7 @@
                         <a href="{{ route('home') }}#solutions">פתרונות</a>
                         <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
                         <a href="{{ route('audiences') }}">למי זה מתאים</a>
+                        <a href="{{ route('agencies') }}">לסוכנויות</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                         <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
@@ -169,6 +170,7 @@
                             <h3>המוצר</h3>
                             <a href="{{ route('home') }}#solutions">פתרונות</a>
                             <a href="{{ route('audiences') }}">למי זה מתאים</a>
+                            <a href="{{ route('agencies') }}">לסוכנויות</a>
                             <a href="{{ route('pricing') }}">מחירון</a>
                             <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                             <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
@@ -198,6 +200,7 @@
                     <div class="footer-inline-links">
                         <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('audiences') }}">למי זה מתאים</a>
+                        <a href="{{ route('agencies') }}">לסוכנויות</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                         <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>

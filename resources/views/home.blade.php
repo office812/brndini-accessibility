@@ -187,6 +187,7 @@
 
         <div class="magazine-actions">
             <a class="ghost-button button-link" href="{{ route('audiences') }}">לעמוד המלא: למי זה מתאים</a>
+            <a class="ghost-button button-link" href="{{ route('agencies') }}">לעמוד המלא: לסוכנויות</a>
         </div>
     </section>
 

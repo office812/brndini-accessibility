@@ -86,6 +86,10 @@
                 </ul>
             </article>
         </div>
+
+        <div class="magazine-actions">
+            <a class="ghost-button button-link" href="{{ route('agencies') }}">לעמוד הייעודי לסוכנויות</a>
+        </div>
     </section>
 
     <section class="section-band section-band-alt">
