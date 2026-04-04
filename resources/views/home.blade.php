@@ -15,7 +15,7 @@
 
             <div class="hero-action-row hero-action-row-center">
                 <a class="primary-button button-link" href="{{ route('register.show') }}">התחל ניסיון</a>
-                <a class="ghost-button button-link" href="#how-a11y-bridge-works">איך זה עובד</a>
+                <a class="ghost-button button-link" href="{{ route('how-it-works') }}">איך זה עובד</a>
             </div>
         </div>
 
@@ -141,6 +141,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="magazine-actions">
+            <a class="ghost-button button-link" href="{{ route('how-it-works') }}">לעמוד המלא: איך זה עובד</a>
         </div>
     </section>
 

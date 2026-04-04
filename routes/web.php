@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'home'])->name('home');
 Route::view('/about', 'about')->name('about');
+Route::view('/how-it-works', 'how-it-works')->name('how-it-works');
 Route::view('/for-whom', 'for-whom')->name('audiences');
 Route::view('/for-agencies', 'for-agencies')->name('agencies');
 Route::view('/pricing', 'pricing')->name('pricing');

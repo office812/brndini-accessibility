@@ -98,7 +98,7 @@
                 <div class="site-header-menu" id="site-menu-panel" data-header-menu-panel="site-menu">
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="{{ route('home') }}#solutions">פתרונות</a>
-                        <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
+                        <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                         <a href="{{ route('audiences') }}">למי זה מתאים</a>
                         <a href="{{ route('agencies') }}">לסוכנויות</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
@@ -190,7 +190,7 @@
                             <h3>התחלה מהירה</h3>
                             <a href="{{ route('register.show') }}">פתיחת חשבון</a>
                             <a href="{{ route('login.show') }}">התחברות</a>
-                            <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
+                            <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                         </div>
                     </div>
                 </div>

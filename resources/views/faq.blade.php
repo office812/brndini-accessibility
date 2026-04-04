@@ -15,6 +15,7 @@
             </p>
             <div class="hero-action-row">
                 <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                <a class="ghost-button button-link" href="{{ route('how-it-works') }}">איך זה עובד</a>
                 <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לשירותי Brndini</a>
             </div>
         </div>
