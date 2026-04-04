@@ -74,7 +74,17 @@
                         </div>
                     </div>
 
-                    <div class="flow-stage signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1">
+                    <div class="flow-progress-shell">
+                        <div class="flow-progress-track" aria-hidden="true">
+                            <span class="flow-progress-fill" data-flow-progress-fill></span>
+                        </div>
+                        <div class="flow-progress-meta">
+                            <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
+                            <span data-flow-progress-caption>מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.</span>
+                        </div>
+                    </div>
+
+                    <div class="flow-stage signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.">
                         <div class="flow-stage-head">
                             <strong>בוא נתחיל מהאתר עצמו</strong>
                             <p>מכניסים את הדומיין, ואנחנו מכינים סביבת עבודה וקוד הטמעה קבוע.</p>
@@ -86,7 +96,7 @@
                         <p class="signup-note">ניסיון חינם, בלי כרטיס אשראי. בהמשך נוסיף את שאר הפרטים.</p>
                     </div>
 
-                    <div class="flow-stage signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2">
+                    <div class="flow-stage signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="נותנים שם ברור לאתר ולעסק, כדי שהמערכת תהיה מסודרת מהרגע הראשון.">
                         <div class="flow-stage-head">
                             <strong>נבנה עבורך סביבת עבודה מסודרת</strong>
                             <p>שם אתר ושם חברה, כדי שהכול יהיה ברור בדשבורד מהיום הראשון.</p>
@@ -103,7 +113,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-stage signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3">
+                    <div class="flow-stage signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="פרטי הגישה והאישורים האחרונים, ואז החשבון מוכן.">
                         <div class="flow-stage-head">
                             <strong>יוצרים את החשבון ומסיימים</strong>
                             <p>עוד פרטי גישה בסיסיים והמערכת מוכנה.</p>

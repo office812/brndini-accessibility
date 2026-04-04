@@ -209,6 +209,16 @@
                         </div>
                     </div>
 
+                    <div class="flow-progress-shell">
+                        <div class="flow-progress-track" aria-hidden="true">
+                            <span class="flow-progress-fill" data-flow-progress-fill></span>
+                        </div>
+                        <div class="flow-progress-meta">
+                            <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
+                            <span data-flow-progress-caption>מגדירים את השירות ואת המטרה, כדי לחזור עם כיוון ברור.</span>
+                        </div>
+                    </div>
+
                     <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline">
                         <strong>הפנייה שלך כרגע</strong>
                         <div class="flow-summary-grid">
@@ -219,7 +229,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1">
+                    <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מגדירים את השירות ואת המטרה, כדי לחזור עם כיוון ברור.">
                         <div class="flow-stage-head">
                             <strong>במה בדיוק נוכל לעזור?</strong>
                             <p>שירות אחד ברור ומטרה אחת ברורה, כדי שנחזור עם כיוון מדויק.</p>
@@ -265,7 +275,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2">
+                    <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="קצב, דחיפות ותקציב עוזרים לנו להבין איך נכון לפתוח את השיחה.">
                         <div class="flow-stage-head">
                             <strong>נבין את המסגרת העסקית</strong>
                             <p>כמה פרטים שיעזרו לנו להבין תקציב, דחיפות וקצב התחלה.</p>
@@ -340,7 +350,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3">
+                    <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="עוד קצת הקשר ודרך חזרה, ואז הפנייה נכנסת ישירות למרכז הלידים.">
                         <div class="flow-stage-head">
                             <strong>עוד פרטי קשר קצרים ואפשר לשלוח</strong>
                             <p>כאן נסיים עם הדרך הנוחה לחזור אליך ועם כמה פרטים שיעזרו לנו להגיב מדויק יותר.</p>

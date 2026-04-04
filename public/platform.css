@@ -4840,6 +4840,48 @@ body.page-is-ready .auth-shell {
     align-items: end;
 }
 
+.flow-progress-shell {
+    display: grid;
+    gap: 8px;
+    padding: 10px 2px 2px;
+}
+
+.flow-progress-track {
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.06);
+    overflow: hidden;
+}
+
+.flow-progress-fill {
+    display: block;
+    width: 33.333%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #1d6dff 0%, #4a8cff 100%);
+    transition: width var(--motion-slow) ease;
+}
+
+.flow-progress-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.flow-progress-meta strong {
+    font-size: 0.86rem;
+    color: var(--page-ink);
+}
+
+.flow-progress-meta span {
+    color: var(--page-muted);
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
+
 .flow-wizard-stepper {
     display: flex;
     flex-wrap: wrap;
@@ -4983,6 +5025,11 @@ body.page-is-ready .auth-shell {
     gap: 14px;
 }
 
+.lead-wizard-form .primary-button,
+.auth-form-onboarding .primary-button {
+    min-height: 52px;
+}
+
 .lead-wizard-form .flow-stage,
 .auth-form-onboarding .flow-stage {
     backdrop-filter: blur(14px);
@@ -5066,6 +5113,10 @@ body.page-is-ready .auth-shell {
     .flow-wizard-intro-compact,
     .flow-summary-grid {
         grid-template-columns: 1fr;
+    }
+
+    .flow-progress-meta {
+        align-items: flex-start;
     }
 
     .flow-wizard-stepper {

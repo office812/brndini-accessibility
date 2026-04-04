@@ -393,6 +393,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var stages = Array.prototype.slice.call(form.querySelectorAll('[data-flow-stage]'));
     var stepInput = form.querySelector('[data-flow-step-input]');
     var stepButtons = Array.prototype.slice.call(form.querySelectorAll('[data-flow-step]'));
+    var progressFill = form.querySelector('[data-flow-progress-fill]');
+    var progressLabel = form.querySelector('[data-flow-progress-label]');
+    var progressCaption = form.querySelector('[data-flow-progress-caption]');
     var current = Number(stepInput && stepInput.value ? stepInput.value : 1);
 
     if (!stages.length) {
@@ -459,6 +462,43 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
+    function syncSuggestedFields() {
+      var domainField = form.querySelector('[name="domain"]');
+      var siteNameField = form.querySelector('[name="site_name"]');
+      var companyNameField = form.querySelector('[name="company_name"]');
+
+      if (domainField && siteNameField && !siteNameField.value.trim()) {
+        var rawDomain = domainField.value.trim()
+          .replace(/^https?:\/\//i, '')
+          .replace(/^www\./i, '')
+          .split('/')[0];
+
+        if (rawDomain) {
+          var guessedName = rawDomain.split('.')[0].replace(/[-_]+/g, ' ').trim();
+          if (guessedName) {
+            siteNameField.value = guessedName.replace(/\b\w/g, function (char) { return char.toUpperCase(); });
+          }
+        }
+      }
+
+      if (siteNameField && companyNameField && !companyNameField.value.trim() && siteNameField.value.trim()) {
+        companyNameField.value = siteNameField.value.trim();
+      }
+    }
+
+    function syncContactRequirements() {
+      var contactField = form.querySelector('[name="preferred_contact"]');
+      var phoneField = form.querySelector('[name="contact_phone"]');
+
+      if (!contactField || !phoneField) {
+        return;
+      }
+
+      var requiresPhone = contactField.value === 'phone' || contactField.value === 'whatsapp';
+      phoneField.required = requiresPhone;
+      phoneField.toggleAttribute('data-required-by-contact', requiresPhone);
+    }
+
     function render() {
       stages.forEach(function (stage, index) {
         stage.classList.toggle('is-active', index + 1 === current);
@@ -474,6 +514,20 @@ document.addEventListener('DOMContentLoaded', function () {
         stepInput.value = String(current);
       }
 
+      if (progressFill) {
+        progressFill.style.width = String((current / stages.length) * 100) + '%';
+      }
+
+      if (progressLabel) {
+        progressLabel.textContent = 'שלב ' + current + ' מתוך ' + stages.length;
+      }
+
+      if (progressCaption) {
+        var activeStage = findStage(current);
+        progressCaption.textContent = (activeStage && activeStage.getAttribute('data-flow-caption')) || '';
+      }
+
+      syncContactRequirements();
       updateSummary();
     }
 
@@ -508,10 +562,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     Array.prototype.slice.call(form.querySelectorAll('input, select, textarea')).forEach(function (field) {
-      field.addEventListener('input', updateSummary);
-      field.addEventListener('change', updateSummary);
+      field.addEventListener('input', function () {
+        syncSuggestedFields();
+        syncContactRequirements();
+        updateSummary();
+      });
+      field.addEventListener('change', function () {
+        syncSuggestedFields();
+        syncContactRequirements();
+        updateSummary();
+      });
     });
 
+    syncSuggestedFields();
+    syncContactRequirements();
     render();
   });
 
