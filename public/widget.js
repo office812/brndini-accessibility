@@ -572,6 +572,22 @@
       var toolbar = document.createElement('section');
       toolbar.className = 'ab-widget-toolbar';
 
+      var toolbarHead = document.createElement('div');
+      toolbarHead.className = 'ab-widget-toolbar-head';
+
+      var toolbarTitle = document.createElement('strong');
+      toolbarTitle.className = 'ab-widget-toolbar-title';
+      toolbarTitle.textContent = 'קפיצה מהירה והתאמות';
+
+      var toolbarCopy = document.createElement('span');
+      toolbarCopy.className = 'ab-widget-toolbar-copy';
+      toolbarCopy.textContent = planName === 'premium'
+        ? 'כל היכולות פתוחות כאן בגלילה אחת, עם חיפוש וקפיצה מהירה לאזור הרצוי.'
+        : 'החבילה החינמית פתוחה כאן במלואה, והיכולות המתקדמות מרוכזות בהמשך באותו חלון.';
+
+      toolbarHead.appendChild(toolbarTitle);
+      toolbarHead.appendChild(toolbarCopy);
+
       var shortcuts = document.createElement('div');
       shortcuts.className = 'ab-widget-shortcuts';
 
@@ -649,6 +665,7 @@
       searchWrap.appendChild(searchIcon);
       searchWrap.appendChild(searchInput);
       searchWrap.appendChild(searchMeta);
+      toolbar.appendChild(toolbarHead);
       toolbar.appendChild(shortcuts);
       toolbar.appendChild(searchWrap);
 
@@ -659,29 +676,124 @@
       var overview = document.createElement('section');
       overview.className = 'ab-widget-overview';
 
-      [
-        { label: 'מסלול', value: planName === 'premium' ? 'פרימיום' : 'חינם' },
-        { label: 'ציון', value: widgetConfig.audit && widgetConfig.audit.score ? String(widgetConfig.audit.score) : '—' },
-        { label: 'מצב', value: currentPrefs.profile !== 'none' ? 'פרופיל פעיל' : 'התאמה ידנית' },
-        { label: 'הצהרה', value: widgetConfig.statementUrl ? 'מחוברת' : 'חסרה' }
-      ].forEach(function (fact) {
-        var card = document.createElement('article');
-        card.className = 'ab-widget-overview-card';
+      var activeEntries = getActiveAdjustmentEntries(currentPrefs);
+      var unlockedFeatureCount = featureCatalog.filter(function (feature) {
+        return feature.plan !== 'premium' || planName === 'premium';
+      }).length;
+      var unlockedProfileCount = profiles.filter(function (profile) {
+        return profile.plan !== 'premium' || planName === 'premium';
+      }).length;
+      var scoreValue = widgetConfig.audit && widgetConfig.audit.score ? String(widgetConfig.audit.score) : '—';
 
-        var labelNode = document.createElement('span');
-        labelNode.className = 'ab-widget-overview-label';
-        labelNode.textContent = fact.label;
+      var hero = document.createElement('article');
+      hero.className = 'ab-widget-hero-card';
 
-        var valueNode = document.createElement('strong');
-        valueNode.className = 'ab-widget-overview-value';
-        valueNode.textContent = fact.value;
+      var heroCopy = document.createElement('div');
+      heroCopy.className = 'ab-widget-hero-copy';
 
-        card.appendChild(labelNode);
-        card.appendChild(valueNode);
-        overview.appendChild(card);
-      });
+      var heroEyebrow = document.createElement('span');
+      heroEyebrow.className = 'ab-widget-overview-label';
+      heroEyebrow.textContent = planName === 'premium' ? 'מרכז התאמות מלא' : 'כלי נגישות חינמי';
+
+      var heroTitle = document.createElement('strong');
+      heroTitle.className = 'ab-widget-hero-title';
+      heroTitle.textContent = planName === 'premium'
+        ? 'כל ההתאמות המתקדמות פתוחות עכשיו'
+        : 'רוב ההתאמות פתוחות כבר עכשיו, בלי חסימות בדרך';
+
+      var heroDescription = document.createElement('p');
+      heroDescription.className = 'ab-widget-hero-description';
+      heroDescription.textContent = planName === 'premium'
+        ? 'הפאנל נשאר פתוח, כל שינוי מוחל מיידית על האתר, וכל ההעדפות הפעילות נשמרות בדפדפן של המשתמש.'
+        : 'אפשר להתחיל עם טקסט, צבעים, מיקוד ופרופילים בסיסיים מייד. היכולות המתקדמות מרוכזות בהמשך בצורה מסודרת אם תרצו להתרחב.';
+
+      var heroPills = document.createElement('div');
+      heroPills.className = 'ab-widget-hero-pills';
+      heroPills.appendChild(createChip(widgetConfig.siteName || 'האתר שלך'));
+      heroPills.appendChild(createChip(planName === 'premium' ? 'פרימיום' : 'חינם', planName === 'premium' ? 'is-plan-premium' : 'is-plan-free'));
+      heroPills.appendChild(createChip('ציון ' + scoreValue, 'is-chip-muted'));
+      heroPills.appendChild(createChip(widgetConfig.statementUrl ? 'הצהרה מחוברת' : 'ללא הצהרה', widgetConfig.statementUrl ? 'is-chip-positive' : 'is-chip-muted'));
+
+      var heroActions = document.createElement('div');
+      heroActions.className = 'ab-widget-hero-actions';
+      heroActions.appendChild(createMiniMetric('פעיל עכשיו', activeEntries.length ? String(activeEntries.length) + ' התאמות' : 'מצב רגיל'));
+      heroActions.appendChild(createMiniMetric('פתוח במסלול', String(unlockedFeatureCount) + ' פקדים · ' + String(unlockedProfileCount) + ' פרופילים'));
+
+      heroCopy.appendChild(heroEyebrow);
+      heroCopy.appendChild(heroTitle);
+      heroCopy.appendChild(heroDescription);
+      heroCopy.appendChild(heroPills);
+      heroCopy.appendChild(heroActions);
+
+      var heroAside = document.createElement('div');
+      heroAside.className = 'ab-widget-hero-aside';
+      heroAside.appendChild(createOverviewFact('מצב', currentPrefs.profile !== 'none' ? 'פרופיל פעיל' : 'התאמה ידנית'));
+      heroAside.appendChild(createOverviewFact('העדפות', activeEntries.length ? String(activeEntries.length) + ' פעילות' : 'אין פעילות'));
+      heroAside.appendChild(createOverviewFact('שכבת אתר', widgetConfig.statementUrl ? 'מחוברת' : 'בסיסית'));
+
+      hero.appendChild(heroCopy);
+      hero.appendChild(heroAside);
+      overview.appendChild(hero);
+
+      var promiseRail = document.createElement('div');
+      promiseRail.className = 'ab-widget-promise-rail';
+      promiseRail.appendChild(createPromiseCard('חל מיידית', 'כל שינוי מיושם ישר באתר, בלי רענון ובלי סגירה של הפאנל.'));
+      promiseRail.appendChild(createPromiseCard('נשמר בדפדפן', 'ההתאמות הפעילות נשמרות למשתמש וחוזרות גם בביקור הבא.'));
+      promiseRail.appendChild(createPromiseCard(planName === 'premium' ? 'שכבה מלאה' : 'חינם קודם', planName === 'premium' ? 'כל היכולות פתוחות כאן בגלילה אחת רציפה.' : 'החינם בנוי להיות שימושי באמת, והמתקדם נשאר כשלב הבא.'));
+      overview.appendChild(promiseRail);
 
       return overview;
+    }
+
+    function createOverviewFact(label, value) {
+      var card = document.createElement('article');
+      card.className = 'ab-widget-overview-card';
+
+      var labelNode = document.createElement('span');
+      labelNode.className = 'ab-widget-overview-label';
+      labelNode.textContent = label;
+
+      var valueNode = document.createElement('strong');
+      valueNode.className = 'ab-widget-overview-value';
+      valueNode.textContent = value;
+
+      card.appendChild(labelNode);
+      card.appendChild(valueNode);
+      return card;
+    }
+
+    function createMiniMetric(label, value) {
+      var metric = document.createElement('div');
+      metric.className = 'ab-widget-hero-metric';
+
+      var labelNode = document.createElement('span');
+      labelNode.className = 'ab-widget-hero-metric-label';
+      labelNode.textContent = label;
+
+      var valueNode = document.createElement('strong');
+      valueNode.className = 'ab-widget-hero-metric-value';
+      valueNode.textContent = value;
+
+      metric.appendChild(labelNode);
+      metric.appendChild(valueNode);
+      return metric;
+    }
+
+    function createPromiseCard(title, copy) {
+      var card = document.createElement('article');
+      card.className = 'ab-widget-promise-card';
+
+      var titleNode = document.createElement('strong');
+      titleNode.className = 'ab-widget-promise-title';
+      titleNode.textContent = title;
+
+      var copyNode = document.createElement('p');
+      copyNode.className = 'ab-widget-promise-copy';
+      copyNode.textContent = copy;
+
+      card.appendChild(titleNode);
+      card.appendChild(copyNode);
+      return card;
     }
 
     function createActiveStateCard(currentPrefs) {
@@ -1049,6 +1161,11 @@
       descNode.className = 'ab-widget-card-copy';
       descNode.textContent = 'המסלול החינמי כבר נותן את רוב ההתאמות. פרימיום פותח פרופילים חכמים, שליטה עמוקה יותר בטקסט ותצוגה, וכלי מיקוד מתקדמים.';
 
+      var comparison = document.createElement('div');
+      comparison.className = 'ab-widget-premium-compare';
+      comparison.appendChild(createCompareRow('כבר פתוח בחינם', 'טקסט, צבעים, ניגודיות, מיקוד ופרופילים בסיסיים.'));
+      comparison.appendChild(createCompareRow('נפתח בפרימיום', 'פרופילים ייעודיים, שליטה עמוקה יותר ומסלולי עבודה מתקדמים.'));
+
       var stats = document.createElement('div');
       stats.className = 'ab-widget-premium-stats';
 
@@ -1105,12 +1222,30 @@
 
       card.appendChild(titleNode);
       card.appendChild(descNode);
+      card.appendChild(comparison);
       card.appendChild(stats);
       card.appendChild(grid);
       card.appendChild(actionWrap);
       section.appendChild(card);
 
       return section;
+    }
+
+    function createCompareRow(label, value) {
+      var row = document.createElement('div');
+      row.className = 'ab-widget-compare-row';
+
+      var labelNode = document.createElement('strong');
+      labelNode.className = 'ab-widget-compare-label';
+      labelNode.textContent = label;
+
+      var valueNode = document.createElement('span');
+      valueNode.className = 'ab-widget-compare-value';
+      valueNode.textContent = value;
+
+      row.appendChild(labelNode);
+      row.appendChild(valueNode);
+      return row;
     }
 
     function createLockButton(url) {
@@ -1283,9 +1418,13 @@
       .ab-widget-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
       .ab-widget-chip{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#0b1220;color:#fff;font-size:12px;font-weight:700;}
       .ab-widget-chip.is-chip-muted{background:rgba(15,23,42,.05);color:#0f172a;}
+      .ab-widget-chip.is-chip-positive{background:rgba(21,128,61,.1);color:#166534;}
       .ab-widget-chip.is-plan-free{background:rgba(21,128,61,.1);color:#166534;}
       .ab-widget-chip.is-plan-premium{background:rgba(124,58,237,.12);color:#6d28d9;}
       .ab-widget-toolbar{display:grid;gap:10px;padding:12px 14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(247,250,253,.96));border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
+      .ab-widget-toolbar-head{display:grid;gap:3px;}
+      .ab-widget-toolbar-title{font-size:13px;font-weight:800;}
+      .ab-widget-toolbar-copy{color:#64748b;font-size:12px;line-height:1.55;}
       .ab-widget-shortcuts{display:flex;flex-wrap:wrap;gap:8px;}
       .ab-widget-shortcut{min-height:34px;padding:0 12px;border:1px solid rgba(15,23,42,.08);border-radius:999px;background:rgba(255,255,255,.82);color:#334155;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease,color var(--ab-motion-fast) ease;}
       .ab-widget-shortcut:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(15,23,42,.08);background:rgba(29,109,255,.08);color:#0d3ea7;}
@@ -1296,7 +1435,21 @@
       .ab-widget-search-input::placeholder{color:#94a3b8;font-weight:600;}
       .ab-widget-search-meta{font-size:11px;color:#64748b;font-weight:800;white-space:nowrap;}
       .ab-widget-body{display:grid;gap:14px;margin-top:14px;}
-      .ab-widget-overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+      .ab-widget-overview{display:grid;gap:10px;}
+      .ab-widget-hero-card{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(220px,.95fr);gap:12px;padding:15px;border-radius:22px;background:linear-gradient(135deg,rgba(29,109,255,.12),rgba(255,255,255,.92) 42%,rgba(124,58,237,.08));border:1px solid rgba(29,109,255,.12);box-shadow:0 14px 32px rgba(29,109,255,.08);}
+      .ab-widget-hero-copy{display:grid;gap:10px;min-width:0;}
+      .ab-widget-hero-title{font-size:22px;line-height:1.15;font-weight:900;letter-spacing:-.03em;}
+      .ab-widget-hero-description{margin:0;color:#475569;font-size:13px;line-height:1.75;}
+      .ab-widget-hero-pills{display:flex;flex-wrap:wrap;gap:8px;}
+      .ab-widget-hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+      .ab-widget-hero-metric{display:grid;gap:3px;padding:11px 12px;border-radius:16px;background:rgba(255,255,255,.76);border:1px solid rgba(255,255,255,.7);box-shadow:0 10px 18px rgba(15,23,42,.04);}
+      .ab-widget-hero-metric-label{font-size:11px;color:#64748b;font-weight:800;letter-spacing:.03em;text-transform:uppercase;}
+      .ab-widget-hero-metric-value{font-size:13px;font-weight:900;line-height:1.5;}
+      .ab-widget-hero-aside{display:grid;gap:10px;align-content:start;}
+      .ab-widget-promise-rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+      .ab-widget-promise-card{display:grid;gap:5px;padding:12px 13px;border-radius:18px;background:rgba(255,255,255,.76);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
+      .ab-widget-promise-title{font-size:12px;font-weight:900;color:#0f172a;}
+      .ab-widget-promise-copy{margin:0;color:#64748b;font-size:11px;line-height:1.65;}
       .ab-widget-overview-card{display:grid;gap:4px;padding:12px 13px;border-radius:16px;background:rgba(255,255,255,.72);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
       .ab-widget-overview-label{font-size:11px;color:#64748b;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
       .ab-widget-overview-value{font-size:15px;font-weight:800;}
@@ -1343,6 +1496,10 @@
       .ab-widget-premium-stat strong{font-size:12px;font-weight:800;}
       .ab-widget-premium-stat span{font-size:11px;color:#64748b;line-height:1.55;}
       .ab-widget-premium-stat.is-highlight{background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(236,72,153,.08));border-color:rgba(124,58,237,.16);}
+      .ab-widget-premium-compare{display:grid;gap:8px;}
+      .ab-widget-compare-row{display:grid;gap:2px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.72);border:1px solid rgba(124,58,237,.08);}
+      .ab-widget-compare-label{font-size:11px;font-weight:900;color:#4c1d95;text-transform:uppercase;letter-spacing:.05em;}
+      .ab-widget-compare-value{color:#64748b;font-size:12px;line-height:1.65;}
       .ab-widget-premium-more{margin:0;grid-column:1 / -1;color:#6d28d9;font-size:12px;font-weight:800;text-align:center;}
       .ab-widget-upgrade-list{margin:0;padding:0;list-style:none;display:grid;gap:6px;color:#4c1d95;font-size:12px;font-weight:700;}
       .ab-widget-upgrade-list li{position:relative;padding-right:16px;line-height:1.6;}
@@ -1386,6 +1543,7 @@
         .ab-widget-panel{width:min(520px,calc(100vw - 24px));max-height:min(78vh,760px);padding:16px;}
         .ab-widget-search{grid-template-columns:1fr;}
         .ab-widget-search-icon,.ab-widget-search-meta{display:none;}
+        .ab-widget-hero-card,
         .ab-widget-overview,
         .ab-widget-sections,
         .ab-widget-sections.ab-layout-split,
@@ -1393,7 +1551,9 @@
         .ab-widget-grid-profiles,
         .ab-widget-premium-list,
         .ab-widget-premium-stats,
-        .ab-widget-choice-group{grid-template-columns:1fr;}
+        .ab-widget-choice-group,
+        .ab-widget-promise-rail,
+        .ab-widget-hero-actions{grid-template-columns:1fr;}
         .ab-widget-section-head{grid-template-columns:auto 1fr;}
         .ab-widget-section-badge{grid-column:1 / -1;justify-self:start;}
       }
@@ -1405,12 +1565,15 @@
         .ab-widget-toolbar{padding:12px;}
         .ab-widget-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
         .ab-widget-shortcut{justify-content:center;}
+        .ab-widget-hero-card,
         .ab-widget-overview,
         .ab-widget-sections.ab-layout-split,
         .ab-widget-grid,
         .ab-widget-grid-profiles,
         .ab-widget-premium-list,
-        .ab-widget-premium-stats{grid-template-columns:1fr;}
+        .ab-widget-premium-stats,
+        .ab-widget-promise-rail,
+        .ab-widget-hero-actions{grid-template-columns:1fr;}
         .ab-widget-header{align-items:flex-start;}
         .ab-widget-header-actions{width:100%;justify-content:flex-end;}
         .ab-widget-section-head{grid-template-columns:auto 1fr;}
