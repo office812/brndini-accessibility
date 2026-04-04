@@ -751,47 +751,47 @@
                         <section class="super-admin-kpi-grid super-admin-kpi-grid-compact">
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🚀</span>
-                                <strong>{{ $adminServiceLeads->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['total'] ?? 0 }}</strong>
                                 <p>לידים לשירותי Brndini</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🌐</span>
-                                <strong>{{ $adminServiceLeads->pluck('site_name')->filter()->unique()->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['unique_sites'] ?? 0 }}</strong>
                                 <p>אתרים שביקשו שירות</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">📬</span>
-                                <strong>{{ $adminServiceLeads->pluck('user_email')->filter()->unique()->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['unique_contacts'] ?? 0 }}</strong>
                                 <p>לקוחות שפנו</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">✅</span>
-                                <strong>{{ $adminServiceLeads->where('status', 'won')->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['won'] ?? 0 }}</strong>
                                 <p>נסגרו כלקוח</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🔥</span>
-                                <strong>{{ $adminServiceLeads->where('opportunity_key', 'hot')->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['hot'] ?? 0 }}</strong>
                                 <p>לידים חמים</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">↗</span>
-                                <strong>{{ $adminServiceLeads->where('source', 'public')->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['public'] ?? 0 }}</strong>
                                 <p>לידים מהאתר הציבורי</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🪄</span>
-                                <strong>{{ $adminServiceLeads->where('service_type', 'ecosystem_access')->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['ecosystem_access'] ?? 0 }}</strong>
                                 <p>עניין במוצרים הבאים</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">⏰</span>
-                                <strong>{{ $adminServiceLeads->where('freshness_key', 'stale')->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['stale'] ?? 0 }}</strong>
                                 <p>לידים שדורשים חזרה</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">📅</span>
-                                <strong>{{ $adminServiceLeads->where('follow_up_tone', 'good')->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['due_today'] ?? 0 }}</strong>
                                 <p>חזרות שמתוזמנות להיום</p>
                             </article>
                             <article class="super-admin-kpi-card">
@@ -806,12 +806,12 @@
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">🧑‍💼</span>
-                                <strong>{{ $adminServiceLeads->filter(fn ($lead) => filled($lead->assigned_admin_email ?? null))->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['assigned'] ?? 0 }}</strong>
                                 <p>לידים שכבר שויכו למטפל</p>
                             </article>
                             <article class="super-admin-kpi-card">
                                 <span class="super-admin-kpi-icon">📌</span>
-                                <strong>{{ $adminServiceLeads->filter(fn ($lead) => blank($lead->assigned_admin_email ?? null))->count() }}</strong>
+                                <strong>{{ $serviceLeadKpis['unassigned'] ?? 0 }}</strong>
                                 <p>לידים שעדיין לא משויכים</p>
                             </article>
                             <article class="super-admin-kpi-card">
@@ -1135,24 +1135,13 @@
                                                     <span class="status-pill is-good">שווי: {{ $lead->budget_estimate_label }}</span>
                                                     <span class="status-pill is-neutral">משוקלל: {{ $lead->weighted_estimate_label }}</span>
                                                 </div>
-                                                @php
-                                                    $nextStatuses = match($lead->status) {
-                                                        'new' => ['contacted' => 'סמן נוצר קשר', 'qualified' => 'סמן רלוונטי'],
-                                                        'contacted' => ['qualified' => 'סמן רלוונטי', 'proposal' => 'סמן נשלחה הצעה'],
-                                                        'qualified' => ['proposal' => 'סמן נשלחה הצעה', 'won' => 'סמן נסגר כלקוח'],
-                                                        'proposal' => ['won' => 'סמן נסגר כלקוח', 'closed' => 'סמן נסגר'],
-                                                        'won' => ['closed' => 'סמן נסגר'],
-                                                        'closed' => ['contacted' => 'פתח מחדש לנוצר קשר'],
-                                                        default => [],
-                                                    };
-                                                @endphp
-                                                @if (!empty($nextStatuses))
+                                                @if (!empty($lead->next_statuses))
                                                     <div class="lead-status-shortcuts">
-                                                        @foreach ($nextStatuses as $statusKey => $statusCta)
+                                                        @foreach ($lead->next_statuses as $nextStatus)
                                                             <form method="POST" action="{{ route('dashboard.super-admin.leads.update', $lead->update_key) }}">
                                                                 @csrf
-                                                                <input type="hidden" name="quick_status" value="{{ $statusKey }}">
-                                                                <button class="secondary-button" type="submit">{{ $statusCta }}</button>
+                                                                <input type="hidden" name="quick_status" value="{{ $nextStatus['key'] }}">
+                                                                <button class="secondary-button" type="submit">{{ $nextStatus['label'] }}</button>
                                                             </form>
                                                         @endforeach
                                                     </div>
@@ -1827,41 +1816,41 @@
                                         @foreach ($serviceCatalog as $serviceKey => $service)
                                             <div class="domain-info-row">
                                                 <span>{{ $service['label'] }}</span>
-                                                <strong>{{ $adminServiceLeads->where('service_type', $serviceKey)->count() }}</strong>
+                                                <strong>{{ $serviceLeadDemandMetrics['services_indexed'][$serviceKey] ?? 0 }}</strong>
                                             </div>
                                         @endforeach
 
                                         <div class="domain-info-row">
                                             <span>חדשים</span>
-                                            <strong>{{ $adminServiceLeads->where('status', 'new')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['new'] ?? 0 }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>בהצעה</span>
-                                            <strong>{{ $adminServiceLeads->where('status', 'proposal')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['proposal'] ?? 0 }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>נסגרו כלקוח</span>
-                                            <strong>{{ $adminServiceLeads->where('status', 'won')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['won'] ?? 0 }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>מהאתר הציבורי</span>
-                                            <strong>{{ $adminServiceLeads->where('source', 'public')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['public'] ?? 0 }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>מתוך הדשבורד</span>
-                                            <strong>{{ $adminServiceLeads->where('source', 'dashboard')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['dashboard'] ?? 0 }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>עניין במוצרים הבאים</span>
-                                            <strong>{{ $adminServiceLeads->where('service_type', 'ecosystem_access')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['ecosystem_access'] ?? 0 }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>דורשים חזרה</span>
-                                            <strong>{{ $adminServiceLeads->where('freshness_key', 'stale')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['stale'] ?? 0 }}</strong>
                                         </div>
                                         <div class="domain-info-row">
                                             <span>לחזור היום</span>
-                                            <strong>{{ $adminServiceLeads->where('follow_up_tone', 'good')->count() }}</strong>
+                                            <strong>{{ $serviceLeadDemandMetrics['due_today'] ?? 0 }}</strong>
                                         </div>
                                     </div>
                                 </article>

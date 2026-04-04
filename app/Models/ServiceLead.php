@@ -460,6 +460,35 @@ class ServiceLead extends Model
         };
     }
 
+    public static function quickStatusOptions(string $status): array
+    {
+        return match ($status) {
+            'new' => [
+                'contacted' => 'סמן נוצר קשר',
+                'qualified' => 'סמן רלוונטי',
+            ],
+            'contacted' => [
+                'qualified' => 'סמן רלוונטי',
+                'proposal' => 'סמן נשלחה הצעה',
+            ],
+            'qualified' => [
+                'proposal' => 'סמן נשלחה הצעה',
+                'won' => 'סמן נסגר כלקוח',
+            ],
+            'proposal' => [
+                'won' => 'סמן נסגר כלקוח',
+                'closed' => 'סמן נסגר',
+            ],
+            'won' => [
+                'closed' => 'סמן נסגר',
+            ],
+            'closed' => [
+                'contacted' => 'פתח מחדש לנוצר קשר',
+            ],
+            default => [],
+        };
+    }
+
     public static function sourceOptions(): array
     {
         return [

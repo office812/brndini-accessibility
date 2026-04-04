@@ -267,31 +267,44 @@
   });
 
   injectStyles();
+  loadWidgetConfig();
 
-  fetch(platformOrigin + '/api/public/widget-config/' + encodeURIComponent(siteKey))
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (payload) {
-      if (payload && payload.inactive) {
-        renderInactiveWidget(payload);
-        return;
-      }
-
-      if (!payload.success || !payload.data) {
-        throw new Error('Missing widget config.');
-      }
-
-      reportWidgetSeen(payload.data);
-      renderWidget(payload.data);
-    })
-    .catch(function () {
-      renderInactiveWidget({
-        inactive: true,
-        siteName: 'A11Y Bridge',
-        purchaseUrl: purchaseFallbackUrl
-      });
+  function clearRenderedWidget() {
+    document.querySelectorAll('.ab-widget-shell').forEach(function (node) {
+      node.remove();
     });
+  }
+
+  function loadWidgetConfig() {
+    clearRenderedWidget();
+
+    fetch(platformOrigin + '/api/public/widget-config/' + encodeURIComponent(siteKey))
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error('Widget config request failed with status ' + response.status);
+        }
+
+        return response.json();
+      })
+      .then(function (payload) {
+        if (payload && payload.inactive) {
+          renderInactiveWidget(payload);
+          return;
+        }
+
+        if (!payload || !payload.success || !payload.data) {
+          throw new Error('Missing widget config.');
+        }
+
+        reportWidgetSeen(payload.data);
+        renderWidget(payload.data);
+      })
+      .catch(function () {
+        renderUnavailableWidget({
+          siteName: 'A11Y Bridge'
+        }, loadWidgetConfig);
+      });
+  }
 
   function normalizePlan(plan) {
     if (plan === 'premium' || plan === 'growth' || plan === 'agency') {
@@ -1362,6 +1375,48 @@
     document.body.appendChild(shell);
   }
 
+  function renderUnavailableWidget(payload, retryFn) {
+    var shell = document.createElement('div');
+    shell.className = 'ab-widget-shell ab-' + (forcedPosition || 'bottom-left') + ' ab-comfortable';
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'ab-widget-button ab-widget-unavailable ab-mode-icon-label ab-style-midnight';
+    button.setAttribute('aria-label', 'נגישות זמנית לא זמינה');
+
+    var buttonGlow = document.createElement('span');
+    buttonGlow.className = 'ab-widget-button-glow';
+    buttonGlow.setAttribute('aria-hidden', 'true');
+
+    var buttonIcon = document.createElement('span');
+    buttonIcon.className = 'ab-widget-button-icon';
+    buttonIcon.setAttribute('aria-hidden', 'true');
+    buttonIcon.innerHTML = getWidgetIconSvg('pulse');
+
+    var buttonLabel = document.createElement('span');
+    buttonLabel.className = 'ab-widget-button-label';
+    buttonLabel.textContent = 'נגישות זמנית לא זמינה';
+
+    button.appendChild(buttonGlow);
+    button.appendChild(buttonIcon);
+    button.appendChild(buttonLabel);
+
+    button.addEventListener('click', function () {
+      shell.remove();
+      if (typeof retryFn === 'function') {
+        retryFn();
+      }
+    });
+
+    var note = document.createElement('div');
+    note.className = 'ab-widget-unavailable-note';
+    note.textContent = 'לא הצלחנו לטעון את ההגדרות כרגע. לחץ כדי לנסות שוב.';
+
+    shell.appendChild(button);
+    shell.appendChild(note);
+    document.body.appendChild(shell);
+  }
+
   function injectStyles() {
     if (document.getElementById('ab-widget-styles')) {
       return;
@@ -1396,6 +1451,7 @@
       .ab-widget-button.ab-preset-elegant{background:linear-gradient(135deg,#1f2937,#67553d 88%);}
       .ab-widget-button.ab-preset-bold{background:linear-gradient(135deg,#7c3aed,#ec4899 88%);}
       .ab-widget-button.ab-license-inactive{background:linear-gradient(135deg,#d92d20,#7a0510);}
+      .ab-widget-button.ab-widget-unavailable{background:linear-gradient(135deg,#0f172a,#1d4ed8 88%);}
       .ab-widget-panel{width:min(470px,calc(100vw - 28px));max-height:min(82vh,760px);overflow:auto;border-radius:var(--ab-radius);background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(244,248,252,.96));color:#0f172a;border:1px solid rgba(255,255,255,.76);box-shadow:0 30px 90px rgba(15,23,42,.16);padding:16px;position:relative;opacity:0;transform:translateY(12px) scale(.985);visibility:hidden;pointer-events:none;backdrop-filter:blur(22px);}
       .ab-widget-panel::before{content:"";position:absolute;inset:0 0 auto 0;height:120px;border-radius:inherit;background:radial-gradient(circle at top right,rgba(29,109,255,.14),transparent 58%);pointer-events:none;}
       .ab-widget-panel.ab-preset-high-tech{background:linear-gradient(180deg,rgba(245,249,255,.96),rgba(231,239,252,.98));}
@@ -1515,6 +1571,7 @@
       .ab-widget-footer{display:grid;gap:10px;padding-top:14px;border-top:1px solid rgba(15,23,42,.08);}
       .ab-widget-note{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
       .ab-widget-inactive-note{max-width:230px;padding:10px 14px;border-radius:14px;background:rgba(217,45,32,.1);color:#7a0510;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(122,5,16,.08);}
+      .ab-widget-unavailable-note{max-width:250px;padding:10px 14px;border-radius:14px;background:rgba(29,78,216,.12);color:#1e3a8a;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(29,78,216,.08);}
       .ab-widget-shell.ab-is-updating .ab-widget-panel{box-shadow:0 32px 96px rgba(29,109,255,.18);border-color:rgba(29,109,255,.16);}
       .ab-reading-guide{position:fixed;left:0;right:0;height:72px;pointer-events:none;z-index:999998;background:linear-gradient(180deg,rgba(29,109,255,.04),rgba(29,109,255,.14),rgba(29,109,255,.04));border-top:1px solid rgba(29,109,255,.18);border-bottom:1px solid rgba(29,109,255,.18);backdrop-filter:blur(2px);display:none;}
       html.ab-theme-bright{filter:brightness(1.06) contrast(1.04);}

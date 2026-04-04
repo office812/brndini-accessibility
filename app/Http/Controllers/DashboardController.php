@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
@@ -1422,6 +1423,8 @@ class DashboardController extends Controller
         })
             ->filter(fn (array $item) => $item['count'] > 0)
             ->values();
+        $serviceLeadKpis = $this->buildServiceLeadKpis($serviceLeads);
+        $serviceLeadDemandMetrics = $this->buildServiceLeadDemandMetrics($serviceLeads, $serviceCatalog);
 
         $superAdminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->isSuperAdmin())->count();
         $adminUsersCount = $users->filter(fn (User $adminUser) => $adminUser->is_admin && ! $adminUser->isSuperAdmin())->count();
@@ -1465,6 +1468,8 @@ class DashboardController extends Controller
             'serviceLeadChannelSummary' => $serviceLeadChannelSummary,
             'serviceLeadValueSummary' => $serviceLeadValueSummary,
             'serviceLeadPerformanceSummary' => $serviceLeadPerformanceSummary,
+            'serviceLeadKpis' => $serviceLeadKpis,
+            'serviceLeadDemandMetrics' => $serviceLeadDemandMetrics,
             'serviceLeadSourcePerformance' => $serviceLeadSourcePerformance,
             'serviceLeadServicePerformance' => $serviceLeadServicePerformance,
             'serviceLeadCloseReasonSummary' => $serviceLeadCloseReasonSummary,
@@ -1518,6 +1523,49 @@ class DashboardController extends Controller
                 'service_leads_with_playbook' => $serviceLeads->filter(fn ($lead) => filled($lead->playbook_key ?? null))->count(),
             ],
             'platformReadiness' => $this->platformReadiness(),
+        ];
+    }
+
+    private function buildServiceLeadKpis(Collection $serviceLeads): array
+    {
+        return [
+            'total' => $serviceLeads->count(),
+            'unique_sites' => $serviceLeads->pluck('site_name')->filter()->unique()->count(),
+            'unique_contacts' => $serviceLeads->pluck('user_email')->filter()->unique()->count(),
+            'won' => $serviceLeads->where('status', 'won')->count(),
+            'hot' => $serviceLeads->where('opportunity_key', 'hot')->count(),
+            'public' => $serviceLeads->where('source', 'public')->count(),
+            'ecosystem_access' => $serviceLeads->where('service_type', 'ecosystem_access')->count(),
+            'stale' => $serviceLeads->where('freshness_key', 'stale')->count(),
+            'due_today' => $serviceLeads->where('follow_up_tone', 'good')->count(),
+            'assigned' => $serviceLeads->filter(fn ($lead) => filled($lead->assigned_admin_email ?? null))->count(),
+            'unassigned' => $serviceLeads->filter(fn ($lead) => blank($lead->assigned_admin_email ?? null))->count(),
+        ];
+    }
+
+    private function buildServiceLeadDemandMetrics(Collection $serviceLeads, array $serviceCatalog): array
+    {
+        $services = collect($serviceCatalog)
+            ->map(function (array $service, string $key) use ($serviceLeads) {
+                return [
+                    'key' => $key,
+                    'label' => $service['label'],
+                    'count' => $serviceLeads->where('service_type', $key)->count(),
+                ];
+            })
+            ->values();
+
+        return [
+            'services' => $services,
+            'services_indexed' => $services->pluck('count', 'key')->all(),
+            'new' => $serviceLeads->where('status', 'new')->count(),
+            'proposal' => $serviceLeads->where('status', 'proposal')->count(),
+            'won' => $serviceLeads->where('status', 'won')->count(),
+            'public' => $serviceLeads->where('source', 'public')->count(),
+            'dashboard' => $serviceLeads->where('source', 'dashboard')->count(),
+            'ecosystem_access' => $serviceLeads->where('service_type', 'ecosystem_access')->count(),
+            'stale' => $serviceLeads->where('freshness_key', 'stale')->count(),
+            'due_today' => $serviceLeads->where('follow_up_tone', 'good')->count(),
         ];
     }
 
@@ -1749,6 +1797,13 @@ class DashboardController extends Controller
                 $lead->opening_subject = $this->buildLeadOpeningSubject($lead, $serviceCatalog);
                 $lead->opening_mailto = $this->buildLeadOpeningMailto($lead);
                 $lead->opening_whatsapp_href = $this->buildLeadOpeningWhatsappHref($lead);
+                $lead->next_statuses = collect(ServiceLead::quickStatusOptions((string) ($lead->status ?? 'new')))
+                    ->map(fn (string $label, string $key) => [
+                        'key' => $key,
+                        'label' => $label,
+                    ])
+                    ->values()
+                    ->all();
                 $offer = $this->recommendedLeadOffer($lead);
                 $lead->offer_outline_key = $offer['key'];
                 $lead->offer_outline_label = $offer['label'];
