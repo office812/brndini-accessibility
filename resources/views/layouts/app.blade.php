@@ -99,6 +99,7 @@
                     <nav class="site-nav" aria-label="ניווט ראשי">
                         <a href="{{ route('home') }}#solutions">פתרונות</a>
                         <a href="{{ route('home') }}#how-a11y-bridge-works">איך זה עובד</a>
+                        <a href="{{ route('audiences') }}">למי זה מתאים</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                         <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
@@ -167,6 +168,7 @@
                         <div class="footer-link-group">
                             <h3>המוצר</h3>
                             <a href="{{ route('home') }}#solutions">פתרונות</a>
+                            <a href="{{ route('audiences') }}">למי זה מתאים</a>
                             <a href="{{ route('pricing') }}">מחירון</a>
                             <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                             <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
@@ -195,6 +197,7 @@
                     <span>© {{ now()->year }} A11Y Bridge. כל הזכויות שמורות.</span>
                     <div class="footer-inline-links">
                         <a href="{{ route('about') }}">אודות</a>
+                        <a href="{{ route('audiences') }}">למי זה מתאים</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                         <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>

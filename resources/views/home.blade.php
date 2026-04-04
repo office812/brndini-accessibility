@@ -184,6 +184,10 @@
                 </ul>
             </article>
         </div>
+
+        <div class="magazine-actions">
+            <a class="ghost-button button-link" href="{{ route('audiences') }}">לעמוד המלא: למי זה מתאים</a>
+        </div>
     </section>
 
     <section class="cta-banner">
