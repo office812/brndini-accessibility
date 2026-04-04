@@ -87,8 +87,8 @@
             <span>וידג׳ט, התקנה, הצהרה ובקרה טכנית</span>
         </article>
         <article class="company-proof-card">
-            <strong>2 חבילות</strong>
-            <span>חינם להתחלה ופרימיום ליכולות מתקדמות</span>
+            <strong>מודל שקוף</strong>
+            <span>כלי חינמי להתחלה, ושירותים עסקיים בנפרד רק כשצריך</span>
         </article>
         <article class="company-proof-card">
             <strong>Multi-site</strong>
@@ -282,6 +282,10 @@
                 <h3>צמיחה דרך תוכן</h3>
                 <p>אזור מאמרים מובנה שעוזר גם לקידום אורגני וגם להסברת הקטגוריה.</p>
             </article>
+        </div>
+
+        <div class="magazine-actions">
+            <a class="ghost-button button-link" href="{{ route('use-cases') }}">לתרחישי שימוש אמיתיים</a>
         </div>
     </section>
 
