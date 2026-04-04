@@ -245,6 +245,10 @@
                 </ul>
             </article>
         </div>
+
+        <div class="magazine-actions">
+            <a class="ghost-button button-link" href="{{ route('free-tool') }}">לעמוד המלא: מה כלול בחינם</a>
+        </div>
     </section>
 
     <section class="section-band" id="solutions">

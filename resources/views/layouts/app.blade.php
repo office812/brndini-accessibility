@@ -174,6 +174,7 @@
                             <a href="{{ route('use-cases') }}">תרחישי שימוש</a>
                             <a href="{{ route('agencies') }}">לסוכנויות</a>
                             <a href="{{ route('pricing') }}">מחירון</a>
+                            <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
                             <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                             <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                             <a href="{{ route('faq') }}">שאלות נפוצות</a>
@@ -205,6 +206,7 @@
                         <a href="{{ route('use-cases') }}">תרחישי שימוש</a>
                         <a href="{{ route('agencies') }}">לסוכנויות</a>
                         <a href="{{ route('pricing') }}">מחירון</a>
+                        <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                         <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                         <a href="{{ route('faq') }}">שאלות נפוצות</a>

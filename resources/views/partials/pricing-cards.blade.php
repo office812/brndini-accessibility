@@ -10,7 +10,10 @@
                 <li>הצהרת נגישות בסיסית, זיהוי התקנה, סטטוס אתר ובקרה טכנית</li>
                 <li>מתאים לבעלי אתרים, סוכנויות וצוותים שרוצים להתחיל מהר בלי חיכוך</li>
             </ul>
-            <a class="ghost-button button-link" href="{{ route('register.show') }}">להתחיל בחינם</a>
+            <div class="hero-action-row">
+                <a class="ghost-button button-link" href="{{ route('register.show') }}">להתחיל בחינם</a>
+                <a class="ghost-button button-link" href="{{ route('free-tool') }}">מה כלול בחינם</a>
+            </div>
         </article>
 
         <article class="plan-card plan-card-current">

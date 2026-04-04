@@ -11,6 +11,7 @@ Route::view('/how-it-works', 'how-it-works')->name('how-it-works');
 Route::view('/for-whom', 'for-whom')->name('audiences');
 Route::view('/for-agencies', 'for-agencies')->name('agencies');
 Route::view('/use-cases', 'use-cases')->name('use-cases');
+Route::view('/free-tool', 'free-tool')->name('free-tool');
 Route::view('/pricing', 'pricing')->name('pricing');
 Route::view('/products', 'products')->name('products');
 Route::view('/faq', 'faq')->name('faq');
