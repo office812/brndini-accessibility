@@ -115,27 +115,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="flow-progress-shell">
-                                        <div class="flow-progress-track" aria-hidden="true">
-                                            <span class="flow-progress-fill" data-flow-progress-fill></span>
-                                        </div>
-                                        <div class="flow-progress-meta">
-                                            <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
-                                            <span data-flow-progress-caption>מגדירים את השירות ואת המטרה, כדי להתחיל מכיוון ברור.</span>
-                                        </div>
-                                    </div>
+                                    <div class="flow-shell-grid">
+                                        <div class="flow-shell-main">
+                                            <div class="flow-progress-shell">
+                                                <div class="flow-progress-track" aria-hidden="true">
+                                                    <span class="flow-progress-fill" data-flow-progress-fill></span>
+                                                </div>
+                                                <div class="flow-progress-meta">
+                                                    <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
+                                                    <span data-flow-progress-caption>מגדירים את השירות ואת המטרה, כדי להתחיל מכיוון ברור.</span>
+                                                </div>
+                                            </div>
 
-                                    <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline">
-                                        <strong>הפנייה של {{ $site->site_name }}</strong>
-                                        <div class="flow-summary-grid">
-                                            <div><span>שירות</span><strong data-flow-summary-target="service_type">{{ $serviceCatalog[$selectedServiceType]['label'] ?? 'טרם נבחר' }}</strong></div>
-                                            <div><span>מטרה</span><strong data-flow-summary-target="goal">נגדיר יחד בצעד הראשון</strong></div>
-                                            <div><span>זמן</span><strong data-flow-summary-target="timeframe">טרם הוגדר</strong></div>
-                                            <div><span>חזרה</span><strong data-flow-summary-target="preferred_contact">אימייל</strong></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מגדירים את השירות ואת המטרה, כדי להתחיל מכיוון ברור.">
+                                            <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מגדירים את השירות ואת המטרה, כדי להתחיל מכיוון ברור.">
                                         <div class="flow-stage-head">
                                             <strong>מה השירות שיקדם את האתר הזה?</strong>
                                             <p>נבחר כיוון ברור ונבין בקצרה מה היית רוצה להשיג.</p>
@@ -156,7 +148,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="קצב, תקציב ודחיפות עוזרים ל-Brndini להבין איך נכון להמשיך.">
+                                            <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="קצב, תקציב ודחיפות עוזרים ל-Brndini להבין איך נכון להמשיך.">
                                         <div class="flow-stage-head">
                                             <strong>נבין את המסגרת העסקית</strong>
                                             <p>כמה פרטים שיעזרו לנו להבין קצב, תקציב ודחיפות.</p>
@@ -231,7 +223,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="עוד קצת הקשר ודרך חזרה, ואז הפנייה נכנסת למרכז הלידים.">
+                                            <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="עוד קצת הקשר ודרך חזרה, ואז הפנייה נכנסת למרכז הלידים.">
                                         <div class="flow-stage-head">
                                             <strong>נסיים את הפנייה ונשלח</strong>
                                             <p>עוד קצת הקשר ודרך חזרה, ואז זה יוצא ישר למרכז הלידים.</p>
@@ -251,16 +243,35 @@
                                         <input id="service_contact_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
                                         <span class="meta-note">אם נוח לך שיחזרו בטלפון או בווטסאפ, צריך להשאיר כאן מספר זמין.</span>
 
-                                        <div class="flow-summary-card flow-summary-card-compact">
-                                            <strong>מה קורה אחרי השליחה</strong>
-                                            <p class="signup-note">הפנייה תיכנס ישירות למרכז הלידים של Brndini. זו לא תמיכה טכנית של המערכת, אלא פנייה עסקית על השירות שביקשת.</p>
+                                                <div class="support-form-actions">
+                                                    <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                                                    <button class="primary-button" type="submit">שלח פנייה לשירות</button>
+                                                    <span class="meta-note">פניות כאן מועברות לאזור הלידים של Brndini, בנפרד מהתמיכה הטכנית של המערכת.</span>
+                                                </div>
+                                            </div>
                                         </div>
 
-                                        <div class="support-form-actions">
-                                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
-                                            <button class="primary-button" type="submit">שלח פנייה לשירות</button>
-                                            <span class="meta-note">פניות כאן מועברות לאזור הלידים של Brndini, בנפרד מהתמיכה הטכנית של המערכת.</span>
-                                        </div>
+                                        <aside class="flow-shell-aside">
+                                            <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline flow-summary-card-sticky">
+                                                <strong>הפנייה של {{ $site->site_name }}</strong>
+                                                <div class="flow-summary-grid">
+                                                    <div><span>שירות</span><strong data-flow-summary-target="service_type">{{ $serviceCatalog[$selectedServiceType]['label'] ?? 'טרם נבחר' }}</strong></div>
+                                                    <div><span>מטרה</span><strong data-flow-summary-target="goal">נגדיר יחד בצעד הראשון</strong></div>
+                                                    <div><span>זמן</span><strong data-flow-summary-target="timeframe">טרם הוגדר</strong></div>
+                                                    <div><span>חזרה</span><strong data-flow-summary-target="preferred_contact">אימייל</strong></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flow-support-card">
+                                                <p class="eyebrow">מה קורה אחרי השליחה</p>
+                                                <strong>Brndini מקבלת פנייה עסקית מסודרת מתוך האתר הזה</strong>
+                                                <ul class="compact-check-list">
+                                                    <li>ההקשר של האתר והדומיין נשמר אוטומטית</li>
+                                                    <li>אפשר לחזור אליך במייל, טלפון או ווטסאפ</li>
+                                                    <li>הפנייה נכנסת ישירות למרכז הלידים להמשך טיפול</li>
+                                                </ul>
+                                            </div>
+                                        </aside>
                                     </div>
                                 </form>
                             </section>

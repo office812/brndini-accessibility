@@ -209,27 +209,19 @@
                         </div>
                     </div>
 
-                    <div class="flow-progress-shell">
-                        <div class="flow-progress-track" aria-hidden="true">
-                            <span class="flow-progress-fill" data-flow-progress-fill></span>
-                        </div>
-                        <div class="flow-progress-meta">
-                            <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
-                            <span data-flow-progress-caption>מגדירים את השירות ואת המטרה, כדי לחזור עם כיוון ברור.</span>
-                        </div>
-                    </div>
+                    <div class="flow-shell-grid">
+                        <div class="flow-shell-main">
+                            <div class="flow-progress-shell">
+                                <div class="flow-progress-track" aria-hidden="true">
+                                    <span class="flow-progress-fill" data-flow-progress-fill></span>
+                                </div>
+                                <div class="flow-progress-meta">
+                                    <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
+                                    <span data-flow-progress-caption>מגדירים את השירות ואת המטרה, כדי לחזור עם כיוון ברור.</span>
+                                </div>
+                            </div>
 
-                    <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline">
-                        <strong>הפנייה שלך כרגע</strong>
-                        <div class="flow-summary-grid">
-                            <div><span>שירות</span><strong data-flow-summary-target="service_type">אחסון וניהול שרת</strong></div>
-                            <div><span>מטרה</span><strong data-flow-summary-target="goal">נמלא יחד תוך כדי</strong></div>
-                            <div><span>זמן</span><strong data-flow-summary-target="timeframe">טרם הוגדר</strong></div>
-                            <div><span>חזרה</span><strong data-flow-summary-target="preferred_contact">אימייל</strong></div>
-                        </div>
-                    </div>
-
-                    <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מגדירים את השירות ואת המטרה, כדי לחזור עם כיוון ברור.">
+                            <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מגדירים את השירות ואת המטרה, כדי לחזור עם כיוון ברור.">
                         <div class="flow-stage-head">
                             <strong>במה בדיוק נוכל לעזור?</strong>
                             <p>שירות אחד ברור ומטרה אחת ברורה, כדי שנחזור עם כיוון מדויק.</p>
@@ -273,9 +265,9 @@
                         <div class="signup-actions-row">
                             <button class="primary-button" type="button" data-flow-next>המשך</button>
                         </div>
-                    </div>
+                            </div>
 
-                    <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="קצב, דחיפות ותקציב עוזרים לנו להבין איך נכון לפתוח את השיחה.">
+                            <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="קצב, דחיפות ותקציב עוזרים לנו להבין איך נכון לפתוח את השיחה.">
                         <div class="flow-stage-head">
                             <strong>נבין את המסגרת העסקית</strong>
                             <p>כמה פרטים שיעזרו לנו להבין תקציב, דחיפות וקצב התחלה.</p>
@@ -348,9 +340,9 @@
                             <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
                             <button class="primary-button" type="button" data-flow-next>המשך</button>
                         </div>
-                    </div>
+                            </div>
 
-                    <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="עוד קצת הקשר ודרך חזרה, ואז הפנייה נכנסת ישירות למרכז הלידים.">
+                            <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="עוד קצת הקשר ודרך חזרה, ואז הפנייה נכנסת ישירות למרכז הלידים.">
                         <div class="flow-stage-head">
                             <strong>עוד פרטי קשר קצרים ואפשר לשלוח</strong>
                             <p>כאן נסיים עם הדרך הנוחה לחזור אליך ועם כמה פרטים שיעזרו לנו להגיב מדויק יותר.</p>
@@ -370,15 +362,34 @@
                         <input id="public_service_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
                         <span class="meta-note">אם בחרת טלפון או ווטסאפ, חשוב להוסיף כאן מספר זמין.</span>
 
-                        <div class="flow-summary-card flow-summary-card-compact">
-                            <strong>לפני שליחה</strong>
-                            <p class="signup-note">Brndini תחזור רק על השירות שביקשת. זה לא ערוץ תמיכה טכנית של המערכת, אלא פנייה עסקית מסודרת.</p>
-                        </div>
-
                         <div class="signup-actions-row">
                             <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
                             <button class="primary-button" type="submit">שלח פנייה עסקית</button>
                         </div>
+                            </div>
+                        </div>
+
+                        <aside class="flow-shell-aside">
+                            <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline flow-summary-card-sticky">
+                                <strong>הפנייה שלך כרגע</strong>
+                                <div class="flow-summary-grid">
+                                    <div><span>שירות</span><strong data-flow-summary-target="service_type">אחסון וניהול שרת</strong></div>
+                                    <div><span>מטרה</span><strong data-flow-summary-target="goal">נמלא יחד תוך כדי</strong></div>
+                                    <div><span>זמן</span><strong data-flow-summary-target="timeframe">טרם הוגדר</strong></div>
+                                    <div><span>חזרה</span><strong data-flow-summary-target="preferred_contact">אימייל</strong></div>
+                                </div>
+                            </div>
+
+                            <div class="flow-support-card">
+                                <p class="eyebrow">מה קורה אחרי השליחה</p>
+                                <strong>Brndini מקבלת פנייה עסקית מסודרת, לא טיקט תמיכה</strong>
+                                <ul class="compact-check-list">
+                                    <li>השירות והמטרה נשמרים יחד עם פרטי העסק</li>
+                                    <li>אפשר לחזור אליך במייל, טלפון או ווטסאפ</li>
+                                    <li>הפנייה נכנסת ישירות למרכז הלידים להמשך טיפול</li>
+                                </ul>
+                            </div>
+                        </aside>
                     </div>
                 </form>
             </section>

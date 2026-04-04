@@ -5632,6 +5632,25 @@ body.page-is-ready .auth-shell {
     align-items: end;
 }
 
+.flow-shell-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+    gap: 18px;
+    align-items: start;
+}
+
+.flow-shell-main {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+}
+
+.flow-shell-aside {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+}
+
 .flow-progress-shell {
     display: grid;
     gap: 8px;
@@ -5788,9 +5807,14 @@ body.page-is-ready .auth-shell {
     font-size: 0.92rem;
 }
 
+.flow-summary-card-sticky {
+    position: sticky;
+    top: 18px;
+}
+
 .flow-summary-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
 }
 
@@ -5825,6 +5849,26 @@ body.page-is-ready .auth-shell {
 .lead-wizard-form .flow-stage,
 .auth-form-onboarding .flow-stage {
     backdrop-filter: blur(14px);
+}
+
+.flow-support-card {
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(234, 242, 255, 0.72), rgba(255, 255, 255, 0.96));
+    border: 1px solid rgba(29, 109, 255, 0.12);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.05);
+}
+
+.flow-support-card strong {
+    font-size: 0.96rem;
+    line-height: 1.5;
+}
+
+.flow-support-card .compact-check-list {
+    gap: 8px;
+    margin: 0;
 }
 
 .lead-wizard-form .support-form-row,
@@ -5901,10 +5945,33 @@ body.page-is-ready .auth-shell {
     grid-template-rows: 1fr auto;
 }
 
+@media (max-width: 1100px) {
+    .flow-shell-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .flow-shell-aside {
+        order: -1;
+    }
+
+    .flow-summary-card-sticky {
+        position: static;
+    }
+}
+
 @media (max-width: 900px) {
+    .flow-shell-grid,
     .flow-wizard-intro-compact,
     .flow-summary-grid {
         grid-template-columns: 1fr;
+    }
+
+    .flow-shell-aside {
+        order: -1;
+    }
+
+    .flow-summary-card-sticky {
+        position: static;
     }
 
     .flow-progress-meta {

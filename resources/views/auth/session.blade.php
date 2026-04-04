@@ -74,99 +74,115 @@
                         </div>
                     </div>
 
-                    <div class="flow-progress-shell">
-                        <div class="flow-progress-track" aria-hidden="true">
-                            <span class="flow-progress-fill" data-flow-progress-fill></span>
-                        </div>
-                        <div class="flow-progress-meta">
-                            <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
-                            <span data-flow-progress-caption>מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.</span>
-                        </div>
-                    </div>
+                    <div class="flow-shell-grid">
+                        <div class="flow-shell-main">
+                            <div class="flow-progress-shell">
+                                <div class="flow-progress-track" aria-hidden="true">
+                                    <span class="flow-progress-fill" data-flow-progress-fill></span>
+                                </div>
+                                <div class="flow-progress-meta">
+                                    <strong data-flow-progress-label>שלב 1 מתוך 3</strong>
+                                    <span data-flow-progress-caption>מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.</span>
+                                </div>
+                            </div>
 
-                    <div class="flow-stage signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.">
-                        <div class="flow-stage-head">
-                            <strong>בוא נתחיל מהאתר עצמו</strong>
-                            <p>מכניסים את הדומיין, ואנחנו מכינים סביבת עבודה וקוד הטמעה קבוע.</p>
-                        </div>
-                        <label for="domain">הדומיין של האתר</label>
-                        <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
+                            <div class="flow-stage signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.">
+                                <div class="flow-stage-head">
+                                    <strong>בוא נתחיל מהאתר עצמו</strong>
+                                    <p>מכניסים את הדומיין, ואנחנו מכינים סביבת עבודה וקוד הטמעה קבוע.</p>
+                                </div>
+                                <label for="domain">הדומיין של האתר</label>
+                                <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
 
-                        <button class="primary-button auth-submit" type="button" data-flow-next>המשך</button>
-                        <p class="signup-note">ניסיון חינם, בלי כרטיס אשראי. בהמשך נוסיף את שאר הפרטים.</p>
-                    </div>
+                                <button class="primary-button auth-submit" type="button" data-flow-next>המשך</button>
+                                <p class="signup-note">ניסיון חינם, בלי כרטיס אשראי. בהמשך נוסיף את שאר הפרטים.</p>
+                            </div>
 
-                    <div class="flow-stage signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="נותנים שם ברור לאתר ולעסק, כדי שהמערכת תהיה מסודרת מהרגע הראשון.">
-                        <div class="flow-stage-head">
-                            <strong>נבנה עבורך סביבת עבודה מסודרת</strong>
-                            <p>שם אתר ושם חברה, כדי שהכול יהיה ברור בדשבורד מהיום הראשון.</p>
-                        </div>
-                        <label for="site_name">שם האתר</label>
-                        <input id="site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
+                            <div class="flow-stage signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="נותנים שם ברור לאתר ולעסק, כדי שהמערכת תהיה מסודרת מהרגע הראשון.">
+                                <div class="flow-stage-head">
+                                    <strong>נבנה עבורך סביבת עבודה מסודרת</strong>
+                                    <p>שם אתר ושם חברה, כדי שהכול יהיה ברור בדשבורד מהיום הראשון.</p>
+                                </div>
+                                <label for="site_name">שם האתר</label>
+                                <input id="site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
 
-                        <label for="company_name">שם החברה</label>
-                        <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}" required>
+                                <label for="company_name">שם החברה</label>
+                                <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}" required>
 
-                        <div class="signup-actions-row">
-                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
-                            <button class="primary-button" type="button" data-flow-next>המשך</button>
-                        </div>
-                    </div>
+                                <div class="signup-actions-row">
+                                    <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                                    <button class="primary-button" type="button" data-flow-next>המשך</button>
+                                </div>
+                            </div>
 
-                    <div class="flow-stage signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="פרטי הגישה והאישורים האחרונים, ואז החשבון מוכן.">
-                        <div class="flow-stage-head">
-                            <strong>יוצרים את החשבון ומסיימים</strong>
-                            <p>עוד פרטי גישה בסיסיים והמערכת מוכנה.</p>
-                        </div>
+                            <div class="flow-stage signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="פרטי הגישה והאישורים האחרונים, ואז החשבון מוכן.">
+                                <div class="flow-stage-head">
+                                    <strong>יוצרים את החשבון ומסיימים</strong>
+                                    <p>עוד פרטי גישה בסיסיים והמערכת מוכנה.</p>
+                                </div>
 
-                        <div class="flow-summary-card flow-summary-card-compact">
-                            <strong>מה ייווצר עכשיו</strong>
-                            <div class="flow-summary-grid">
-                                <div><span>דומיין</span><strong data-flow-summary-target="domain">עדיין לא הוזן</strong></div>
-                                <div><span>אתר</span><strong data-flow-summary-target="site_name">עדיין לא הוזן</strong></div>
-                                <div><span>חברה</span><strong data-flow-summary-target="company_name">עדיין לא הוזן</strong></div>
-                                <div><span>חשבון</span><strong data-flow-summary-target="email">יתווסף בשלב הזה</strong></div>
+                                <label for="signup_email">אימייל</label>
+                                <input id="signup_email" name="email" type="email" value="{{ old('email') }}" required>
+
+                                <label for="signup_password">סיסמה</label>
+                                <div class="password-field">
+                                    <input id="signup_password" name="password" type="password" minlength="8" required>
+                                    <button class="password-toggle" type="button" data-password-toggle="signup_password" aria-label="הצג או הסתר סיסמה">👁</button>
+                                </div>
+
+                                <label for="signup_password_confirmation">אימות סיסמה</label>
+                                <div class="password-field">
+                                    <input id="signup_password_confirmation" name="password_confirmation" type="password" minlength="8" required>
+                                    <button class="password-toggle" type="button" data-password-toggle="signup_password_confirmation" aria-label="הצג או הסתר סיסמה">👁</button>
+                                </div>
+
+                                <label class="toggle-row consent-row">
+                                    <input type="checkbox" name="accepted_terms" value="1" @checked(old('accepted_terms')) required>
+                                    <span>קראתי ואני מאשר/ת את <a href="{{ route('legal.terms') }}" target="_blank" rel="noopener">תנאי השימוש</a>.</span>
+                                </label>
+
+                                <label class="toggle-row consent-row">
+                                    <input type="checkbox" name="accepted_privacy" value="1" @checked(old('accepted_privacy')) required>
+                                    <span>קראתי ואני מאשר/ת את <a href="{{ route('legal.privacy') }}" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</span>
+                                </label>
+
+                                <label class="toggle-row consent-row">
+                                    <input type="checkbox" name="acknowledged_self_service" value="1" @checked(old('acknowledged_self_service')) required>
+                                    <span>אני מבין/ה שזהו כלי self-service ותמיכה טכנית במערכת בלבד, ולא שירות נגישות, ייעוץ או התחייבות לציות מלא.</span>
+                                </label>
+
+                                <p class="signup-note signup-note-legal">
+                                    פתיחת החשבון מיועדת לשימוש עצמאי בכלי. התמיכה בפלטפורמה היא תמיכה טכנית בלבד.
+                                </p>
+
+                                <div class="signup-actions-row">
+                                    <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                                    <button class="primary-button auth-submit" type="submit">ליצור חשבון</button>
+                                </div>
                             </div>
                         </div>
 
-                        <label for="signup_email">אימייל</label>
-                        <input id="signup_email" name="email" type="email" value="{{ old('email') }}" required>
+                        <aside class="flow-shell-aside">
+                            <div class="flow-summary-card flow-summary-card-compact flow-summary-card-sticky">
+                                <strong>מה ייווצר עכשיו</strong>
+                                <div class="flow-summary-grid">
+                                    <div><span>דומיין</span><strong data-flow-summary-target="domain">עדיין לא הוזן</strong></div>
+                                    <div><span>אתר</span><strong data-flow-summary-target="site_name">עדיין לא הוזן</strong></div>
+                                    <div><span>חברה</span><strong data-flow-summary-target="company_name">עדיין לא הוזן</strong></div>
+                                    <div><span>חשבון</span><strong data-flow-summary-target="email">יתווסף בשלב הזה</strong></div>
+                                </div>
+                            </div>
 
-                        <label for="signup_password">סיסמה</label>
-                        <div class="password-field">
-                            <input id="signup_password" name="password" type="password" minlength="8" required>
-                            <button class="password-toggle" type="button" data-password-toggle="signup_password" aria-label="הצג או הסתר סיסמה">👁</button>
-                        </div>
-
-                        <label for="signup_password_confirmation">אימות סיסמה</label>
-                        <div class="password-field">
-                            <input id="signup_password_confirmation" name="password_confirmation" type="password" minlength="8" required>
-                            <button class="password-toggle" type="button" data-password-toggle="signup_password_confirmation" aria-label="הצג או הסתר סיסמה">👁</button>
-                        </div>
-
-                        <label class="toggle-row consent-row">
-                            <input type="checkbox" name="accepted_terms" value="1" @checked(old('accepted_terms')) required>
-                            <span>קראתי ואני מאשר/ת את <a href="{{ route('legal.terms') }}" target="_blank" rel="noopener">תנאי השימוש</a>.</span>
-                        </label>
-
-                        <label class="toggle-row consent-row">
-                            <input type="checkbox" name="accepted_privacy" value="1" @checked(old('accepted_privacy')) required>
-                            <span>קראתי ואני מאשר/ת את <a href="{{ route('legal.privacy') }}" target="_blank" rel="noopener">מדיניות הפרטיות</a>.</span>
-                        </label>
-
-                        <label class="toggle-row consent-row">
-                            <input type="checkbox" name="acknowledged_self_service" value="1" @checked(old('acknowledged_self_service')) required>
-                            <span>אני מבין/ה שזהו כלי self-service ותמיכה טכנית במערכת בלבד, ולא שירות נגישות, ייעוץ או התחייבות לציות מלא.</span>
-                        </label>
-
-                        <p class="signup-note signup-note-legal">
-                            פתיחת החשבון מיועדת לשימוש עצמאי בכלי. התמיכה בפלטפורמה היא תמיכה טכנית בלבד.
-                        </p>
-
-                        <div class="signup-actions-row">
-                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
-                            <button class="primary-button auth-submit" type="submit">ליצור חשבון</button>
-                        </div>
+                            <div class="flow-support-card">
+                                <p class="eyebrow">מה קורה מיד אחרי</p>
+                                <strong>המערכת מכינה אתר פעיל עם סביבת עבודה מסודרת</strong>
+                                <ul class="compact-check-list">
+                                    <li>קוד הטמעה קבוע לאתר הראשון</li>
+                                    <li>דשבורד לניהול וידג׳ט, התקנה והצהרה</li>
+                                    <li>גישה ישירה למסכי הטמעה, חשבון ותמיכה טכנית</li>
+                                </ul>
+                            </div>
+                        </aside>
                     </div>
                 </form>
 
