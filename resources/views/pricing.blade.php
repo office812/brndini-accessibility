@@ -76,6 +76,34 @@
         </div>
     </section>
 
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">מה כלול, ומה לא</p>
+            <h2>כדי שלא תהיה תחושה של אותיות קטנות, הנה ההפרדה הפשוטה באמת.</h2>
+        </div>
+
+        <div class="decision-grid">
+            <article class="decision-card decision-card-free">
+                <span class="status-pill is-neutral">כלול בחינם</span>
+                <ul class="compact-check-list">
+                    <li>ווידג׳ט נגישות מנוהל</li>
+                    <li>קוד הטמעה קבוע</li>
+                    <li>דשבורד, הצהרה בסיסית ובקרה טכנית</li>
+                    <li>תמיכה טכנית בשימוש בפלטפורמה</li>
+                </ul>
+            </article>
+            <article class="decision-card decision-card-services">
+                <span class="status-pill is-good">אופציונלי דרך Brndini</span>
+                <ul class="compact-check-list">
+                    <li>אחסון, תחזוקה ושדרוג אתר</li>
+                    <li>SEO, תוכן, קמפיינים ודפי נחיתה</li>
+                    <li>אוטומציות ותהליכי follow-up</li>
+                    <li>ליווי עסקי נפרד לפי צורך</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
     <section class="section-band section-band-alt">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">מעבר לכלי החינמי</p>

@@ -62,6 +62,37 @@
         @include('partials.brndini-services-cards')
     </section>
 
+    <section class="section-band section-band-alt">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">מתי השירותים האלה מתאימים</p>
+            <h2>לא כל מי שמתקין את הכלי צריך שירות. השירותים כאן מיועדים רק למי שרוצה קפיצה עסקית נוספת.</h2>
+        </div>
+
+        <div class="decision-grid">
+            <article class="decision-card decision-card-free">
+                <span class="status-pill is-neutral">הכלי לבדו מספיק</span>
+                <strong>אם אתה רוצה רק להפעיל את המוצר, להטמיע את הקוד ולנהל את הווידג׳ט לבד.</strong>
+                <ul class="compact-check-list">
+                    <li>יש לך אתר קיים שמתוחזק אצלך</li>
+                    <li>אתה יודע לבצע הטמעה בסיסית</li>
+                    <li>אין כרגע צורך בשדרוג אתר או שיווק</li>
+                    <li>הצורך הוא תפעולי, לא שירותי</li>
+                </ul>
+            </article>
+
+            <article class="decision-card decision-card-services">
+                <span class="status-pill is-good">Brndini רלוונטית</span>
+                <strong>אם מעבר לכלי אתה רוצה תשתית, צמיחה, שיפור אתר או מנוע שיווקי שעובד טוב יותר.</strong>
+                <ul class="compact-check-list">
+                    <li>האתר צריך אחסון, תחזוקה או מעבר מסודר</li>
+                    <li>יש צורך ב־SEO, קמפיינים או דפי נחיתה</li>
+                    <li>רוצים לשפר את הביצועים, המהירות או ההמרה</li>
+                    <li>יש תהליכים שצריך להפוך לאוטומטיים</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
     <section class="section-band section-band-plain">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">Brndini Ecosystem</p>
@@ -118,6 +149,17 @@
                 <span class="process-index">03</span>
                 <h3>Brndini ממשיכה משם</h3>
                 <p>הפנייה נכנסת ישירות למרכז הלידים, ומאפשרת לך לנהל מכירה, תיאום וחזרה ללקוח מתוך מערכת אחת.</p>
+            </article>
+        </div>
+
+        <div class="service-expectation-strip">
+            <article class="service-expectation-card">
+                <strong>פנייה עסקית, לא טיקט תמיכה</strong>
+                <p>האזור הזה מיועד להצעות שירות ולבדיקת התאמה עסקית. תמיכה טכנית בכלי החינמי נשארת בתוך המערכת עצמה.</p>
+            </article>
+            <article class="service-expectation-card">
+                <strong>שומרים על הפרדה ברורה</strong>
+                <p>הווידג׳ט נשאר חינמי ו־self-service. השירותים של Brndini נכנסים רק כשבאמת צריך תוצאה עסקית מעבר לזה.</p>
             </article>
         </div>
     </section>

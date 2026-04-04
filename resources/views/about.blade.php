@@ -108,6 +108,26 @@
         </div>
     </section>
 
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">המסר שאנחנו שומרים עליו</p>
+            <h2>A11Y Bridge היא פלטפורמה חינמית. Brndini היא השכבה העסקית שמסביבה.</h2>
+        </div>
+
+        <div class="decision-grid">
+            <article class="decision-card decision-card-free">
+                <span class="status-pill is-neutral">A11Y Bridge</span>
+                <strong>כלי self-service חינמי להטמעת וידג׳ט, הצהרה בסיסית ובקרה טכנית.</strong>
+                <p>אנחנו רוצים שאנשים יתחילו מהר, יקבלו ערך מיידי, וינהלו את המערכת בעצמם בלי תלות בשיחת מכירה.</p>
+            </article>
+            <article class="decision-card decision-card-services">
+                <span class="status-pill is-good">Brndini</span>
+                <strong>שירותים עסקיים אופציונליים למי שרוצה לגדול, לשדרג או לעבוד טוב יותר.</strong>
+                <p>כשהעסק צריך אחסון, SEO, קמפיינים, תחזוקה, שדרוג אתר או אוטומציות, Brndini נכנסת בתור שכבת שירות נפרדת.</p>
+            </article>
+        </div>
+    </section>
+
     <section class="cta-banner cta-banner-wide">
         <div>
             <p class="eyebrow">בואו נבנה שכבת נגישות שנראית כמו מוצר אמיתי</p>

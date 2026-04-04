@@ -152,6 +152,50 @@
         <a class="primary-button button-link" href="{{ route('register.show') }}">פתח חשבון</a>
     </section>
 
+    <section class="section-band section-band-alt">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">מה מקבלים בחינם כבר בהתחלה</p>
+            <h2>הערך מתחיל מהר, בלי שיחת מכירה ובלי להיתקע על חבילת פרימיום.</h2>
+            <p class="hero-text">
+                פותחים חשבון, מוסיפים אתר, מעתיקים קוד, ומקבלים שכבת ניהול בסיסית שאפשר לעבוד איתה באמת.
+                המטרה היא לתת לך מערכת שימושית מהיום הראשון, לא רק עמוד הרשמה יפה.
+            </p>
+        </div>
+
+        <div class="free-value-grid">
+            <article class="free-value-card">
+                <span class="process-index">01</span>
+                <h3>קוד הטמעה קבוע</h3>
+                <p>פעם אחת באתר, ואז כל השינויים הבאים נמשכים מתוך הדשבורד בלי להחליף שוב קוד.</p>
+            </article>
+            <article class="free-value-card">
+                <span class="process-index">02</span>
+                <h3>ווידג׳ט מנוהל</h3>
+                <p>שליטה על טקסט כפתור, מיקום, שפה, מראה והתאמות בסיסיות מתוך מקום אחד.</p>
+            </article>
+            <article class="free-value-card">
+                <span class="process-index">03</span>
+                <h3>הצהרה בסיסית</h3>
+                <p>עמוד ציבורי ברור עם ניסוח בסיסי, פרטי קשר וקישור קבוע מתוך הווידג׳ט.</p>
+            </article>
+            <article class="free-value-card">
+                <span class="process-index">04</span>
+                <h3>בקרה טכנית</h3>
+                <p>חיווי אם ההטמעה זוהתה, בדיקות בסיסיות, סטטוס אתר והתראות לשכבת הניהול.</p>
+            </article>
+            <article class="free-value-card free-value-card-highlight">
+                <p class="eyebrow">בלי הבטחות מיותרות</p>
+                <h3>כלי self-service חינמי, ברור ושקוף.</h3>
+                <ul class="compact-check-list">
+                    <li>כולל widget, דשבורד והצהרה בסיסית</li>
+                    <li>לא דורש שיחת מכירה כדי להתחיל</li>
+                    <li>תמיכה טכנית בלבד בשימוש במערכת</li>
+                    <li>שירותי Brndini נשארים שכבה נפרדת ואופציונלית</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
     <section class="section-band" id="solutions">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">טכנולוגיה שעובדת</p>
@@ -351,6 +395,37 @@
         </div>
 
         @include('partials.brndini-services-cards')
+    </section>
+
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">מתי נשארים במוצר, ומתי ממשיכים ל־Brndini</p>
+            <h2>שתי שכבות ברורות: כלי חינמי לעבודה עצמאית, ושירותים רק כשיש צורך עסקי אמיתי.</h2>
+        </div>
+
+        <div class="decision-grid">
+            <article class="decision-card decision-card-free">
+                <span class="status-pill is-neutral">נשארים בכלי החינמי</span>
+                <strong>אם מה שצריך הוא widget, הטמעה, הצהרה בסיסית וניהול טכני.</strong>
+                <ul class="compact-check-list">
+                    <li>להטמיע את הווידג׳ט באתר</li>
+                    <li>לשנות טקסט, שפה, מיקום ועיצוב</li>
+                    <li>להציג הצהרת נגישות בסיסית</li>
+                    <li>לראות סטטוס התקנה וחיווי טכני</li>
+                </ul>
+            </article>
+
+            <article class="decision-card decision-card-services">
+                <span class="status-pill is-good">ממשיכים ל־Brndini</span>
+                <strong>אם מה שצריך הוא שיפור עסקי רחב יותר מעבר לכלי עצמו.</strong>
+                <ul class="compact-check-list">
+                    <li>אחסון יציב וניהול תשתית</li>
+                    <li>SEO, תוכן וקידום אורגני</li>
+                    <li>קמפיינים, פרסום ודפי נחיתה</li>
+                    <li>שדרוג אתר, תחזוקה או אוטומציות</li>
+                </ul>
+            </article>
+        </div>
     </section>
 
     <section class="section-band section-band-plain">
