@@ -379,6 +379,52 @@
         </div>
     </section>
 
+    <section class="section-band section-band-plain">
+        <div class="section-heading section-heading-center">
+            <p class="eyebrow">איך זה מרגיש אחרי שהמערכת עולה לאוויר</p>
+            <h2>כל אחד רואה את השכבה שמתאימה לו, בלי בלגן ובלי לעבוד “סביב” המוצר.</h2>
+            <p class="hero-text">
+                במקום כלי שנראה אותו דבר לכולם, A11Y Bridge נותנת חוויה ברורה לכל תפקיד:
+                מי שמפעיל את האתר, מי שמטמיע, ומי שמנהל כמה לקוחות או כמה אתרים.
+            </p>
+        </div>
+
+        <div class="role-experience-grid">
+            <article class="role-experience-card">
+                <span class="status-pill is-neutral">בעל האתר</span>
+                <h3>רואה שליטה ברורה, בלי להיכנס לטכני מיותר.</h3>
+                <p>סטטוס אתר, ווידג׳ט, הצהרה בסיסית, והבנה מה מותקן ומה עדיין מחכה להטמעה.</p>
+                <ul class="compact-check-list">
+                    <li>הבנה מהירה של מצב האתר</li>
+                    <li>שפה פשוטה במקום ז׳רגון טכני</li>
+                    <li>מקום אחד לכל מה שצריך ביום־יום</li>
+                </ul>
+            </article>
+
+            <article class="role-experience-card">
+                <span class="status-pill is-neutral">המטמיע</span>
+                <h3>רואה קוד, אימות וחיווי, בלי לחפש קבצים או גרסאות.</h3>
+                <p>מסך התקנה ברור, קוד אחד קבוע, חיווי שהווידג׳ט באמת זוהה, ומסלול עבודה קצר לביצוע.</p>
+                <ul class="compact-check-list">
+                    <li>העתקה והדבקה מהירה</li>
+                    <li>פחות טעויות בהטמעה</li>
+                    <li>חיווי אם האתר באמת מושך את ההגדרות</li>
+                </ul>
+            </article>
+
+            <article class="role-experience-card">
+                <span class="status-pill is-neutral">סוכנות או צוות</span>
+                <h3>רואים רישיונות, אתרים והטמעות כמו מערכת עבודה אמיתית.</h3>
+                <p>לא עוד ערבוב של תוסף, מיילים והודעות. יש מקום אחד שמרכז אתרים, סטטוסים, הצהרות וניהול מתמשך.</p>
+                <ul class="compact-check-list">
+                    <li>פחות כאוס בין אתרים ולקוחות</li>
+                    <li>נקודת שליטה אחידה לכל החשבון</li>
+                    <li>בסיס טבעי להמשך למוצרים ושירותים נוספים</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
     <section class="section-band">
         <div class="section-heading section-heading-center">
             <p class="eyebrow">אמון והוכחת ערך</p>
@@ -422,6 +468,21 @@
             <article class="people-signal-card">
                 <strong>תמיכה והטמעה</strong>
                 <p>מרכז תמיכה, סטטוס התקנה וחיווי אמיתי למה שמוטמע בפועל.</p>
+            </article>
+        </div>
+
+        <div class="operating-principles-strip">
+            <article class="operating-principle-card">
+                <strong>מהיר להתחלה</strong>
+                <p>אפשר להפעיל את המוצר בלי להתחיל מפרויקט, הצעת מחיר או שיחת מכירה.</p>
+            </article>
+            <article class="operating-principle-card">
+                <strong>שקוף במסרים</strong>
+                <p>המערכת מסבירה מה היא כן נותנת, ומה נשאר באחריות בעל האתר.</p>
+            </article>
+            <article class="operating-principle-card">
+                <strong>מוכן לצמיחה</strong>
+                <p>כשהעסק רוצה יותר, Brndini והשכבות הבאות כבר מחכות סביב אותו חשבון.</p>
             </article>
         </div>
     </section>
