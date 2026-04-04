@@ -68,27 +68,85 @@
         </div>
     </section>
 
-    <section class="public-proof-strip" aria-label="יתרונות מרכזיים">
-        <article class="public-proof-card">
-            <span class="meta-label">Self-service</span>
-            <strong>פותחים חשבון ומתחילים לעבוד מהר</strong>
-            <p>אין צורך להמתין להצעה או להטמעה ידנית כדי להפעיל את המוצר.</p>
-        </article>
-        <article class="public-proof-card">
-            <span class="meta-label">Persistent install</span>
-            <strong>אותו קוד נשאר גם אחרי עדכונים</strong>
-            <p>האתר מושך הגדרות חדשות אוטומטית מתוך הדשבורד בלי להחליף שוב snippet.</p>
-        </article>
-        <article class="public-proof-card">
-            <span class="meta-label">Clear messaging</span>
-            <strong>הפרדה ברורה בין כלי חינמי לשירותים</strong>
-            <p>תמיכה טכנית בלבד במערכת, ושירותי Brndini כשבאמת רוצים שכבה עסקית רחבה יותר.</p>
-        </article>
-        <article class="public-proof-card">
-            <span class="meta-label">Built to grow</span>
-            <strong>בסיס חזק לאתרים, סוכנויות וצוותים</strong>
-            <p>אותו תהליך עובד גם לבעל אתר אחד וגם לסוכנות שמנהלת כמה אתרים ולקוחות.</p>
-        </article>
+    <section class="public-proof-band" aria-label="למה לעבוד עם A11Y Bridge">
+        <div class="public-proof-copy">
+            <p class="eyebrow">למה זה מרגיש אחרת</p>
+            <h2>פחות טפסים, פחות תוספים, פחות חיכוך. יותר מוצר אחד שמתחיל לעבוד מהר ונשאר ברור גם אחרי ההטמעה.</h2>
+            <p class="hero-text">
+                A11Y Bridge לא נבנתה כדי למכור עוד חבילת נגישות, אלא כדי לתת שכבת עבודה חינמית
+                שנראית טוב, נשארת יציבה, ומחברת את המשתמש רק כשבאמת יש צורך בשכבת שירות נוספת.
+            </p>
+        </div>
+
+        <div class="public-proof-grid">
+            <article class="public-proof-panel">
+                <span class="meta-label">פתיחה מהירה</span>
+                <strong>חשבון, אתר וקוד הטמעה תוך דקות</strong>
+                <p>בלי שיחת מכירה ובלי לחכות למישהו שיפעיל את המערכת ידנית.</p>
+            </article>
+            <article class="public-proof-panel">
+                <span class="meta-label">שליטה רציפה</span>
+                <strong>האתר מושך שינויים מהדשבורד</strong>
+                <p>אותו snippet נשאר קבוע, והשינויים עצמם מתעדכנים בלי להחליף שוב קוד.</p>
+            </article>
+            <article class="public-proof-panel">
+                <span class="meta-label">מסר שקוף</span>
+                <strong>כלי חינמי, תמיכה טכנית, שירותים נפרדים</strong>
+                <p>אין בלבול בין מוצר self-service לבין Brndini כשכבת צמיחה עסקית.</p>
+            </article>
+            <article class="public-proof-panel public-proof-panel-list">
+                <span class="meta-label">מה נשאר אצלך</span>
+                <ul class="compact-check-list">
+                    <li>הטמעה קבועה באתר</li>
+                    <li>דשבורד ניהול קצר וברור</li>
+                    <li>הצהרה בסיסית וקישור ציבורי</li>
+                    <li>חיבור לשירותים רק כשצריך</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <section class="public-command-board" aria-label="שכבת העבודה של המוצר">
+        <div class="public-command-copy">
+            <p class="eyebrow">מרכז עבודה אחד</p>
+            <h2>כך זה נראה כשהשכבה החינמית כבר יושבת באתר ועובדים ממנה בפועל.</h2>
+            <p class="hero-text">
+                במקום להחזיק תוסף בצד, מסמך הצהרה במקום אחר ועוד קוד snippet במייל ישן,
+                יש סביבת עבודה אחת שמרכזת סטטוס, התקנה, בדיקות והמלצות המשך.
+            </p>
+            <div class="public-link-row">
+                <a class="ghost-button button-link" href="{{ route('register.show') }}">לפתוח חשבון</a>
+                <a class="ghost-button button-link" href="{{ route('how-it-works') }}">לראות את הזרימה</a>
+            </div>
+        </div>
+
+        <div class="public-command-visual" aria-hidden="true">
+            <div class="public-command-shell">
+                <div class="public-command-topline">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="public-command-panels">
+                    <article>
+                        <small>חשבון</small>
+                        <strong>אתר אחד מתחיל מהר, כמה אתרים נשארים מסודרים</strong>
+                    </article>
+                    <article>
+                        <small>הטמעה</small>
+                        <strong>קוד קבוע עם חיווי אם זוהה או לא זוהה לאחרונה</strong>
+                    </article>
+                    <article>
+                        <small>בקרה</small>
+                        <strong>בדיקה, הצהרה וסטטוס במבט אחד</strong>
+                    </article>
+                    <article>
+                        <small>צמיחה</small>
+                        <strong>המשך טבעי ל־Brndini רק כשצריך שירות עסקי רחב יותר</strong>
+                    </article>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="public-section" id="solutions">

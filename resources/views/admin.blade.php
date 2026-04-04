@@ -5,6 +5,10 @@
         <div class="domain-shell-main super-admin-main">
             <section class="domain-shell-header">
                 <h1>מרכז סופר־אדמין</h1>
+                <p class="domain-shell-header-intro">
+                    מרכז השליטה של Brndini: משתמשים, אתרים, פניות, לידים, קודי מעקב ותמונת מצב מערכתית
+                    ממקום אחד, בשפה תפעולית ברורה ולא במסך עמוס.
+                </p>
             </section>
 
             @unless($platformReadiness['ready'])
@@ -53,6 +57,29 @@
 
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="overview">
+                        <section class="workspace-snapshot workspace-snapshot-admin">
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">משתמשים</span>
+                                <strong>{{ $adminSummary['users'] }}</strong>
+                                <p>סה״כ חשבונות במערכת</p>
+                            </article>
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">אתרים</span>
+                                <strong>{{ $adminSummary['sites'] }}</strong>
+                                <p>{{ $adminSummary['active_sites'] }} פעילים כרגע</p>
+                            </article>
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">פניות פתוחות</span>
+                                <strong>{{ $adminSummary['tickets_open'] }}</strong>
+                                <p>מרכז התמיכה מחכה לטיפול</p>
+                            </article>
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">לידים</span>
+                                <strong>{{ $adminSummary['service_leads'] }}</strong>
+                                <p>{{ $adminSummary['service_leads_needing_action'] }} דורשים פעולה</p>
+                            </article>
+                        </section>
+
                         <section class="super-admin-hero-card">
                             <div class="super-admin-hero-copy">
                                 <p class="eyebrow">שליטה מערכתית מלאה</p>

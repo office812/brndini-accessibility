@@ -50,6 +50,10 @@
             <section class="licenses-welcome">
                 <p class="eyebrow">ניהול רישיונות ונגישות</p>
                 <h1>{{ $user->name }}, סביבת הניהול שלך מוכנה לעבודה</h1>
+                <p class="licenses-welcome-intro">
+                    זהו מרכז העבודה של האתר הפעיל: הטמעה, מצב רישיון, בדיקות, הצהרה בסיסית
+                    וחיבור לשירותי Brndini כשצריך שכבה עסקית רחבה יותר.
+                </p>
             </section>
 
             @unless($platformReadiness['ready'])
@@ -62,6 +66,29 @@
             <section class="dashboard-workspace dashboard-workspace-inline">
                 <div class="dashboard-tab-content">
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="overview">
+                        <section class="workspace-snapshot">
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">אתר פעיל</span>
+                                <strong>{{ $site->site_name }}</strong>
+                                <p>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</p>
+                            </article>
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">הטמעה</span>
+                                <strong>{{ $installationLabel }}</strong>
+                                <p>{{ $installationSeenLabel }}</p>
+                            </article>
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">חבילה</span>
+                                <strong>{{ $currentPlan['name'] }}</strong>
+                                <p>{{ $currentPlan['price'] }}</p>
+                            </article>
+                            <article class="workspace-snapshot-item">
+                                <span class="meta-label">ציון אחרון</span>
+                                <strong>{{ $auditSnapshot['score'] }}</strong>
+                                <p>{{ $lastAuditedLabel }}</p>
+                            </article>
+                        </section>
+
                         <section class="steward-overview-grid">
                             <div class="steward-main-stack">
                                 <section class="steward-hero-card">
