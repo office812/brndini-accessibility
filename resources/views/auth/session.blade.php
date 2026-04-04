@@ -52,11 +52,11 @@
                     <input type="hidden" name="signup_step" value="{{ $signupStep }}">
                     <input type="hidden" name="flow_step" value="{{ $signupStep }}" data-flow-step-input>
 
-                    <div class="flow-wizard-intro">
+                    <div class="flow-wizard-intro flow-wizard-intro-compact">
                         <div>
                             <p class="eyebrow">התחלה מהירה</p>
-                            <strong>פותחים חשבון ב־3 צעדים קצרים</strong>
-                            <p class="signup-note">נאסוף רק את מה שצריך כדי ליצור חשבון, אתר ראשון וקוד הטמעה קבוע.</p>
+                            <strong>פתיחת חשבון בכמה צעדים קצרים</strong>
+                            <p class="signup-note">דומיין, פרטי אתר ופרטי גישה. זה הכול.</p>
                         </div>
                         <div class="flow-wizard-stepper" aria-label="התקדמות בהרשמה">
                             <button class="flow-wizard-step {{ $signupStep === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
@@ -77,7 +77,7 @@
                     <div class="flow-stage signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1">
                         <div class="flow-stage-head">
                             <strong>בוא נתחיל מהאתר עצמו</strong>
-                            <p>הדומיין מאפשר לנו להכין סביבת עבודה נכונה ולחבר אחר כך את קוד ההטמעה לאתר המתאים.</p>
+                            <p>מכניסים את הדומיין, ואנחנו מכינים סביבת עבודה וקוד הטמעה קבוע.</p>
                         </div>
                         <label for="domain">הדומיין של האתר</label>
                         <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
@@ -89,7 +89,7 @@
                     <div class="flow-stage signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2">
                         <div class="flow-stage-head">
                             <strong>נבנה עבורך סביבת עבודה מסודרת</strong>
-                            <p>כאן אנחנו מגדירים איך האתר יוצג אצלך בדשבורד ואיך תזהה אותו מהר בהמשך.</p>
+                            <p>שם אתר ושם חברה, כדי שהכול יהיה ברור בדשבורד מהיום הראשון.</p>
                         </div>
                         <label for="site_name">שם האתר</label>
                         <input id="site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
@@ -106,10 +106,10 @@
                     <div class="flow-stage signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3">
                         <div class="flow-stage-head">
                             <strong>יוצרים את החשבון ומסיימים</strong>
-                            <p>רק עוד פרטי גישה בסיסיים והסכמות, והמערכת תיצור לך את סביבת העבודה המלאה.</p>
+                            <p>עוד פרטי גישה בסיסיים והמערכת מוכנה.</p>
                         </div>
 
-                        <div class="flow-summary-card">
+                        <div class="flow-summary-card flow-summary-card-compact">
                             <strong>מה ייווצר עכשיו</strong>
                             <div class="flow-summary-grid">
                                 <div><span>דומיין</span><strong data-flow-summary-target="domain">עדיין לא הוזן</strong></div>

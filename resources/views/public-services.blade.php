@@ -187,11 +187,11 @@
                     @csrf
                     <input type="hidden" name="flow_step" value="{{ old('flow_step', '1') }}" data-flow-step-input>
 
-                    <div class="flow-wizard-intro">
+                    <div class="flow-wizard-intro flow-wizard-intro-compact">
                         <div>
                             <p class="eyebrow">פנייה עסקית</p>
-                            <strong>3 צעדים קצרים ומסודרים</strong>
-                            <p class="signup-note">נסביר לנו במה אתה צריך עזרה, נבין את המסגרת העסקית, ואז נחזור אליך בדרך שנוחה לך.</p>
+                            <strong>פנייה עסקית קצרה, לא טופס מעייף</strong>
+                            <p class="signup-note">צורך, מסגרת ופרטי חזרה. קצר, ברור ומהיר.</p>
                         </div>
                         <div class="flow-wizard-stepper" aria-label="התקדמות בפנייה עסקית">
                             <button class="flow-wizard-step {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
@@ -209,7 +209,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-summary-card flow-summary-card-lead">
+                    <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline">
                         <strong>הפנייה שלך כרגע</strong>
                         <div class="flow-summary-grid">
                             <div><span>שירות</span><strong data-flow-summary-target="service_type">אחסון וניהול שרת</strong></div>
@@ -222,7 +222,7 @@
                     <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1">
                         <div class="flow-stage-head">
                             <strong>במה בדיוק נוכל לעזור?</strong>
-                            <p>נגדיר את השירות שמעניין אותך ואת המטרה העסקית, כדי שנחזור עם כיוון מדויק ולא עם תשובה כללית.</p>
+                            <p>שירות אחד ברור ומטרה אחת ברורה, כדי שנחזור עם כיוון מדויק.</p>
                         </div>
 
                         <div class="support-form-row">
@@ -268,7 +268,7 @@
                     <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2">
                         <div class="flow-stage-head">
                             <strong>נבין את המסגרת העסקית</strong>
-                            <p>כמה פרטים קצרים שיעזרו לנו לדעת אם מדובר בצורך דחוף, בצמיחה, בשדרוג או במהלך ארוך יותר.</p>
+                            <p>כמה פרטים שיעזרו לנו להבין תקציב, דחיפות וקצב התחלה.</p>
                         </div>
 
                         <div class="support-form-row">
@@ -360,7 +360,7 @@
                         <input id="public_service_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
                         <span class="meta-note">אם בחרת טלפון או ווטסאפ, חשוב להוסיף כאן מספר זמין.</span>
 
-                        <div class="flow-summary-card">
+                        <div class="flow-summary-card flow-summary-card-compact">
                             <strong>לפני שליחה</strong>
                             <p class="signup-note">Brndini תחזור רק על השירות שביקשת. זה לא ערוץ תמיכה טכנית של המערכת, אלא פנייה עסקית מסודרת.</p>
                         </div>

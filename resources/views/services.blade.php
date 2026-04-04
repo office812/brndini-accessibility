@@ -93,11 +93,11 @@
                                     <input type="hidden" name="entry_point" value="{{ old('entry_point', request('entry', 'dashboard-services')) }}">
                                     <input type="hidden" name="flow_step" value="{{ old('flow_step', '1') }}" data-flow-step-input>
 
-                                    <div class="flow-wizard-intro">
+                                    <div class="flow-wizard-intro flow-wizard-intro-compact">
                                         <div>
                                             <p class="eyebrow">פנייה לשירות</p>
-                                            <strong>מגדירים את השירות ב־3 צעדים</strong>
-                                            <p class="signup-note">תוך פחות מדקה נגדיר את הצורך, את המסגרת העסקית ואת הדרך הכי טובה לחזור אליך.</p>
+                                            <strong>מגדירים את השירות בכמה צעדים קצרים</strong>
+                                            <p class="signup-note">הצורך, המסגרת העסקית ודרך החזרה. בלי בלגן ובלי טופס אינסופי.</p>
                                         </div>
                                         <div class="flow-wizard-stepper" aria-label="התקדמות בפניית שירות">
                                             <button class="flow-wizard-step {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
@@ -115,7 +115,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="flow-summary-card flow-summary-card-lead">
+                                    <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline">
                                         <strong>הפנייה של {{ $site->site_name }}</strong>
                                         <div class="flow-summary-grid">
                                             <div><span>שירות</span><strong data-flow-summary-target="service_type">{{ $serviceCatalog[$selectedServiceType]['label'] ?? 'טרם נבחר' }}</strong></div>
@@ -128,7 +128,7 @@
                                     <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1">
                                         <div class="flow-stage-head">
                                             <strong>מה השירות שיקדם את האתר הזה?</strong>
-                                            <p>נבחר את כיוון העבודה ונבין בקצרה מה היית רוצה להשיג, כדי שלא נתחיל משיחה כללית מדי.</p>
+                                            <p>נבחר כיוון ברור ונבין בקצרה מה היית רוצה להשיג.</p>
                                         </div>
 
                                         <label for="service_type">איזה שירות מעניין אותך?</label>
@@ -149,7 +149,7 @@
                                     <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2">
                                         <div class="flow-stage-head">
                                             <strong>נבין את המסגרת העסקית</strong>
-                                            <p>כך נוכל לדעת אם זו התחלה מהירה, מהלך רחב יותר או משהו שדורש מסלול מדויק מראש.</p>
+                                            <p>כמה פרטים שיעזרו לנו להבין קצב, תקציב ודחיפות.</p>
                                         </div>
 
                                         <div class="support-form-row">
@@ -224,7 +224,7 @@
                                     <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3">
                                         <div class="flow-stage-head">
                                             <strong>נסיים את הפנייה ונשלח</strong>
-                                            <p>עוד פרטים קצרים שיעזרו ל־Brndini לחזור אליך עם תגובה עניינית ולא עם שיחת בירור כללית.</p>
+                                            <p>עוד קצת הקשר ודרך חזרה, ואז זה יוצא ישר למרכז הלידים.</p>
                                         </div>
 
                                         <label for="service_message">פרטים חשובים</label>
@@ -241,7 +241,7 @@
                                         <input id="service_contact_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
                                         <span class="meta-note">אם נוח לך שיחזרו בטלפון או בווטסאפ, צריך להשאיר כאן מספר זמין.</span>
 
-                                        <div class="flow-summary-card">
+                                        <div class="flow-summary-card flow-summary-card-compact">
                                             <strong>מה קורה אחרי השליחה</strong>
                                             <p class="signup-note">הפנייה תיכנס ישירות למרכז הלידים של Brndini. זו לא תמיכה טכנית של המערכת, אלא פנייה עסקית על השירות שביקשת.</p>
                                         </div>
