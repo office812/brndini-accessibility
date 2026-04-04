@@ -9,6 +9,10 @@
         <div class="domain-shell-main">
             <section class="domain-shell-header">
                 <h1>התקנה והתאמת הווידג׳ט</h1>
+                <p class="domain-shell-header-intro">
+                    כל מה שקשור להטמעה של האתר הפעיל נשאר כאן: קוד ההתקנה, סטטוס הזיהוי,
+                    תצורת הווידג׳ט והצעדים שצריך לסגור כדי שהשכבה החינמית תעבוד חלק.
+                </p>
             </section>
 
             <section class="domain-card domain-hero-card">
@@ -24,6 +28,29 @@
                     <span class="status-pill is-neutral">{{ $widgetPresetLabels[$widget['preset']] ?? $widget['preset'] }}</span>
                     <span class="status-pill is-neutral">{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }}</span>
                 </div>
+            </section>
+
+            <section class="workspace-snapshot">
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">מצב התקנה</span>
+                    <strong>{{ $installationLabel }}</strong>
+                    <p>{{ $installationSeenLabel }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">רישיון</span>
+                    <strong>{{ $licenseStatus === 'active' ? 'מוכן להטמעה' : 'דורש הפעלה' }}</strong>
+                    <p>{{ $licenseStatus === 'active' ? 'אפשר להתקין ולבדוק זיהוי באתר.' : 'כדאי להפעיל רישיון לפני שהווידג׳ט נטען באמת.' }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">תצורה</span>
+                    <strong>{{ $widgetPresetLabels[$widget['preset']] ?? $widget['preset'] }}</strong>
+                    <p>{{ $widgetLayoutLabels[$widget['panelLayout']] ?? $widget['panelLayout'] }} · {{ $widget['position'] === 'bottom-left' ? 'שמאל למטה' : 'ימין למטה' }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">פקדים פעילים</span>
+                    <strong>{{ $featureCount }}</strong>
+                    <p>התאמות זמינות כרגע למבקרים באתר דרך הווידג׳ט.</p>
+                </article>
             </section>
 
             @include('partials.service-recommendations-panel', [

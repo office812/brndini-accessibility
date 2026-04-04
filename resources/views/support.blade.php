@@ -10,6 +10,10 @@
         <div class="domain-shell-main">
             <section class="domain-shell-header">
                 <h1>תמיכה טכנית במערכת</h1>
+                <p class="domain-shell-header-intro">
+                    מרכז התמיכה של האתר הפעיל: פניות טכניות על התקנה, רישיון, טעינת הווידג׳ט,
+                    שמירת הגדרות והתנהגות המערכת. לא ייעוץ נגישות, אלא תמיכה במוצר עצמו.
+                </p>
             </section>
 
             <section class="domain-card domain-hero-card">
@@ -24,6 +28,29 @@
                     <span class="status-pill {{ $supportSummary['urgent'] > 0 ? 'is-warn' : 'is-good' }}">דחופות: {{ $supportSummary['urgent'] }}</span>
                     <span class="status-pill is-neutral">פעילות אחרונה: {{ $supportSummary['lastActivity'] }}</span>
                 </div>
+            </section>
+
+            <section class="workspace-snapshot">
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">פניות פתוחות</span>
+                    <strong>{{ $supportSummary['open'] }}</strong>
+                    <p>טיקטים שעדיין מחכים לסגירה או להמשך טיפול.</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">דחופות</span>
+                    <strong>{{ $supportSummary['urgent'] }}</strong>
+                    <p>{{ $supportSummary['urgent'] > 0 ? 'יש פניות שמצריכות טיפול מהיר יותר.' : 'כרגע אין פניות דחופות במערכת.' }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">פעילות אחרונה</span>
+                    <strong>{{ $supportSummary['lastActivity'] }}</strong>
+                    <p>כך נראה קצב התנועה האחרון במרכז התמיכה של האתר.</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">סוג התמיכה</span>
+                    <strong>טכנית בלבד</strong>
+                    <p>המסך הזה מטפל במוצר, לא בייעוץ או ליווי נגישות.</p>
+                </article>
             </section>
 
             @include('partials.service-recommendations-panel', [

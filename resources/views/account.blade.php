@@ -10,6 +10,10 @@
         <div class="domain-shell-main">
             <section class="domain-shell-header">
                 <h1>תוכנית ותשלומים</h1>
+                <p class="domain-shell-header-intro">
+                    כאן מנהלים את הרישוי של האתר הפעיל בלבד: מסלול, מחזור חיוב, תוקף,
+                    מפתח ציבורי וכל מה שקשור לתצורת הרישיון של הדומיין הזה.
+                </p>
             </section>
 
             <section class="domain-card domain-hero-card">
@@ -24,6 +28,29 @@
                     <span class="status-pill is-neutral">{{ $currentPlan['name'] }}</span>
                     <span class="status-pill is-neutral">חידוש: {{ $licenseExpiresLabel }}</span>
                 </div>
+            </section>
+
+            <section class="workspace-snapshot">
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">מסלול</span>
+                    <strong>{{ $currentPlan['name'] }}</strong>
+                    <p>{{ $currentPlan['price'] }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">מחזור חיוב</span>
+                    <strong>{{ $billing['cycle'] === 'yearly' ? 'שנתי' : 'חודשי' }}</strong>
+                    <p>המסלול מנוהל ברמת האתר הפעיל בלבד.</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">תוקף רישיון</span>
+                    <strong>{{ $licenseExpiresLabel }}</strong>
+                    <p>{{ $licenseStatus === 'active' ? 'הרישיון כרגע פעיל וזמין לשימוש.' : 'האתר הזה עדיין לא פעיל מבחינת רישוי.' }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">מפתח ציבורי</span>
+                    <strong>{{ $site->public_key }}</strong>
+                    <p>מזהה האתר שמשמש את הווידג׳ט באתר החי.</p>
+                </article>
             </section>
 
             @include('partials.service-recommendations-panel', [

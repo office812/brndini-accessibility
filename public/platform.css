@@ -3890,6 +3890,11 @@ body.page-is-ready .auth-shell {
     font-size: 1.08rem;
 }
 
+.domain-shell-main > .workspace-snapshot {
+    margin-top: -4px;
+    margin-bottom: 6px;
+}
+
 .domain-hero-card,
 .domain-card-head,
 .billing-hero-meta,
@@ -3900,6 +3905,29 @@ body.page-is-ready .auth-shell {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.domain-hero-card {
+    padding: 24px 26px;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at top left, rgba(54, 114, 255, 0.08), transparent 20%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 249, 253, 0.92));
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: 0 20px 44px rgba(15, 23, 42, 0.06);
+}
+
+.domain-hero-card .panel-intro {
+    max-width: 58ch;
+}
+
+.domain-tab-workspace .dashboard-tab-content {
+    display: grid;
+    gap: 18px;
+}
+
+.domain-tab-workspace .dashboard-tab-panel.is-active {
+    gap: 18px;
 }
 
 .plan-card-grid {
@@ -4055,7 +4083,7 @@ body.page-is-ready .auth-shell {
 .support-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-    gap: 14px;
+    gap: 18px;
     align-items: start;
 }
 

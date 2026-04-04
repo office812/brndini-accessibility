@@ -9,6 +9,10 @@
         <div class="domain-shell-main">
             <section class="domain-shell-header">
                 <h1>ביקורות, התראות וציות</h1>
+                <p class="domain-shell-header-intro">
+                    סביבת העבודה לבקרה שוטפת: בדיקות פתוחות, התראות פעילות, יצירת הצהרה בסיסית
+                    וקישור בין מצב האתר לבין מה שצריך לטפל בו עכשיו.
+                </p>
             </section>
 
             <section class="domain-card domain-hero-card">
@@ -23,6 +27,29 @@
                     <input type="hidden" name="site_id" value="{{ $site->id }}">
                     <button class="primary-button" type="submit">הרץ בדיקה חדשה</button>
                 </form>
+            </section>
+
+            <section class="workspace-snapshot">
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">ציון בדיקה</span>
+                    <strong>{{ $auditSnapshot['score'] }}</strong>
+                    <p>{{ $lastAuditedLabel }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">התראות פתוחות</span>
+                    <strong>{{ $openAlertsCount }}</strong>
+                    <p>{{ $openAlertsCount === 0 ? 'כרגע הכול שקט יחסית לפי ההגדרות הנוכחיות.' : 'יש פריטים שדורשים מעקב או טיפול במסך הזה.' }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">הצהרה</span>
+                    <strong>{{ $statementStatus === 'connected' ? 'מחוברת' : 'חסרה' }}</strong>
+                    <p>{{ $statementStatus === 'connected' ? 'קישור ציבורי כבר קיים וניתן לפתוח אותו.' : 'אפשר ליצור הצהרה ישירות מתוך היוצר המונחה.' }}</p>
+                </article>
+                <article class="workspace-snapshot-item">
+                    <span class="meta-label">רישיון</span>
+                    <strong>{{ $licenseStatus === 'active' ? 'פעיל' : 'לא פעיל' }}</strong>
+                    <p>{{ $licenseStatus === 'active' ? 'הווידג׳ט מורשה להיטען והבדיקות רלוונטיות לאתר הפעיל.' : 'לפני עבודה מלאה כדאי להפעיל את הרישיון של האתר.' }}</p>
+                </article>
             </section>
 
             @include('partials.service-recommendations-panel', [
