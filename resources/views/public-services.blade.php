@@ -183,124 +183,192 @@
                     </div>
                 </div>
 
-                <form class="stack-form" method="POST" action="{{ route('brndini.services.store') }}">
+                <form class="stack-form lead-wizard-form" method="POST" action="{{ route('brndini.services.store') }}" data-flow-wizard>
                     @csrf
+                    <input type="hidden" name="flow_step" value="{{ old('flow_step', '1') }}" data-flow-step-input>
 
-                    <div class="support-form-row">
+                    <div class="flow-wizard-intro">
                         <div>
-                            <label for="public_service_name">שם מלא</label>
-                            <input id="public_service_name" name="name" type="text" value="{{ old('name') }}" placeholder="למשל: מיכאל אזין">
+                            <p class="eyebrow">פנייה עסקית</p>
+                            <strong>3 צעדים קצרים ומסודרים</strong>
+                            <p class="signup-note">נסביר לנו במה אתה צריך עזרה, נבין את המסגרת העסקית, ואז נחזור אליך בדרך שנוחה לך.</p>
                         </div>
-                        <div>
-                            <label for="public_service_email">אימייל</label>
-                            <input id="public_service_email" name="email" type="email" value="{{ old('email') }}" placeholder="office@example.com">
-                        </div>
-                    </div>
-
-                    <label for="public_service_website">אתר / דומיין</label>
-                    <input id="public_service_website" name="website" type="text" value="{{ old('website') }}" placeholder="https://your-site.com">
-
-                    <label for="public_service_type">איזה שירות מעניין אותך?</label>
-                    <select id="public_service_type" name="service_type">
-                        <option value="hosting" @selected($selectedPublicServiceType === 'hosting')>אחסון וניהול שרת</option>
-                        <option value="seo" @selected($selectedPublicServiceType === 'seo')>SEO וקידום אורגני</option>
-                        <option value="campaigns" @selected($selectedPublicServiceType === 'campaigns')>קמפיינים ופרסום</option>
-                        <option value="maintenance" @selected($selectedPublicServiceType === 'maintenance')>תחזוקת אתר</option>
-                        <option value="website_upgrade" @selected($selectedPublicServiceType === 'website_upgrade')>שדרוג אתר קיים</option>
-                        <option value="landing_pages" @selected($selectedPublicServiceType === 'landing_pages')>דפי נחיתה</option>
-                        <option value="automations" @selected($selectedPublicServiceType === 'automations')>אוטומציות ותהליכים</option>
-                        <option value="ecosystem_access" @selected($selectedPublicServiceType === 'ecosystem_access')>גישה מוקדמת לכלי Brndini הבאים</option>
-                    </select>
-
-                    <input type="hidden" name="entry_point" value="{{ old('entry_point', request('entry', 'public-services')) }}">
-                    <input type="hidden" name="utm_source" value="{{ old('utm_source', request('utm_source')) }}">
-                    <input type="hidden" name="utm_medium" value="{{ old('utm_medium', request('utm_medium')) }}">
-                    <input type="hidden" name="utm_campaign" value="{{ old('utm_campaign', request('utm_campaign')) }}">
-                    <input type="hidden" name="referrer_url" value="{{ old('referrer_url', request('referrer_url', request()->headers->get('referer'))) }}">
-
-                    <label for="public_service_goal">מה אתה רוצה להשיג?</label>
-                    <input id="public_service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להגדיל לידים, להעביר לאחסון יציב">
-
-                    <div class="support-form-row">
-                        <div>
-                            <label for="public_service_business_type">איזה סוג עסק אתה?</label>
-                            <select id="public_service_business_type" name="business_type">
-                                <option value="">בחר סוג עסק</option>
-                                @foreach ($serviceLeadBusinessTypeLabels as $businessKey => $businessLabel)
-                                    <option value="{{ $businessKey }}" @selected(old('business_type') === $businessKey)>{{ $businessLabel }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label for="public_service_team_size">מה גודל הצוות?</label>
-                            <select id="public_service_team_size" name="team_size">
-                                <option value="">בחר גודל צוות</option>
-                                @foreach ($serviceLeadTeamSizeLabels as $teamKey => $teamLabel)
-                                    <option value="{{ $teamKey }}" @selected(old('team_size') === $teamKey)>{{ $teamLabel }}</option>
-                                @endforeach
-                            </select>
+                        <div class="flow-wizard-stepper" aria-label="התקדמות בפנייה עסקית">
+                            <button class="flow-wizard-step {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
+                                <span>1</span>
+                                <strong>הצורך</strong>
+                            </button>
+                            <button class="flow-wizard-step {{ old('flow_step') === '2' ? 'is-active' : '' }}" type="button" data-flow-step="2">
+                                <span>2</span>
+                                <strong>המסגרת</strong>
+                            </button>
+                            <button class="flow-wizard-step {{ old('flow_step') === '3' ? 'is-active' : '' }}" type="button" data-flow-step="3">
+                                <span>3</span>
+                                <strong>פרטי חזרה</strong>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="support-form-row">
-                        <div>
-                            <label for="public_service_timeframe">מתי תרצה להתחיל?</label>
-                            <select id="public_service_timeframe" name="timeframe">
-                                <option value="">בחר טווח זמן</option>
-                                @foreach ($serviceLeadTimeframeLabels as $timeframeKey => $timeframeLabel)
-                                    <option value="{{ $timeframeKey }}" @selected(old('timeframe') === $timeframeKey)>{{ $timeframeLabel }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label for="public_service_budget">מה סדר הגודל התקציבי?</label>
-                            <select id="public_service_budget" name="budget_range">
-                                <option value="">בחר תקציב משוער</option>
-                                @foreach ($serviceLeadBudgetLabels as $budgetKey => $budgetLabel)
-                                    <option value="{{ $budgetKey }}" @selected(old('budget_range') === $budgetKey)>{{ $budgetLabel }}</option>
-                                @endforeach
-                            </select>
+                    <div class="flow-summary-card flow-summary-card-lead">
+                        <strong>הפנייה שלך כרגע</strong>
+                        <div class="flow-summary-grid">
+                            <div><span>שירות</span><strong data-flow-summary-target="service_type">אחסון וניהול שרת</strong></div>
+                            <div><span>מטרה</span><strong data-flow-summary-target="goal">נמלא יחד תוך כדי</strong></div>
+                            <div><span>זמן</span><strong data-flow-summary-target="timeframe">טרם הוגדר</strong></div>
+                            <div><span>חזרה</span><strong data-flow-summary-target="preferred_contact">אימייל</strong></div>
                         </div>
                     </div>
 
-                    <div class="support-form-row">
-                        <div>
-                            <label for="public_service_urgency">מה רמת הדחיפות?</label>
-                            <select id="public_service_urgency" name="urgency_level">
-                                <option value="">בחר רמת דחיפות</option>
-                                @foreach ($serviceLeadUrgencyLabels as $urgencyKey => $urgencyLabel)
-                                    <option value="{{ $urgencyKey }}" @selected(old('urgency_level') === $urgencyKey)>{{ $urgencyLabel }}</option>
-                                @endforeach
-                            </select>
+                    <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1">
+                        <div class="flow-stage-head">
+                            <strong>במה בדיוק נוכל לעזור?</strong>
+                            <p>נגדיר את השירות שמעניין אותך ואת המטרה העסקית, כדי שנחזור עם כיוון מדויק ולא עם תשובה כללית.</p>
                         </div>
-                        <div>
-                            <label for="public_service_callback_window">מתי הכי נוח לחזור אליך?</label>
-                            <select id="public_service_callback_window" name="callback_window">
-                                <option value="">בחר חלון חזרה</option>
-                                @foreach ($serviceLeadCallbackWindowLabels as $windowKey => $windowLabel)
-                                    <option value="{{ $windowKey }}" @selected(old('callback_window') === $windowKey)>{{ $windowLabel }}</option>
-                                @endforeach
-                            </select>
+
+                        <div class="support-form-row">
+                            <div>
+                                <label for="public_service_name">שם מלא</label>
+                                <input id="public_service_name" name="name" type="text" value="{{ old('name') }}" placeholder="למשל: מיכאל אזין" required>
+                            </div>
+                            <div>
+                                <label for="public_service_email">אימייל</label>
+                                <input id="public_service_email" name="email" type="email" value="{{ old('email') }}" placeholder="office@example.com" required>
+                            </div>
+                        </div>
+
+                        <label for="public_service_website">אתר / דומיין</label>
+                        <input id="public_service_website" name="website" type="text" value="{{ old('website') }}" placeholder="https://your-site.com">
+
+                        <label for="public_service_type">איזה שירות מעניין אותך?</label>
+                        <select id="public_service_type" name="service_type" required>
+                            <option value="hosting" @selected($selectedPublicServiceType === 'hosting')>אחסון וניהול שרת</option>
+                            <option value="seo" @selected($selectedPublicServiceType === 'seo')>SEO וקידום אורגני</option>
+                            <option value="campaigns" @selected($selectedPublicServiceType === 'campaigns')>קמפיינים ופרסום</option>
+                            <option value="maintenance" @selected($selectedPublicServiceType === 'maintenance')>תחזוקת אתר</option>
+                            <option value="website_upgrade" @selected($selectedPublicServiceType === 'website_upgrade')>שדרוג אתר קיים</option>
+                            <option value="landing_pages" @selected($selectedPublicServiceType === 'landing_pages')>דפי נחיתה</option>
+                            <option value="automations" @selected($selectedPublicServiceType === 'automations')>אוטומציות ותהליכים</option>
+                            <option value="ecosystem_access" @selected($selectedPublicServiceType === 'ecosystem_access')>גישה מוקדמת לכלי Brndini הבאים</option>
+                        </select>
+
+                        <input type="hidden" name="entry_point" value="{{ old('entry_point', request('entry', 'public-services')) }}">
+                        <input type="hidden" name="utm_source" value="{{ old('utm_source', request('utm_source')) }}">
+                        <input type="hidden" name="utm_medium" value="{{ old('utm_medium', request('utm_medium')) }}">
+                        <input type="hidden" name="utm_campaign" value="{{ old('utm_campaign', request('utm_campaign')) }}">
+                        <input type="hidden" name="referrer_url" value="{{ old('referrer_url', request('referrer_url', request()->headers->get('referer'))) }}">
+
+                        <label for="public_service_goal">מה אתה רוצה להשיג?</label>
+                        <input id="public_service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להגדיל לידים, להעביר לאחסון יציב" required>
+
+                        <div class="signup-actions-row">
+                            <button class="primary-button" type="button" data-flow-next>המשך</button>
                         </div>
                     </div>
 
-                    <label for="public_service_message">פרטים חשובים</label>
-                    <textarea id="public_service_message" name="message" rows="6" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה היית רוצה שיקרה בחודש הקרוב.">{{ old('message') }}</textarea>
+                    <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2">
+                        <div class="flow-stage-head">
+                            <strong>נבין את המסגרת העסקית</strong>
+                            <p>כמה פרטים קצרים שיעזרו לנו לדעת אם מדובר בצורך דחוף, בצמיחה, בשדרוג או במהלך ארוך יותר.</p>
+                        </div>
 
-                    <label for="public_service_contact">איך נוח שנחזור אליך?</label>
-                    <select id="public_service_contact" name="preferred_contact">
-                        <option value="email" @selected(old('preferred_contact', 'email') === 'email')>אימייל</option>
-                        <option value="phone" @selected(old('preferred_contact') === 'phone')>טלפון</option>
-                        <option value="whatsapp" @selected(old('preferred_contact') === 'whatsapp')>ווטסאפ</option>
-                    </select>
+                        <div class="support-form-row">
+                            <div>
+                                <label for="public_service_business_type">איזה סוג עסק אתה?</label>
+                                <select id="public_service_business_type" name="business_type">
+                                    <option value="">בחר סוג עסק</option>
+                                    @foreach ($serviceLeadBusinessTypeLabels as $businessKey => $businessLabel)
+                                        <option value="{{ $businessKey }}" @selected(old('business_type') === $businessKey)>{{ $businessLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="public_service_team_size">מה גודל הצוות?</label>
+                                <select id="public_service_team_size" name="team_size">
+                                    <option value="">בחר גודל צוות</option>
+                                    @foreach ($serviceLeadTeamSizeLabels as $teamKey => $teamLabel)
+                                        <option value="{{ $teamKey }}" @selected(old('team_size') === $teamKey)>{{ $teamLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-                    <label for="public_service_phone">טלפון / ווטסאפ לחזרה</label>
-                    <input id="public_service_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
-                    <span class="meta-note">אם בחרת טלפון או ווטסאפ, חשוב להוסיף כאן מספר זמין.</span>
+                        <div class="support-form-row">
+                            <div>
+                                <label for="public_service_timeframe">מתי תרצה להתחיל?</label>
+                                <select id="public_service_timeframe" name="timeframe">
+                                    <option value="">בחר טווח זמן</option>
+                                    @foreach ($serviceLeadTimeframeLabels as $timeframeKey => $timeframeLabel)
+                                        <option value="{{ $timeframeKey }}" @selected(old('timeframe') === $timeframeKey)>{{ $timeframeLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="public_service_budget">מה סדר הגודל התקציבי?</label>
+                                <select id="public_service_budget" name="budget_range">
+                                    <option value="">בחר תקציב משוער</option>
+                                    @foreach ($serviceLeadBudgetLabels as $budgetKey => $budgetLabel)
+                                        <option value="{{ $budgetKey }}" @selected(old('budget_range') === $budgetKey)>{{ $budgetLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-                    <div class="support-form-actions">
-                        <button class="primary-button" type="submit">שלח פנייה עסקית</button>
-                        <span class="meta-note">Brndini תחזור רק בנושא השירות שביקשת. זה לא ערוץ תמיכה טכנית של המערכת.</span>
+                        <div class="support-form-row">
+                            <div>
+                                <label for="public_service_urgency">מה רמת הדחיפות?</label>
+                                <select id="public_service_urgency" name="urgency_level">
+                                    <option value="">בחר רמת דחיפות</option>
+                                    @foreach ($serviceLeadUrgencyLabels as $urgencyKey => $urgencyLabel)
+                                        <option value="{{ $urgencyKey }}" @selected(old('urgency_level') === $urgencyKey)>{{ $urgencyLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="public_service_callback_window">מתי הכי נוח לחזור אליך?</label>
+                                <select id="public_service_callback_window" name="callback_window">
+                                    <option value="">בחר חלון חזרה</option>
+                                    @foreach ($serviceLeadCallbackWindowLabels as $windowKey => $windowLabel)
+                                        <option value="{{ $windowKey }}" @selected(old('callback_window') === $windowKey)>{{ $windowLabel }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="signup-actions-row">
+                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                            <button class="primary-button" type="button" data-flow-next>המשך</button>
+                        </div>
+                    </div>
+
+                    <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3">
+                        <div class="flow-stage-head">
+                            <strong>עוד פרטי קשר קצרים ואפשר לשלוח</strong>
+                            <p>כאן נסיים עם הדרך הנוחה לחזור אליך ועם כמה פרטים שיעזרו לנו להגיב מדויק יותר.</p>
+                        </div>
+
+                        <label for="public_service_message">פרטים חשובים</label>
+                        <textarea id="public_service_message" name="message" rows="6" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה היית רוצה שיקרה בחודש הקרוב." required>{{ old('message') }}</textarea>
+
+                        <label for="public_service_contact">איך נוח שנחזור אליך?</label>
+                        <select id="public_service_contact" name="preferred_contact" required>
+                            <option value="email" @selected(old('preferred_contact', 'email') === 'email')>אימייל</option>
+                            <option value="phone" @selected(old('preferred_contact') === 'phone')>טלפון</option>
+                            <option value="whatsapp" @selected(old('preferred_contact') === 'whatsapp')>ווטסאפ</option>
+                        </select>
+
+                        <label for="public_service_phone">טלפון / ווטסאפ לחזרה</label>
+                        <input id="public_service_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
+                        <span class="meta-note">אם בחרת טלפון או ווטסאפ, חשוב להוסיף כאן מספר זמין.</span>
+
+                        <div class="flow-summary-card">
+                            <strong>לפני שליחה</strong>
+                            <p class="signup-note">Brndini תחזור רק על השירות שביקשת. זה לא ערוץ תמיכה טכנית של המערכת, אלא פנייה עסקית מסודרת.</p>
+                        </div>
+
+                        <div class="signup-actions-row">
+                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                            <button class="primary-button" type="submit">שלח פנייה עסקית</button>
+                        </div>
                     </div>
                 </form>
             </section>

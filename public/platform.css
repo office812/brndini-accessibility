@@ -4825,6 +4825,143 @@ body.page-is-ready .auth-shell {
     align-items: center;
 }
 
+.flow-wizard-intro {
+    display: grid;
+    gap: 18px;
+    padding: 18px 20px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(240, 246, 255, 0.92));
+    border: 1px solid rgba(29, 109, 255, 0.1);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.05);
+}
+
+.flow-wizard-stepper {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.flow-wizard-step {
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+    padding: 12px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.78);
+    color: var(--page-ink);
+    font: inherit;
+    cursor: pointer;
+    transition: transform var(--motion-fast) ease, box-shadow var(--motion-fast) ease, border-color var(--motion-fast) ease, background var(--motion-fast) ease;
+}
+
+.flow-wizard-step span {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.06);
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+.flow-wizard-step strong {
+    font-size: 0.95rem;
+}
+
+.flow-wizard-step:hover,
+.flow-wizard-step.is-active {
+    transform: translateY(-1px);
+    border-color: rgba(29, 109, 255, 0.22);
+    background: rgba(29, 109, 255, 0.08);
+    box-shadow: 0 12px 24px rgba(29, 109, 255, 0.08);
+}
+
+.flow-wizard-step.is-active span,
+.flow-wizard-step.is-complete span {
+    background: var(--accent);
+    color: #fff;
+}
+
+.flow-wizard-step.is-complete {
+    border-color: rgba(29, 109, 255, 0.14);
+}
+
+.flow-stage {
+    display: none;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.05);
+}
+
+.flow-stage.is-active {
+    display: grid;
+}
+
+.flow-stage-head {
+    display: grid;
+    gap: 6px;
+}
+
+.flow-stage-head strong {
+    font-size: 1.08rem;
+    font-weight: 800;
+}
+
+.flow-stage-head p {
+    margin: 0;
+    color: var(--page-muted);
+    line-height: 1.7;
+}
+
+.flow-summary-card {
+    display: grid;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(246, 249, 253, 0.96));
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.flow-summary-card-lead {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(236, 243, 255, 0.94));
+    border-color: rgba(29, 109, 255, 0.12);
+}
+
+.flow-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.flow-summary-grid div {
+    display: grid;
+    gap: 4px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.flow-summary-grid span {
+    color: var(--page-muted);
+    font-size: 0.82rem;
+}
+
+.flow-summary-grid strong {
+    font-size: 0.96rem;
+    line-height: 1.5;
+}
+
+.lead-wizard-form {
+    gap: 18px;
+}
+
 .signup-step {
     width: 8px;
     height: 8px;
@@ -4887,6 +5024,23 @@ body.page-is-ready .auth-shell {
         linear-gradient(160deg, #e9eef4 0%, #dae4ef 100%);
     display: grid;
     grid-template-rows: 1fr auto;
+}
+
+@media (max-width: 900px) {
+    .flow-wizard-stepper,
+    .flow-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .flow-wizard-step {
+        grid-template-columns: auto 1fr;
+        justify-items: start;
+        align-items: center;
+    }
+
+    .flow-wizard-step span {
+        margin-inline-start: 0;
+    }
 }
 
 .auth-showcase-media {

@@ -87,101 +87,170 @@
                                     </div>
                                 </div>
 
-                                <form class="stack-form" method="POST" action="{{ route('dashboard.services.store', ['site' => $site->id]) }}">
+                                <form class="stack-form lead-wizard-form" method="POST" action="{{ route('dashboard.services.store', ['site' => $site->id]) }}" data-flow-wizard>
                                     @csrf
                                     <input type="hidden" name="site_id" value="{{ old('site_id', $site->id) }}">
                                     <input type="hidden" name="entry_point" value="{{ old('entry_point', request('entry', 'dashboard-services')) }}">
+                                    <input type="hidden" name="flow_step" value="{{ old('flow_step', '1') }}" data-flow-step-input>
 
-                    <label for="service_type">איזה שירות מעניין אותך?</label>
-                    <select id="service_type" name="service_type">
-                        @foreach ($serviceCatalog as $serviceKey => $service)
-                            <option value="{{ $serviceKey }}" @selected($selectedServiceType === $serviceKey)>{{ $service['label'] }}</option>
-                        @endforeach
-                                    </select>
-
-                                    <label for="service_goal">מה המטרה שלך?</label>
-                                    <input id="service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להעלות לידים, להעביר לאחסון יציב">
-
-                                    <div class="support-form-row">
+                                    <div class="flow-wizard-intro">
                                         <div>
-                                            <label for="service_business_type">איזה סוג עסק אתה?</label>
-                                            <select id="service_business_type" name="business_type">
-                                                <option value="">בחר סוג עסק</option>
-                                                @foreach ($serviceLeadBusinessTypeLabels as $businessKey => $businessLabel)
-                                                    <option value="{{ $businessKey }}" @selected(old('business_type') === $businessKey)>{{ $businessLabel }}</option>
-                                                @endforeach
-                                            </select>
+                                            <p class="eyebrow">פנייה לשירות</p>
+                                            <strong>מגדירים את השירות ב־3 צעדים</strong>
+                                            <p class="signup-note">תוך פחות מדקה נגדיר את הצורך, את המסגרת העסקית ואת הדרך הכי טובה לחזור אליך.</p>
                                         </div>
-                                        <div>
-                                            <label for="service_team_size">מה גודל הצוות?</label>
-                                            <select id="service_team_size" name="team_size">
-                                                <option value="">בחר גודל צוות</option>
-                                                @foreach ($serviceLeadTeamSizeLabels as $teamKey => $teamLabel)
-                                                    <option value="{{ $teamKey }}" @selected(old('team_size') === $teamKey)>{{ $teamLabel }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="flow-wizard-stepper" aria-label="התקדמות בפניית שירות">
+                                            <button class="flow-wizard-step {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
+                                                <span>1</span>
+                                                <strong>השירות</strong>
+                                            </button>
+                                            <button class="flow-wizard-step {{ old('flow_step') === '2' ? 'is-active' : '' }}" type="button" data-flow-step="2">
+                                                <span>2</span>
+                                                <strong>המסגרת</strong>
+                                            </button>
+                                            <button class="flow-wizard-step {{ old('flow_step') === '3' ? 'is-active' : '' }}" type="button" data-flow-step="3">
+                                                <span>3</span>
+                                                <strong>שליחה</strong>
+                                            </button>
                                         </div>
                                     </div>
 
-                                    <div class="support-form-row">
-                                        <div>
-                                            <label for="service_timeframe">מתי תרצה להתחיל?</label>
-                                            <select id="service_timeframe" name="timeframe">
-                                                <option value="">בחר טווח זמן</option>
-                                                @foreach ($serviceLeadTimeframeLabels as $timeframeKey => $timeframeLabel)
-                                                    <option value="{{ $timeframeKey }}" @selected(old('timeframe') === $timeframeKey)>{{ $timeframeLabel }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="service_budget_range">מה סדר הגודל התקציבי?</label>
-                                            <select id="service_budget_range" name="budget_range">
-                                                <option value="">בחר תקציב משוער</option>
-                                                @foreach ($serviceLeadBudgetLabels as $budgetKey => $budgetLabel)
-                                                    <option value="{{ $budgetKey }}" @selected(old('budget_range') === $budgetKey)>{{ $budgetLabel }}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="flow-summary-card flow-summary-card-lead">
+                                        <strong>הפנייה של {{ $site->site_name }}</strong>
+                                        <div class="flow-summary-grid">
+                                            <div><span>שירות</span><strong data-flow-summary-target="service_type">{{ $serviceCatalog[$selectedServiceType]['label'] ?? 'טרם נבחר' }}</strong></div>
+                                            <div><span>מטרה</span><strong data-flow-summary-target="goal">נגדיר יחד בצעד הראשון</strong></div>
+                                            <div><span>זמן</span><strong data-flow-summary-target="timeframe">טרם הוגדר</strong></div>
+                                            <div><span>חזרה</span><strong data-flow-summary-target="preferred_contact">אימייל</strong></div>
                                         </div>
                                     </div>
 
-                                    <div class="support-form-row">
-                                        <div>
-                                            <label for="service_urgency_level">מה רמת הדחיפות?</label>
-                                            <select id="service_urgency_level" name="urgency_level">
-                                                <option value="">בחר רמת דחיפות</option>
-                                                @foreach ($serviceLeadUrgencyLabels as $urgencyKey => $urgencyLabel)
-                                                    <option value="{{ $urgencyKey }}" @selected(old('urgency_level') === $urgencyKey)>{{ $urgencyLabel }}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1">
+                                        <div class="flow-stage-head">
+                                            <strong>מה השירות שיקדם את האתר הזה?</strong>
+                                            <p>נבחר את כיוון העבודה ונבין בקצרה מה היית רוצה להשיג, כדי שלא נתחיל משיחה כללית מדי.</p>
                                         </div>
-                                        <div>
-                                            <label for="service_callback_window">מתי הכי נוח לחזור אליך?</label>
-                                            <select id="service_callback_window" name="callback_window">
-                                                <option value="">בחר חלון חזרה</option>
-                                                @foreach ($serviceLeadCallbackWindowLabels as $windowKey => $windowLabel)
-                                                    <option value="{{ $windowKey }}" @selected(old('callback_window') === $windowKey)>{{ $windowLabel }}</option>
-                                                @endforeach
-                                            </select>
+
+                                        <label for="service_type">איזה שירות מעניין אותך?</label>
+                                        <select id="service_type" name="service_type" required>
+                                            @foreach ($serviceCatalog as $serviceKey => $service)
+                                                <option value="{{ $serviceKey }}" @selected($selectedServiceType === $serviceKey)>{{ $service['label'] }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        <label for="service_goal">מה המטרה שלך?</label>
+                                        <input id="service_goal" name="goal" type="text" value="{{ old('goal') }}" placeholder="למשל: לשפר מהירות, להעלות לידים, להעביר לאחסון יציב" required>
+
+                                        <div class="signup-actions-row">
+                                            <button class="primary-button" type="button" data-flow-next>המשך</button>
                                         </div>
                                     </div>
 
-                                    <label for="service_message">פרטים חשובים</label>
-                                    <textarea id="service_message" name="message" rows="7" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה תרצה להשיג.">{{ old('message') }}</textarea>
+                                    <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2">
+                                        <div class="flow-stage-head">
+                                            <strong>נבין את המסגרת העסקית</strong>
+                                            <p>כך נוכל לדעת אם זו התחלה מהירה, מהלך רחב יותר או משהו שדורש מסלול מדויק מראש.</p>
+                                        </div>
 
-                                    <label for="service_preferred_contact">איך נוח לך שנחזור?</label>
-                                    <select id="service_preferred_contact" name="preferred_contact">
-                                        @foreach ($servicePreferredContactLabels as $contactKey => $contactLabel)
-                                            <option value="{{ $contactKey }}" @selected(old('preferred_contact', 'email') === $contactKey)>{{ $contactLabel }}</option>
-                                        @endforeach
-                                    </select>
+                                        <div class="support-form-row">
+                                            <div>
+                                                <label for="service_business_type">איזה סוג עסק אתה?</label>
+                                                <select id="service_business_type" name="business_type">
+                                                    <option value="">בחר סוג עסק</option>
+                                                    @foreach ($serviceLeadBusinessTypeLabels as $businessKey => $businessLabel)
+                                                        <option value="{{ $businessKey }}" @selected(old('business_type') === $businessKey)>{{ $businessLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="service_team_size">מה גודל הצוות?</label>
+                                                <select id="service_team_size" name="team_size">
+                                                    <option value="">בחר גודל צוות</option>
+                                                    @foreach ($serviceLeadTeamSizeLabels as $teamKey => $teamLabel)
+                                                        <option value="{{ $teamKey }}" @selected(old('team_size') === $teamKey)>{{ $teamLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                    <label for="service_contact_phone">טלפון / ווטסאפ לחזרה</label>
-                                    <input id="service_contact_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
-                                    <span class="meta-note">אם נוח לך שיחזרו בטלפון או בווטסאפ, צריך להשאיר כאן מספר זמין.</span>
+                                        <div class="support-form-row">
+                                            <div>
+                                                <label for="service_timeframe">מתי תרצה להתחיל?</label>
+                                                <select id="service_timeframe" name="timeframe">
+                                                    <option value="">בחר טווח זמן</option>
+                                                    @foreach ($serviceLeadTimeframeLabels as $timeframeKey => $timeframeLabel)
+                                                        <option value="{{ $timeframeKey }}" @selected(old('timeframe') === $timeframeKey)>{{ $timeframeLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="service_budget_range">מה סדר הגודל התקציבי?</label>
+                                                <select id="service_budget_range" name="budget_range">
+                                                    <option value="">בחר תקציב משוער</option>
+                                                    @foreach ($serviceLeadBudgetLabels as $budgetKey => $budgetLabel)
+                                                        <option value="{{ $budgetKey }}" @selected(old('budget_range') === $budgetKey)>{{ $budgetLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                    <div class="support-form-actions">
-                                        <button class="primary-button" type="submit">שלח פנייה לשירות</button>
-                                        <span class="meta-note">פניות כאן מועברות לאזור הלידים של Brndini, בנפרד מהתמיכה הטכנית של המערכת.</span>
+                                        <div class="support-form-row">
+                                            <div>
+                                                <label for="service_urgency_level">מה רמת הדחיפות?</label>
+                                                <select id="service_urgency_level" name="urgency_level">
+                                                    <option value="">בחר רמת דחיפות</option>
+                                                    @foreach ($serviceLeadUrgencyLabels as $urgencyKey => $urgencyLabel)
+                                                        <option value="{{ $urgencyKey }}" @selected(old('urgency_level') === $urgencyKey)>{{ $urgencyLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label for="service_callback_window">מתי הכי נוח לחזור אליך?</label>
+                                                <select id="service_callback_window" name="callback_window">
+                                                    <option value="">בחר חלון חזרה</option>
+                                                    @foreach ($serviceLeadCallbackWindowLabels as $windowKey => $windowLabel)
+                                                        <option value="{{ $windowKey }}" @selected(old('callback_window') === $windowKey)>{{ $windowLabel }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="signup-actions-row">
+                                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                                            <button class="primary-button" type="button" data-flow-next>המשך</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3">
+                                        <div class="flow-stage-head">
+                                            <strong>נסיים את הפנייה ונשלח</strong>
+                                            <p>עוד פרטים קצרים שיעזרו ל־Brndini לחזור אליך עם תגובה עניינית ולא עם שיחת בירור כללית.</p>
+                                        </div>
+
+                                        <label for="service_message">פרטים חשובים</label>
+                                        <textarea id="service_message" name="message" rows="7" placeholder="ספר בקצרה מה העסק צריך, מה מצב האתר היום, ומה תרצה להשיג." required>{{ old('message') }}</textarea>
+
+                                        <label for="service_preferred_contact">איך נוח לך שנחזור?</label>
+                                        <select id="service_preferred_contact" name="preferred_contact" required>
+                                            @foreach ($servicePreferredContactLabels as $contactKey => $contactLabel)
+                                                <option value="{{ $contactKey }}" @selected(old('preferred_contact', 'email') === $contactKey)>{{ $contactLabel }}</option>
+                                            @endforeach
+                                        </select>
+
+                                        <label for="service_contact_phone">טלפון / ווטסאפ לחזרה</label>
+                                        <input id="service_contact_phone" name="contact_phone" type="text" value="{{ old('contact_phone') }}" placeholder="למשל: 050-123-4567">
+                                        <span class="meta-note">אם נוח לך שיחזרו בטלפון או בווטסאפ, צריך להשאיר כאן מספר זמין.</span>
+
+                                        <div class="flow-summary-card">
+                                            <strong>מה קורה אחרי השליחה</strong>
+                                            <p class="signup-note">הפנייה תיכנס ישירות למרכז הלידים של Brndini. זו לא תמיכה טכנית של המערכת, אלא פנייה עסקית על השירות שביקשת.</p>
+                                        </div>
+
+                                        <div class="support-form-actions">
+                                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                                            <button class="primary-button" type="submit">שלח פנייה לשירות</button>
+                                            <span class="meta-note">פניות כאן מועברות לאזור הלידים של Brndini, בנפרד מהתמיכה הטכנית של המערכת.</span>
+                                        </div>
                                     </div>
                                 </form>
                             </section>

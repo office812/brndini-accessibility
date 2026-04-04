@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @php($isLogin = $mode === 'login')
-@php($signupStep = old('signup_step', '1'))
+@php($signupStep = old('flow_step', old('signup_step', '1')))
 
 @section('content')
     <section class="auth-screen">
@@ -47,25 +47,50 @@
                     <a href="{{ route('home') }}">חזרה לאתר</a>
                 </div>
             @else
-                <form class="stack-form auth-form auth-form-onboarding" method="POST" action="{{ route('register') }}" data-signup-wizard>
+                <form class="stack-form auth-form auth-form-onboarding" method="POST" action="{{ route('register') }}" data-flow-wizard>
                     @csrf
-                    <input type="hidden" name="signup_step" value="{{ $signupStep }}" data-signup-step-input>
+                    <input type="hidden" name="signup_step" value="{{ $signupStep }}">
+                    <input type="hidden" name="flow_step" value="{{ $signupStep }}" data-flow-step-input>
 
-                    <div class="signup-stepper" aria-label="התקדמות בהרשמה">
-                        <span class="signup-step {{ $signupStep === '1' ? 'is-active' : '' }}"></span>
-                        <span class="signup-step {{ $signupStep === '2' ? 'is-active' : '' }}"></span>
-                        <span class="signup-step {{ $signupStep === '3' ? 'is-active' : '' }}"></span>
+                    <div class="flow-wizard-intro">
+                        <div>
+                            <p class="eyebrow">התחלה מהירה</p>
+                            <strong>פותחים חשבון ב־3 צעדים קצרים</strong>
+                            <p class="signup-note">נאסוף רק את מה שצריך כדי ליצור חשבון, אתר ראשון וקוד הטמעה קבוע.</p>
+                        </div>
+                        <div class="flow-wizard-stepper" aria-label="התקדמות בהרשמה">
+                            <button class="flow-wizard-step {{ $signupStep === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
+                                <span>1</span>
+                                <strong>האתר</strong>
+                            </button>
+                            <button class="flow-wizard-step {{ $signupStep === '2' ? 'is-active' : '' }}" type="button" data-flow-step="2">
+                                <span>2</span>
+                                <strong>העסק</strong>
+                            </button>
+                            <button class="flow-wizard-step {{ $signupStep === '3' ? 'is-active' : '' }}" type="button" data-flow-step="3">
+                                <span>3</span>
+                                <strong>החשבון</strong>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-signup-stage="1">
+                    <div class="flow-stage signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1">
+                        <div class="flow-stage-head">
+                            <strong>בוא נתחיל מהאתר עצמו</strong>
+                            <p>הדומיין מאפשר לנו להכין סביבת עבודה נכונה ולחבר אחר כך את קוד ההטמעה לאתר המתאים.</p>
+                        </div>
                         <label for="domain">הדומיין של האתר</label>
                         <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
 
-                        <button class="primary-button auth-submit" type="button" data-signup-next>המשך</button>
+                        <button class="primary-button auth-submit" type="button" data-flow-next>המשך</button>
                         <p class="signup-note">ניסיון חינם, בלי כרטיס אשראי. בהמשך נוסיף את שאר הפרטים.</p>
                     </div>
 
-                    <div class="signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-signup-stage="2">
+                    <div class="flow-stage signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2">
+                        <div class="flow-stage-head">
+                            <strong>נבנה עבורך סביבת עבודה מסודרת</strong>
+                            <p>כאן אנחנו מגדירים איך האתר יוצג אצלך בדשבורד ואיך תזהה אותו מהר בהמשך.</p>
+                        </div>
                         <label for="site_name">שם האתר</label>
                         <input id="site_name" name="site_name" type="text" value="{{ old('site_name') }}" required>
 
@@ -73,12 +98,27 @@
                         <input id="company_name" name="company_name" type="text" value="{{ old('company_name') }}" required>
 
                         <div class="signup-actions-row">
-                            <button class="ghost-button" type="button" data-signup-prev>חזרה</button>
-                            <button class="primary-button" type="button" data-signup-next>המשך</button>
+                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
+                            <button class="primary-button" type="button" data-flow-next>המשך</button>
                         </div>
                     </div>
 
-                    <div class="signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-signup-stage="3">
+                    <div class="flow-stage signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3">
+                        <div class="flow-stage-head">
+                            <strong>יוצרים את החשבון ומסיימים</strong>
+                            <p>רק עוד פרטי גישה בסיסיים והסכמות, והמערכת תיצור לך את סביבת העבודה המלאה.</p>
+                        </div>
+
+                        <div class="flow-summary-card">
+                            <strong>מה ייווצר עכשיו</strong>
+                            <div class="flow-summary-grid">
+                                <div><span>דומיין</span><strong data-flow-summary-target="domain">עדיין לא הוזן</strong></div>
+                                <div><span>אתר</span><strong data-flow-summary-target="site_name">עדיין לא הוזן</strong></div>
+                                <div><span>חברה</span><strong data-flow-summary-target="company_name">עדיין לא הוזן</strong></div>
+                                <div><span>חשבון</span><strong data-flow-summary-target="email">יתווסף בשלב הזה</strong></div>
+                            </div>
+                        </div>
+
                         <label for="signup_email">אימייל</label>
                         <input id="signup_email" name="email" type="email" value="{{ old('email') }}" required>
 
@@ -114,7 +154,7 @@
                         </p>
 
                         <div class="signup-actions-row">
-                            <button class="ghost-button" type="button" data-signup-prev>חזרה</button>
+                            <button class="ghost-button" type="button" data-flow-prev>חזרה</button>
                             <button class="primary-button auth-submit" type="submit">ליצור חשבון</button>
                         </div>
                     </div>
@@ -169,92 +209,4 @@
         </aside>
     </section>
 
-    @unless($isLogin)
-        <script>
-            (function () {
-                const form = document.querySelector('[data-signup-wizard]');
-
-                if (!form) {
-                    return;
-                }
-
-                const stages = Array.from(form.querySelectorAll('[data-signup-stage]'));
-                const stepInput = form.querySelector('[data-signup-step-input]');
-                const steps = Array.from(form.querySelectorAll('.signup-step'));
-                let current = Number(stepInput?.value || 1);
-
-                function validateStage(stageNumber) {
-                    const stage = form.querySelector('[data-signup-stage="' + stageNumber + '"]');
-
-                    if (!stage) {
-                        return true;
-                    }
-
-                    const fields = Array.from(stage.querySelectorAll('input[required], select[required], textarea[required]'));
-                    let isValid = true;
-
-                    fields.forEach((field) => {
-                        if (!field.reportValidity()) {
-                            isValid = false;
-                        }
-                    });
-
-                    if (!isValid) {
-                        return false;
-                    }
-
-                    if (stageNumber === 3) {
-                        const password = form.querySelector('#signup_password');
-                        const confirmation = form.querySelector('#signup_password_confirmation');
-
-                        if (password && confirmation && password.value !== confirmation.value) {
-                            confirmation.setCustomValidity('הסיסמאות חייבות להיות זהות.');
-                            confirmation.reportValidity();
-                            return false;
-                        }
-
-                        if (confirmation) {
-                            confirmation.setCustomValidity('');
-                        }
-                    }
-
-                    return true;
-                }
-
-                function render() {
-                    stages.forEach((stage, index) => {
-                        stage.classList.toggle('is-active', index + 1 === current);
-                    });
-
-                    steps.forEach((step, index) => {
-                        step.classList.toggle('is-active', index + 1 === current);
-                    });
-
-                    if (stepInput) {
-                        stepInput.value = String(current);
-                    }
-                }
-
-                form.querySelectorAll('[data-signup-next]').forEach((button) => {
-                    button.addEventListener('click', function () {
-                        if (!validateStage(current)) {
-                            return;
-                        }
-
-                        current = Math.min(current + 1, stages.length);
-                        render();
-                    });
-                });
-
-                form.querySelectorAll('[data-signup-prev]').forEach((button) => {
-                    button.addEventListener('click', function () {
-                        current = Math.max(current - 1, 1);
-                        render();
-                    });
-                });
-
-                render();
-            })();
-        </script>
-    @endunless
 @endsection

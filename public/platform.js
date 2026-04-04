@@ -389,6 +389,132 @@ document.addEventListener('DOMContentLoaded', function () {
     setActivePane(buttons[0].getAttribute('data-widget-pane-button'));
   });
 
+  document.querySelectorAll('[data-flow-wizard]').forEach(function (form) {
+    var stages = Array.prototype.slice.call(form.querySelectorAll('[data-flow-stage]'));
+    var stepInput = form.querySelector('[data-flow-step-input]');
+    var stepButtons = Array.prototype.slice.call(form.querySelectorAll('[data-flow-step]'));
+    var current = Number(stepInput && stepInput.value ? stepInput.value : 1);
+
+    if (!stages.length) {
+      return;
+    }
+
+    function findStage(number) {
+      return form.querySelector('[data-flow-stage="' + number + '"]');
+    }
+
+    function validateStage(number) {
+      var stage = findStage(number);
+      if (!stage) {
+        return true;
+      }
+
+      var fields = Array.prototype.slice.call(stage.querySelectorAll('input[required], select[required], textarea[required]'));
+      var isValid = true;
+
+      fields.forEach(function (field) {
+        if (!field.reportValidity()) {
+          isValid = false;
+        }
+      });
+
+      var password = form.querySelector('#signup_password');
+      var confirmation = form.querySelector('#signup_password_confirmation');
+      if (stage.contains(password) || stage.contains(confirmation)) {
+        if (password && confirmation && password.value !== confirmation.value) {
+          confirmation.setCustomValidity('הסיסמאות חייבות להיות זהות.');
+          confirmation.reportValidity();
+          return false;
+        }
+
+        if (confirmation) {
+          confirmation.setCustomValidity('');
+        }
+      }
+
+      return isValid;
+    }
+
+    function updateSummary() {
+      form.querySelectorAll('[data-flow-summary-target]').forEach(function (node) {
+        var fieldName = node.getAttribute('data-flow-summary-target');
+        var field = fieldName ? form.querySelector('[name="' + fieldName + '"]') : null;
+
+        if (!field) {
+          return;
+        }
+
+        if (!node.dataset.flowEmpty) {
+          node.dataset.flowEmpty = (node.textContent || '').trim();
+        }
+
+        var value = '';
+        if (field.tagName === 'SELECT') {
+          value = field.options[field.selectedIndex] ? field.options[field.selectedIndex].textContent.trim() : '';
+        } else {
+          value = (field.value || '').trim();
+        }
+
+        node.textContent = value || node.getAttribute('data-flow-empty') || node.dataset.flowEmpty || '';
+      });
+    }
+
+    function render() {
+      stages.forEach(function (stage, index) {
+        stage.classList.toggle('is-active', index + 1 === current);
+      });
+
+      stepButtons.forEach(function (button, index) {
+        var isActive = index + 1 === current;
+        button.classList.toggle('is-active', isActive);
+        button.classList.toggle('is-complete', index + 1 < current);
+      });
+
+      if (stepInput) {
+        stepInput.value = String(current);
+      }
+
+      updateSummary();
+    }
+
+    form.querySelectorAll('[data-flow-next]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        if (!validateStage(current)) {
+          return;
+        }
+
+        current = Math.min(current + 1, stages.length);
+        render();
+      });
+    });
+
+    form.querySelectorAll('[data-flow-prev]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        current = Math.max(current - 1, 1);
+        render();
+      });
+    });
+
+    stepButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        var target = Number(button.getAttribute('data-flow-step') || current);
+        if (target > current && !validateStage(current)) {
+          return;
+        }
+
+        current = Math.max(1, Math.min(target, stages.length));
+        render();
+      });
+    });
+
+    Array.prototype.slice.call(form.querySelectorAll('input, select, textarea')).forEach(function (field) {
+      field.addEventListener('input', updateSummary);
+      field.addEventListener('change', updateSummary);
+    });
+
+    render();
+  });
+
   document.querySelectorAll('a[href]').forEach(function (link) {
     link.addEventListener('click', function (event) {
       var href = link.getAttribute('href');
