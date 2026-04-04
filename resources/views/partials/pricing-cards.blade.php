@@ -2,28 +2,28 @@
     <div class="pricing-grid">
         <article class="plan-card">
             <span class="status-pill is-neutral">חינם</span>
-            <strong>פתיחה מהירה של וידג׳ט נגישות</strong>
-            <p>מסלול שמאפשר להתחיל נכון, להטמיע קוד קבוע באתר, ולפתוח את רוב כלי הנגישות של הווידג׳ט.</p>
+            <strong>כלי self-service חינמי לאתר שלך</strong>
+            <p>פותחים חשבון, מוסיפים אתר, מטמיעים קוד קבוע, ומנהלים את הווידג׳ט, ההצהרה והבקרה הטכנית ממקום אחד.</p>
             <div class="plan-price-line">ללא עלות</div>
             <ul class="plan-card-list">
-                <li>ניגודיות, גודל טקסט, גופן קריא והדגשת כותרות</li>
-                <li>הדגשת קישורים, הפחתת תנועה, סמן גדול וגובה שורות</li>
-                <li>פרופילי בסיס, קוד הטמעה קבוע, הצהרת נגישות וניהול מרחוק</li>
+                <li>ווידג׳ט נגישות, קוד הטמעה קבוע וניהול מרחוק מתוך הדשבורד</li>
+                <li>הצהרת נגישות בסיסית, זיהוי התקנה, סטטוס אתר ובקרה טכנית</li>
+                <li>מתאים לבעלי אתרים, סוכנויות וצוותים שרוצים להתחיל מהר בלי חיכוך</li>
             </ul>
             <a class="ghost-button button-link" href="{{ route('register.show') }}">להתחיל בחינם</a>
         </article>
 
         <article class="plan-card plan-card-current">
-            <span class="status-pill is-good">פרימיום</span>
-            <strong>כל היכולות הקריטיות של הווידג׳ט</strong>
-            <p>מסלול שמוסיף את ההתאמות המתקדמות, הפרופילים הייעודיים והשליטה העמוקה יותר בחוויית המשתמש.</p>
-            <div class="plan-price-line">$49 / חודש או $249 / שנה</div>
+            <span class="status-pill is-good">שירותים אופציונליים</span>
+            <strong>Brndini נכנסת כשצריך צמיחה, תשתית ותפעול</strong>
+            <p>הכלי נשאר חינמי. כשצריך תוצאה עסקית רחבה יותר, אפשר להשאיר פנייה מסודרת לשירותים של Brndini.</p>
+            <div class="plan-price-line">לפי צורך והצעת התאמה</div>
             <ul class="plan-card-list">
-                <li>מדריך קריאה, הסתרת תמונות, מרווח בין אותיות ויישור תוכן</li>
-                <li>פרופילי ADHD, דיסלקסיה, מגבלות קוגניטיביות וחוויית קריאה מתקדמת</li>
-                <li>פתרון עשיר יותר לאתרים שרוצים את כל שכבת הנגישות במקום אחד</li>
+                <li>אחסון, תחזוקת אתר, שדרוג אתר קיים ודפי נחיתה</li>
+                <li>SEO, קמפיינים, אוטומציות ומנועי צמיחה נוספים של Brndini</li>
+                <li>נכנסים רק אם אתה רוצה, בלי לבלבל את זה עם הכלי החינמי או עם תמיכה טכנית</li>
             </ul>
-            <a class="primary-button button-link" href="{{ route('register.show') }}">לעבור לפרימיום</a>
+            <a class="primary-button button-link" href="{{ route('brndini.services', request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])) }}">לשירותי Brndini</a>
         </article>
     </div>
 </div>
