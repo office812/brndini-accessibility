@@ -964,8 +964,9 @@
                                             <option value="">כל המטפלים</option>
                                             <option value="unassigned">לא משויך</option>
                                             @foreach ($serviceLeadAssigneeSummary as $item)
-                                                @continue($item['key'] === 'unassigned')
-                                                <option value="{{ $item['key'] }}">{{ $item['label'] }}</option>
+                                                @if ($item['key'] !== 'unassigned')
+                                                    <option value="{{ $item['key'] }}">{{ $item['label'] }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -1091,22 +1092,20 @@
                                                     </div>
                                                 @endif
                                                 @if (!empty($lead->proposal_intro))
-                                                    @php($proposalIntroId = 'lead-proposal-' . md5((string) $lead->update_key))
                                                     <div class="lead-proposal-box">
                                                         <div class="lead-opening-head">
                                                             <strong>תקציר הצעה מוצע</strong>
-                                                            <button class="secondary-button" type="button" data-copy-target="{{ $proposalIntroId }}">העתק תקציר</button>
+                                                            <button class="secondary-button" type="button" data-copy-target="lead-proposal-{{ md5((string) $lead->update_key) }}">העתק תקציר</button>
                                                         </div>
-                                                        <p class="support-ticket-message" id="{{ $proposalIntroId }}">{{ $lead->proposal_intro }}</p>
+                                                        <p class="support-ticket-message" id="lead-proposal-{{ md5((string) $lead->update_key) }}">{{ $lead->proposal_intro }}</p>
                                                     </div>
                                                 @endif
                                                 @if (!empty($lead->opening_line))
-                                                    @php($openingLineId = 'lead-opening-' . md5((string) $lead->update_key))
                                                     <div class="lead-opening-box">
                                                         <div class="lead-opening-head">
                                                             <strong>נוסח פתיחה מוצע</strong>
                                                             <div class="lead-opening-actions">
-                                                                <button class="secondary-button" type="button" data-copy-target="{{ $openingLineId }}">העתק נוסח</button>
+                                                                <button class="secondary-button" type="button" data-copy-target="lead-opening-{{ md5((string) $lead->update_key) }}">העתק נוסח</button>
                                                                 @if (!empty($lead->opening_mailto))
                                                                     <a class="secondary-button" href="{{ $lead->opening_mailto }}">פתח מייל</a>
                                                                 @endif
@@ -1118,7 +1117,7 @@
                                                         @if (!empty($lead->opening_subject))
                                                             <p class="meta-note"><strong>כותרת:</strong> {{ $lead->opening_subject }}</p>
                                                         @endif
-                                                        <p class="support-ticket-message" id="{{ $openingLineId }}">{{ $lead->opening_line }}</p>
+                                                        <p class="support-ticket-message" id="lead-opening-{{ md5((string) $lead->update_key) }}">{{ $lead->opening_line }}</p>
                                                     </div>
                                                 @endif
                                                 @if (!empty($lead->repeat_contact_label) || !empty($lead->repeat_site_label))
