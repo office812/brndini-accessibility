@@ -506,6 +506,102 @@
 
     <section class="section-band section-band-alt">
         <div class="section-heading section-heading-center">
+            <p class="eyebrow">כך זה נראה כשהמערכת כבר עובדת</p>
+            <h2>לא עוד תוסף מנותק, אלא שכבה אחת ברורה של מוצר, התקנה, בקרה ותוכן.</h2>
+            <p class="hero-text">
+                בנינו את A11Y Bridge כך שהערך לא יישב רק על הווידג׳ט עצמו, אלא על כל המעטפת שמסביב:
+                onboarding מהיר, קוד קבוע, בקרה על אתרים, דפי הסבר, ותשתית שיכולה לגדול יחד עם העסק.
+            </p>
+        </div>
+
+        <div class="proof-metrics-band" aria-label="product proof">
+            <article class="proof-metric-card">
+                <span class="eyebrow">Self-service</span>
+                <strong>פתיחת חשבון → אתר → קוד הטמעה</strong>
+                <p>זרימה קצרה שנותנת ערך מהר ולא משאירה את המשתמש מול טופס אינסופי.</p>
+            </article>
+            <article class="proof-metric-card">
+                <span class="eyebrow">ניהול רציף</span>
+                <strong>מקום אחד לווידג׳ט, הצהרה ובקרה</strong>
+                <p>אותו חשבון מנהל את הווידג׳ט, מסך ההטמעה, סטטוס האתר והעמוד הציבורי.</p>
+            </article>
+            <article class="proof-metric-card">
+                <span class="eyebrow">Brndini layer</span>
+                <strong>שירותים, לידים ומוצרים נוספים</strong>
+                <p>הכלי החינמי מכניס תנועה, וברנדיני פוגשת את מי שבאמת צריך שכבה עסקית מעליו.</p>
+            </article>
+            <article class="proof-metric-card proof-metric-card-highlight">
+                <span class="eyebrow">Premium feel</span>
+                <strong>הרגשה של מוצר הייטק, לא של תוסף זמני</strong>
+                <p>ממשק, דשבורד, מאמרים, סופר־אדמין ואזורי שירות בנויים כמו מערכת אחת בוגרת.</p>
+            </article>
+        </div>
+
+        <div class="outcome-grid">
+            <article class="outcome-card outcome-card-highlight">
+                <span class="status-pill is-good">יום ראשון באוויר</span>
+                <h3>בעל אתר שרוצה להתחיל מהר, בלי לחפש מי ייגע לו בקוד בכל שינוי קטן.</h3>
+                <p>
+                    פותח חשבון, מוסיף אתר, מעתיק קוד אחד קבוע, ומאותו רגע השינויים מנוהלים מתוך הדשבורד.
+                    אין מעבר בין כמה תוספים, מסמכים וכלים שונים.
+                </p>
+                <div class="outcome-stat-row">
+                    <div class="outcome-stat">
+                        <strong>1</strong>
+                        <span>קוד הטמעה קבוע</span>
+                    </div>
+                    <div class="outcome-stat">
+                        <strong>1</strong>
+                        <span>דשבורד לניהול</span>
+                    </div>
+                    <div class="outcome-stat">
+                        <strong>1</strong>
+                        <span>עמוד הצהרה ציבורי</span>
+                    </div>
+                </div>
+                <div class="outcome-footer">
+                    <a class="ghost-button button-link" href="{{ route('how-it-works') }}">לראות את הזרימה המלאה</a>
+                </div>
+            </article>
+
+            <article class="outcome-card">
+                <span class="status-pill is-neutral">סוכנות</span>
+                <h3>צוות שמנהל כמה לקוחות ורוצה נקודת שליטה אחידה במקום אוסף חיבורים ושינויים ידניים.</h3>
+                <p>
+                    אותו תהליך onboarding, אותו widget, אותו מסך התקנה, ואותו מבנה account לכל אתר.
+                    הלקוח מרגיש מוצר מסודר, והצוות עובד על תהליך שחוזר על עצמו.
+                </p>
+                <ul class="compact-check-list">
+                    <li>הטמעה עקבית לכל לקוח</li>
+                    <li>פחות friction מול מפתחים</li>
+                    <li>בסיס טבעי להמשך למוצרים נוספים</li>
+                </ul>
+                <div class="outcome-footer">
+                    <a class="ghost-button button-link" href="{{ route('agencies') }}">לעמוד הייעודי לסוכנויות</a>
+                </div>
+            </article>
+
+            <article class="outcome-card">
+                <span class="status-pill is-neutral">צוות פנימי</span>
+                <h3>ארגון שצריך בקרה, חיווי והפרדה ברורה בין הכלי החינמי לבין שירותים עסקיים בעתיד.</h3>
+                <p>
+                    A11Y Bridge משאירה את שכבת הנגישות עצמה ברורה ופשוטה, ובמקביל יודעת לחבר את מי שרוצה
+                    אחסון, SEO, קמפיינים או שדרוג אתר ישירות לאקו־סיסטם של Brndini.
+                </p>
+                <ul class="compact-check-list">
+                    <li>תמיכה טכנית בלבד במערכת</li>
+                    <li>מסר שקוף בלי הבטחות מיותרות</li>
+                    <li>מעבר טבעי לשירותים עסקיים כשצריך</li>
+                </ul>
+                <div class="outcome-footer">
+                    <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לשירותי Brndini</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-band section-band-alt">
+        <div class="section-heading section-heading-center">
             <p class="eyebrow">שירותים נוספים של Brndini</p>
             <h2>הווידג׳ט נשאר חינמי. Brndini נכנסת כשצריך צמיחה, תשתית ותפעול.</h2>
             <p class="hero-text">
