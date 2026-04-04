@@ -63,6 +63,17 @@ class ServiceLead extends Model
         return collect(is_array($leads) ? $leads : []);
     }
 
+    public static function runtimeLeadByKey(string $leadKey): ?array
+    {
+        $lead = static::runtimeLeads()->first(function (array $item) use ($leadKey) {
+            $currentKey = (string) ($item['key'] ?? ('service-' . ($item['id'] ?? 'x')));
+
+            return $currentKey === $leadKey;
+        });
+
+        return is_array($lead) ? $lead : null;
+    }
+
     public static function storeRuntime(User $user, Site $site, array $validated): void
     {
         $scope = static::runtimeScope();

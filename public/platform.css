@@ -234,6 +234,17 @@ body.is-navigating {
     justify-content: center;
 }
 
+.lead-status-shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0 4px;
+}
+
+.lead-status-shortcuts form {
+    margin: 0;
+}
+
 a {
     color: inherit;
 }

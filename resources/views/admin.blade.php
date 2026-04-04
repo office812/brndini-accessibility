@@ -1136,6 +1136,28 @@
                                                     <span class="status-pill is-good">שווי: {{ $lead->budget_estimate_label }}</span>
                                                     <span class="status-pill is-neutral">משוקלל: {{ $lead->weighted_estimate_label }}</span>
                                                 </div>
+                                                @php
+                                                    $nextStatuses = match($lead->status) {
+                                                        'new' => ['contacted' => 'סמן נוצר קשר', 'qualified' => 'סמן רלוונטי'],
+                                                        'contacted' => ['qualified' => 'סמן רלוונטי', 'proposal' => 'סמן נשלחה הצעה'],
+                                                        'qualified' => ['proposal' => 'סמן נשלחה הצעה', 'won' => 'סמן נסגר כלקוח'],
+                                                        'proposal' => ['won' => 'סמן נסגר כלקוח', 'closed' => 'סמן נסגר'],
+                                                        'won' => ['closed' => 'סמן נסגר'],
+                                                        'closed' => ['contacted' => 'פתח מחדש לנוצר קשר'],
+                                                        default => [],
+                                                    };
+                                                @endphp
+                                                @if (!empty($nextStatuses))
+                                                    <div class="lead-status-shortcuts">
+                                                        @foreach ($nextStatuses as $statusKey => $statusCta)
+                                                            <form method="POST" action="{{ route('dashboard.super-admin.leads.update', $lead->update_key) }}">
+                                                                @csrf
+                                                                <input type="hidden" name="quick_status" value="{{ $statusKey }}">
+                                                                <button class="secondary-button" type="submit">{{ $statusCta }}</button>
+                                                            </form>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
                                                 @if (!empty($lead->lead_tags))
                                                     <div class="lead-intel-row">
                                                         @foreach ($lead->lead_tags as $tag)

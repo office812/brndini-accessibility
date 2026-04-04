@@ -672,15 +672,40 @@ class DashboardController extends Controller
         $admin = $request->user();
         $this->ensureSuperAdmin($admin);
 
+        $runtimeLead = ServiceLead::runtimeLeadByKey($leadKey);
+
+        if (! $runtimeLead) {
+            return redirect()
+                ->route('dashboard.super-admin', ['tab' => 'leads'])
+                ->with('status', 'הליד שביקשת כבר לא נמצא במערכת.');
+        }
+
         $validated = $request->validate([
-            'status' => ['required', Rule::in(array_keys($this->serviceLeadStatusLabels()))],
+            'status' => ['nullable', Rule::in(array_keys($this->serviceLeadStatusLabels()))],
+            'quick_status' => ['nullable', Rule::in(array_keys($this->serviceLeadStatusLabels()))],
             'internal_note' => ['nullable', 'string', 'max:4000'],
             'assigned_admin_email' => ['nullable', 'email'],
             'follow_up_at' => ['nullable', 'date'],
             'close_reason' => ['nullable', Rule::in(array_keys(ServiceLead::closeReasonOptions()))],
         ]);
 
-        ServiceLead::updateRuntime($leadKey, $admin, $validated);
+        $payload = [
+            'status' => $validated['quick_status'] ?? $validated['status'] ?? ($runtimeLead['status'] ?? 'new'),
+            'internal_note' => $request->exists('internal_note')
+                ? ($validated['internal_note'] ?? '')
+                : (string) ($runtimeLead['internal_note'] ?? ''),
+            'assigned_admin_email' => $request->exists('assigned_admin_email')
+                ? ($validated['assigned_admin_email'] ?? null)
+                : ($runtimeLead['assigned_admin_email'] ?? null),
+            'follow_up_at' => $request->exists('follow_up_at')
+                ? ($validated['follow_up_at'] ?? null)
+                : ($runtimeLead['follow_up_at'] ?? null),
+            'close_reason' => $request->exists('close_reason')
+                ? ($validated['close_reason'] ?? null)
+                : ($runtimeLead['close_reason'] ?? null),
+        ];
+
+        ServiceLead::updateRuntime($leadKey, $admin, $payload);
 
         return redirect()
             ->route('dashboard.super-admin', ['tab' => 'leads'])
