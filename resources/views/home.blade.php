@@ -8,10 +8,10 @@
     <section class="public-stage public-stage-home">
         <div class="public-stage-copy">
             <p class="eyebrow">A11Y Bridge</p>
-            <h1>פותחים חשבון, מחברים אתר, ומטמיעים שכבת נגישות טכנית שנשארת מנוהלת.</h1>
+            <h1>פותחים חשבון, מחברים אתר, ומטמיעים שכבת נגישות מנוהלת.</h1>
             <p class="hero-text hero-text-lead">
-                A11Y Bridge היא נקודת כניסה חינמית לאתר: snippet קבוע, dashboard ברור, statement בסיסי,
-                וזיהוי התקנה במקום אחד. המוצר נשאר self-service, התמיכה טכנית בלבד, ו־Brndini נכנסת רק כשצריך שכבת המשך עסקית.
+                כלי חינמי אחד שמוביל מהר מפתיחת חשבון ל־snippet קבוע, dashboard ברור,
+                statement בסיסי וזיהוי התקנה. בלי מסלול פרימיום מבלבל, ובלי מסגור של שירות נגישות.
             </p>
 
             <div class="public-cta-row public-cta-row-hero">
@@ -20,9 +20,18 @@
             </div>
 
             <div class="public-hero-notes" aria-label="יתרונות מרכזיים">
-                <span>snippet קבוע לאתר</span>
-                <span>dashboard ברור וקל לסריקה</span>
-                <span>statement בסיסי ותמיכה טכנית בלבד</span>
+                <article>
+                    <small>snippet</small>
+                    <strong>מוסיפים פעם אחת</strong>
+                </article>
+                <article>
+                    <small>dashboard</small>
+                    <strong>מנהלים ממקום אחד</strong>
+                </article>
+                <article>
+                    <small>support</small>
+                    <strong>טכני בלבד</strong>
+                </article>
             </div>
         </div>
 
@@ -31,19 +40,20 @@
                 <div class="public-stage-canvas">
                     <div class="public-stage-canvas-line"></div>
                     <div class="public-stage-canvas-copy">
-                        <small>workspace / install / statement</small>
-                        <strong>מוצר חינמי שמתנהג כמו סביבת עבודה, לא כמו תוסף שנשכח בתחתית האתר.</strong>
+                        <small>install / widget / statement</small>
+                        <strong>סביבת עבודה שקטה וברורה שמנהלת את שכבת הנגישות מתוך חשבון אחד.</strong>
+                        <p>לא מחליפים snippet בכל שינוי, לא מחפשים קבצים ידנית, ולא מתבלבלים בין מוצר חינמי לשירות עסקי.</p>
                     </div>
                     <div class="public-stage-canvas-stack">
                         <article>
-                            <span>האתר הפעיל</span>
+                            <span>הטמעה</span>
                             <strong>snippet אחד, מנוהל מרחוק</strong>
-                            <p>מטמיעים פעם אחת. שינויי widget והצהרה נמשכים מתוך המערכת.</p>
+                            <p>מטמיעים פעם אחת, וכל שינוי נמשך מתוך המערכת.</p>
                         </article>
                         <article>
                             <span>סטטוס</span>
                             <strong>זוהה / לא זוהה לאחרונה</strong>
-                            <p>חיווי אמיתי אם שכבת הנגישות נטענת באתר בפועל.</p>
+                            <p>חיווי ברור אם שכבת הנגישות נטענת באתר בפועל.</p>
                         </article>
                     </div>
                     <div class="public-stage-canvas-metrics">
@@ -59,24 +69,24 @@
     <section class="public-shell-section public-shell-section-divider">
         <div class="section-heading">
             <p class="eyebrow">מה מקבלים בחינם</p>
-            <h2>השכבה החינמית נותנת התחלה אמיתית, לא דמו.</h2>
+            <h2>השכבה החינמית נועדה לעבוד באמת כבר מהיום הראשון.</h2>
         </div>
 
         <div class="public-proof-rail">
             <article>
                 <small>ווידג׳ט</small>
-                <strong>הגדרות בסיסיות מנוהלות מתוך dashboard</strong>
-                <p>שפה, טקסט כפתור, preset, panel layout ופקדים מרכזיים.</p>
+                <strong>הגדרות ליבה מתוך dashboard</strong>
+                <p>שפה, טקסט כפתור, preset ופקדים מרכזיים במקום אחד.</p>
             </article>
             <article>
                 <small>הטמעה</small>
                 <strong>קוד קבוע לאתר</strong>
-                <p>המערכת מושכת את השינויים מרחוק בלי להחליף snippet על כל שינוי.</p>
+                <p>שינויים נמשכים מרחוק בלי להחליף snippet בכל עדכון.</p>
             </article>
             <article>
                 <small>ציות</small>
                 <strong>statement בסיסי וזיהוי התקנה</strong>
-                <p>נקודת התחלה מסודרת וברורה בלי למסגר את זה כשירות נגישות.</p>
+                <p>נקודת פתיחה טכנית מסודרת בלי למסגר את זה כשירות נגישות.</p>
             </article>
         </div>
     </section>
@@ -84,7 +94,7 @@
     <section class="public-shell-section public-shell-section-soft">
         <div class="section-heading">
             <p class="eyebrow">איך זה עובד</p>
-            <h2>ארבעה צעדים קצרים, ואז ממשיכים לנהל.</h2>
+            <h2>ארבעה צעדים קצרים, ואז ממשיכים לנהל מתוך סביבת עבודה אחת.</h2>
         </div>
 
         <div class="public-flow-grid public-flow-grid-compact">
@@ -113,10 +123,10 @@
         <div class="public-bridge-layout">
             <div>
                 <p class="eyebrow">זה מספיק כדי להתחיל</p>
-                <h3>אם הצורך הוא widget, snippet, statement בסיסי וניהול טכני, A11Y Bridge מספיקה לבד.</h3>
+                <h3>אם מה שצריך הוא widget, snippet, statement בסיסי וניהול טכני, A11Y Bridge מספיקה לבד.</h3>
             </div>
             <div>
-                <p>אם האתר צריך מעבר לזה תשתית, צמיחה, SEO, קמפיינים, תחזוקה או אוטומציות, לא מערבבים את זה עם הכלי. ממשיכים ל־Brndini.</p>
+                <p>אם האתר צריך מעבר לזה תשתית, צמיחה, SEO, קמפיינים, תחזוקה או אוטומציות, לא מערבבים את זה עם הכלי. ממשיכים ל־Brndini רק כשצריך.</p>
                 <a class="ghost-button button-link" href="{{ route('how-it-works') }}">למהלך המלא</a>
             </div>
         </div>
@@ -131,7 +141,7 @@
         <div class="public-dual-panel public-dual-panel-quiet">
             <article class="public-decision-card">
                 <p class="eyebrow">נשארים ב־A11Y Bridge</p>
-                <h3>כשמה שצריך הוא מוצר self-service ברור ומהיר ליישום.</h3>
+                <h3>כשמה שצריך הוא מוצר self-service ברור, מהיר ושקט ליישום.</h3>
                 <ul class="compact-check-list">
                     <li>הטמעה באתר קיים</li>
                     <li>ניהול שוטף של הווידג׳ט והטקסטים</li>
