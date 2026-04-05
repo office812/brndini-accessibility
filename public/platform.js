@@ -758,3 +758,112 @@ document.addEventListener('DOMContentLoaded', function () {
 
   syncPreview();
 });
+
+// ─── Toast Notification System ───────────────────────────────────────────────
+(function () {
+  var toastContainer = null;
+
+  function ensureContainer() {
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.className = 'toast-container';
+      toastContainer.setAttribute('aria-live', 'polite');
+      toastContainer.setAttribute('aria-atomic', 'false');
+      document.body.appendChild(toastContainer);
+    }
+    return toastContainer;
+  }
+
+  window.showToast = function (message, type) {
+    type = type || 'success';
+    var container = ensureContainer();
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+
+    var icon = type === 'success'
+      ? '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : type === 'error'
+      ? '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>'
+      : '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="0.8" fill="currentColor"/></svg>';
+
+    toast.innerHTML = '<span class="toast-icon">' + icon + '</span><span class="toast-text">' + message + '</span>';
+    container.appendChild(toast);
+
+    requestAnimationFrame(function () {
+      toast.classList.add('is-visible');
+    });
+
+    window.setTimeout(function () {
+      toast.classList.add('is-hiding');
+      window.setTimeout(function () {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 350);
+    }, 3000);
+  };
+})();
+
+// ─── Enhanced Copy Button Feedback ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-copy-target]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var targetId = btn.getAttribute('data-copy-target');
+      var target = targetId ? document.getElementById(targetId) : null;
+      if (!target || !navigator.clipboard) return;
+
+      navigator.clipboard.writeText(target.textContent || '').then(function () {
+        btn.classList.add('is-copied');
+        var orig = btn.innerHTML;
+        btn.innerHTML = '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> הועתק!';
+        if (window.showToast) window.showToast('הקוד הועתק ללוח', 'success');
+        window.setTimeout(function () {
+          btn.classList.remove('is-copied');
+          btn.innerHTML = orig;
+        }, 2000);
+      });
+    });
+  });
+});
+
+// ─── Relative Timestamps ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  function timeAgo(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    if (seconds < 60) return 'לפני רגע';
+    var minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return 'לפני ' + minutes + ' דקות';
+    var hours = Math.floor(minutes / 60);
+    if (hours < 24) return 'לפני ' + hours + ' שעות';
+    var days = Math.floor(hours / 24);
+    if (days < 30) return 'לפני ' + days + ' ימים';
+    var months = Math.floor(days / 30);
+    if (months < 12) return 'לפני ' + months + ' חודשים';
+    return 'לפני ' + Math.floor(months / 12) + ' שנים';
+  }
+
+  function updateRelativeTimes() {
+    document.querySelectorAll('time[data-relative]').forEach(function (el) {
+      var dt = el.getAttribute('datetime');
+      if (!dt) return;
+      var date = new Date(dt);
+      if (isNaN(date)) return;
+      el.setAttribute('title', el.textContent.trim() || dt);
+      el.textContent = timeAgo(date);
+    });
+  }
+
+  updateRelativeTimes();
+  window.setInterval(updateRelativeTimes, 60000);
+});
+
+// ─── Site Favicons in Sidebar ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-site-favicon]').forEach(function (img) {
+    var domain = img.getAttribute('data-site-favicon');
+    if (!domain) return;
+    try {
+      var host = new URL(domain.startsWith('http') ? domain : 'https://' + domain).hostname;
+      img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(host) + '&sz=32';
+      img.onerror = function () { img.style.display = 'none'; };
+    } catch (e) { img.style.display = 'none'; }
+  });
+});

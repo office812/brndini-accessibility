@@ -36,7 +36,7 @@
 
             <div class="licenses-sidebar-block licenses-sidebar-help">
                 <span class="meta-label">אתר פעיל</span>
-                <h3>{{ $site->site_name }}</h3>
+                <h3 class="site-name-with-favicon"><img class="site-favicon" src="" data-site-favicon="{{ $site->domain }}" alt="" aria-hidden="true" width="20" height="20">{{ $site->site_name }}</h3>
                 <p>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</p>
                 <div class="mini-status-list">
                     <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
