@@ -9,7 +9,7 @@
         <div class="stitch-home-hero-copy">
             <div class="stitch-home-badge">
                 <span class="stitch-home-badge-dot"></span>
-                <span>A11Y Bridge 2.0</span>
+                <span>A11Y Bridge 2.0 — נגישות בקוד אחד</span>
             </div>
             <h1>
                 <span>מטמיעים נגישות</span>
@@ -20,8 +20,25 @@
                 הצהרה וזיהוי התקנה מתוך סביבת עבודה אחת.
             </p>
             <div class="stitch-home-actions">
-                <a class="stitch-button stitch-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                <a class="stitch-button stitch-button-primary" href="{{ route('register.show') }}">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+                    פתיחת חשבון חינמי
+                </a>
                 <a class="stitch-button stitch-button-secondary" href="{{ route('how-it-works') }}">איך זה עובד</a>
+            </div>
+            <div class="stitch-home-trust-row">
+                <span>
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="#22c55e" stroke-width="2"/></svg>
+                    ללא כרטיס אשראי
+                </span>
+                <span>
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="#22c55e" stroke-width="2"/></svg>
+                    הטמעה תוך 3 דקות
+                </span>
+                <span>
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="#22c55e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="#22c55e" stroke-width="2"/></svg>
+                    תמיכה טכנית כלולה
+                </span>
             </div>
         </div>
 
@@ -106,12 +123,24 @@
     </section>
 
     <section class="stitch-home-proof">
-        <p>מותאם לאתרים שרוצים לעלות מהר לאוויר</p>
-        <div class="stitch-home-proof-row" aria-label="קהלי יעד">
-            <span>וורדפרס</span>
-            <span>שופיפיי</span>
-            <span>וויקס</span>
-            <span>אתר מותאם אישית</span>
+        <p>מותאם לכל סוג אתר — מטמיעים בכמה דקות</p>
+        <div class="stitch-home-proof-row" aria-label="פלטפורמות נתמכות">
+            <span class="stitch-platform-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#21759B"/><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm-1 17.93V15H9l3-9 3 9h-2v4.93A8 8 0 014 12c0-.34.02-.67.05-1H7l-1.5-4.5A8 8 0 0112 4c.35 0 .69.02 1.03.06L11 9h2l1 3h-3v7.93z" fill="#fff"/></svg>
+                וורדפרס
+            </span>
+            <span class="stitch-platform-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect width="24" height="24" rx="4" fill="#96BF48"/><path d="M8.5 6.5c.28-1.64 1.64-2.9 3.34-2.9.56 0 1.1.14 1.56.4l.9-1.56A5.5 5.5 0 006.5 7l2 .5zm7.5 1l-1.5 1c.28.36.5.76.5 1.22 0 .28-.06.54-.16.78l1.86.48C16.88 10.44 17 9.98 17 9.5c0-.72-.18-1.4-.5-2zm-4 8.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 11 12 11s2.5 1.12 2.5 2.5S13.38 16 12 16zm0-7c-2.49 0-4.5 2.01-4.5 4.5S9.51 18 12 18s4.5-2.01 4.5-4.5S14.49 9 12 9z" fill="#fff"/></svg>
+                שופיפיי
+            </span>
+            <span class="stitch-platform-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect width="24" height="24" rx="4" fill="#0C6EFC"/><path d="M7 8h10v8H7z" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M10 8v8M14 8v8M7 12h10" stroke="#fff" stroke-width="1.5"/></svg>
+                וויקס
+            </span>
+            <span class="stitch-platform-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect width="24" height="24" rx="4" fill="#5b5fca"/><path d="M7 8l5 8 5-8" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                אתר מותאם אישית
+            </span>
         </div>
     </section>
 
@@ -123,7 +152,12 @@
 
         <div class="stitch-home-feature-grid">
             <article class="stitch-home-feature-card">
-                <div class="stitch-home-feature-icon">01</div>
+                <div class="stitch-home-feature-icon">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M8 6l-4 6 4 6M16 6l4 6-4 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13 4l-2 16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
                 <h3>קטע קוד אחד, אתר חי</h3>
                 <p>מטמיעים פעם אחת בלבד וממשיכים לנהל את שכבת הנגישות מתוך סביבת העבודה.</p>
                 <div class="stitch-home-feature-visual stitch-home-feature-visual-bars">
@@ -132,7 +166,14 @@
             </article>
 
             <article class="stitch-home-feature-card">
-                <div class="stitch-home-feature-icon">02</div>
+                <div class="stitch-home-feature-icon">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
                 <h3>וידג׳ט, הצהרה וסטטוס</h3>
                 <p>אותו דשבורד מחזיק את טקסטי הווידג׳ט, ההצהרה הבסיסית וחיווי ההטמעה.</p>
                 <div class="stitch-home-feature-visual stitch-home-feature-visual-lines">
@@ -141,7 +182,11 @@
             </article>
 
             <article class="stitch-home-feature-card">
-                <div class="stitch-home-feature-icon">03</div>
+                <div class="stitch-home-feature-icon">
+                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    </svg>
+                </div>
                 <h3>Brndini כשצריך יותר</h3>
                 <p>כשצריך צמיחה, ביצועים או שכבת שירותים נוספת, ממשיכים ל־Brndini בלי לבלבל את המוצר עצמו.</p>
                 <div class="stitch-home-feature-visual stitch-home-feature-visual-orbit">
