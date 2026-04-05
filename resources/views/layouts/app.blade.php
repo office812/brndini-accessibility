@@ -101,19 +101,14 @@
 
                 <div class="site-header-menu" id="site-menu-panel" data-header-menu-panel="site-menu">
                     <nav class="site-nav" aria-label="ניווט ראשי">
-                        <a href="{{ route('home') }}#solutions">פתרונות</a>
+                        <a href="{{ route('home') }}">בית</a>
                         <a href="{{ route('how-it-works') }}">איך זה עובד</a>
-                        <a href="{{ route('audiences') }}">למי זה מתאים</a>
-                        <a href="{{ route('use-cases') }}">תרחישי שימוש</a>
-                        <a href="{{ route('agencies') }}">לסוכנויות</a>
+                        <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
-                        <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
-                        <a href="{{ route('pricing') }}">מחירון</a>
                         <a href="{{ route('faq') }}">שאלות נפוצות</a>
                         <a href="{{ route('about') }}">אודות</a>
-                        <a href="{{ route('articles.index') }}">מאמרים</a>
                         <a href="{{ route('login.show') }}">התחברות</a>
-                        <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון</a>
+                        <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                     </nav>
                 </div>
                 <button class="header-menu-backdrop" type="button" aria-label="סגור תפריט" data-header-menu-backdrop="site-menu"></button>
@@ -153,51 +148,31 @@
                             </span>
                         </a>
                         <p>
-                            וידג׳ט נגישות, קוד הטמעה קבוע, דשבורד ניהול, הצהרה בסיסית, תוכן ותמיכה טכנית
-                            במסגרת מוצרית אחת.
+                            כלי חינמי self-service להטמעת וידג׳ט נגישות, עם דשבורד, קוד הטמעה קבוע,
+                            הצהרה בסיסית ותמיכה טכנית בלבד.
                         </p>
-
-                        <div class="site-footer-presence" aria-label="צוותים ושותפים">
-                            <div class="site-footer-avatars">
-                                <span>IN</span>
-                                <span>UX</span>
-                                <span>QA</span>
-                            </div>
-                            <div class="site-footer-presence-copy">
-                                <strong>מוצר, תמיכה ותוכן באותו קו</strong>
-                                <small>חוויית SaaS חיה שמתאימה לבעלי אתרים, סוכנויות וארגונים.</small>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="site-footer-links">
                         <div class="footer-link-group">
                             <h3>המוצר</h3>
-                            <a href="{{ route('home') }}#solutions">פתרונות</a>
-                            <a href="{{ route('audiences') }}">למי זה מתאים</a>
-                            <a href="{{ route('use-cases') }}">תרחישי שימוש</a>
-                            <a href="{{ route('agencies') }}">לסוכנויות</a>
-                            <a href="{{ route('pricing') }}">מחירון</a>
+                            <a href="{{ route('home') }}">בית</a>
+                            <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                             <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
-                            <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
-                            <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                             <a href="{{ route('faq') }}">שאלות נפוצות</a>
-                            <a href="{{ route('home') }}#articles">מאמרים</a>
                         </div>
                         <div class="footer-link-group">
-                            <h3>החברה</h3>
+                            <h3>Brndini</h3>
+                            <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                             <a href="{{ route('about') }}">אודות</a>
-                            <a href="{{ route('faq') }}">שאלות נפוצות</a>
-                            <a href="{{ route('articles.index') }}">בלוג</a>
-                            <a href="{{ route('login.show') }}">אזור לקוחות</a>
+                            <a href="{{ route('pricing') }}">מודל העבודה</a>
+                        </div>
+                        <div class="footer-link-group">
+                            <h3>משפטי</h3>
                             <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
                             <a href="{{ route('legal.privacy') }}">פרטיות</a>
-                        </div>
-                        <div class="footer-link-group">
-                            <h3>התחלה מהירה</h3>
-                            <a href="{{ route('register.show') }}">פתיחת חשבון</a>
                             <a href="{{ route('login.show') }}">התחברות</a>
-                            <a href="{{ route('how-it-works') }}">איך זה עובד</a>
+                            <a href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                         </div>
                     </div>
                 </div>
@@ -205,19 +180,15 @@
                 <div class="site-footer-bottom">
                     <span>© {{ now()->year }} A11Y Bridge. כל הזכויות שמורות.</span>
                     <div class="footer-inline-links">
-                        <a href="{{ route('about') }}">אודות</a>
-                        <a href="{{ route('audiences') }}">למי זה מתאים</a>
-                        <a href="{{ route('use-cases') }}">תרחישי שימוש</a>
-                        <a href="{{ route('agencies') }}">לסוכנויות</a>
-                        <a href="{{ route('pricing') }}">מחירון</a>
+                        <a href="{{ route('home') }}">בית</a>
+                        <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                         <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
-                        <a href="{{ route('products', $marketingParams) }}">מוצרים נוספים</a>
                         <a href="{{ route('faq') }}">שאלות נפוצות</a>
-                        <a href="{{ route('articles.index') }}">מאמרים</a>
+                        <a href="{{ route('about') }}">אודות</a>
                         <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
                         <a href="{{ route('legal.privacy') }}">פרטיות</a>
-                        <a href="{{ route('register.show') }}">פתיחת חשבון</a>
+                        <a href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                     </div>
                 </div>
             </footer>

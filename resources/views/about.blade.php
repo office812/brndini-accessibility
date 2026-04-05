@@ -1,138 +1,93 @@
 @extends('layouts.app')
 
 @php($title = 'אודות A11Y Bridge | כלי חינמי להטמעת וידג׳ט נגישות')
-@php($metaDescription = 'A11Y Bridge היא פלטפורמה חינמית להטמעת וידג׳ט נגישות: קוד הטמעה קבוע, דשבורד, הצהרה בסיסית, בקרה טכנית ותוכן לבעלי אתרים, סוכנויות וארגונים.')
+@php($metaDescription = 'A11Y Bridge היא שכבה חינמית, שקטה וברורה להטמעת וידג׳ט נגישות. Brndini נשארת שכבת שירותים עסקיים נפרדת ואופציונלית.')
+@php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
-    <section class="about-hero">
-        <div class="about-hero-copy">
+    <section class="public-stage">
+        <div class="public-stage-copy">
             <p class="eyebrow">אודות A11Y Bridge</p>
-            <h1>אנחנו בונים כלי חינמי להטמעת וידג׳ט נגישות שנראה ומתנהג כמו מוצר הייטק אמיתי.</h1>
+            <h1>בנינו את A11Y Bridge כמו מוצר. לא כמו כפתור שמתחבא בתחתית האתר.</h1>
             <p class="hero-text hero-text-lead">
-                A11Y Bridge נולדה מתוך צורך פשוט: לא רק להוסיף כפתור לאתר, אלא לתת לעסקים,
-                לסוכנויות ולצוותים מערכת חינמית שמחברת וידג׳ט, הטמעה, הצהרה בסיסית, תוכן ובקרה טכנית תחת מותג אחד.
+                הרעיון פשוט: לתת לבעלי אתרים, לסוכנויות ולצוותים שכבה חינמית שנראית רצינית,
+                עובדת מהר, ונשארת שקופה במסרים שלה. לא שירות נגישות, לא ייעוץ, ולא עוד מסך צדדי
+                שמרגיש זמני.
             </p>
-            <div class="hero-action-row">
-                <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון</a>
-                <a class="ghost-button button-link" href="{{ route('pricing') }}">לצפייה בחבילות</a>
+            <div class="public-cta-row">
+                <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                <a class="ghost-button button-link" href="{{ route('how-it-works') }}">איך זה עובד</a>
             </div>
         </div>
 
-        <div class="about-hero-panel">
-            <div class="about-hero-grid">
-                <article class="about-mini-card">
-                    <span class="eyebrow">מוצר</span>
-                    <strong>וידג׳ט מנוהל</strong>
-                    <p>הטמעה אחת, שליטה מלאה מהפלטפורמה.</p>
-                </article>
-                <article class="about-mini-card">
-                    <span class="eyebrow">ציות</span>
-                    <strong>מסגור רציני</strong>
-                    <p>הצהרה בסיסית, בדיקות, חיווי התקנה ומסך ניהול ברור.</p>
-                </article>
-                <article class="about-mini-card">
-                    <span class="eyebrow">צמיחה</span>
-                    <strong>תוכן ו־SEO</strong>
-                    <p>מאמרים, עמודי מוצר ושפה שמסבירה את הערך העסקי.</p>
-                </article>
-                <article class="about-mini-card">
-                    <span class="eyebrow">תפעול</span>
-                    <strong>תמיכה טכנית</strong>
-                    <p>ניהול לקוחות, אתרים, רישיונות ופניות טכניות מתוך מקום אחד.</p>
-                </article>
+        <div class="public-stage-visual" aria-hidden="true">
+            <div class="public-device-shell public-device-shell-quiet">
+                <div class="public-device-card">
+                    <small>הגישה</small>
+                    <strong>מוצר חינמי עם גבולות ברורים.</strong>
+                    <p>הכלי נשאר self-service. Brndini נשארת שכבה עסקית נפרדת כשבאמת צריך אותה.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="section-band">
+    <section class="public-shell-section">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">למה אנחנו קיימים</p>
-            <h2>כי נגישות לא צריכה להיראות כמו תוסף צדדי, אלא כמו שכבת מוצר שלמה.</h2>
+            <p class="eyebrow">למה בנינו את זה</p>
+            <h2>כי שכבת נגישות לא צריכה להרגיש כמו טלאי.</h2>
         </div>
 
-        <div class="about-story-grid">
-            <article class="story-card">
-                <h3>פחות כאוס, יותר שליטה</h3>
-                <p>במקום לערבב בין כמה מסכים, כמה כלים וכמה מסרים, בנינו מערכת אחת שמרכזת את כל מה שבעל האתר צריך כדי להטמיע, לנהל ולעדכן.</p>
+        <div class="public-shell-grid public-shell-grid-three">
+            <article class="public-shell-card">
+                <small>01</small>
+                <h3>פחות חיכוך</h3>
+                <p>חשבון, אתר, snippet ודשבורד אחד במקום כמה נקודות מפוזרות.</p>
             </article>
-            <article class="story-card">
-                <h3>מותאם לעסקים, סוכנויות וארגונים</h3>
-                <p>המערכת תוכננה לעבוד גם לאתר בודד וגם למי שמנהל כמה רישיונות, כמה לקוחות וכמה אתרים במקביל.</p>
+            <article class="public-shell-card">
+                <small>02</small>
+                <h3>יותר בהירות</h3>
+                <p>המערכת מסבירה מה היא כן עושה, ומה נשאר מחוץ לשכבה החינמית.</p>
             </article>
-            <article class="story-card">
-                <h3>נראות של חברה גדולה</h3>
-                <p>אנחנו מאמינים שכלי נגישות חינמי צריך להיראות כמו SaaS חזק: מסכים ברורים, חבילות, אזור תוכן ושפה מוצרית עקבית.</p>
+            <article class="public-shell-card">
+                <small>03</small>
+                <h3>בסיס לצמיחה</h3>
+                <p>מי שצריך יותר עובר ל־Brndini, אבל רק כשיש צורך עסקי אמיתי.</p>
             </article>
         </div>
     </section>
 
-    <section class="section-band section-band-alt">
+    <section class="public-shell-section public-shell-section-soft">
         <div class="section-heading section-heading-center">
-            <p class="eyebrow">איך אנחנו עובדים</p>
-            <h2>תשתית אחת שמחברת בין אתר, וידג׳ט, לקוח וצוות.</h2>
+            <p class="eyebrow">עקרונות עבודה</p>
+            <h2>אותה שפה בכל נקודת מגע.</h2>
         </div>
 
-        <div class="about-process-grid">
-            <article class="process-card-strong">
-                <span class="process-index">01</span>
-                <h3>יוצרים סביבת עבודה לאתר</h3>
-                <p>כל אתר מקבל מפתח אתר, רישיון, חבילה, סטטוס התקנה ונקודת ניהול משלו.</p>
+        <div class="public-dual-panel">
+            <article class="public-decision-card">
+                <p class="eyebrow">A11Y Bridge</p>
+                <h3>כלי חינמי, שקט ומדויק להטמעה וניהול.</h3>
+                <ul class="compact-check-list">
+                    <li>פתיחה מהירה</li>
+                    <li>דשבורד ברור</li>
+                    <li>הצהרה בסיסית</li>
+                    <li>תמיכה טכנית בלבד</li>
+                </ul>
             </article>
-            <article class="process-card-strong">
-                <span class="process-index">02</span>
-                <h3>מטמיעים פעם אחת</h3>
-                <p>קוד אחד באתר, והמערכת מושכת אוטומטית את כל ההגדרות, הפיצ׳רים והשינויים הבאים.</p>
-            </article>
-            <article class="process-card-strong">
-                <span class="process-index">03</span>
-                <h3>ממשיכים לנהל ולשפר</h3>
-                <p>מאמרים, בקרה טכנית, רישיונות וחוויית משתמש מנוהלים מתוך אותה פלטפורמה.</p>
-            </article>
-        </div>
-    </section>
-
-    <section class="section-band">
-        <div class="section-heading section-heading-center">
-            <p class="eyebrow">מעבר לכלי החינמי</p>
-            <h2>Brndini בנויה לעבוד כמו אקו־סיסטם, לא כמו מוצר בודד.</h2>
-            <p class="hero-text">
-                הווידג׳ט החינמי פותח את הדלת. כשהעסק רוצה לשפר אתר, להשיג יותר תנועה או לעבוד על תשתית,
-                Brndini מציעה שכבת שירותים עסקיים משלימה.
-            </p>
-        </div>
-
-        @include('partials.brndini-services-cards')
-
-        <div class="magazine-actions">
-            <a class="ghost-button button-link" href="{{ route('products') }}">להכיר את המוצרים הבאים</a>
-        </div>
-    </section>
-
-    <section class="section-band section-band-plain">
-        <div class="section-heading section-heading-center">
-            <p class="eyebrow">המסר שאנחנו שומרים עליו</p>
-            <h2>A11Y Bridge היא פלטפורמה חינמית. Brndini היא השכבה העסקית שמסביבה.</h2>
-        </div>
-
-        <div class="decision-grid">
-            <article class="decision-card decision-card-free">
-                <span class="status-pill is-neutral">A11Y Bridge</span>
-                <strong>כלי self-service חינמי להטמעת וידג׳ט, הצהרה בסיסית ובקרה טכנית.</strong>
-                <p>אנחנו רוצים שאנשים יתחילו מהר, יקבלו ערך מיידי, וינהלו את המערכת בעצמם בלי תלות בשיחת מכירה.</p>
-            </article>
-            <article class="decision-card decision-card-services">
-                <span class="status-pill is-good">Brndini</span>
-                <strong>שירותים עסקיים אופציונליים למי שרוצה לגדול, לשדרג או לעבוד טוב יותר.</strong>
-                <p>כשהעסק צריך אחסון, SEO, קמפיינים, תחזוקה, שדרוג אתר או אוטומציות, Brndini נכנסת בתור שכבת שירות נפרדת.</p>
+            <article class="public-decision-card">
+                <p class="eyebrow">Brndini</p>
+                <h3>שירותים עסקיים נפרדים למי שצריך שכבה רחבה יותר.</h3>
+                <ul class="compact-check-list">
+                    <li>אחסון ותחזוקה</li>
+                    <li>SEO וקמפיינים</li>
+                    <li>שדרוג אתר ודפי נחיתה</li>
+                    <li>אוטומציות ומוצרים נוספים</li>
+                </ul>
             </article>
         </div>
-    </section>
 
-    <section class="cta-banner cta-banner-wide">
-        <div>
-            <p class="eyebrow">בואו נבנה שכבת נגישות שנראית כמו מוצר אמיתי</p>
-            <h2>אם אתם רוצים שהאתר שלכם ייראה מנוהל, אמין ומוכן לצמיחה, זה המקום להתחיל ממנו.</h2>
+        <div class="public-cta-row public-cta-row-center">
+            <a class="ghost-button button-link" href="{{ route('free-tool') }}">מה כלול בחינם</a>
+            <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
         </div>
-        <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון</a>
     </section>
 @endsection
