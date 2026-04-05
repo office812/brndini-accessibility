@@ -78,10 +78,95 @@
 
     </section>
 
-    <section class="public-shell-section public-shell-section-divider">
-        <div class="section-heading">
-            <p class="eyebrow">מה מקבלים בחינם</p>
-            <h2>הכול מתחיל ב־snippet אחד, ואז ממשיכים לנהל מרחוק.</h2>
+    <section class="public-shell-section public-shell-section-logo-band">
+        <div class="public-logo-band" aria-label="עקרונות המוצר">
+            <span>snippet קבוע</span>
+            <span>widget מנוהל מרחוק</span>
+            <span>statement בסיסי</span>
+            <span>חיווי התקנה</span>
+            <span>תמיכה טכנית בלבד</span>
+        </div>
+    </section>
+
+    <section class="public-shell-section public-shell-section-showcase">
+        <div class="section-heading section-heading-heroish">
+            <p class="eyebrow">מפסיקים להחליף קוד בכל שינוי</p>
+            <h2>פותחים חשבון, מטמיעים snippet אחד, וכל שאר השכבה מנוהלת מתוך המערכת.</h2>
+        </div>
+
+        <div class="public-showcase-split">
+            <div class="public-showcase-copy">
+                <article>
+                    <small>01</small>
+                    <strong>הטמעה פעם אחת</strong>
+                    <p>snippet קבוע באתר, בלי לחזור למפתח בכל שינוי טקסט או preset.</p>
+                </article>
+                <article>
+                    <small>02</small>
+                    <strong>ניהול מתוך dashboard</strong>
+                    <p>widget, statement וחיווי התקנה ממקום אחד, בשפה שקטה ולא טכנית מדי.</p>
+                </article>
+                <article>
+                    <small>03</small>
+                    <strong>רואים מה חסר עכשיו</strong>
+                    <p>המסכים הפנימיים מראים סטטוס, פעולה הבאה ותחזוקה שוטפת של השכבה.</p>
+                </article>
+            </div>
+
+            <div class="public-showcase-visual" aria-hidden="true">
+                <div class="public-device-shell public-device-shell-inline">
+                    <div class="public-stage-canvas public-stage-canvas-secondary">
+                        <div class="public-stage-canvas-topline">
+                            <span>OVERVIEW / INSTALL / STATUS</span>
+                            <span>A11Y BRIDGE</span>
+                        </div>
+                        <div class="public-stage-canvas-grid public-stage-canvas-grid-dual">
+                            <article class="is-primary">
+                                <span>status</span>
+                                <strong>widget זוהה</strong>
+                                <p>הקוד באתר נטען ומעודכן מתוך סביבת העבודה.</p>
+                            </article>
+                            <article>
+                                <span>statement</span>
+                                <strong>נקודת פתיחה בסיסית</strong>
+                                <p>הצהרה מחוברת למסך הציות בלי לערבב שירות נגישות.</p>
+                            </article>
+                            <article>
+                                <span>preset</span>
+                                <strong>מנוהל מרחוק</strong>
+                                <p>טקסטים, preset ופעולות נגישות מנוהלים בלי החלפת snippet.</p>
+                            </article>
+                            <article>
+                                <span>support</span>
+                                <strong>טכני בלבד</strong>
+                                <p>פונים לתמיכה טכנית רק כשבאמת צריך עזרה בשימוש במערכת.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="public-shell-section public-shell-section-metrics">
+        <div class="section-heading section-heading-heroish">
+            <p class="eyebrow">בנוי לבעלי אתרים, לסוכנויות ולצוותים פנימיים</p>
+            <h2>מוצר אחד, סביבת עבודה אחת, וכל מה שצריך כדי להתחיל מהר.</h2>
+        </div>
+
+        <div class="public-metric-line">
+            <article>
+                <strong>1</strong>
+                <span>snippet קבוע</span>
+            </article>
+            <article>
+                <strong>4</strong>
+                <span>מסכים מרכזיים לניהול</span>
+            </article>
+            <article>
+                <strong>0</strong>
+                <span>שירות נגישות במסווה</span>
+            </article>
         </div>
 
         <div class="public-proof-rail">
@@ -103,51 +188,10 @@
         </div>
     </section>
 
-    <section class="public-shell-section public-shell-section-soft">
-        <div class="section-heading">
-            <p class="eyebrow">איך זה עובד</p>
-            <h2>ארבעה צעדים קצרים, ואז ממשיכים לנהל מתוך סביבת עבודה אחת.</h2>
-        </div>
-
-        <div class="public-flow-grid public-flow-grid-compact">
-            <article class="public-flow-step">
-                <span>01</span>
-                <h3>פותחים חשבון</h3>
-                <p>יוצרים משתמש ומוסיפים את האתר הראשון כדי לפתוח סביבת עבודה פעילה.</p>
-            </article>
-            <article class="public-flow-step">
-                <span>02</span>
-                <h3>מטמיעים קוד קבוע</h3>
-                <p>snippet אחד באתר, שממנו ה־widget וה־statement נמשכים בהמשך.</p>
-            </article>
-            <article class="public-flow-step">
-                <span>03</span>
-                <h3>מגדירים את השכבה</h3>
-                <p>מעדכנים מראה, טקסטים והצהרה בסיסית מתוך dashboard אחד.</p>
-            </article>
-            <article class="public-flow-step">
-                <span>04</span>
-                <h3>ממשיכים לנהל</h3>
-                <p>רואים אם ההתקנה זוהתה, מה חסר, ומה כדאי לעשות עכשיו.</p>
-            </article>
-        </div>
-
-        <div class="public-bridge-layout">
-            <div>
-                <p class="eyebrow">זה מספיק כדי להתחיל</p>
-                <h3>אם מה שצריך הוא widget, snippet, statement בסיסי וניהול טכני, A11Y Bridge מספיקה לבד.</h3>
-            </div>
-            <div>
-                <p>אם האתר צריך מעבר לזה תשתית, צמיחה, SEO, קמפיינים, תחזוקה או אוטומציות, לא מערבבים את זה עם הכלי. ממשיכים ל־Brndini רק כשצריך.</p>
-                <a class="ghost-button button-link" href="{{ route('how-it-works') }}">למהלך המלא</a>
-            </div>
-        </div>
-    </section>
-
-    <section class="public-shell-section public-shell-section-last">
-        <div class="section-heading">
+    <section class="public-shell-section public-shell-section-last public-shell-section-darkend">
+        <div class="section-heading section-heading-heroish">
             <p class="eyebrow">Brndini</p>
-            <h2>Brndini היא שכבת המשך עסקית, לא “פרימיום של A11Y Bridge”.</h2>
+            <h2>כשצריך מעבר למוצר, ממשיכים לשכבה עסקית נפרדת ולא “פרימיום של A11Y Bridge”.</h2>
         </div>
 
         <div class="public-dual-panel public-dual-panel-quiet">
