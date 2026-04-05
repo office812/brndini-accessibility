@@ -39,8 +39,9 @@ if ($act === 'ping') {
 
 // ─── WRITE FILE ──────────────────────────────────────────────────────────────
 } elseif ($act === 'write') {
-    $rel     = ltrim($_GET['path'] ?? '', '/');
-    $content = base64_decode($_GET['content'] ?? '');
+    $rel     = ltrim(($_POST['path'] ?? $_GET['path'] ?? ''), '/');
+    $raw     = $_POST['content'] ?? $_GET['content'] ?? '';
+    $content = base64_decode($raw);
     if (!$rel || $content === false) {
         echo json_encode(['error' => 'missing path or content']);
     } else {
