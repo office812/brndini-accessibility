@@ -12,13 +12,17 @@
 - ✅ תוכן מקורי ואיכותי בעברית
 
 ### מה חסר (קריטי):
-- ❌ אין Schema.org JSON-LD (structured data)
+- ✅ Schema.org JSON-LD קיים (Organization, LocalBusiness, FAQ, Breadcrumb) - מסופק ע"י Yoast
+- ❌ אין Service Schema לדפי שירות (לא מסופק ע"י Yoast)
 - ❌ אין llms.txt לבוטים של AI
 - ❌ robots.txt לא מכיל הנחיות ל-AI crawlers
-- ❌ אין FAQ Schema markup (ה-FAQ קיים בתוכן אבל לא מסומן כ-schema)
+- ❌ OG/Twitter tags חסרים בדף הבית (Yoast לא מייצר אותם שם)
+- ❌ תמונות עם alt text ריק
+- ❌ אינסטגרם מדורג מעל האתר בחיפוש ממותג
 - ❌ אין נוכחות בספריות סוכנויות (Clutch, Sortlist, GoodFirms)
 - ❌ 0 ביקורות חיצוניות (Facebook, Google Business)
 - ❌ אין backlinks מאתרים סמכותיים
+- ❌ לא מדורג ב-7 מתוך 8 מילות מפתח מרכזיות (מדורג ~#6 רק ל"סוכנות פרסום דיגיטלי ישראל")
 
 ---
 
@@ -30,13 +34,12 @@
 3. לאחר ההפעלה, לך ל: הגדרות → קישורים קבועים → לחץ "שמור" (לרענון הנתיבים)
 
 ### מה התוסף עושה:
-- מוסיף **Organization Schema** לכל דף
-- מוסיף **LocalBusiness Schema** לדף הבית
-- מוסיף **Service Schema** לדפי שירות
-- מנסה לזהות FAQ מ-Elementor ולהוסיף **FAQ Schema** אוטומטית
-- יוצר נתיב `/llms.txt` לבוטים של AI
-- מעדכן `robots.txt` עם הנחיות לבוטים של AI
+- מוסיף **Service Schema** לדפי שירות (לא מסופק ע"י Yoast)
+- יוצר נתיב `/llms.txt` לבוטים של AI (ChatGPT, Perplexity, Claude, Gemini)
+- מעדכן `robots.txt` עם הנחיות מפורשות לבוטים של AI
+- מתקן **alt text ריק** בתמונות אוטומטית
 - מוסיף meta tags מותאמים ל-AI
+- **לא** מכפיל Schema שכבר קיים ב-Yoast (Organization, LocalBusiness, FAQ, Breadcrumb)
 
 ### בדיקה:
 - בדוק `https://brndini.co.il/llms.txt` - צריך להציג תוכן טקסט
