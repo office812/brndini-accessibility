@@ -6587,6 +6587,11 @@ body.page-is-ready .auth-shell {
     color: var(--accent-deep);
 }
 
+.status-pill.is-bad {
+    background: rgba(220, 48, 48, 0.12);
+    color: #e05252;
+}
+
 .cta-link {
     margin-top: 18px;
     width: fit-content;

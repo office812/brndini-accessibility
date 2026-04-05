@@ -36,13 +36,15 @@
         </div>
 
         <div class="public-shell-grid public-shell-grid-three">
-            @foreach ($knowledgeTopics as $topic)
+            @forelse ($knowledgeTopics as $topic)
                 <article class="public-shell-card">
                     <small>{{ $topic['count'] }} עמודים</small>
                     <h3>{{ $topic['label'] }}</h3>
                     <p>{{ $topic['summary'] }}</p>
                 </article>
-            @endforeach
+            @empty
+                <p class="panel-intro" style="grid-column:1/-1;text-align:center;opacity:.6;">אין תכנים זמינים כרגע. בקרוב.</p>
+            @endforelse
         </div>
     </section>
 
@@ -96,7 +98,7 @@
         </div>
 
         <div class="knowledge-topic-list">
-            @foreach ($knowledgeTopics as $topic)
+            @forelse ($knowledgeTopics as $topic)
                 <section class="knowledge-topic-card">
                     <header class="knowledge-topic-head">
                         <div>
@@ -108,7 +110,7 @@
                     </header>
 
                     <div class="knowledge-article-list">
-                        @foreach ($topic['articles'] as $article)
+                        @forelse ($topic['articles'] as $article)
                             <article class="knowledge-article-item">
                                 <div>
                                     <p class="meta-label">{{ optional($article->published_at)->format('d.m.Y') }} · {{ $article->readingTimeMinutes() }} דקות</p>
@@ -117,10 +119,14 @@
                                 </div>
                                 <a class="text-link" href="{{ route('articles.show', $article) }}">לקריאה מלאה</a>
                             </article>
-                        @endforeach
+                        @empty
+                            <p class="meta-label" style="opacity:.5;">אין מאמרים בנושא זה עדיין.</p>
+                        @endforelse
                     </div>
                 </section>
-            @endforeach
+            @empty
+                <p class="panel-intro" style="text-align:center;opacity:.6;padding:2rem 0;">אין נושאים זמינים כרגע.</p>
+            @endforelse
         </div>
     </section>
 
