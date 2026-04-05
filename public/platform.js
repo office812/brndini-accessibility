@@ -1065,3 +1065,56 @@ document.addEventListener('click', function (e) {
     }
   }
 });
+
+// ─── Scroll Reveal ────────────────────────────────────────────────────────────
+(function () {
+  if (!window.IntersectionObserver) return;
+  var els = document.querySelectorAll('[data-reveal]');
+  if (!els.length) return;
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-revealed');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (el) { obs.observe(el); });
+})();
+
+// ─── FAQ accordion smooth animation ──────────────────────────────────────────
+document.querySelectorAll('details').forEach(function (d) {
+  d.addEventListener('toggle', function () {
+    if (d.open) d.classList.add('is-open');
+    else d.classList.remove('is-open');
+  });
+});
+
+// ─── Newsletter form: AJAX submit with toast ──────────────────────────────────
+(function () {
+  var form = document.querySelector('.stitch-home-newsletter-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    var email = form.querySelector('input[name="email"]').value;
+    if (!email) return;
+    btn.disabled = true;
+    btn.textContent = 'שולח...';
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+      body: new URLSearchParams(new FormData(form))
+    }).then(function (r) { return r.json().catch(function(){ return {}; }); })
+      .then(function () {
+        if (window.showToast) showToast('! נוספת לרשימה בהצלחה', 'success');
+        form.querySelector('input[name="email"]').value = '';
+        btn.textContent = 'הצטרפת!';
+        btn.style.background = '#22c55e';
+      }).catch(function () {
+        if (window.showToast) showToast('שגיאה — נסה שוב', 'error');
+        btn.disabled = false;
+        btn.textContent = 'הצטרפות לרשימה';
+      });
+  });
+})();

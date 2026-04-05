@@ -122,7 +122,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-proof">
+    <section class="stitch-home-proof" data-reveal>
         <p>מותאם לכל סוג אתר — מטמיעים בכמה דקות</p>
         <div class="stitch-home-proof-row" aria-label="פלטפורמות נתמכות">
             <span class="stitch-platform-badge">
@@ -144,7 +144,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-stats">
+    <section class="stitch-home-stats" data-reveal>
         <div class="stitch-home-stats-row">
             <div class="stitch-home-stat-item">
                 <span class="stitch-home-stat-number" data-counter="847">0</span>
@@ -168,7 +168,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-features" id="features">
+    <section class="stitch-home-features" id="features" data-reveal>
         <div class="stitch-home-section-heading">
             <h2>הכלים הנכונים לשיפור הנגישות</h2>
             <p>במקום עוד תוסף מבולגן, מתחילים ממוצר ברור שאפשר להטמיע, לנהל ולעקוב אחריו.</p>
@@ -220,7 +220,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-comparison" id="comparison">
+    <section class="stitch-home-comparison" id="comparison" data-reveal>
         <div class="stitch-home-section-heading stitch-home-section-heading-centered">
             <h2>A11Y Bridge מול הגישות האחרות</h2>
             <p>בחרנו בגישה אחרת: כלי self-service חינמי ושקוף, בלי חיכוך.</p>
@@ -257,7 +257,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-cta-band">
+    <section class="stitch-home-cta-band" data-reveal>
         <div class="stitch-home-cta-surface">
             <div class="stitch-home-cta-copy">
                 <h2>אל תחכו שהנגישות תהפוך לבלגן. <span>הכניסו שכבה טכנית ברורה עוד היום.</span></h2>
@@ -274,7 +274,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-newsletter" id="newsletter">
+    <section class="stitch-home-newsletter" id="newsletter" data-reveal>
         <div class="stitch-home-newsletter-inner">
             <div class="stitch-home-newsletter-copy">
                 <span class="stitch-home-badge" style="margin-bottom:12px">
@@ -298,7 +298,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-faq" id="faq">
+    <section class="stitch-home-faq" id="faq" data-reveal>
         <div class="stitch-home-section-heading stitch-home-section-heading-centered">
             <h2>שאלות נפוצות</h2>
             <p>כל מה שצריך לדעת לפני שמטמיעים את A11Y Bridge.</p>

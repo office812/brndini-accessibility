@@ -23,6 +23,10 @@ class NewsletterController extends Controller
             Log::info('Newsletter subscribe (no table): ' . $email);
         }
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['ok' => true]);
+        }
+
         return back()->with('newsletter_success', 'נרשמת בהצלחה! נשלח לך עדכון כשמוצרים חדשים יוצאים.');
     }
 }
