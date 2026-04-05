@@ -1,0 +1,133 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://brndini.co.il/#organization",
+  "name": "ברנדיני",
+  "alternateName": ["Brndini", "Brndini Digital Agency", "ברנדיני סוכנות פרסום דיגיטלי"],
+  "url": "https://brndini.co.il",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://brndini.co.il/wp-content/uploads/brndini-logo.png",
+    "width": 300,
+    "height": 100
+  },
+  "description": "ברנדיני היא סוכנות פרסום דיגיטלי מובילה בישראל המתמחה במיתוג, בניית אתרים, פרסום ממומן, ניהול רשתות חברתיות, עיצוב גרפי וקופירייטינג לעסקים שרוצים לצמוח.",
+  "foundingLocation": {
+    "@type": "Place",
+    "name": "Nes Ziona, Israel"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "גולדה מאיר 5",
+    "addressLocality": "נס ציונה",
+    "addressCountry": "IL"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "url": "https://brndini.co.il/contact/",
+    "availableLanguage": ["Hebrew", "English"]
+  },
+  "sameAs": [
+    "https://www.facebook.com/brndini.agency/",
+    "https://www.instagram.com/brndini.il/"
+  ],
+  "knowsAbout": [
+    "שיווק דיגיטלי",
+    "מיתוג עסקים",
+    "בניית אתרים",
+    "פרסום ממומן",
+    "ניהול רשתות חברתיות",
+    "עיצוב גרפי",
+    "קופירייטינג",
+    "קידום אתרים SEO",
+    "פרסום בגוגל",
+    "פרסום בפייסבוק",
+    "פרסום באינסטגרם",
+    "פרסום בטיקטוק",
+    "Digital Marketing",
+    "Branding",
+    "Web Development",
+    "SEO",
+    "Google Ads",
+    "Social Media Marketing"
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "שירותי ברנדיני",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "בניית אתרים",
+          "description": "בניית אתרי וורדפרס מותאמים אישית, חנויות מקוונות, דפי נחיתה ואתרי תדמית לעסקים",
+          "url": "https://brndini.co.il/services/website-building/"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "פרסום ממומן",
+          "description": "ניהול קמפיינים ממומנים בגוגל, פייסבוק, אינסטגרם, טיקטוק, לינקדאין ויוטיוב",
+          "url": "https://brndini.co.il/services/internet-advertising/"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "ניהול רשתות חברתיות",
+          "description": "ניהול מקצועי של פרופילים עסקיים בפייסבוק, אינסטגרם, לינקדאין וטיקטוק",
+          "url": "https://brndini.co.il/services/ניהול-רשתות-חברתיות/"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "מיתוג עסקים",
+          "description": "מיתוג מלא לעסקים כולל לוגו, קונספט מותג, זהות חזותית וספר מותג",
+          "url": "https://brndini.co.il/services/מיתוג-עסקים/"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "עיצוב גרפי",
+          "description": "עיצוב לוגו, כרטיסי ביקור, פוסטים לרשתות חברתיות, פליירים, רולאפים וחומרים שיווקיים",
+          "url": "https://brndini.co.il/services/עיצוב-גרפי/"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "קופירייטינג",
+          "description": "כתיבה שיווקית לאתרים, רשתות חברתיות, מאמרים, סיפורי מותג ועמודי אודות",
+          "url": "https://brndini.co.il/services/שירותי-קופיירייטינג/"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "ייעוץ עסקי",
+          "description": "ייעוץ עסקי דיגיטלי, ייעוץ פיננסי, אוטומציה עסקית וניהול מוניטין",
+          "url": "https://brndini.co.il/services/business-consulting/"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "קידום אתרים SEO",
+          "description": "קידום אורגני בגוגל, SEO טכני, אסטרטגיית תוכן וקידום מקומי לעסקים בישראל",
+          "url": "https://brndini.co.il/services/internet-advertising/קידום-אורגני-כיצד-להגיע-לראש-תוצאות-הח/"
+        }
+      }
+    ]
+  }
+}
