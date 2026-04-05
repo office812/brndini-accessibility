@@ -8,9 +8,9 @@
     <section class="public-stage">
         <div class="public-stage-copy">
             <p class="eyebrow">מה כלול בחינם</p>
-            <h1>השכבה החינמית של A11Y Bridge מספיקה כדי להתחיל נכון, בלי Trial ובלי חבילת “פרימיום” בדרך.</h1>
+            <h1>השכבה החינמית של A11Y Bridge מספיקה כדי להתחיל נכון, בלי תקופת ניסיון ובלי חבילת “פרימיום” בדרך.</h1>
             <p class="hero-text hero-text-lead">
-                המטרה היא לתת מוצר אמיתי מהרגע הראשון: widget, הטמעה, דשבורד, הצהרה בסיסית
+                המטרה היא לתת מוצר אמיתי מהרגע הראשון: ווידג׳ט, הטמעה, דשבורד, הצהרה בסיסית
                 וזיהוי התקנה. מה שלא כלול כאן נשאר מחוץ לכלי, ובמקרה הצורך עובר לשירותי Brndini.
             </p>
             <div class="public-cta-row">
@@ -35,7 +35,7 @@
             <article class="public-shell-card">
                 <small>02</small>
                 <h3>קוד הטמעה קבוע</h3>
-                <p>מטמיעים פעם אחת וממשיכים לנהל הכל מרחוק בלי להחליף snippet.</p>
+                <p>מטמיעים פעם אחת וממשיכים לנהל הכל מרחוק בלי להחליף קוד הטמעה.</p>
             </article>
             <article class="public-shell-card">
                 <small>03</small>
@@ -61,7 +61,7 @@
                 <p class="eyebrow">כן כלול</p>
                 <ul class="compact-check-list">
                     <li>פתיחת חשבון חופשית</li>
-                    <li>שכבת widget ודשבורד</li>
+                    <li>שכבת ווידג׳ט ודשבורד</li>
                     <li>הצהרה בסיסית</li>
                     <li>תמיכה טכנית בפלטפורמה</li>
                 </ul>

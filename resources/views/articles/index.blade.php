@@ -5,10 +5,10 @@
 @section('content')
     <section class="public-stage">
         <div class="public-stage-copy">
-            <p class="eyebrow">Knowledge Center</p>
+            <p class="eyebrow">מרכז הידע</p>
             <h1>מרכז הידע של A11Y Bridge סביב נגישות לאתרים, הצהרות, WCAG ו־SEO.</h1>
             <p class="hero-text hero-text-lead">
-                במקום בלוג כללי, בנינו שכבת תוכן שמחלקת את התחום לאשכולות ברורים: widget,
+                במקום בלוג כללי, בנינו שכבת תוכן שמחלקת את התחום לאשכולות ברורים: ווידג׳ט,
                 הצהרות, ציות, פלטפורמות, סוכנויות ו־AI SEO. כל עמוד כאן נועד או להסביר משהו
                 היטב, או להוביל אותך לצעד הבא הנכון.
             </p>
@@ -50,7 +50,7 @@
         @php($featuredCover = $featuredArticle->coverTheme())
         <section class="public-shell-section public-shell-section-soft">
             <div class="section-heading section-heading-center">
-                <p class="eyebrow">Featured article</p>
+                <p class="eyebrow">מאמר מוביל</p>
                 <h2>{{ $featuredArticle->title }}</h2>
                 <p class="hero-text">{{ $featuredArticle->excerpt }}</p>
             </div>

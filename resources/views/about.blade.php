@@ -25,7 +25,7 @@
                 <div class="public-device-card">
                     <small>הגישה</small>
                     <strong>מוצר חינמי עם גבולות ברורים.</strong>
-                    <p>הכלי נשאר self-service. Brndini נשארת שכבה עסקית נפרדת כשבאמת צריך אותה.</p>
+                    <p>הכלי נשאר בשימוש עצמי. Brndini נשארת שכבה עסקית נפרדת כשבאמת צריך אותה.</p>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
             <article class="public-shell-card">
                 <small>01</small>
                 <h3>פחות חיכוך</h3>
-                <p>חשבון, אתר, snippet ודשבורד אחד במקום כמה נקודות מפוזרות.</p>
+                <p>חשבון, אתר, קוד הטמעה ודשבורד אחד במקום כמה נקודות מפוזרות.</p>
             </article>
             <article class="public-shell-card">
                 <small>02</small>

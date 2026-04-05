@@ -21,8 +21,8 @@
                 <h1>{{ $isLogin ? 'חזרה מהירה לסביבת העבודה' : 'פותחים אתר ראשון וממשיכים ישר להטמעה' }}</h1>
                 <p class="hero-text">
                     {{ $isLogin
-                        ? 'כניסה ישירה ל־dashboard, למסך ההטמעה, ל־statement ולתמיכה הטכנית.'
-                        : 'שלושה שלבים קצרים שמובילים מהר ל־first connected site: אתר ראשון, snippet קבוע ו־dashboard ברור להטמעה.' }}
+                        ? 'כניסה ישירה לדשבורד, למסך ההטמעה, להצהרה ולתמיכה הטכנית.'
+                        : 'שלושה שלבים קצרים שמובילים מהר לאתר ראשון מחובר: אתר ראשון, קוד הטמעה קבוע ודשבורד ברור להטמעה.' }}
                 </p>
             </div>
 
@@ -54,8 +54,8 @@
 
                     <div class="flow-wizard-intro flow-wizard-intro-compact flow-wizard-intro-public">
                         <div class="flow-wizard-intro-copy">
-                            <p class="eyebrow">Setup flow</p>
-                            <strong>מכינים אתר ראשון ו־snippet ראשון</strong>
+                            <p class="eyebrow">פתיחה מהירה</p>
+                            <strong>מכינים אתר ראשון וקוד הטמעה ראשון</strong>
                             <p class="signup-note">בלי כרטיס אשראי ובלי לקפוץ בין מסכים.</p>
                         </div>
                         <div class="flow-wizard-stepper" aria-label="התקדמות בהרשמה">
@@ -88,15 +88,15 @@
 
                             <div class="auth-setup-strip" aria-label="מה נפתח מיד אחרי ההרשמה">
                                 <article>
-                                    <small>site</small>
+                                    <small>אתר</small>
                                     <strong>אתר ראשון מחובר</strong>
                                 </article>
                                 <article>
-                                    <small>snippet</small>
+                                    <small>קוד</small>
                                     <strong>קוד הטמעה קבוע</strong>
                                 </article>
                                 <article>
-                                    <small>dashboard</small>
+                                    <small>ניהול</small>
                                     <strong>סביבת עבודה מוכנה</strong>
                                 </article>
                             </div>
@@ -104,7 +104,7 @@
                             <div class="flow-stage flow-stage-product signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.">
                                 <div class="flow-stage-head">
                                     <strong>מתחילים מהאתר עצמו</strong>
-                                    <p>הדומיין פותח את סביבת העבודה ומייצר את ה־snippet הראשוני לאתר.</p>
+                                    <p>הדומיין פותח את סביבת העבודה ומייצר את קוד ההטמעה הראשוני לאתר.</p>
                                 </div>
                                 <label for="domain">הדומיין של האתר</label>
                                 <input id="domain" name="domain" type="text" value="{{ old('domain') }}" placeholder="https://your-site.com" required>
@@ -132,8 +132,8 @@
 
                             <div class="flow-stage flow-stage-product signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="פרטי הגישה והאישורים האחרונים, ואז החשבון מוכן.">
                                 <div class="flow-stage-head">
-                                    <strong>יוצרים את החשבון וממשיכים ל־dashboard</strong>
-                                    <p>עוד פרטי גישה בסיסיים, והמערכת מוכנה ל־install ולהגדרות הראשונות.</p>
+                                    <strong>יוצרים את החשבון וממשיכים לדשבורד</strong>
+                                    <p>עוד פרטי גישה בסיסיים, והמערכת מוכנה להטמעה ולהגדרות הראשונות.</p>
                                 </div>
 
                                 <label for="signup_email">אימייל</label>
@@ -190,7 +190,7 @@
 
                             <div class="flow-support-card flow-support-card-product">
                                 <p class="eyebrow">אחרי ההרשמה</p>
-                                <strong>נכנסים ישר ל־dashboard עם אתר ראשון מוכן לעבודה</strong>
+                                <strong>נכנסים ישר לדשבורד עם אתר ראשון מוכן לעבודה</strong>
                                 <ul class="compact-check-list">
                                     <li>קוד הטמעה קבוע לאתר הראשון</li>
                                     <li>דשבורד לניהול וידג׳ט, התקנה והצהרה</li>
@@ -235,7 +235,7 @@
 
             <div class="auth-showcase-footer">
                 <div class="auth-showcase-quote">
-                    <h2>פותחים חשבון, מטמיעים snippet אחד, ומתחילים לנהל.</h2>
+                    <h2>פותחים חשבון, מטמיעים קוד אחד, ומתחילים לנהל.</h2>
                     <p>
                         A11Y Bridge בנויה כדי לעבור מהר מחשבון חדש לאתר מחובר:
                         setup קצר, קוד הטמעה קבוע, ו־workspace ברור שלא מרגיש כמו טופס הרשמה.
@@ -243,7 +243,7 @@
                 </div>
 
                 <div class="auth-showcase-testimonial">
-                    <strong>מוצר חינמי שמוביל מהר ל־first site, בלי בלבול מול Brndini.</strong>
+                    <strong>מוצר חינמי שמוביל מהר לאתר ראשון מחובר, בלי בלבול מול Brndini.</strong>
                     <span>A11Y Bridge</span>
                 </div>
             </div>

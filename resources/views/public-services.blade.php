@@ -9,7 +9,7 @@
     <section class="public-stage public-stage-brndini">
         <div class="public-stage-copy">
             <p class="eyebrow">שירותי Brndini</p>
-            <h1>כשהאתר צריך יותר מ־widget ודשבורד, Brndini היא שכבת ההמשך העסקית.</h1>
+            <h1>כשהאתר צריך יותר מווידג׳ט ודשבורד, Brndini היא שכבת ההמשך העסקית.</h1>
             <p class="hero-text hero-text-lead">
                 כאן לא פותחים טיקט. כאן פותחים שיחה עסקית על אחסון, SEO, קמפיינים, תחזוקה,
                 שדרוג אתר, דפי נחיתה או אוטומציות. אם צריך רק את הכלי החינמי, נשארים בתוך
@@ -26,10 +26,10 @@
                 <div class="public-stage-canvas public-stage-canvas-services">
                     <div class="public-stage-canvas-topline">
                         <span>Brndini</span>
-                        <span>hosting / seo / growth</span>
+                        <span>אחסון / SEO / צמיחה</span>
                     </div>
                     <div class="public-stage-canvas-copy">
-                        <small>business layer</small>
+                        <small>שכבה עסקית</small>
                         <strong>כאן עוברים משכבה טכנית לכל מה שמקדם את האתר קדימה.</strong>
                         <p>אחסון, SEO, קמפיינים, תחזוקה, שדרוג אתר ואוטומציות. פנייה עסקית מסודרת, לא טיקט תמיכה.</p>
                     </div>
@@ -64,7 +64,7 @@
         <div class="public-dual-panel">
             <article class="public-decision-card">
                 <p class="eyebrow">נשארים בכלי</p>
-                <h3>אם מה שצריך הוא widget, קוד הטמעה, דשבורד והצהרה בסיסית.</h3>
+                <h3>אם מה שצריך הוא ווידג׳ט, קוד הטמעה, דשבורד והצהרה בסיסית.</h3>
                 <ul class="compact-check-list">
                     <li>יש אתר קיים ומתוחזק</li>
                     <li>הצורך הוא תפעולי וטכני</li>

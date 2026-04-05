@@ -7,7 +7,7 @@
 @section('content')
     <section class="public-stage">
         <div class="public-stage-copy">
-            <p class="eyebrow">FAQ</p>
+            <p class="eyebrow">שאלות נפוצות</p>
             <h1>התשובות הקצרות לפני שמתחילים.</h1>
             <p class="hero-text hero-text-lead">
                 מה הכלי נותן, מה לא, איך עובדת ההטמעה, ואיפה עובר הגבול בין A11Y Bridge

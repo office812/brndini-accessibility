@@ -13112,3 +13112,529 @@ body.page-home {
         text-align: center;
     }
 }
+
+/* Brndini design rollout across public + auth */
+body.public-page:not(.page-home),
+body.auth-page {
+    --brand-primary: #5b9ce6;
+    --brand-primary-deep: #5b5fca;
+    --brand-primary-soft: #b9d2ef;
+    --brand-surface: #080d17;
+    --brand-surface-raised: #101827;
+    --brand-surface-bright: #162235;
+    --brand-outline: #2b3b58;
+    --brand-text: #f3f7ff;
+    --brand-muted: #97aac6;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(91, 156, 230, 0.14), transparent 18%),
+        linear-gradient(180deg, #080d17 0%, #0a1020 54%, #070b14 100%);
+    color: var(--brand-text);
+}
+
+.public-page:not(.page-home) .page-shell-public,
+.auth-page .auth-shell {
+    width: min(1320px, calc(100% - 40px));
+}
+
+.public-page:not(.page-home) .site-header,
+.public-page:not(.page-home) .site-header-public {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    max-width: none;
+    margin: 0 0 32px;
+    padding: 0 24px;
+    min-height: 82px;
+    border: 0;
+    border-bottom: 1px solid rgba(43, 59, 88, 0.28);
+    border-radius: 0;
+    background: rgba(8, 13, 23, 0.82);
+    backdrop-filter: blur(18px);
+    box-shadow: none;
+}
+
+.public-page:not(.page-home) .site-header .brand,
+.public-page:not(.page-home) .site-header-public .brand {
+    gap: 12px;
+    padding-inline: 0;
+}
+
+.public-page:not(.page-home) .site-header .brand strong,
+.public-page:not(.page-home) .site-header-public .brand strong {
+    color: var(--brand-text);
+    font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
+    font-size: 1.42rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.public-page:not(.page-home) .site-header .brand small,
+.public-page:not(.page-home) .site-header-public .brand small {
+    display: none;
+}
+
+.public-page:not(.page-home) .site-header .brand-mark,
+.public-page:not(.page-home) .site-header-public .brand-mark {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(135deg, rgba(91, 156, 230, 0.22), rgba(91, 95, 202, 0.18));
+    box-shadow: 0 8px 24px rgba(91, 156, 230, 0.18);
+}
+
+.public-page:not(.page-home) .site-header .site-nav,
+.public-page:not(.page-home) .site-header-public .site-nav {
+    gap: 18px;
+    align-items: center;
+}
+
+.public-page:not(.page-home) .site-header .site-nav a:not(.nav-button-secondary):not(.nav-button-primary),
+.public-page:not(.page-home) .site-header-public .site-nav a:not(.nav-button-secondary):not(.nav-button-primary) {
+    padding: 0;
+    min-height: auto;
+    border: 0;
+    background: transparent;
+    color: rgba(243, 247, 255, 0.78);
+    font-family: "Inter", var(--font-ui), sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.public-page:not(.page-home) .site-header .site-nav a.is-current:not(.nav-button-secondary):not(.nav-button-primary),
+.public-page:not(.page-home) .site-header .site-nav a:hover:not(.nav-button-secondary):not(.nav-button-primary),
+.public-page:not(.page-home) .site-header-public .site-nav a.is-current:not(.nav-button-secondary):not(.nav-button-primary),
+.public-page:not(.page-home) .site-header-public .site-nav a:hover:not(.nav-button-secondary):not(.nav-button-primary) {
+    color: var(--brand-primary);
+}
+
+.public-page:not(.page-home) .site-header .site-nav .nav-button-secondary,
+.public-page:not(.page-home) .site-header-public .site-nav .nav-button-secondary {
+    padding: 0;
+    min-height: auto;
+    border: 0;
+    background: transparent;
+    color: rgba(243, 247, 255, 0.82);
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.public-page:not(.page-home) .site-header .site-nav .nav-button-primary,
+.public-page:not(.page-home) .site-header-public .site-nav .nav-button-primary,
+.public-page:not(.page-home) .primary-button,
+.auth-page .primary-button {
+    border: 0;
+    color: #f7fbff;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-deep));
+    box-shadow: 0 18px 42px rgba(91, 156, 230, 0.22);
+}
+
+.public-page:not(.page-home) .ghost-button,
+.auth-page .ghost-button,
+.public-page:not(.page-home) .site-header .site-nav .nav-button-secondary,
+.public-page:not(.page-home) .site-header-public .site-nav .nav-button-secondary {
+    border-color: rgba(43, 59, 88, 0.5);
+    background: rgba(16, 24, 39, 0.7);
+    color: var(--brand-text);
+    box-shadow: none;
+}
+
+.public-page:not(.page-home) .public-stage,
+.public-page:not(.page-home) .public-shell-section,
+.public-page:not(.page-home) .site-footer,
+.public-page:not(.page-home) .articles-shell,
+.public-page:not(.page-home) .article-layout,
+.public-page:not(.page-home) .section-band,
+.public-page:not(.page-home) .about-hero {
+    width: min(1280px, calc(100% - 40px));
+    margin-inline: auto;
+}
+
+.public-page:not(.page-home) .public-stage,
+.public-page:not(.page-home) .about-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.88fr);
+    gap: 56px;
+    align-items: center;
+    padding: 42px 0 12px;
+}
+
+.public-page:not(.page-home) .public-stage::before,
+.public-page:not(.page-home) .about-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 82% 20%, rgba(91, 156, 230, 0.12), transparent 28%);
+    pointer-events: none;
+}
+
+.public-page:not(.page-home) .public-stage-copy,
+.public-page:not(.page-home) .about-hero-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 650px;
+}
+
+.public-page:not(.page-home) .public-stage-copy h1,
+.public-page:not(.page-home) .about-hero-copy h1,
+.public-page:not(.page-home) .section-heading h2 {
+    color: var(--brand-text);
+    font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
+    letter-spacing: -0.06em;
+}
+
+.public-page:not(.page-home) .public-stage-copy h1,
+.public-page:not(.page-home) .about-hero-copy h1 {
+    max-width: 10ch;
+    font-size: clamp(2.9rem, 5.5vw, 5.2rem);
+    line-height: 0.96;
+}
+
+.public-page:not(.page-home) .public-stage-copy .hero-text-lead,
+.public-page:not(.page-home) .about-hero-copy .hero-text-lead,
+.public-page:not(.page-home) .public-shell-card p,
+.public-page:not(.page-home) .public-decision-card p,
+.public-page:not(.page-home) .article-body,
+.public-page:not(.page-home) .knowledge-topic-card p,
+.public-page:not(.page-home) .knowledge-article-item p,
+.public-page:not(.page-home) .capability-card p,
+.public-page:not(.page-home) .site-footer p {
+    color: var(--brand-muted);
+}
+
+.public-page:not(.page-home) .eyebrow,
+.public-page:not(.page-home) .meta-label,
+.public-page:not(.page-home) .public-stage-canvas-copy small,
+.public-page:not(.page-home) .public-stage-canvas-topline,
+.public-page:not(.page-home) .preview-pill,
+.auth-page .eyebrow {
+    color: var(--brand-primary-soft);
+}
+
+.public-page:not(.page-home) .public-stage-visual,
+.public-page:not(.page-home) .about-hero-visual {
+    position: relative;
+    z-index: 1;
+    justify-content: center;
+}
+
+.public-page:not(.page-home) .public-device-shell,
+.public-page:not(.page-home) .public-device-shell-poster,
+.public-page:not(.page-home) .public-device-shell-quiet,
+.public-page:not(.page-home) .public-device-shell-services,
+.public-page:not(.page-home) .article-cover,
+.public-page:not(.page-home) .public-shell-card,
+.public-page:not(.page-home) .public-decision-card,
+.public-page:not(.page-home) .panel-card,
+.public-page:not(.page-home) .knowledge-topic-card,
+.public-page:not(.page-home) .knowledge-article-item,
+.public-page:not(.page-home) .capability-card,
+.public-page:not(.page-home) .faq-item,
+.auth-page .auth-screen-panel,
+.auth-page .auth-screen-showcase,
+.auth-page .flow-summary-card-product,
+.auth-page .flow-support-card-product,
+.auth-page .flow-progress-shell,
+.auth-page .flow-wizard-intro-public,
+.auth-page .auth-setup-strip article {
+    border-color: rgba(43, 59, 88, 0.3) !important;
+    background: linear-gradient(180deg, rgba(16, 24, 39, 0.94), rgba(10, 16, 28, 0.96)) !important;
+    color: var(--brand-text);
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.18);
+}
+
+.public-page:not(.page-home) .public-stage-canvas,
+.public-page:not(.page-home) .public-stage-canvas-services,
+.public-page:not(.page-home) .public-device-card,
+.public-page:not(.page-home) .article-body.panel-card,
+.auth-page .auth-showcase-window,
+.auth-page .auth-showcase-stat,
+.auth-page .flow-wizard-step,
+.auth-page .stack-form input,
+.auth-page .stack-form select,
+.auth-page .stack-form textarea {
+    border-color: rgba(43, 59, 88, 0.3) !important;
+    background: rgba(8, 13, 23, 0.72) !important;
+    color: var(--brand-text) !important;
+    box-shadow: none;
+}
+
+.auth-page .stack-form input::placeholder,
+.auth-page .stack-form textarea::placeholder {
+    color: rgba(151, 170, 198, 0.68);
+}
+
+.auth-page .stack-form label,
+.auth-page .flow-progress-meta span,
+.auth-page .signup-note,
+.auth-page .auth-links-row a,
+.auth-page .auth-showcase-testimonial span,
+.auth-page .auth-screen-copy .hero-text,
+.auth-page .flow-wizard-intro-copy p,
+.auth-page .auth-showcase-quote p,
+.auth-page .auth-showcase-stat p {
+    color: var(--brand-muted) !important;
+}
+
+.auth-page .auth-screen-copy h1,
+.auth-page .flow-stage-head strong,
+.auth-page .auth-showcase-quote h2,
+.auth-page .flow-summary-card-product strong:first-child,
+.auth-page .flow-support-card-product strong:first-child {
+    color: var(--brand-text);
+    font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
+}
+
+.auth-page {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(91, 156, 230, 0.14), transparent 20%),
+        linear-gradient(180deg, #080d17 0%, #0a1020 54%, #070b14 100%);
+}
+
+.auth-page .auth-showcase-quote {
+    background: linear-gradient(135deg, rgba(91, 156, 230, 0.28), rgba(91, 95, 202, 0.28)) !important;
+    color: #f7fbff;
+}
+
+.auth-page .auth-showcase-glow {
+    background: radial-gradient(circle, rgba(91, 156, 230, 0.28), transparent 66%) !important;
+}
+
+.public-page:not(.page-home) .public-shell-section-soft,
+.public-page:not(.page-home) .section-band-alt,
+.public-page:not(.page-home) .section-band,
+.public-page:not(.page-home) .section-band-dark {
+    background: transparent;
+}
+
+.public-page:not(.page-home) .public-shell-card h3,
+.public-page:not(.page-home) .public-decision-card h3,
+.public-page:not(.page-home) .public-stage-canvas-copy strong,
+.public-page:not(.page-home) .public-stage-canvas-grid strong,
+.public-page:not(.page-home) .knowledge-topic-card h3,
+.public-page:not(.page-home) .knowledge-article-item h4 a,
+.public-page:not(.page-home) .article-body strong,
+.public-page:not(.page-home) .article-body h2,
+.public-page:not(.page-home) .article-body h3,
+.public-page:not(.page-home) .capability-card h3,
+.public-page:not(.page-home) .site-footer .brand strong,
+.public-page:not(.page-home) .site-footer h3 {
+    color: var(--brand-text);
+}
+
+.public-page:not(.page-home) .public-stage-canvas-grid article,
+.public-page:not(.page-home) .public-stage-canvas-stack article,
+.public-page:not(.page-home) .public-stage-canvas-metrics div,
+.public-page:not(.page-home) .public-shell-card,
+.public-page:not(.page-home) .knowledge-article-item,
+.public-page:not(.page-home) .capability-card {
+    border-color: rgba(43, 59, 88, 0.26);
+}
+
+.public-page:not(.page-home) .public-stage-canvas-grid article.is-primary,
+.public-page:not(.page-home) .public-decision-card-accent,
+.public-page:not(.page-home) .article-cover,
+.public-page:not(.page-home) .article-cover-kicker,
+.auth-page .flow-wizard-step.is-active {
+    background: linear-gradient(180deg, rgba(18, 31, 53, 0.94), rgba(12, 22, 40, 0.96)) !important;
+    border-color: rgba(91, 156, 230, 0.28) !important;
+}
+
+.public-page:not(.page-home) .article-cover-orb,
+.public-page:not(.page-home) .article-cover-beam,
+.public-page:not(.page-home) .article-cover-panel {
+    filter: hue-rotate(185deg) saturate(1.1);
+}
+
+.public-page:not(.page-home) .public-meta-strip span,
+.public-page:not(.page-home) .preview-pill,
+.public-page:not(.page-home) .text-link,
+.public-page:not(.page-home) .site-footer a,
+.public-page:not(.page-home) .site-footer span {
+    color: rgba(151, 170, 198, 0.82);
+}
+
+.public-page:not(.page-home) .text-link:hover,
+.public-page:not(.page-home) .site-footer a:hover {
+    color: var(--brand-primary-soft);
+}
+
+.public-page:not(.page-home) .site-footer {
+    padding-top: 40px;
+    padding-bottom: 24px;
+    border-top: 1px solid rgba(43, 59, 88, 0.16);
+    background: transparent;
+}
+
+.public-page:not(.page-home) .site-footer p,
+.public-page:not(.page-home) .site-footer a,
+.public-page:not(.page-home) .site-footer span {
+    color: rgba(151, 170, 198, 0.82);
+}
+
+.public-page:not(.page-home) .site-footer-top,
+.public-page:not(.page-home) .site-footer-bottom {
+    border-color: rgba(43, 59, 88, 0.16);
+}
+
+.public-page:not(.page-home) .public-stage-brndini {
+    grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.88fr);
+}
+
+@media (max-width: 1100px) {
+    .public-page:not(.page-home) .public-stage,
+    .public-page:not(.page-home) .about-hero,
+    .public-page:not(.page-home) .public-stage-brndini {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .public-page:not(.page-home) .site-header,
+    .public-page:not(.page-home) .site-header-public {
+        grid-template-columns: 1fr;
+        border-radius: 24px;
+        margin-inline: auto;
+        width: min(1280px, calc(100% - 40px));
+        padding: 12px 16px;
+        position: relative;
+    }
+
+    .auth-page .auth-screen-signup,
+    .auth-page .auth-screen-login {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-page .auth-screen-showcase {
+        position: static;
+    }
+}
+
+@media (max-width: 760px) {
+    .public-page:not(.page-home) .page-shell-public,
+    .public-page:not(.page-home) .public-stage,
+    .public-page:not(.page-home) .public-shell-section,
+    .public-page:not(.page-home) .site-footer,
+    .public-page:not(.page-home) .articles-shell,
+    .public-page:not(.page-home) .article-layout,
+    .public-page:not(.page-home) .section-band,
+    .public-page:not(.page-home) .about-hero,
+    .auth-page .auth-shell {
+        width: calc(100% - 22px);
+    }
+
+    .public-page:not(.page-home) .site-header,
+    .public-page:not(.page-home) .site-header-public {
+        width: calc(100% - 22px);
+        margin-bottom: 24px;
+        padding: 12px 14px;
+    }
+
+    .public-page:not(.page-home) .public-stage-copy h1,
+    .public-page:not(.page-home) .about-hero-copy h1 {
+        max-width: none;
+        font-size: clamp(2.6rem, 12vw, 4rem);
+    }
+
+    .public-page:not(.page-home) .public-stage,
+    .public-page:not(.page-home) .about-hero {
+        gap: 22px;
+        padding-top: 24px;
+    }
+
+    .public-page:not(.page-home) .site-footer-links {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .auth-page .auth-screen-panel,
+    .auth-page .auth-screen-showcase {
+        padding: 20px;
+    }
+}
+
+/* Brndini rollout polish for signup + services */
+.auth-page .auth-shell {
+    padding-top: 16px;
+    padding-bottom: 28px;
+}
+
+.auth-page .auth-screen-signup,
+.auth-page .auth-screen-login {
+    gap: 22px;
+}
+
+.auth-page .auth-screen-panel {
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-page .auth-screen-panel::before,
+.auth-page .auth-screen-showcase::before,
+.public-page:not(.page-home) .public-stage-brndini::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(91, 156, 230, 0.12), transparent 70%);
+    pointer-events: none;
+}
+
+.auth-page .auth-screen-signup .flow-shell-grid-product {
+    align-items: start;
+}
+
+.auth-page .flow-shell-aside-product {
+    align-self: start;
+}
+
+.public-page:not(.page-home) .public-stage-brndini {
+    padding-top: 30px;
+    gap: 44px;
+}
+
+.public-page:not(.page-home) .public-stage-brndini .public-stage-copy h1 {
+    max-width: 9.2ch;
+}
+
+.public-page:not(.page-home) .public-stage-brndini .public-stage-canvas {
+    min-height: 100%;
+}
+
+@media (max-width: 1100px) {
+    .auth-page .auth-screen-panel::before,
+    .auth-page .auth-screen-showcase::before,
+    .public-page:not(.page-home) .public-stage-brndini::after {
+        width: 170px;
+        height: 170px;
+    }
+
+    .public-page:not(.page-home) .public-stage-brndini {
+        gap: 28px;
+    }
+}
+
+@media (max-width: 760px) {
+    .auth-page .auth-shell {
+        padding-top: 10px;
+        padding-bottom: 18px;
+    }
+
+    .auth-page .auth-screen-signup,
+    .auth-page .auth-screen-login {
+        gap: 14px;
+    }
+
+    .auth-page .flow-wizard-stepper {
+        justify-content: stretch;
+    }
+
+    .auth-page .flow-wizard-step {
+        flex: 1 1 0;
+    }
+
+    .public-page:not(.page-home) .public-stage-brndini {
+        padding-top: 18px;
+    }
+}
