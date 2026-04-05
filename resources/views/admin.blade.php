@@ -6,8 +6,8 @@
             <section class="domain-shell-header">
                 <h1>מרכז סופר־אדמין</h1>
                 <p class="domain-shell-header-intro">
-                    מרכז השליטה של Brndini: משתמשים, אתרים, פניות, לידים, קודי מעקב ותמונת מצב מערכתית
-                    ממקום אחד, בשפה תפעולית ברורה ולא במסך עמוס.
+                    נקודת הבקרה של Brndini: משתמשים, אתרים, תמיכה, לידים וקודי מעקב, בשפה תפעולית
+                    קצרה וברורה.
                 </p>
             </section>
 
@@ -82,9 +82,9 @@
 
                         <section class="super-admin-hero-card">
                             <div class="super-admin-hero-copy">
-                                <p class="eyebrow">שליטה מערכתית מלאה</p>
-                                <h2>מרכז תפעול, תמיכה, אתרים ומשתמשים במקום אחד</h2>
-                                <p class="panel-intro">האזור הזה מרכז את תמונת המצב של כל המערכת: לקוחות, רישיונות, הטמעות, טיקטים פתוחים וקודי מעקב גלובליים. הוא צריך לעזור לך לפתור בעיות מהר, לא לגרום לגלילה מיותרת.</p>
+                                <p class="eyebrow">בקרה מערכתית</p>
+                                <h2>מה דורש טיפול עכשיו, מי צריך חזרה, ומה מצב המערכת.</h2>
+                                <p class="panel-intro">זהו משטח העבודה המרכזי של Brndini: תמונת מצב, טיפול מהיר, לידים, משתמשים, אתרים וקודי מעקב, בלי להעמיס בעוד שכבה שיווקית.</p>
                                 <div class="super-admin-hero-actions">
                                     <button class="primary-button" type="button" data-dashboard-tab-link="support">פתח מרכז תמיכה</button>
                                     <button class="secondary-button" type="button" data-dashboard-tab-link="tracking">ערוך קודי מעקב</button>

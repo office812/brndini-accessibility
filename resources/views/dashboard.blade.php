@@ -49,10 +49,10 @@
         <div class="licenses-main">
             <section class="licenses-welcome">
                 <p class="eyebrow">ניהול רישיונות ונגישות</p>
-                <h1>{{ $user->name }}, סביבת הניהול שלך מוכנה לעבודה</h1>
+                <h1>{{ $user->name }}, זה מרכז העבודה של האתר הפעיל</h1>
                 <p class="licenses-welcome-intro">
-                    זהו מרכז העבודה של האתר הפעיל: הטמעה, מצב רישיון, בדיקות, הצהרה בסיסית
-                    וחיבור לשירותי Brndini כשצריך שכבה עסקית רחבה יותר.
+                    כל מה שצריך לתפעול השכבה הטכנית נמצא כאן: הטמעה, סטטוס אתר, הצהרה בסיסית,
+                    חשבון ושירותי Brndini כשיש צורך עסקי רחב יותר.
                 </p>
             </section>
 
@@ -93,11 +93,11 @@
                             <div class="steward-main-stack">
                                 <section class="steward-hero-card">
                                     <div class="steward-hero-copy">
-                                        <span class="portal-hero-kicker">לוח בקרה מרכזי</span>
-                                        <h2>הופכים את האתר לנגיש, מנוהל ומוכן לעבודה.</h2>
+                                        <span class="portal-hero-kicker">סקירה מהירה</span>
+                                        <h2>מצב האתר, הרישיון וההטמעה במבט אחד.</h2>
                                         <p>
-                                            כל מה שחשוב באמת נמצא כאן: הטמעה, רישיון, בדיקות, הצהרה בסיסית ותמיכה טכנית.
-                                            פחות גלילה, יותר שליטה, ובמבט אחד על סטטוס האתר הפעיל.
+                                            זהו מסך העבודה הראשי: האם הקוד נטען, מה מצב הרישיון, איפה עומדת
+                                            ההצהרה, ומה הפעולה הבאה שכדאי לעשות עכשיו.
                                         </p>
 
                                         <div class="steward-hero-actions">
@@ -233,8 +233,8 @@
                                             <a class="steward-feed-item" href="{{ route('dashboard.support', ['site' => $site->id]) }}">
                                                 <span class="steward-feed-thumb">03</span>
                                                 <div>
-                                                    <strong>שקול שירות נוסף של Brndini</strong>
-                                                    <p>אם האתר צריך אחסון, SEO, קמפיינים, תחזוקה או שדרוג, אפשר לפתוח פנייה עסקית מתוך אזור השירותים.</p>
+                                                    <strong>בדוק אם צריך גם שכבת שירות</strong>
+                                                    <p>אם האתר צריך אחסון, SEO, קמפיינים, תחזוקה או שדרוג, אפשר לפתוח מכאן פנייה עסקית מסודרת ל־Brndini.</p>
                                                 </div>
                                             </a>
                                         </div>
@@ -251,8 +251,8 @@
                                 <article class="steward-side-card">
                                     <span class="steward-side-icon">?</span>
                                     <div>
-                                        <h3>יש שאלות?</h3>
-                                        <p>התמיכה עוזרת בשימוש במערכת: הטמעה, חיבור הצהרה, תקלות רישוי והגדרת וידג׳ט.</p>
+                                        <h3>צריך עזרה טכנית?</h3>
+                                        <p>התמיכה כאן מיועדת לשימוש במערכת: התקנה, חיבור הצהרה, תקלות רישוי והגדרת widget.</p>
                                         <a class="secondary-button" href="{{ route('dashboard.support', ['site' => $site->id]) }}">פתח פנייה</a>
                                     </div>
                                 </article>
@@ -274,8 +274,8 @@
                                     <span class="steward-side-icon">★</span>
                                     <div>
                                         <p class="eyebrow">שירותים נוספים של Brndini</p>
-                                        <h3>האתר צריך יותר מווידג׳ט?</h3>
-                                        <p>מכאן אפשר לבקש אחסון, קידום אורגני, קמפיינים, תחזוקת אתר, דפי נחיתה או שדרוג מלא של האתר הקיים.</p>
+                                        <h3>האתר צריך שכבת המשך עסקית?</h3>
+                                        <p>כאן אפשר לבקש אחסון, SEO, קמפיינים, תחזוקה, דפי נחיתה או שדרוג אתר, בנפרד מהתמיכה הטכנית.</p>
                                         <a class="primary-button" href="{{ route('dashboard.services', ['site' => $site->id]) }}">לשירותי Brndini</a>
                                     </div>
                                 </article>
