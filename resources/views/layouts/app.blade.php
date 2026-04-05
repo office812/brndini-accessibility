@@ -101,15 +101,24 @@
 
                 <div class="site-header-menu" id="site-menu-panel" data-header-menu-panel="site-menu">
                     <nav class="site-nav" aria-label="ניווט ראשי">
-                        <a class="{{ request()->routeIs('home') ? 'is-current' : '' }}" href="{{ route('home') }}">בית</a>
-                        <a class="{{ request()->routeIs('how-it-works') ? 'is-current' : '' }}" href="{{ route('how-it-works') }}">איך זה עובד</a>
-                        <a class="{{ request()->routeIs('free-tool') || request()->routeIs('pricing') ? 'is-current' : '' }}" href="{{ route('free-tool') }}">מה כלול בחינם</a>
-                        <a class="{{ request()->routeIs('articles.*') ? 'is-current' : '' }}" href="{{ route('articles.index') }}">מרכז ידע</a>
-                        <a class="{{ request()->routeIs('faq') ? 'is-current' : '' }}" href="{{ route('faq') }}">FAQ</a>
-                        <a class="{{ request()->routeIs('about') ? 'is-current' : '' }}" href="{{ route('about') }}">אודות</a>
-                        <a class="nav-button-secondary nav-button-hub {{ request()->routeIs('brndini.home') || request()->routeIs('products') || request()->routeIs('brndini.services') ? 'is-current' : '' }}" href="{{ route('brndini.home', $marketingParams) }}">Brndini</a>
-                        <a class="nav-button-secondary" href="{{ route('login.show') }}">התחברות</a>
-                        <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                        @if (request()->routeIs('home'))
+                            <a href="#features">פיצ׳רים</a>
+                            <a href="{{ route('how-it-works') }}">איך זה עובד</a>
+                            <a href="{{ route('articles.index') }}">מרכז ידע</a>
+                            <a href="#faq">FAQ</a>
+                            <a class="nav-button-secondary nav-button-hub" href="{{ route('login.show') }}">התחברות</a>
+                            <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                        @else
+                            <a class="{{ request()->routeIs('home') ? 'is-current' : '' }}" href="{{ route('home') }}">בית</a>
+                            <a class="{{ request()->routeIs('how-it-works') ? 'is-current' : '' }}" href="{{ route('how-it-works') }}">איך זה עובד</a>
+                            <a class="{{ request()->routeIs('free-tool') || request()->routeIs('pricing') ? 'is-current' : '' }}" href="{{ route('free-tool') }}">מה כלול בחינם</a>
+                            <a class="{{ request()->routeIs('articles.*') ? 'is-current' : '' }}" href="{{ route('articles.index') }}">מרכז ידע</a>
+                            <a class="{{ request()->routeIs('faq') ? 'is-current' : '' }}" href="{{ route('faq') }}">FAQ</a>
+                            <a class="{{ request()->routeIs('about') ? 'is-current' : '' }}" href="{{ route('about') }}">אודות</a>
+                            <a class="nav-button-secondary nav-button-hub {{ request()->routeIs('brndini.home') || request()->routeIs('products') || request()->routeIs('brndini.services') ? 'is-current' : '' }}" href="{{ route('brndini.home', $marketingParams) }}">Brndini</a>
+                            <a class="nav-button-secondary" href="{{ route('login.show') }}">התחברות</a>
+                            <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                        @endif
                     </nav>
                 </div>
                 <button class="header-menu-backdrop" type="button" aria-label="סגור תפריט" data-header-menu-backdrop="site-menu"></button>
@@ -150,32 +159,53 @@
                         </a>
                         <p>
                             A11Y Bridge נותנת התחלה מהירה: חשבון, אתר, קוד הטמעה קבוע, דשבורד,
-                            הצהרה בסיסית ותמיכה טכנית בלבד. Brndini נשארת שכבת שירותים עסקיים נפרדת.
+                            הצהרה בסיסית ותמיכה טכנית בלבד.
                         </p>
                     </div>
 
                     <div class="site-footer-links">
-                        <div class="footer-link-group">
-                            <h3>A11Y Bridge</h3>
-                            <a href="{{ route('home') }}">בית</a>
-                            <a href="{{ route('how-it-works') }}">איך זה עובד</a>
-                            <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
-                            <a href="{{ route('faq') }}">שאלות נפוצות</a>
-                        </div>
-                        <div class="footer-link-group">
-                            <h3>Brndini</h3>
-                            <a href="{{ route('brndini.home', $marketingParams) }}">Brndini</a>
-                            <a href="{{ route('brndini.services', $marketingParams) }}">שירותים עסקיים</a>
-                            <a href="{{ route('about') }}">אודות</a>
-                            <a href="{{ route('articles.index') }}">מרכז ידע</a>
-                        </div>
-                        <div class="footer-link-group">
-                            <h3>משפטי</h3>
-                            <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
-                            <a href="{{ route('legal.privacy') }}">פרטיות</a>
-                            <a href="{{ route('login.show') }}">התחברות</a>
-                            <a href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
-                        </div>
+                        @if (request()->routeIs('home'))
+                            <div class="footer-link-group">
+                                <h3>מוצר</h3>
+                                <a href="#features">פיצ׳רים</a>
+                                <a href="{{ route('how-it-works') }}">איך זה עובד</a>
+                                <a href="{{ route('faq') }}">שאלות נפוצות</a>
+                            </div>
+                            <div class="footer-link-group">
+                                <h3>משאבים</h3>
+                                <a href="{{ route('articles.index') }}">מרכז ידע</a>
+                                <a href="{{ route('about') }}">אודות</a>
+                                <a href="{{ route('login.show') }}">התחברות</a>
+                            </div>
+                            <div class="footer-link-group">
+                                <h3>משפטי</h3>
+                                <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
+                                <a href="{{ route('legal.privacy') }}">פרטיות</a>
+                                <a href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                            </div>
+                        @else
+                            <div class="footer-link-group">
+                                <h3>A11Y Bridge</h3>
+                                <a href="{{ route('home') }}">בית</a>
+                                <a href="{{ route('how-it-works') }}">איך זה עובד</a>
+                                <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
+                                <a href="{{ route('faq') }}">שאלות נפוצות</a>
+                            </div>
+                            <div class="footer-link-group">
+                                <h3>Brndini</h3>
+                                <a href="{{ route('brndini.home', $marketingParams) }}">Brndini</a>
+                                <a href="{{ route('brndini.services', $marketingParams) }}">שירותים עסקיים</a>
+                                <a href="{{ route('about') }}">אודות</a>
+                                <a href="{{ route('articles.index') }}">מרכז ידע</a>
+                            </div>
+                            <div class="footer-link-group">
+                                <h3>משפטי</h3>
+                                <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
+                                <a href="{{ route('legal.privacy') }}">פרטיות</a>
+                                <a href="{{ route('login.show') }}">התחברות</a>
+                                <a href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
 

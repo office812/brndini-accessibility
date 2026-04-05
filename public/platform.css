@@ -10928,7 +10928,7 @@ body.page-home::after {
     position: relative;
     top: 0;
     max-width: 1260px;
-    margin: 0 auto 46px;
+    margin: 0 auto 38px;
     padding-inline: 0;
     border-color: transparent;
     background: transparent;
@@ -10973,7 +10973,7 @@ body.page-home::after {
 }
 
 .page-home .site-header-public .site-nav {
-    gap: 16px;
+    gap: 18px;
 }
 
 .page-home .site-header-public .site-nav a,
@@ -10981,7 +10981,7 @@ body.page-home::after {
 .page-home .site-header-public .nav-button-primary {
     min-height: 40px;
     padding: 0;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
 }
 
 .page-home .site-header-public .site-nav a:not(.nav-button-secondary):not(.nav-button-primary) {
@@ -12082,7 +12082,7 @@ body.page-home {
     max-width: none;
     margin: 0;
     padding: 0 24px;
-    min-height: 80px;
+    min-height: 84px;
     border-radius: 0;
     border: 0;
     border-bottom: 1px solid rgba(62, 74, 45, 0.18);
@@ -12099,7 +12099,7 @@ body.page-home {
 .page-home .site-header-public .brand strong {
     color: var(--stitch-text);
     font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
-    font-size: 1.45rem;
+    font-size: 1.52rem;
     font-weight: 800;
     letter-spacing: -0.04em;
 }
@@ -12109,15 +12109,15 @@ body.page-home {
 }
 
 .page-home .site-header-public .brand-mark {
-    width: 2rem;
-    height: 2rem;
+    width: 2.15rem;
+    height: 2.15rem;
     border-radius: 0.8rem;
     background: linear-gradient(135deg, rgba(164, 246, 36, 0.18), rgba(255, 255, 255, 0.08));
     box-shadow: 0 8px 24px rgba(164, 246, 36, 0.12);
 }
 
 .page-home .site-header-public .site-nav {
-    gap: 28px;
+    gap: 24px;
     align-items: center;
 }
 
@@ -12128,7 +12128,7 @@ body.page-home {
     background: transparent;
     color: rgba(241, 247, 217, 0.78);
     font-family: "Inter", var(--font-ui), sans-serif;
-    font-size: 0.92rem;
+    font-size: 0.94rem;
     font-weight: 600;
     box-shadow: none;
 }
@@ -12144,13 +12144,13 @@ body.page-home {
     border: 0;
     background: transparent;
     color: rgba(241, 247, 217, 0.82);
-    font-size: 0.92rem;
+    font-size: 0.94rem;
     font-weight: 600;
 }
 
 .page-home .site-header-public .site-nav .nav-button-primary {
     min-height: 44px;
-    padding: 0 20px;
+    padding: 0 22px;
     border-radius: 999px;
     border: 0;
     background: linear-gradient(135deg, var(--stitch-primary), var(--stitch-primary-deep));
@@ -12180,7 +12180,7 @@ body.page-home {
 
 .page-home .stitch-home-hero {
     position: relative;
-    padding: 74px 0 40px;
+    padding: 78px 0 42px;
     overflow: hidden;
 }
 
@@ -12195,7 +12195,7 @@ body.page-home {
 .page-home .stitch-home-hero-copy {
     position: relative;
     z-index: 2;
-    max-width: 860px;
+    max-width: 900px;
     margin: 0 auto;
     text-align: center;
 }
@@ -12209,7 +12209,7 @@ body.page-home {
     border: 1px solid rgba(164, 246, 36, 0.18);
     background: rgba(164, 246, 36, 0.08);
     color: var(--stitch-primary);
-    font-size: 0.78rem;
+    font-size: 0.74rem;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -12224,11 +12224,11 @@ body.page-home {
 }
 
 .page-home .stitch-home-hero h1 {
-    margin: 28px auto 18px;
+    margin: 24px auto 18px;
     font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
-    font-size: clamp(3.7rem, 8vw, 6.8rem);
+    font-size: clamp(3.8rem, 7.6vw, 6.55rem);
     font-weight: 800;
-    line-height: 0.96;
+    line-height: 0.94;
     letter-spacing: -0.07em;
     color: var(--stitch-text);
 }
@@ -12245,11 +12245,11 @@ body.page-home {
 }
 
 .page-home .stitch-home-hero p {
-    max-width: 42rem;
+    max-width: 33rem;
     margin: 0 auto;
     color: var(--stitch-muted);
-    font-size: 1.08rem;
-    line-height: 1.8;
+    font-size: 0.98rem;
+    line-height: 1.65;
 }
 
 .page-home .stitch-home-actions {
@@ -12257,17 +12257,17 @@ body.page-home {
     justify-content: center;
     align-items: center;
     gap: 16px;
-    margin-top: 34px;
+    margin-top: 26px;
 }
 
 .page-home .stitch-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 56px;
-    padding: 0 30px;
-    border-radius: 1rem;
-    font-size: 1rem;
+    min-height: 52px;
+    padding: 0 26px;
+    border-radius: 0.95rem;
+    font-size: 0.95rem;
     font-weight: 800;
     transition: transform 180ms ease, filter 180ms ease, background-color 180ms ease;
 }
@@ -12291,12 +12291,12 @@ body.page-home {
 .page-home .stitch-home-hero-visual {
     position: relative;
     z-index: 1;
-    margin-top: 76px;
+    margin-top: 74px;
 }
 
 .page-home .stitch-home-product {
     position: relative;
-    max-width: 1220px;
+    max-width: 1120px;
     margin: 0 auto;
     padding: 18px;
     border-radius: 2rem;
@@ -12309,9 +12309,9 @@ body.page-home {
     display: grid;
     grid-template-columns: 280px minmax(0, 1fr);
     gap: 22px;
-    min-height: 600px;
-    padding: 26px;
-    border-radius: 1.6rem;
+    min-height: 560px;
+    padding: 24px;
+    border-radius: 1.9rem;
     background:
         radial-gradient(circle at 18% 18%, rgba(164, 246, 36, 0.09), transparent 36%),
         linear-gradient(180deg, rgba(27, 37, 14, 0.92), rgba(19, 27, 10, 0.94));
@@ -12320,7 +12320,7 @@ body.page-home {
 .page-home .stitch-home-product-sidebar {
     display: grid;
     align-content: start;
-    gap: 20px;
+    gap: 24px;
 }
 
 .page-home .stitch-avocado {
@@ -12355,8 +12355,8 @@ body.page-home {
 }
 
 .page-home .stitch-home-site-card {
-    padding: 18px;
-    border-radius: 1.2rem;
+    padding: 20px;
+    border-radius: 1.3rem;
     background: rgba(11, 16, 2, 0.34);
     border: 1px solid rgba(62, 74, 45, 0.3);
 }
@@ -12391,12 +12391,12 @@ body.page-home {
 
 .page-home .stitch-home-site-list {
     display: grid;
-    gap: 10px;
+    gap: 12px;
 }
 
 .page-home .stitch-home-site-list span {
-    padding: 12px 14px;
-    border-radius: 1rem;
+    padding: 14px 16px;
+    border-radius: 1.1rem;
     border: 1px solid rgba(62, 74, 45, 0.22);
     background: rgba(11, 16, 2, 0.24);
     letter-spacing: 0.02em;
@@ -12407,7 +12407,7 @@ body.page-home {
 .page-home .stitch-home-product-main {
     display: grid;
     align-content: start;
-    gap: 18px;
+    gap: 22px;
 }
 
 .page-home .stitch-home-product-top {
@@ -12447,13 +12447,13 @@ body.page-home {
 .page-home .stitch-home-stats-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: 18px;
 }
 
 .page-home .stitch-home-stats-grid article,
 .page-home .stitch-home-graph-panel {
-    padding: 20px;
-    border-radius: 1.2rem;
+    padding: 22px;
+    border-radius: 1.35rem;
     border: 1px solid rgba(62, 74, 45, 0.26);
     background: rgba(11, 16, 2, 0.26);
 }
@@ -12500,8 +12500,8 @@ body.page-home {
 
 .page-home .stitch-home-hero-float {
     position: absolute;
-    top: 112px;
-    left: -18px;
+    top: 126px;
+    left: -8px;
     z-index: 3;
     width: 220px;
     padding: 16px;
@@ -12554,11 +12554,11 @@ body.page-home {
 }
 
 .page-home .stitch-home-proof {
-    padding: 52px 0 26px;
+    padding: 52px 0 18px;
 }
 
 .page-home .stitch-home-proof p {
-    margin: 0 0 20px;
+    margin: 0 0 18px;
     color: rgba(168, 174, 147, 0.64);
     text-align: center;
     font-size: 0.8rem;
@@ -12569,22 +12569,23 @@ body.page-home {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 34px;
-    color: rgba(168, 174, 147, 0.58);
+    gap: 28px;
+    color: rgba(168, 174, 147, 0.6);
     font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
 }
 
 .page-home .stitch-home-features,
 .page-home .stitch-home-cta-band,
 .page-home .stitch-home-faq {
-    padding: 104px 0;
+    padding: 88px 0;
 }
 
 .page-home .stitch-home-section-heading {
-    margin-bottom: 56px;
-    text-align: right;
+    margin-bottom: 44px;
+    text-align: center;
 }
 
 .page-home .stitch-home-section-heading-centered {
@@ -12592,36 +12593,37 @@ body.page-home {
 }
 
 .page-home .stitch-home-section-heading h2 {
-    margin: 0 0 14px;
+    margin: 0 0 12px;
     font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
-    font-size: clamp(2.4rem, 4vw, 4.2rem);
+    font-size: clamp(2.15rem, 3.6vw, 3.4rem);
     font-weight: 800;
-    line-height: 1.04;
+    line-height: 1.08;
     letter-spacing: -0.06em;
     color: var(--stitch-text);
 }
 
 .page-home .stitch-home-section-heading p {
     margin: 0;
-    max-width: 40rem;
+    max-width: 34rem;
+    margin-inline: auto;
     color: var(--stitch-muted);
-    font-size: 1.02rem;
-    line-height: 1.8;
+    font-size: 0.97rem;
+    line-height: 1.7;
 }
 
 .page-home .stitch-home-feature-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
+    gap: 18px;
 }
 
 .page-home .stitch-home-feature-card {
     display: grid;
     align-content: start;
-    gap: 16px;
-    min-height: 370px;
-    padding: 30px;
-    border-radius: 1.6rem;
+    gap: 14px;
+    min-height: 350px;
+    padding: 28px;
+    border-radius: 1.8rem;
     border: 1px solid rgba(62, 74, 45, 0.24);
     background: linear-gradient(180deg, rgba(21, 27, 10, 0.94), rgba(13, 18, 5, 0.96));
     transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
@@ -12650,7 +12652,7 @@ body.page-home {
 .page-home .stitch-home-feature-card h3 {
     margin: 0;
     font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
-    font-size: 1.36rem;
+    font-size: 1.22rem;
     font-weight: 800;
     color: var(--stitch-text);
 }
@@ -12658,8 +12660,8 @@ body.page-home {
 .page-home .stitch-home-feature-card p {
     margin: 0;
     color: var(--stitch-muted);
-    font-size: 0.96rem;
-    line-height: 1.75;
+    font-size: 0.92rem;
+    line-height: 1.7;
 }
 
 .page-home .stitch-home-feature-visual {
@@ -12746,8 +12748,8 @@ body.page-home {
 .page-home .stitch-home-cta-surface {
     position: relative;
     overflow: hidden;
-    padding: 64px 68px;
-    border-radius: 2.5rem;
+    padding: 52px 52px;
+    border-radius: 2.2rem;
     border: 1px solid rgba(164, 246, 36, 0.18);
     background: linear-gradient(180deg, rgba(22, 28, 7, 0.98), rgba(14, 18, 6, 0.98));
 }
@@ -12755,17 +12757,17 @@ body.page-home {
 .page-home .stitch-home-cta-copy {
     position: relative;
     z-index: 2;
-    max-width: 42rem;
+    max-width: 32rem;
     margin-right: auto;
     text-align: right;
 }
 
 .page-home .stitch-home-cta-copy h2 {
-    margin: 0 0 28px;
+    margin: 0 0 22px;
     font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
-    font-size: clamp(2.3rem, 4vw, 4.1rem);
+    font-size: clamp(2.2rem, 3.8vw, 3.7rem);
     font-weight: 800;
-    line-height: 1.06;
+    line-height: 1.1;
     letter-spacing: -0.06em;
 }
 
@@ -12815,12 +12817,12 @@ body.page-home {
 }
 
 .page-home .stitch-home-faq {
-    max-width: 860px;
+    max-width: 720px;
 }
 
 .page-home .stitch-home-faq-list {
     display: grid;
-    gap: 12px;
+    gap: 10px;
 }
 
 .page-home .stitch-home-faq-list details {
@@ -12832,7 +12834,7 @@ body.page-home {
 
 .page-home .stitch-home-faq-list summary {
     position: relative;
-    padding: 20px 22px;
+    padding: 18px 20px;
     cursor: pointer;
     list-style: none;
     color: var(--stitch-text);
@@ -12860,26 +12862,27 @@ body.page-home {
 }
 
 .page-home .stitch-home-faq-list details div {
-    padding: 0 22px 20px;
+    padding: 0 20px 18px;
     color: var(--stitch-muted);
-    font-size: 0.95rem;
-    line-height: 1.8;
+    font-size: 0.9rem;
+    line-height: 1.75;
 }
 
 .page-home .site-footer {
-    padding: 88px 0 34px;
+    padding: 44px 0 20px;
     border-top: 1px solid rgba(62, 74, 45, 0.14);
     background: transparent;
 }
 
 .page-home .site-footer-top {
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 56px;
-    padding-bottom: 32px;
+    gap: 30px;
+    padding-bottom: 12px;
+    align-items: start;
 }
 
 .page-home .site-footer-brand {
-    max-width: 280px;
+    max-width: 180px;
     margin-inline: 0;
     text-align: right;
 }
@@ -12890,13 +12893,12 @@ body.page-home {
 }
 
 .page-home .site-footer-brand p {
-    font-size: 0.9rem;
-    line-height: 1.8;
+    display: none;
 }
 
 .page-home .site-footer-links {
-    grid-template-columns: repeat(3, minmax(120px, 1fr));
-    gap: 42px;
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+    gap: 14px;
 }
 
 .page-home .site-footer .brand strong,
@@ -12914,9 +12916,14 @@ body.page-home {
 .page-home .site-footer-bottom {
     justify-content: space-between;
     text-align: initial;
-    font-size: 0.7rem;
+    font-size: 0.62rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    opacity: 0.55;
+}
+
+.page-home .footer-inline-links {
+    display: none;
 }
 
 @media (max-width: 1100px) {
@@ -12986,16 +12993,17 @@ body.page-home {
     }
 
     .page-home .stitch-home-hero {
-        padding-top: 48px;
+        padding-top: 42px;
     }
 
     .page-home .stitch-home-hero h1 {
-        font-size: clamp(3.05rem, 16vw, 4.7rem);
-        line-height: 0.98;
+        font-size: clamp(3rem, 14vw, 4.35rem);
+        line-height: 0.96;
     }
 
     .page-home .stitch-home-hero p {
-        font-size: 1rem;
+        max-width: 22rem;
+        font-size: 0.92rem;
     }
 
     .page-home .stitch-home-actions {
@@ -13007,14 +13015,19 @@ body.page-home {
     }
 
     .page-home .stitch-home-product {
-        padding: 12px;
+        padding: 10px;
         border-radius: 1.4rem;
     }
 
     .page-home .stitch-home-product-frame {
         gap: 18px;
-        padding: 18px;
+        padding: 16px;
         min-height: auto;
+    }
+
+    .page-home .stitch-home-hero-float {
+        top: 0;
+        left: 0;
     }
 
     .page-home .stitch-avocado {
@@ -13024,13 +13037,13 @@ body.page-home {
 
     .page-home .stitch-home-proof-row {
         gap: 18px;
-        font-size: 0.95rem;
+        font-size: 0.82rem;
     }
 
     .page-home .stitch-home-features,
     .page-home .stitch-home-cta-band,
     .page-home .stitch-home-faq {
-        padding: 72px 0;
+        padding: 62px 0;
     }
 
     .page-home .stitch-home-section-heading {
@@ -13043,12 +13056,12 @@ body.page-home {
     }
 
     .page-home .stitch-home-cta-surface {
-        padding: 28px 24px 140px;
+        padding: 24px 20px 124px;
         border-radius: 2rem;
     }
 
     .page-home .stitch-home-cta-copy h2 {
-        font-size: 2rem;
+        font-size: 1.7rem;
     }
 
     .page-home .stitch-home-cta-orbs .is-ring {
@@ -13072,7 +13085,7 @@ body.page-home {
     }
 
     .page-home .site-footer {
-        padding-top: 72px;
+        padding-top: 40px;
     }
 
     .page-home .site-footer-brand p {

@@ -9,19 +9,19 @@
         <div class="stitch-home-hero-copy">
             <div class="stitch-home-badge">
                 <span class="stitch-home-badge-dot"></span>
-                <span>חדש: A11Y Bridge 2.0</span>
+                <span>A11Y Bridge 2.0</span>
             </div>
             <h1>
-                <span>מטמיעים שכבת נגישות</span>
+                <span>מטמיעים נגישות</span>
                 <span class="is-accent">במהירות האור.</span>
             </h1>
             <p>
-                פותחים חשבון, מחברים אתר, מטמיעים snippet אחד ומנהלים widget, statement
-                וזיהוי התקנה מתוך סביבת עבודה שקטה אחת.
+                פותחים חשבון, מחברים אתר, מטמיעים snippet אחד ומנהלים widget,
+                statement וזיהוי התקנה מתוך סביבת עבודה אחת.
             </p>
             <div class="stitch-home-actions">
                 <a class="stitch-button stitch-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
-                <a class="stitch-button stitch-button-secondary" href="{{ route('how-it-works') }}">צפו בדמו מהיר</a>
+                <a class="stitch-button stitch-button-secondary" href="{{ route('how-it-works') }}">איך זה עובד</a>
             </div>
         </div>
 
@@ -106,7 +106,7 @@
     </section>
 
     <section class="stitch-home-proof">
-        <p>מתאים לאתרים שרוצים להתחיל מהר</p>
+        <p>מותאם לאתרים שרוצים לעלות מהר לאוויר</p>
         <div class="stitch-home-proof-row" aria-label="קהלי יעד">
             <span>WordPress</span>
             <span>Shopify</span>
@@ -115,10 +115,10 @@
         </div>
     </section>
 
-    <section class="stitch-home-features">
+    <section class="stitch-home-features" id="features">
         <div class="stitch-home-section-heading">
             <h2>הכלים הנכונים לשיפור הנגישות</h2>
-            <p>במקום עוד plugin מבולגן, מתחילים ממוצר ברור שאפשר באמת להטמיע ולעבוד איתו.</p>
+            <p>במקום עוד plugin מבולגן, מתחילים ממוצר ברור שאפשר להטמיע, לנהל ולעקוב אחריו.</p>
         </div>
 
         <div class="stitch-home-feature-grid">
@@ -154,7 +154,7 @@
     <section class="stitch-home-cta-band">
         <div class="stitch-home-cta-surface">
             <div class="stitch-home-cta-copy">
-                <h2>אל תחכו שהנגישות תהפוך לעוד בלגן. <span>הכניסו שכבה טכנית ברורה עוד היום.</span></h2>
+                <h2>אל תחכו שהנגישות תהפוך לבלגן. <span>הכניסו שכבה טכנית ברורה עוד היום.</span></h2>
                 <div class="stitch-home-actions">
                     <a class="stitch-button stitch-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                     <a class="stitch-button stitch-button-secondary" href="{{ route('brndini.home', $marketingParams) }}">ל־Brndini</a>
@@ -168,7 +168,7 @@
         </div>
     </section>
 
-    <section class="stitch-home-faq">
+    <section class="stitch-home-faq" id="faq">
         <div class="stitch-home-section-heading stitch-home-section-heading-centered">
             <h2>שאלות נפוצות</h2>
             <p>כל מה שצריך לדעת לפני שמטמיעים את A11Y Bridge.</p>
