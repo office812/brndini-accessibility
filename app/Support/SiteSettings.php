@@ -186,8 +186,9 @@ class SiteSettings
         ];
     }
 
-    public static function sanitizeAlertSettings(array $alerts): array
+    public static function sanitizeAlertSettings(?array $alerts): array
     {
+        $alerts   = $alerts ?? [];
         $defaults = self::defaultAlertSettings();
 
         return [
@@ -209,8 +210,9 @@ class SiteSettings
         ];
     }
 
-    public static function sanitizeAuditSnapshot(array $audit): array
+    public static function sanitizeAuditSnapshot(?array $audit): array
     {
+        $audit    = $audit ?? [];
         $defaults = self::defaultAuditSnapshot();
         $score = is_numeric($audit['score'] ?? null) ? (int) $audit['score'] : $defaults['score'];
 
