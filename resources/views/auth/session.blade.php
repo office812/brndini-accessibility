@@ -4,7 +4,7 @@
 @php($signupStep = old('flow_step', old('signup_step', '1')))
 
 @section('content')
-    <section class="auth-screen">
+    <section class="auth-screen {{ $isLogin ? 'auth-screen-login' : 'auth-screen-signup' }}">
         <div class="auth-screen-panel">
             <a class="auth-brand" href="{{ route('home') }}">
                 <span class="brand-mark" aria-hidden="true">
@@ -22,7 +22,7 @@
                 <p class="hero-text">
                     {{ $isLogin
                         ? 'כניסה ישירה ל־dashboard, למסך ההטמעה, ל־statement ולתמיכה הטכנית.'
-                        : 'שלושה שלבים קצרים שמובילים מהר ל־first connected site: אתר ראשון, snippet קבוע, dashboard ברור וצעדים ראשונים להטמעה.' }}
+                        : 'שלושה שלבים קצרים שמובילים מהר ל־first connected site: אתר ראשון, snippet קבוע ו־dashboard ברור להטמעה.' }}
                 </p>
             </div>
 
@@ -55,8 +55,8 @@
                     <div class="flow-wizard-intro flow-wizard-intro-compact flow-wizard-intro-public">
                         <div class="flow-wizard-intro-copy">
                             <p class="eyebrow">Setup flow</p>
-                            <strong>מכינים אתר ראשון, חשבון ראשון ו־snippet ראשון</strong>
-                            <p class="signup-note">בלי כרטיס אשראי, בלי מסלול פרימיום, ובלי לקפוץ בין מסכים.</p>
+                            <strong>מכינים אתר ראשון ו־snippet ראשון</strong>
+                            <p class="signup-note">בלי כרטיס אשראי ובלי לקפוץ בין מסכים.</p>
                         </div>
                         <div class="flow-wizard-stepper" aria-label="התקדמות בהרשמה">
                             <button class="flow-wizard-step {{ $signupStep === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">

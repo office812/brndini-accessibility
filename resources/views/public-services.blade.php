@@ -6,7 +6,7 @@
 @php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
-    <section class="public-stage">
+    <section class="public-stage public-stage-brndini">
         <div class="public-stage-copy">
             <p class="eyebrow">שירותי Brndini</p>
             <h1>כשהאתר צריך יותר מ־widget ודשבורד, Brndini היא שכבת ההמשך העסקית.</h1>
@@ -18,6 +18,39 @@
             <div class="public-cta-row">
                 <a class="primary-button button-link" href="#public-service-form">להשאיר פנייה עסקית</a>
                 <a class="ghost-button button-link" href="{{ route('free-tool') }}">מה כלול בחינם</a>
+            </div>
+        </div>
+
+        <div class="public-stage-visual" aria-hidden="true">
+            <div class="public-device-shell public-device-shell-poster public-device-shell-services">
+                <div class="public-stage-canvas public-stage-canvas-services">
+                    <div class="public-stage-canvas-topline">
+                        <span>Brndini</span>
+                        <span>hosting / seo / growth</span>
+                    </div>
+                    <div class="public-stage-canvas-copy">
+                        <small>business layer</small>
+                        <strong>כאן עוברים משכבה טכנית לכל מה שמקדם את האתר קדימה.</strong>
+                        <p>אחסון, SEO, קמפיינים, תחזוקה, שדרוג אתר ואוטומציות. פנייה עסקית מסודרת, לא טיקט תמיכה.</p>
+                    </div>
+                    <div class="public-stage-canvas-grid">
+                        <article class="is-primary">
+                            <span>תשתית</span>
+                            <strong>אחסון ותחזוקה</strong>
+                            <p>שרתים, גיבויים, יציבות ושקט תפעולי.</p>
+                        </article>
+                        <article>
+                            <span>צמיחה</span>
+                            <strong>SEO וקמפיינים</strong>
+                            <p>יותר תנועה, יותר לידים, ויותר שליטה.</p>
+                        </article>
+                        <article>
+                            <span>שדרוג</span>
+                            <strong>אתר ואוטומציות</strong>
+                            <p>שיפור אתר קיים ותהליכים שחוסכים עבודה.</p>
+                        </article>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
