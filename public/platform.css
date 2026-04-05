@@ -13802,3 +13802,145 @@ body.auth-page {
     font-size: 1rem;
     line-height: 1.7;
 }
+
+/* ─── Install state visual card ──────────────────────────────────────────── */
+.install-state-hero-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.install-state-visual {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 28px 28px 20px;
+}
+
+.install-state-pending .install-state-icon {
+    color: #b45309;
+    background: rgba(180, 83, 9, 0.1);
+    border-radius: 999px;
+    padding: 14px;
+}
+
+.install-state-installed .install-state-icon {
+    color: #15803d;
+    background: rgba(21, 128, 61, 0.1);
+    border-radius: 999px;
+    padding: 14px;
+}
+
+.install-state-stale .install-state-icon {
+    color: #c0841d;
+    background: rgba(192, 132, 29, 0.1);
+    border-radius: 999px;
+    padding: 14px;
+}
+
+.install-state-label {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.install-state-pending .install-state-label { color: #b45309; }
+.install-state-installed .install-state-label { color: #15803d; }
+.install-state-stale .install-state-label { color: #c0841d; }
+
+.install-state-summary {
+    margin: 0 0 10px;
+    color: var(--page-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.install-state-url {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.82rem;
+    color: var(--accent);
+    word-break: break-all;
+}
+
+.install-state-action {
+    display: inline-block;
+    margin-top: 14px;
+}
+
+.install-state-meta {
+    padding: 12px 28px;
+    border-top: 1px solid var(--line);
+    font-size: 0.84rem;
+    color: var(--page-muted);
+}
+
+/* ─── Install steps checklist ────────────────────────────────────────────── */
+.install-steps-list {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0;
+}
+
+.install-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+}
+
+.install-step:last-child {
+    border-bottom: none;
+}
+
+.install-step-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: var(--surface-alt);
+    border: 2px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--page-muted);
+    transition: background var(--motion-fast) ease, border-color var(--motion-fast) ease;
+}
+
+.install-step.is-done .install-step-num {
+    background: var(--success-bg);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.install-step.is-done .install-step-num::after {
+    content: "✓";
+}
+
+.install-step.is-done .install-step-num {
+    font-size: 0; /* hide number when done */
+}
+
+.install-step.is-done .install-step-num::after {
+    font-size: 0.9rem;
+}
+
+.install-step div strong {
+    display: block;
+    font-size: 0.97rem;
+    margin-bottom: 4px;
+}
+
+.install-step div p {
+    margin: 0;
+    font-size: 0.87rem;
+    color: var(--page-muted);
+    line-height: 1.6;
+}
