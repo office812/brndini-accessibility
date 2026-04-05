@@ -9,32 +9,21 @@
         <div class="public-stage-copy public-stage-copy-centered">
             <div class="public-stage-kicker">
                 <span>A11Y Bridge</span>
-                <span>self-service</span>
+                <span>free self-service</span>
             </div>
-            <h1>שכבת נגישות טכנית שבעלי אתרים אוהבים להטמיע.</h1>
+            <h1>
+                <span>שכבת נגישות</span>
+                <span>טכנית שמחברים</span>
+                <span class="is-accent">בדקות.</span>
+            </h1>
             <p class="hero-text hero-text-lead">
-                פותחים חשבון, מחברים אתר, מטמיעים snippet קבוע ומנהלים widget, statement
-                וזיהוי התקנה מתוך סביבת עבודה אחת. חינם, שקט, ותמיכה טכנית בלבד.
+                פותחים חשבון, מחברים אתר, מטמיעים snippet אחד ומנהלים widget, statement
+                וחיווי התקנה מתוך סביבת עבודה שקטה אחת.
             </p>
 
             <div class="public-cta-row public-cta-row-hero">
                 <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                 <a class="ghost-button button-link" href="{{ route('how-it-works') }}">איך זה עובד</a>
-            </div>
-
-            <div class="public-hero-notes" aria-label="יתרונות מרכזיים">
-                <article>
-                    <small>setup</small>
-                    <strong>פותחים ומטמיעים מהר</strong>
-                </article>
-                <article>
-                    <small>dashboard</small>
-                    <strong>מנהלים ממקום אחד</strong>
-                </article>
-                <article>
-                    <small>support</small>
-                    <strong>טכני בלבד</strong>
-                </article>
             </div>
         </div>
 
@@ -47,8 +36,8 @@
                     </div>
                     <div class="public-stage-canvas-copy">
                         <small>workspace</small>
-                        <strong>snippet אחד באתר. כל השאר מנוהל מתוך המערכת.</strong>
-                        <p>הטמעה, widget, statement וחיווי התקנה, בלי להחליף קוד בכל שינוי ובלי לערבב מוצר חינמי עם שירות עסקי.</p>
+                        <strong>snippet אחד באתר. כל השאר מנוהל מרחוק.</strong>
+                        <p>הטמעה, widget, statement וחיווי התקנה בלי להחליף קוד בכל שינוי.</p>
                     </div>
                     <div class="public-stage-canvas-grid">
                         <article class="is-primary">
@@ -79,6 +68,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="public-hero-notes" aria-label="יתרונות מרכזיים">
+            <article>
+                <small>SETUP</small>
+                <strong>פותחים ומטמיעים מהר</strong>
+            </article>
+            <article>
+                <small>DASHBOARD</small>
+                <strong>מנהלים ממקום אחד</strong>
+            </article>
+            <article>
+                <small>STATUS</small>
+                <strong>רואים אם זה נטען בפועל</strong>
+            </article>
         </div>
     </section>
 
