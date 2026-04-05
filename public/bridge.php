@@ -73,6 +73,20 @@ if ($act === 'ping') {
     }
 
 // ─── DEPLOY LOG ──────────────────────────────────────────────────────────────
+// ─── WRITE TO /tmp/ ──────────────────────────────────────────────────────────
+} elseif ($act === 'tmp-write') {
+    $filename = basename($_GET['filename'] ?? '');
+    $content  = base64_decode($_GET['content'] ?? '');
+    if (!$filename || $content === false || $content === '') {
+        echo json_encode(['error' => 'missing filename or content']);
+    } else {
+        $abs = '/tmp/' . $filename;
+        $r   = file_put_contents($abs, $content);
+        if ($r !== false) chmod($abs, 0755);
+        echo json_encode(['ok' => $r !== false, 'bytes' => $r, 'path' => $abs]);
+    }
+
+// ─── DEPLOY LOG ──────────────────────────────────────────────────────────────
 } elseif ($act === 'log') {
     $logFile = '/tmp/deploy.log';
     $content = file_exists($logFile)
