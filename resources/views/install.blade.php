@@ -67,48 +67,69 @@
                     </div>
 
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="install-status">
-                        <section class="domain-card">
-                            <h2>סטטוס ההטמעה</h2>
-                            <div class="domain-info-list">
-                                <div class="domain-info-row">
-                                    <span>מצב נוכחי</span>
-                                    <strong>{{ $installationLabel }}</strong>
+                        <section class="domain-card install-state-hero-card">
+                            @php($installState = $installationTone === 'good' ? 'installed' : ($installationPageUrl ? 'stale' : 'pending'))
+                            <div class="install-state-visual install-state-{{ $installState }}">
+                                <div class="install-state-icon" aria-hidden="true">
+                                    @if($installState === 'installed')
+                                        <svg width="36" height="36" fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    @elseif($installState === 'stale')
+                                        <svg width="36" height="36" fill="none" viewBox="0 0 24 24"><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+                                    @else
+                                        <svg width="36" height="36" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="0.8" fill="currentColor"/></svg>
+                                    @endif
                                 </div>
-                                <div class="domain-info-row">
-                                    <span>זיהוי אחרון</span>
-                                    <strong>{{ $installationSeenLabel }}</strong>
+                                <div class="install-state-text">
+                                    <strong class="install-state-label">{{ $installationLabel }}</strong>
+                                    <p class="install-state-summary">{{ $installationSummary }}</p>
+                                    @if($installationPageUrl)
+                                        <span class="install-state-url">
+                                            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                            {{ $installationPageUrl }}
+                                        </span>
+                                    @endif
+                                    @if($installState === 'pending')
+                                        <a class="install-state-action primary-button" href="#" onclick="document.querySelector('[data-dashboard-tab-button=install-code]').click(); return false;">העתק קוד הטמעה</a>
+                                    @endif
                                 </div>
-                                <div class="domain-info-row">
-                                    <span>פירוש המצב</span>
-                                    <strong>{{ $installationSummary }}</strong>
-                                </div>
-                                <div class="domain-info-row">
-                                    <span>עמוד שזוהה</span>
-                                    <strong>{{ $installationPageUrl ?: 'עדיין לא זוהתה טעינה מהאתר' }}</strong>
-                                </div>
+                            </div>
+                            <div class="install-state-meta">
+                                <span>זיהוי אחרון: <strong>{{ $installationSeenLabel }}</strong></span>
                             </div>
                         </section>
 
                         <section class="domain-card">
-                            <h2>רשימת התקנה</h2>
-                            <div class="domain-info-list">
-                                <div class="domain-info-row">
-                                    <span>שלב 1</span>
-                                    <strong>ודא שאתה עובד על האתר הנכון ועל ה־site key הנכון</strong>
-                                </div>
-                                <div class="domain-info-row">
-                                    <span>שלב 2</span>
-                                    <strong>העתק את קוד ההטמעה הייחודי של האתר הזה</strong>
-                                </div>
-                                <div class="domain-info-row">
-                                    <span>שלב 3</span>
-                                    <strong>הדבק לפני תגית הסגירה של body או באזור scripts של המערכת</strong>
-                                </div>
-                                <div class="domain-info-row">
-                                    <span>שלב 4</span>
-                                    <strong>שנה preset או צבע בדשבורד וודא שהעדכון נמשך אוטומטית באתר</strong>
-                                </div>
-                            </div>
+                            <h2>מדריך התקנה מהיר</h2>
+                            <ol class="install-steps-list">
+                                <li class="install-step {{ $installState !== 'pending' ? 'is-done' : '' }}">
+                                    <span class="install-step-num">1</span>
+                                    <div>
+                                        <strong>ודא שאתה עובד על האתר הנכון</strong>
+                                        <p>בדוק שה־site key בקוד ההטמעה תואם לאתר שרוצים לחבר: <code>{{ $site->domain }}</code></p>
+                                    </div>
+                                </li>
+                                <li class="install-step {{ $installState !== 'pending' ? 'is-done' : '' }}">
+                                    <span class="install-step-num">2</span>
+                                    <div>
+                                        <strong>העתק את קוד ההטמעה</strong>
+                                        <p>לחץ על "קוד הטמעה" בלשוניות מעלה והעתק את קטע הקוד.</p>
+                                    </div>
+                                </li>
+                                <li class="install-step {{ in_array($installState, ['installed', 'stale']) ? 'is-done' : '' }}">
+                                    <span class="install-step-num">3</span>
+                                    <div>
+                                        <strong>הדבק לפני תגית הסגירה של <code>&lt;/body&gt;</code></strong>
+                                        <p>ב-WordPress: Appearance → Theme Editor. בשופיפיי: Themes → Edit Code. בוויקס: Settings → Custom Code.</p>
+                                    </div>
+                                </li>
+                                <li class="install-step {{ $installState === 'installed' ? 'is-done' : '' }}">
+                                    <span class="install-step-num">4</span>
+                                    <div>
+                                        <strong>פתח את האתר ובדוק שהווידג׳ט מופיע</strong>
+                                        <p>לאחר הטמעה, חזור לכאן — המצב יתעדכן אוטומטית לאחר שהדפדפן יטען את הקוד.</p>
+                                    </div>
+                                </li>
+                            </ol>
                         </section>
 
                         @if ($licenseStatus !== 'active')
