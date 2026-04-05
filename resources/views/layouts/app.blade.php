@@ -37,7 +37,7 @@
         @auth
             <header class="app-header">
                 <div class="app-header-brand">
-                    <a class="app-logo" href="{{ route('dashboard', $siteRouteParams) }}" aria-label="A11Y Bridge dashboard">
+                    <a class="app-logo" href="{{ route('dashboard', $siteRouteParams) }}" aria-label="לוח הבקרה של A11Y Bridge">
                         <span class="brand-mark brand-mark-app" aria-hidden="true">
                             <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
                         </span>
@@ -105,7 +105,7 @@
                             <a href="#features">פיצ׳רים</a>
                             <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                             <a href="{{ route('articles.index') }}">מרכז ידע</a>
-                            <a href="#faq">FAQ</a>
+                            <a href="#faq">שאלות נפוצות</a>
                             <a class="nav-button-secondary nav-button-hub" href="{{ route('login.show') }}">התחברות</a>
                             <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                         @else
@@ -113,7 +113,7 @@
                             <a class="{{ request()->routeIs('how-it-works') ? 'is-current' : '' }}" href="{{ route('how-it-works') }}">איך זה עובד</a>
                             <a class="{{ request()->routeIs('free-tool') || request()->routeIs('pricing') ? 'is-current' : '' }}" href="{{ route('free-tool') }}">מה כלול בחינם</a>
                             <a class="{{ request()->routeIs('articles.*') ? 'is-current' : '' }}" href="{{ route('articles.index') }}">מרכז ידע</a>
-                            <a class="{{ request()->routeIs('faq') ? 'is-current' : '' }}" href="{{ route('faq') }}">FAQ</a>
+                            <a class="{{ request()->routeIs('faq') ? 'is-current' : '' }}" href="{{ route('faq') }}">שאלות נפוצות</a>
                             <a class="{{ request()->routeIs('about') ? 'is-current' : '' }}" href="{{ route('about') }}">אודות</a>
                             <a class="nav-button-secondary nav-button-hub {{ request()->routeIs('brndini.home') || request()->routeIs('products') || request()->routeIs('brndini.services') ? 'is-current' : '' }}" href="{{ route('brndini.home', $marketingParams) }}">Brndini</a>
                             <a class="nav-button-secondary" href="{{ route('login.show') }}">התחברות</a>
@@ -218,7 +218,7 @@
                         <a href="{{ route('articles.index') }}">מרכז ידע</a>
                         <a href="{{ route('brndini.home', $marketingParams) }}">Brndini</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותים עסקיים</a>
-                        <a href="{{ route('faq') }}">FAQ</a>
+                        <a href="{{ route('faq') }}">שאלות נפוצות</a>
                         <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
                         <a href="{{ route('legal.privacy') }}">פרטיות</a>
                         <a href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>

@@ -16,8 +16,8 @@
                 <span class="is-accent">במהירות האור.</span>
             </h1>
             <p>
-                פותחים חשבון, מחברים אתר, מטמיעים snippet אחד ומנהלים widget,
-                statement וזיהוי התקנה מתוך סביבת עבודה אחת.
+                פותחים חשבון, מחברים אתר, מטמיעים קטע קוד אחד ומנהלים וידג׳ט,
+                הצהרה וזיהוי התקנה מתוך סביבת עבודה אחת.
             </p>
             <div class="stitch-home-actions">
                 <a class="stitch-button stitch-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
@@ -29,9 +29,9 @@
             <div class="stitch-home-hero-float">
                 <div class="stitch-home-float-title">
                     <span class="stitch-home-float-dot"></span>
-                    <span>Install check</span>
+                    <span>בדיקת התקנה</span>
                 </div>
-                <strong>Widget detected</strong>
+                <strong>הווידג׳ט זוהה</strong>
                 <div class="stitch-home-float-bar"><span></span></div>
             </div>
 
@@ -45,43 +45,43 @@
                         </div>
                         <div class="stitch-home-site-card">
                             <small>A11Y Bridge</small>
-                            <strong>Site workspace</strong>
-                            <p>snippet, statement ו־widget</p>
+                            <strong>סביבת האתר</strong>
+                            <p>קטע קוד, הצהרה ווידג׳ט</p>
                         </div>
                         <div class="stitch-home-site-list">
-                            <span>snippet קבוע</span>
+                            <span>קטע קוד קבוע</span>
                             <span>preset מרחוק</span>
-                            <span>statement בסיסי</span>
+                            <span>הצהרה בסיסית</span>
                         </div>
                     </div>
 
                     <div class="stitch-home-product-main">
                         <div class="stitch-home-product-top">
                             <div class="stitch-home-pill-row">
-                                <span class="stitch-home-pill is-active">widget זוהה</span>
-                                <span class="stitch-home-pill">dashboard חי</span>
+                                <span class="stitch-home-pill is-active">הווידג׳ט זוהה</span>
+                                <span class="stitch-home-pill">הדשבורד חי</span>
                             </div>
-                            <div class="stitch-home-chip">Site connected</div>
+                            <div class="stitch-home-chip">האתר מחובר</div>
                         </div>
 
                         <div class="stitch-home-stats-grid">
                             <article>
-                                <small>Snippet</small>
+                                <small>קטע קוד</small>
                                 <strong>פעם אחת</strong>
                                 <p>מטמיעים פעם אחת בלבד.</p>
                             </article>
                             <article>
-                                <small>Widget</small>
+                                <small>וידג׳ט</small>
                                 <strong>מנוהל מרחוק</strong>
-                                <p>טקסטים ופעולות מתוך dashboard.</p>
+                                <p>טקסטים ופעולות מתוך הדשבורד.</p>
                             </article>
                             <article>
-                                <small>Statement</small>
+                                <small>הצהרה</small>
                                 <strong>נקודת פתיחה בסיסית</strong>
                                 <p>מחובר למסך הציות.</p>
                             </article>
                             <article>
-                                <small>Status</small>
+                                <small>סטטוס</small>
                                 <strong>זוהה לאחרונה</strong>
                                 <p>רואים שהשכבה חיה באתר.</p>
                             </article>
@@ -89,8 +89,8 @@
 
                         <div class="stitch-home-graph-panel">
                             <div class="stitch-home-graph-copy">
-                                <small>Activity</small>
-                                <strong>Install, widget, statement</strong>
+                                <small>פעילות</small>
+                                <strong>התקנה, וידג׳ט והצהרה</strong>
                             </div>
                             <div class="stitch-home-graph-lines">
                                 <span></span>
@@ -108,23 +108,23 @@
     <section class="stitch-home-proof">
         <p>מותאם לאתרים שרוצים לעלות מהר לאוויר</p>
         <div class="stitch-home-proof-row" aria-label="קהלי יעד">
-            <span>WordPress</span>
-            <span>Shopify</span>
-            <span>Wix</span>
-            <span>Custom stack</span>
+            <span>וורדפרס</span>
+            <span>שופיפיי</span>
+            <span>וויקס</span>
+            <span>אתר מותאם אישית</span>
         </div>
     </section>
 
     <section class="stitch-home-features" id="features">
         <div class="stitch-home-section-heading">
             <h2>הכלים הנכונים לשיפור הנגישות</h2>
-            <p>במקום עוד plugin מבולגן, מתחילים ממוצר ברור שאפשר להטמיע, לנהל ולעקוב אחריו.</p>
+            <p>במקום עוד תוסף מבולגן, מתחילים ממוצר ברור שאפשר להטמיע, לנהל ולעקוב אחריו.</p>
         </div>
 
         <div class="stitch-home-feature-grid">
             <article class="stitch-home-feature-card">
                 <div class="stitch-home-feature-icon">01</div>
-                <h3>snippet אחד, אתר חי</h3>
+                <h3>קטע קוד אחד, אתר חי</h3>
                 <p>מטמיעים פעם אחת בלבד וממשיכים לנהל את שכבת הנגישות מתוך סביבת העבודה.</p>
                 <div class="stitch-home-feature-visual stitch-home-feature-visual-bars">
                     <span></span><span></span><span></span>
@@ -133,8 +133,8 @@
 
             <article class="stitch-home-feature-card">
                 <div class="stitch-home-feature-icon">02</div>
-                <h3>widget, statement ו־status</h3>
-                <p>אותו dashboard מחזיק את טקסטי הווידג׳ט, ההצהרה הבסיסית וחיווי ההטמעה.</p>
+                <h3>וידג׳ט, הצהרה וסטטוס</h3>
+                <p>אותו דשבורד מחזיק את טקסטי הווידג׳ט, ההצהרה הבסיסית וחיווי ההטמעה.</p>
                 <div class="stitch-home-feature-visual stitch-home-feature-visual-lines">
                     <span></span><span></span><span></span><span></span>
                 </div>
@@ -178,7 +178,7 @@
             <details>
                 <summary>מה מקבלים בחינם?</summary>
                 <div>
-                    פתיחת חשבון, חיבור אתר, snippet קבוע, widget מנוהל, statement בסיסי,
+                    פתיחת חשבון, חיבור אתר, קטע קוד קבוע, וידג׳ט מנוהל, הצהרה בסיסית,
                     חיווי התקנה ותמיכה טכנית במערכת.
                 </div>
             </details>
@@ -191,7 +191,7 @@
             <details>
                 <summary>כמה זמן לוקח להטמיע?</summary>
                 <div>
-                    ברוב האתרים מטמיעים snippet אחד בתוך כמה דקות, ואז ממשיכים לנהל את השכבה מתוך ה־dashboard.
+                    ברוב האתרים מטמיעים קטע קוד אחד בתוך כמה דקות, ואז ממשיכים לנהל את השכבה מתוך הדשבורד.
                 </div>
             </details>
         </div>
