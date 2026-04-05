@@ -46,7 +46,7 @@
         </div>
     </section>
 
-    <section class="section-band">
+    <section class="section-band" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">שלושה מצבים קלאסיים</p>
             <h2>המוצר מתאים במיוחד למי שנמצא באחד מהתרחישים האלה.</h2>
@@ -92,7 +92,7 @@
         </div>
     </section>
 
-    <section class="section-band section-band-alt">
+    <section class="section-band section-band-alt" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">מה קורה ביום הראשון</p>
             <h2>לא צריך לגלות לבד איך להתחיל. זו התמונה הפרקטית של השימוש הראשוני.</h2>

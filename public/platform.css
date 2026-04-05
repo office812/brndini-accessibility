@@ -15612,3 +15612,55 @@ html { scroll-behavior: smooth; }
 .has-sticky-header-scrolled header.app-header {
     box-shadow: 0 1px 0 rgba(15,23,42,0.1), 0 4px 24px rgba(15,23,42,0.06);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK THEME: Missing card types on internal public pages
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.public-page:not(.page-home) .about-mini-card,
+.public-page:not(.page-home) .story-card,
+.public-page:not(.page-home) .process-card-strong,
+.public-page:not(.page-home) .audience-fit-card,
+.public-page:not(.page-home) .ecosystem-route-card {
+    border-color: rgba(43, 59, 88, 0.3) !important;
+    background: linear-gradient(180deg, rgba(16, 24, 39, 0.94), rgba(10, 16, 28, 0.96)) !important;
+    color: var(--brand-text);
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.18);
+}
+
+.public-page:not(.page-home) .about-mini-card p,
+.public-page:not(.page-home) .story-card p,
+.public-page:not(.page-home) .process-card-strong p,
+.public-page:not(.page-home) .audience-fit-card p,
+.public-page:not(.page-home) .ecosystem-route-card p {
+    color: var(--brand-muted);
+}
+
+.public-page:not(.page-home) .about-mini-card strong,
+.public-page:not(.page-home) .story-card strong,
+.public-page:not(.page-home) .process-card-strong h3,
+.public-page:not(.page-home) .audience-fit-card h3,
+.public-page:not(.page-home) .ecosystem-route-card h3 {
+    color: var(--brand-text);
+}
+
+/* Stagger reveal animations for grid cards */
+[data-reveal].is-revealed .public-shell-card:nth-child(1),
+[data-reveal].is-revealed .public-flow-step:nth-child(1),
+[data-reveal].is-revealed .audience-fit-card:nth-child(1),
+[data-reveal].is-revealed .about-mini-card:nth-child(1),
+[data-reveal].is-revealed .process-card-strong:nth-child(1) { transition-delay: 0ms; }
+[data-reveal].is-revealed .public-shell-card:nth-child(2),
+[data-reveal].is-revealed .public-flow-step:nth-child(2),
+[data-reveal].is-revealed .audience-fit-card:nth-child(2),
+[data-reveal].is-revealed .about-mini-card:nth-child(2),
+[data-reveal].is-revealed .process-card-strong:nth-child(2) { transition-delay: 70ms; }
+[data-reveal].is-revealed .public-shell-card:nth-child(3),
+[data-reveal].is-revealed .public-flow-step:nth-child(3),
+[data-reveal].is-revealed .audience-fit-card:nth-child(3),
+[data-reveal].is-revealed .about-mini-card:nth-child(3),
+[data-reveal].is-revealed .process-card-strong:nth-child(3) { transition-delay: 140ms; }
+[data-reveal].is-revealed .public-shell-card:nth-child(4),
+[data-reveal].is-revealed .public-flow-step:nth-child(4),
+[data-reveal].is-revealed .about-mini-card:nth-child(4),
+[data-reveal].is-revealed .process-card-strong:nth-child(4) { transition-delay: 210ms; }
