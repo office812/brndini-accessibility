@@ -23,13 +23,6 @@
 
             <div class="public-cta-row public-cta-row-hero">
                 <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
-                <a class="ghost-button button-link" href="{{ route('how-it-works') }}">איך זה עובד</a>
-            </div>
-
-            <div class="public-hero-proofline" aria-label="עקרונות המוצר">
-                <span>snippet קבוע</span>
-                <span>ניהול ממקום אחד</span>
-                <span>תמיכה טכנית בלבד</span>
             </div>
         </div>
 
@@ -40,39 +33,39 @@
                         <span>A11Y Bridge</span>
                         <span>INSTALL / WIDGET / STATEMENT</span>
                     </div>
-                    <div class="public-stage-canvas-copy">
-                        <small>workspace</small>
-                        <strong>snippet אחד באתר. כל השאר מנוהל מרחוק.</strong>
-                        <p>הטמעה, widget, statement וחיווי התקנה בלי להחליף קוד בכל שינוי.</p>
-                    </div>
-                    <div class="public-stage-canvas-grid">
-                        <article class="is-primary">
-                            <span>הטמעה</span>
-                            <strong>snippet קבוע</strong>
-                            <p>מטמיעים פעם אחת, ומכאן מנהלים מרחוק.</p>
-                        </article>
-                        <article>
-                            <span>widget</span>
-                            <strong>מנוהל מתוך dashboard</strong>
-                            <p>טקסט, preset ופעולות נגישות במקום אחד.</p>
-                        </article>
-                        <article>
-                            <span>statement</span>
-                            <strong>מחובר למסך הציות</strong>
-                            <p>נקודת פתיחה בסיסית, שקטה וברורה.</p>
-                        </article>
-                        <article>
-                            <span>status</span>
-                            <strong>זוהה / לא זוהה לאחרונה</strong>
-                            <p>רואים אם שכבת הנגישות נטענת בפועל.</p>
-                        </article>
+                    <div class="public-stage-canvas-compact">
+                        <div class="public-stage-canvas-copy public-stage-canvas-copy-compact">
+                            <small>workspace</small>
+                            <strong>snippet אחד באתר. כל השאר מנוהל מרחוק.</strong>
+                            <p>הטמעה, widget, statement וחיווי התקנה מתוך סביבת עבודה אחת.</p>
+                        </div>
+                        <div class="public-stage-list">
+                            <article class="is-primary">
+                                <span>הטמעה</span>
+                                <strong>snippet קבוע</strong>
+                                <em>מטמיעים פעם אחת</em>
+                            </article>
+                            <article>
+                                <span>widget</span>
+                                <strong>מנוהל מתוך dashboard</strong>
+                                <em>טקסטים ופעולות במקום אחד</em>
+                            </article>
+                        </div>
                     </div>
                     <div class="public-stage-canvas-metrics">
                         <div><small>snippet</small><strong>פעם אחת</strong></div>
-                        <div><small>dashboard</small><strong>מקום אחד</strong></div>
+                        <div><small>status</small><strong>זוהה</strong></div>
                         <div><small>support</small><strong>טכני בלבד</strong></div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="public-stage-hero-actions">
+            <div class="public-hero-proofline" aria-label="עקרונות המוצר">
+                <span>snippet קבוע</span>
+                <span>ניהול ממקום אחד</span>
+                <span>תמיכה טכנית בלבד</span>
             </div>
         </div>
 
