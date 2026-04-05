@@ -27,6 +27,7 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::get('/signup', [AuthController::class, 'showRegister'])->name('register.show');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/newsletter', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
 Route::middleware('auth')->group(function () {
     Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');

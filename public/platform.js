@@ -867,3 +867,31 @@ document.addEventListener('DOMContentLoaded', function () {
     } catch (e) { img.style.display = 'none'; }
   });
 });
+
+// ─── Counter Animations ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  var counters = document.querySelectorAll('[data-counter]');
+  if (!counters.length || !window.IntersectionObserver) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      var el = entry.target;
+      var target = parseInt(el.getAttribute('data-counter'), 10);
+      var duration = 1400;
+      var start = performance.now();
+
+      function tick(now) {
+        var elapsed = Math.min((now - start) / duration, 1);
+        var ease = 1 - Math.pow(1 - elapsed, 3);
+        el.textContent = Math.round(ease * target).toLocaleString('he-IL');
+        if (elapsed < 1) requestAnimationFrame(tick);
+        else el.textContent = target.toLocaleString('he-IL');
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.4 });
+
+  counters.forEach(function (el) { observer.observe(el); });
+});

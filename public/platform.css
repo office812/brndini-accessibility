@@ -14141,3 +14141,214 @@ body.auth-page {
     align-items: center;
     gap: 8px;
 }
+
+/* ─── Homepage stats counters ────────────────────────────────────────────── */
+.stitch-home-stats {
+    padding: 40px 0;
+    border-top: 1px solid rgba(43, 59, 88, 0.12);
+    border-bottom: 1px solid rgba(43, 59, 88, 0.12);
+    margin: 0 0 20px;
+}
+
+.stitch-home-stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+.stitch-home-stat-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.stitch-home-stat-number {
+    font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--stitch-text), var(--stitch-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.stitch-home-stat-suffix {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--stitch-primary);
+    line-height: 1;
+}
+
+.stitch-home-stat-label {
+    font-size: 0.84rem;
+    color: var(--stitch-muted);
+    font-weight: 500;
+}
+
+/* ─── Comparison table ───────────────────────────────────────────────────── */
+.stitch-home-comparison {
+    max-width: 860px;
+    margin-inline: auto;
+}
+
+.stitch-comparison-table {
+    border-radius: 1.4rem;
+    border: 1px solid rgba(43, 59, 88, 0.22);
+    overflow: hidden;
+    background: rgba(16, 24, 39, 0.88);
+}
+
+.stitch-comparison-head,
+.stitch-comparison-row {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(3, 1fr);
+}
+
+.stitch-comparison-head {
+    background: rgba(8, 13, 23, 0.6);
+    border-bottom: 1px solid rgba(43, 59, 88, 0.22);
+}
+
+.stitch-comparison-col {
+    padding: 14px 18px;
+    font-size: 0.88rem;
+    color: var(--stitch-muted);
+    border-left: 1px solid rgba(43, 59, 88, 0.14);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stitch-comparison-col:first-child {
+    border-left: none;
+}
+
+.stitch-comparison-col-us {
+    background: rgba(91, 156, 230, 0.08);
+    color: var(--stitch-text);
+    font-weight: 700;
+}
+
+.stitch-comparison-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(91, 156, 230, 0.18);
+    color: var(--stitch-primary);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.stitch-comparison-head .stitch-comparison-col-feature {
+    font-size: 0;
+}
+
+.stitch-comparison-row {
+    border-bottom: 1px solid rgba(43, 59, 88, 0.12);
+}
+
+.stitch-comparison-row:last-child {
+    border-bottom: none;
+}
+
+.stitch-comparison-row .stitch-comparison-col-feature {
+    color: var(--stitch-text);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ─── Newsletter section ─────────────────────────────────────────────────── */
+.stitch-home-newsletter {
+    max-width: 860px;
+    margin-inline: auto;
+}
+
+.stitch-home-newsletter-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    padding: 52px;
+    border-radius: 2rem;
+    background: linear-gradient(180deg, rgba(18, 29, 49, 0.98), rgba(10, 16, 30, 0.98));
+    border: 1px solid rgba(91, 156, 230, 0.18);
+}
+
+.stitch-home-newsletter-copy h2 {
+    margin: 0 0 12px;
+    font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 800;
+    color: var(--stitch-text);
+    line-height: 1.2;
+}
+
+.stitch-home-newsletter-copy p {
+    margin: 0;
+    color: var(--stitch-muted);
+    font-size: 0.92rem;
+    line-height: 1.7;
+}
+
+.stitch-newsletter-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.stitch-newsletter-input-row input[type="email"] {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(91, 156, 230, 0.24);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--stitch-text);
+    font-size: 0.95rem;
+    outline: none;
+    direction: rtl;
+}
+
+.stitch-newsletter-input-row input[type="email"]::placeholder {
+    color: var(--stitch-muted);
+}
+
+.stitch-newsletter-input-row input[type="email"]:focus {
+    border-color: var(--stitch-primary);
+    background: rgba(91, 156, 230, 0.08);
+}
+
+.stitch-newsletter-note {
+    margin: 0;
+    font-size: 0.78rem;
+    color: rgba(151, 170, 198, 0.6);
+}
+
+.stitch-newsletter-success {
+    margin: 8px 0 0;
+    color: #4ade80;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+@media (max-width: 760px) {
+    .stitch-home-newsletter-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 32px 24px;
+    }
+    .stitch-comparison-head,
+    .stitch-comparison-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    .stitch-comparison-col:nth-child(3),
+    .stitch-comparison-col:nth-child(4) {
+        display: none;
+    }
+    .stitch-home-stats-row {
+        gap: 32px;
+    }
+}

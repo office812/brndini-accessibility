@@ -144,6 +144,30 @@
         </div>
     </section>
 
+    <section class="stitch-home-stats">
+        <div class="stitch-home-stats-row">
+            <div class="stitch-home-stat-item">
+                <span class="stitch-home-stat-number" data-counter="847">0</span>
+                <span class="stitch-home-stat-label">אתרים פעילים</span>
+            </div>
+            <div class="stitch-home-stat-item">
+                <span class="stitch-home-stat-number" data-counter="3">0</span>
+                <span class="stitch-home-stat-suffix">דקות</span>
+                <span class="stitch-home-stat-label">זמן הטמעה ממוצע</span>
+            </div>
+            <div class="stitch-home-stat-item">
+                <span class="stitch-home-stat-number" data-counter="100">0</span>
+                <span class="stitch-home-stat-suffix">%</span>
+                <span class="stitch-home-stat-label">חינמי לצמיתות</span>
+            </div>
+            <div class="stitch-home-stat-item">
+                <span class="stitch-home-stat-number" data-counter="1">0</span>
+                <span class="stitch-home-stat-suffix">קוד</span>
+                <span class="stitch-home-stat-label">לכל האתר</span>
+            </div>
+        </div>
+    </section>
+
     <section class="stitch-home-features" id="features">
         <div class="stitch-home-section-heading">
             <h2>הכלים הנכונים לשיפור הנגישות</h2>
@@ -196,6 +220,43 @@
         </div>
     </section>
 
+    <section class="stitch-home-comparison" id="comparison">
+        <div class="stitch-home-section-heading stitch-home-section-heading-centered">
+            <h2>A11Y Bridge מול הגישות האחרות</h2>
+            <p>בחרנו בגישה אחרת: כלי self-service חינמי ושקוף, בלי חיכוך.</p>
+        </div>
+
+        <div class="stitch-comparison-table">
+            <div class="stitch-comparison-head">
+                <div class="stitch-comparison-col stitch-comparison-col-feature"></div>
+                <div class="stitch-comparison-col stitch-comparison-col-us">
+                    <span class="stitch-comparison-badge">A11Y Bridge</span>
+                </div>
+                <div class="stitch-comparison-col">תוסף נגישות</div>
+                <div class="stitch-comparison-col">ספק שירות</div>
+            </div>
+
+            @foreach ([
+                ['מחיר', 'חינמי לצמיתות', 'חינמי עד גבול / מנוי', 'תשלום חודשי'],
+                ['הטמעה', 'קטע קוד אחד', 'פלאגין + הגדרות', 'תהליך ארוך'],
+                ['שליטה', 'מלאה — מהדשבורד', 'חלקית', 'בידי הספק'],
+                ['הצהרת נגישות', 'כלולה', 'לרוב בתשלום', 'כלולה'],
+                ['ניהול מרחוק', 'כן — preset חי', 'לא תמיד', 'כן'],
+                ['תמיכה טכנית', 'כן', 'לא תמיד', 'כן'],
+            ] as $row)
+            <div class="stitch-comparison-row">
+                <div class="stitch-comparison-col stitch-comparison-col-feature">{{ $row[0] }}</div>
+                <div class="stitch-comparison-col stitch-comparison-col-us">
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ $row[1] }}
+                </div>
+                <div class="stitch-comparison-col">{{ $row[2] }}</div>
+                <div class="stitch-comparison-col">{{ $row[3] }}</div>
+            </div>
+            @endforeach
+        </div>
+    </section>
+
     <section class="stitch-home-cta-band">
         <div class="stitch-home-cta-surface">
             <div class="stitch-home-cta-copy">
@@ -210,6 +271,30 @@
                 <span class="is-glow"></span>
                 <span class="is-pill"></span>
             </div>
+        </div>
+    </section>
+
+    <section class="stitch-home-newsletter" id="newsletter">
+        <div class="stitch-home-newsletter-inner">
+            <div class="stitch-home-newsletter-copy">
+                <span class="stitch-home-badge" style="margin-bottom:12px">
+                    <span class="stitch-home-badge-dot"></span>
+                    <span>Brndini Hub — בקרוב</span>
+                </span>
+                <h2>רוצה לדעת כשמוצרים חדשים יוצאים?</h2>
+                <p>A11Y Bridge הוא המוצר הראשון. בקרוב נוסיף כלים נוספים תחת Brndini Hub — SEO, ביצועים, מעקב. הכנסו לרשימה וקבלו גישה ראשונים.</p>
+            </div>
+            <form class="stitch-home-newsletter-form" method="POST" action="{{ route('newsletter.subscribe') }}">
+                @csrf
+                <div class="stitch-newsletter-input-row">
+                    <input type="email" name="email" placeholder="האימייל שלך" required autocomplete="email">
+                    <button type="submit" class="stitch-button stitch-button-primary">הצטרפות לרשימה</button>
+                </div>
+                <p class="stitch-newsletter-note">ללא ספאם. ניתן להסרה בכל עת.</p>
+                @if(session('newsletter_success'))
+                    <p class="stitch-newsletter-success">✓ {{ session('newsletter_success') }}</p>
+                @endif
+            </form>
         </div>
     </section>
 
