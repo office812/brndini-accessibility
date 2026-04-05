@@ -13,11 +13,26 @@ class ArticleController extends Controller
     public function index(): View
     {
         $articles = Article::published()->latest('published_at')->get();
+        $featuredArticle = $articles->first();
+        $knowledgeTopics = collect(Article::knowledgeTopics())->map(function (array $topic, string $key) use ($articles) {
+            $topicArticles = $articles->filter(fn (Article $article) => $article->knowledgeTopicKey() === $key)->take(3)->values();
+
+            return [
+                'key' => $key,
+                'label' => $topic['label'],
+                'pillar' => $topic['pillar'],
+                'summary' => $topic['summary'],
+                'eyebrow' => $topic['eyebrow'],
+                'count' => $articles->filter(fn (Article $article) => $article->knowledgeTopicKey() === $key)->count(),
+                'articles' => $topicArticles,
+            ];
+        })->filter(fn (array $topic) => $topic['count'] > 0)->values();
 
         return view('articles.index', [
             'articles' => $articles,
-            'featuredArticle' => $articles->first(),
-            'metaDescription' => 'מאמרים על נגישות אתרים, וידג׳ט נגישות, הצהרת נגישות, בדיקות אתר, WCAG וניהול נגישות בפלטפורמה אחת.',
+            'featuredArticle' => $featuredArticle,
+            'knowledgeTopics' => $knowledgeTopics,
+            'metaDescription' => 'מרכז הידע של A11Y Bridge: מאמרים ומדריכים על וידג׳ט נגישות, הצהרת נגישות, WCAG, SEO, הטמעה וניהול נגישות לאתרים.',
             'canonicalUrl' => route('articles.index'),
         ]);
     }
@@ -26,13 +41,19 @@ class ArticleController extends Controller
     {
         abort_unless($article->published_at, 404);
 
+        $article = $article->load('author');
+        $topicKey = $article->knowledgeTopicKey();
+
         return view('article', [
-            'article' => $article->load('author'),
+            'article' => $article,
             'relatedArticles' => Article::published()
                 ->whereKeyNot($article->id)
-                ->latest('published_at')
+                ->get()
+                ->sortByDesc(function (Article $candidate) use ($topicKey) {
+                    return $candidate->knowledgeTopicKey() === $topicKey ? 1 : 0;
+                })
                 ->take(3)
-                ->get(),
+                ->values(),
             'metaDescription' => $article->meta_description ?: $article->excerpt,
             'canonicalUrl' => route('articles.show', $article),
         ]);
