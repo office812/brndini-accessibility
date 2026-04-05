@@ -123,6 +123,20 @@ if ($act === 'ping') {
         echo json_encode(['log' => implode('', $lines)]);
     }
 
+// ─── ARTISAN ─────────────────────────────────────────────────────────────────
+} elseif ($act === 'artisan') {
+    $cmd = $_GET['cmd'] ?? '';
+    // Whitelist safe artisan commands
+    $allowed = ['migrate', 'migrate --force', 'cache:clear', 'config:clear', 'view:clear', 'route:clear', 'optimize:clear'];
+    if (!in_array($cmd, $allowed)) {
+        echo json_encode(['error' => 'command not allowed: ' . $cmd]);
+    } else {
+        $phpBin  = PHP_BINARY;
+        $artisan = $APP . '/artisan';
+        $output  = shell_exec("cd $APP && $phpBin $artisan $cmd 2>&1");
+        echo json_encode(['ok' => true, 'output' => $output]);
+    }
+
 } else {
     echo json_encode(['error' => 'unknown action: ' . $act]);
 }
