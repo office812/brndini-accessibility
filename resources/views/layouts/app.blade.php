@@ -228,6 +228,23 @@
         @endguest
     </div>
 
+    <!-- Command Palette -->
+<div class="cmd-palette-overlay" id="cmd-palette" aria-modal="true" role="dialog" aria-label="חיפוש מהיר" hidden>
+    <div class="cmd-palette-panel">
+        <div class="cmd-palette-search">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true" class="cmd-search-icon"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="text" id="cmd-input" placeholder="חפש עמוד, פעולה..." autocomplete="off" dir="rtl">
+            <kbd class="cmd-esc-hint">ESC</kbd>
+        </div>
+        <ul class="cmd-results" id="cmd-results" role="listbox"></ul>
+        <div class="cmd-palette-footer">
+            <span><kbd>↑↓</kbd> ניווט</span>
+            <span><kbd>↵</kbd> מעבר</span>
+            <span><kbd>ESC</kbd> סגירה</span>
+        </div>
+    </div>
+</div>
+
     <script src="{{ url('/platform.js') }}?v={{ $assetVersion ?? '1' }}" defer></script>
 
     @if (!empty($platformWidgetSiteKey) && auth()->check())

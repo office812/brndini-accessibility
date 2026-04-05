@@ -895,3 +895,159 @@ document.addEventListener('DOMContentLoaded', function () {
 
   counters.forEach(function (el) { observer.observe(el); });
 });
+
+// ─── Command Palette (Cmd+K) ─────────────────────────────────────────────────
+(function () {
+  var overlay = document.getElementById('cmd-palette');
+  var input   = document.getElementById('cmd-input');
+  var results = document.getElementById('cmd-results');
+  if (!overlay || !input || !results) return;
+
+  // Build navigation items from current page links + static items
+  function buildItems() {
+    var items = [];
+
+    // Static navigation items
+    var staticItems = [
+      { label: 'דשבורד', icon: '◉', href: '/dashboard', category: 'ניווט' },
+      { label: 'הטמעה', icon: '⌨', href: '/dashboard/install', category: 'ניווט' },
+      { label: 'ציות ובקרה', icon: '◇', href: '/dashboard/compliance', category: 'ניווט' },
+      { label: 'תמיכה טכנית', icon: '◎', href: '/dashboard/support', category: 'ניווט' },
+      { label: 'חשבון', icon: '⊙', href: '/dashboard/account', category: 'ניווט' },
+      { label: 'דף הבית', icon: '⌂', href: '/', category: 'אתר' },
+      { label: 'תמחור', icon: '₪', href: '/pricing', category: 'אתר' },
+      { label: 'הרשמה', icon: '+', href: '/signup', category: 'חשבון' },
+      { label: 'כניסה', icon: '→', href: '/login', category: 'חשבון' },
+    ];
+
+    // Collect links from page nav
+    document.querySelectorAll('nav a[href], .licenses-product-nav a[href], .domain-sidebar-nav a[href]').forEach(function (a) {
+      var label = (a.textContent || '').trim();
+      if (label && a.href && !items.find(function(i){ return i.href === a.getAttribute('href'); })) {
+        items.push({ label: label, href: a.getAttribute('href'), category: 'עמוד', icon: '◦' });
+      }
+    });
+
+    return staticItems.concat(items);
+  }
+
+  var allItems = [];
+  var selectedIdx = -1;
+
+  function open() {
+    allItems = buildItems();
+    overlay.hidden = false;
+    overlay.removeAttribute('hidden');
+    input.value = '';
+    renderResults('');
+    window.setTimeout(function () { input.focus(); }, 50);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    overlay.hidden = true;
+    overlay.setAttribute('hidden', '');
+    input.value = '';
+    results.innerHTML = '';
+    selectedIdx = -1;
+    document.body.style.overflow = '';
+  }
+
+  function renderResults(query) {
+    var q = query.toLowerCase().trim();
+    var filtered = q
+      ? allItems.filter(function (i) { return i.label.toLowerCase().includes(q) || (i.category || '').toLowerCase().includes(q); })
+      : allItems.slice(0, 7);
+
+    results.innerHTML = '';
+    selectedIdx = filtered.length ? 0 : -1;
+
+    filtered.forEach(function (item, idx) {
+      var li = document.createElement('li');
+      li.className = 'cmd-result-item' + (idx === 0 ? ' is-selected' : '');
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
+      li.innerHTML =
+        '<span class="cmd-result-icon">' + (item.icon || '◦') + '</span>' +
+        '<span class="cmd-result-label">' + item.label + '</span>' +
+        (item.category ? '<span class="cmd-result-cat">' + item.category + '</span>' : '');
+      li.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        navigate(item.href);
+      });
+      li.addEventListener('mouseover', function () {
+        setSelected(idx);
+      });
+      results.appendChild(li);
+    });
+  }
+
+  function setSelected(idx) {
+    var items = results.querySelectorAll('.cmd-result-item');
+    items.forEach(function (el, i) {
+      el.classList.toggle('is-selected', i === idx);
+      el.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+    selectedIdx = idx;
+  }
+
+  function navigate(href) {
+    close();
+    if (href) window.location.href = href;
+  }
+
+  input.addEventListener('input', function () {
+    renderResults(input.value);
+  });
+
+  input.addEventListener('keydown', function (e) {
+    var items = results.querySelectorAll('.cmd-result-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelected(Math.min(selectedIdx + 1, items.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelected(Math.max(selectedIdx - 1, 0));
+    } else if (e.key === 'Enter') {
+      var sel = results.querySelector('.cmd-result-item.is-selected');
+      if (sel) sel.dispatchEvent(new MouseEvent('mousedown'));
+    } else if (e.key === 'Escape') {
+      close();
+    }
+  });
+
+  overlay.addEventListener('mousedown', function (e) {
+    if (e.target === overlay) close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      overlay.hidden ? open() : close();
+    }
+    if (e.key === 'Escape' && !overlay.hidden) close();
+  });
+
+  // Add Cmd+K hint to authenticated header if exists
+  var appHeader = document.querySelector('.app-header-actions, .app-topbar-actions, [data-cmd-hint]');
+  if (appHeader) {
+    var hint = document.createElement('button');
+    hint.className = 'cmd-trigger-hint';
+    hint.setAttribute('aria-label', 'פתיחת חיפוש מהיר');
+    hint.innerHTML = '<svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>חיפוש</span><kbd>⌘K</kbd>';
+    hint.addEventListener('click', open);
+    appHeader.prepend(hint);
+  }
+})();
+
+// ─── Keyboard Shortcut: I = Install, C = Compliance ──────────────────────────
+document.addEventListener('keydown', function (e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+  var installLink = document.querySelector('a[href*="/install"]');
+  var complianceLink = document.querySelector('a[href*="/compliance"]');
+
+  if (e.key === 'i' && installLink) { installLink.click(); }
+  if (e.key === 'c' && complianceLink) { complianceLink.click(); }
+});
