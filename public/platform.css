@@ -15146,3 +15146,180 @@ header.app-header .app-header-right {
     header.site-header .site-nav .nav-brndini-badge { display: none !important; }
     header.app-header .app-nav a { font-size: 0.82rem; padding: 0 9px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HOMEPAGE HEADER — dark glass, matches dark hero
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Homepage pill: dark glass instead of white */
+.page-home header.site-header.site-header-public {
+    background: rgba(10, 16, 30, 0.62) !important;
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 2px 40px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255,255,255,0.07) !important;
+    backdrop-filter: blur(20px) saturate(1.4) !important;
+}
+
+/* Logo: smaller, no border on dark */
+.page-home header.site-header.site-header-public .brand-mark {
+    background: rgba(255,255,255,0.07) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 9px !important;
+}
+
+/* Login button on dark: semi-transparent, white text */
+.page-home header.site-header.site-header-public .site-nav .nav-button-secondary,
+.page-home header.site-header.site-header-public .site-nav a.nav-button-secondary {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.13) !important;
+    color: rgba(255,255,255,0.86) !important;
+    backdrop-filter: none !important;
+}
+.page-home header.site-header.site-header-public .site-nav .nav-button-secondary:hover,
+.page-home header.site-header.site-header-public .site-nav a.nav-button-secondary:hover {
+    background: rgba(255,255,255,0.14) !important;
+    border-color: rgba(255,255,255,0.22) !important;
+    color: #fff !important;
+}
+
+/* Primary CTA: white with dark text — premium on dark bg */
+.page-home header.site-header.site-header-public .site-nav .nav-button-primary,
+.page-home header.site-header.site-header-public .site-nav a.nav-button-primary {
+    background: #fff !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.28) !important;
+    border: none !important;
+}
+.page-home header.site-header.site-header-public .site-nav .nav-button-primary:hover,
+.page-home header.site-header.site-header-public .site-nav a.nav-button-primary:hover {
+    background: #f1f5f9 !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.36) !important;
+    transform: translateY(-2px);
+}
+
+/* Nav items on homepage: pure white, no pill bg on hover */
+.page-home header.site-header.site-header-public .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge) {
+    color: rgba(255,255,255,0.72) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+}
+.page-home header.site-header.site-header-public .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge):hover {
+    color: #fff !important;
+    background: rgba(255,255,255,0.07) !important;
+}
+
+/* Brndini badge on dark */
+.page-home header.site-header.site-header-public .site-nav .nav-brndini-badge,
+.page-home header.site-header.site-header-public .site-nav a.nav-brndini-badge {
+    background: rgba(129,120,255,0.14) !important;
+    border-color: rgba(129,120,255,0.28) !important;
+    color: #a5b4fc !important;
+}
+.page-home header.site-header.site-header-public .site-nav .nav-brndini-dot { background: #a5b4fc !important; }
+
+/* Separator on dark */
+.page-home header.site-header.site-header-public .site-nav .site-nav-sep {
+    background: rgba(255,255,255,0.15) !important;
+}
+
+/* Brand text on dark */
+.page-home header.site-header.site-header-public .brand strong { color: #fff !important; }
+
+/* ─── Non-homepage light header: cleaner proportions ─────────────────────── */
+header.site-header:not(.site-header-public) .brand-mark,
+header.site-header.site-header-public:not(.page-home *) .brand-mark {
+    width: 32px !important;
+    height: 32px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNIFIED PUBLIC HEADER — same style on ALL public pages (not just homepage)
+   Dark glass pill everywhere. Only app-header (logged-in) is different.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* All public headers get the same dark glass treatment */
+header.site-header {
+    background: rgba(10, 16, 30, 0.58) !important;
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 2px 40px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+    backdrop-filter: blur(20px) saturate(1.4) !important;
+}
+
+/* Logo always white text on dark header */
+header.site-header .brand strong { color: #fff !important; }
+header.site-header .brand-mark {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 9px !important;
+    box-shadow: none !important;
+}
+
+/* Nav links — white/muted on dark */
+header.site-header .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge) {
+    color: rgba(255,255,255,0.68) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+}
+header.site-header .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge):hover {
+    color: #fff !important;
+    background: rgba(255,255,255,0.08) !important;
+}
+header.site-header .site-nav > a.is-current:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge) {
+    color: #fff !important;
+    background: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.14) !important;
+}
+
+/* Separator */
+header.site-header .site-nav .site-nav-sep {
+    background: rgba(255,255,255,0.16) !important;
+}
+
+/* Brndini badge on dark */
+header.site-header .site-nav .nav-brndini-badge,
+header.site-header .site-nav a.nav-brndini-badge {
+    background: rgba(129,120,255,0.14) !important;
+    border-color: rgba(129,120,255,0.28) !important;
+    color: #a5b4fc !important;
+}
+header.site-header .site-nav .nav-brndini-badge:hover,
+header.site-header .site-nav a.nav-brndini-badge:hover {
+    background: rgba(129,120,255,0.22) !important;
+    border-color: rgba(129,120,255,0.42) !important;
+}
+header.site-header .site-nav .nav-brndini-dot { background: #a5b4fc !important; }
+
+/* Login button — glass on dark */
+header.site-header .site-nav .nav-button-secondary,
+header.site-header .site-nav a.nav-button-secondary {
+    background: rgba(255,255,255,0.09) !important;
+    border-color: rgba(255,255,255,0.14) !important;
+    color: rgba(255,255,255,0.88) !important;
+    backdrop-filter: none !important;
+}
+header.site-header .site-nav .nav-button-secondary:hover,
+header.site-header .site-nav a.nav-button-secondary:hover {
+    background: rgba(255,255,255,0.15) !important;
+    border-color: rgba(255,255,255,0.24) !important;
+    color: #fff !important;
+}
+
+/* Primary CTA — white pill on dark (premium, clean) */
+header.site-header .site-nav .nav-button-primary,
+header.site-header .site-nav a.nav-button-primary {
+    background: #fff !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+    border: none !important;
+    font-weight: 700 !important;
+}
+header.site-header .site-nav .nav-button-primary:hover,
+header.site-header .site-nav a.nav-button-primary:hover {
+    background: #f1f5f9 !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.38) !important;
+    transform: translateY(-2px) !important;
+    color: #0f172a !important;
+}
