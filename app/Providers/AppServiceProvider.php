@@ -78,6 +78,12 @@ class AppServiceProvider extends ServiceProvider
 
     private function assetVersion(): ?string
     {
+        // Use platform.css modification time as version — updates automatically on each deploy
+        $cssPath = public_path('platform.css');
+        if (File::exists($cssPath)) {
+            return (string) File::lastModified($cssPath);
+        }
+
         $headPath = base_path('.git/HEAD');
 
         if (! File::exists($headPath)) {
