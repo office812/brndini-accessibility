@@ -109,6 +109,13 @@ document.addEventListener('DOMContentLoaded', function () {
     finishTopProgress();
   });
 
+  function syncStickyHeaderState() {
+    document.body.classList.toggle('has-sticky-header-scrolled', window.scrollY > 16);
+  }
+
+  syncStickyHeaderState();
+  window.addEventListener('scroll', syncStickyHeaderState, { passive: true });
+
   function setMenuState(toggle, panel, backdrop, isOpen) {
     toggle.classList.toggle('is-open', isOpen);
     panel.classList.toggle('is-open', isOpen);
