@@ -36,7 +36,7 @@
                     <label for="login_password">סיסמה</label>
                     <div class="password-field">
                         <input id="login_password" name="password" type="password" required>
-                        <button class="password-toggle" type="button" data-password-toggle="login_password" aria-label="הצג או הסתר סיסמה">👁</button>
+                        <button class="password-toggle" type="button" data-password-toggle="login_password" aria-label="הצג או הסתר סיסמה"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></button>
                     </div>
 
                     <button class="primary-button auth-submit" type="submit">להתחבר</button>
@@ -142,13 +142,13 @@
                                 <label for="signup_password">סיסמה</label>
                                 <div class="password-field">
                                     <input id="signup_password" name="password" type="password" minlength="8" required>
-                                    <button class="password-toggle" type="button" data-password-toggle="signup_password" aria-label="הצג או הסתר סיסמה">👁</button>
+                                    <button class="password-toggle" type="button" data-password-toggle="signup_password" aria-label="הצג או הסתר סיסמה"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></button>
                                 </div>
 
                                 <label for="signup_password_confirmation">אימות סיסמה</label>
                                 <div class="password-field">
                                     <input id="signup_password_confirmation" name="password_confirmation" type="password" minlength="8" required>
-                                    <button class="password-toggle" type="button" data-password-toggle="signup_password_confirmation" aria-label="הצג או הסתר סיסמה">👁</button>
+                                    <button class="password-toggle" type="button" data-password-toggle="signup_password_confirmation" aria-label="הצג או הסתר סיסמה"><svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></button>
                                 </div>
 
                                 <label class="toggle-row consent-row">

@@ -6,6 +6,9 @@
     <title>{{ $title ?? 'A11Y Bridge' }}</title>
     <meta name="description" content="{{ $metaDescription ?? 'A11Y Bridge היא פלטפורמה חינמית להטמעת וידג׳ט נגישות עם דשבורד, קוד הטמעה קבוע וגישה נוחה להצהרה בסיסית.' }}">
     <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
+    <link rel="icon" type="image/png" href="{{ url('/inn-logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ url('/inn-logo.png') }}">
+    <meta name="theme-color" content="#0a101e">
     <meta property="og:title" content="{{ $title ?? 'A11Y Bridge' }}">
     <meta property="og:description" content="{{ $metaDescription ?? 'פלטפורמה חינמית להטמעת וידג׳ט נגישות עם דשבורד ניהול וקוד הטמעה קבוע.' }}">
     <meta property="og:type" content="website">

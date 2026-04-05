@@ -15449,3 +15449,164 @@ details > div {
     .page-shell-public .site-footer { padding: 36px 24px 22px; }
     .stitch-newsletter-input-row { flex-direction: column; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AUTH PAGE POLISH
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.auth-page { background: #070d1a; }
+
+.auth-shell { min-height: 100dvh; }
+
+/* Password toggle: SVG eye instead of emoji */
+.password-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 0;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: color 150ms ease, background 150ms ease;
+    flex-shrink: 0;
+}
+.password-toggle:hover { color: #94a3b8; background: rgba(255,255,255,0.04); }
+.password-field { position: relative; }
+.password-field input { padding-inline-start: 12px; padding-inline-end: 44px; width: 100%; }
+.password-field .password-toggle { position: absolute; inset-block: 4px; inset-inline-end: 4px; }
+
+/* Auth brand: smaller, cleaner */
+.auth-brand .brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    padding: 4px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: none;
+}
+.auth-brand strong { color: #fff; font-size: 0.94rem; font-weight: 800; }
+.auth-brand small { color: rgba(255,255,255,0.4); font-size: 0.78rem; }
+
+/* Stack form polish */
+.stack-form label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+}
+.stack-form input[type="email"],
+.stack-form input[type="password"],
+.stack-form input[type="text"] {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    color: #fff;
+    font: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+.stack-form input:focus {
+    border-color: rgba(29,109,255,0.5);
+    background: rgba(29,109,255,0.05);
+    box-shadow: 0 0 0 3px rgba(29,109,255,0.12);
+}
+.stack-form input::placeholder { color: rgba(255,255,255,0.28); }
+
+/* Primary button pulse on auth */
+.auth-submit {
+    width: 100%;
+    min-height: 48px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Auth links row */
+.auth-links-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.auth-links-row a {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.84rem;
+    text-decoration: none;
+    transition: color 150ms ease;
+}
+.auth-links-row a:hover { color: rgba(255,255,255,0.85); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MICRO-INTERACTIONS & GLOBAL POLISH
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Page transition fade */
+.page-shell { animation: pageFadeIn 0.22s ease; }
+@keyframes pageFadeIn { from { opacity: 0.7; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Better focus ring globally */
+:focus-visible {
+    outline: 2px solid rgba(29,109,255,0.7);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Button active press effect */
+.primary-button:active,
+.stitch-button:active,
+.nav-button-primary:active { transform: scale(0.97) translateY(0) !important; }
+
+/* Selection color */
+::selection { background: rgba(29,109,255,0.28); color: inherit; }
+
+/* ─── Top progress bar ───────────────────────────────────────────────────────── */
+.top-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 9999;
+    pointer-events: none;
+}
+.top-progress-bar {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #1d6dff, #a5b4fc);
+    transition: width 220ms ease;
+    border-radius: 999px;
+}
+
+/* ─── Flash messages (errors) polish ────────────────────────────────────────── */
+.flash {
+    margin: 0 auto 16px;
+    max-width: 720px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    animation: flashSlideIn 0.24s ease;
+}
+.flash-success { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.24); color: #86efac; }
+.flash-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.22); color: #fca5a5; }
+@keyframes flashSlideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── Dashboard app header sticky shadow on scroll ──────────────────────────── */
+.has-sticky-header-scrolled header.app-header {
+    box-shadow: 0 1px 0 rgba(15,23,42,0.1), 0 4px 24px rgba(15,23,42,0.06);
+}
