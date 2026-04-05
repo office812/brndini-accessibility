@@ -96,7 +96,8 @@ if ($act === 'ping') {
 
 // ─── TRIGGER DEPLOY ──────────────────────────────────────────────────────────
 } elseif ($act === 'deploy') {
-    file_put_contents('/tmp/a11y-deploy-trigger', '1');
+    // Write trigger inside APP dir - accessible by both PHP-FPM and cron
+    file_put_contents($APP . '/.deploy-trigger', '1');
     echo json_encode(['queued' => true, 'message' => 'Deploy will run within 60 seconds']);
 
 // ─── APP ENV ─────────────────────────────────────────────────────────────────
