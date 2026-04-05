@@ -10948,7 +10948,7 @@ body.page-home::after {
 .page-home .site-header-public .site-nav a.is-current,
 .page-home .site-header-public .site-nav a:hover,
 .page-home .site-header-public .site-nav .nav-button-secondary:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .page-home .site-header-public .nav-button-primary {
@@ -10962,15 +10962,26 @@ body.page-home::after {
 }
 
 .page-home .site-header-public .site-nav {
-    gap: 10px;
+    gap: 6px;
 }
 
 .page-home .site-header-public .site-nav a,
 .page-home .site-header-public .site-nav .nav-button-secondary,
 .page-home .site-header-public .nav-button-primary {
     min-height: 40px;
-    padding: 0 14px;
-    font-size: 0.92rem;
+    padding: 0 12px;
+    font-size: 0.88rem;
+}
+
+.page-home .site-header-public .site-nav a:not(.nav-button-secondary):not(.nav-button-primary) {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    padding-inline: 10px;
+}
+
+.page-home .site-header-public .site-nav a.is-current:not(.nav-button-secondary):not(.nav-button-primary) {
+    color: #a7d664;
 }
 
 .page-home .public-stage-home {
@@ -11047,6 +11058,35 @@ body.page-home::after {
     margin-top: 18px;
 }
 
+.page-home .public-hero-proofline {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 18px;
+    margin-top: 14px;
+    color: rgba(230, 237, 246, 0.6);
+    font-family: var(--font-ui);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.page-home .public-hero-proofline span {
+    position: relative;
+}
+
+.page-home .public-hero-proofline span + span::before {
+    content: "";
+    position: absolute;
+    inset-inline-end: calc(100% + 8px);
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    margin-top: -2px;
+    border-radius: 999px;
+    background: rgba(167, 214, 100, 0.72);
+}
+
 .page-home .public-cta-row-hero .primary-button {
     background: linear-gradient(135deg, #a7d664, #7caf42 90%);
     color: #14230c;
@@ -11057,21 +11097,6 @@ body.page-home::after {
     border-color: rgba(255, 255, 255, 0.12);
     background: rgba(255, 255, 255, 0.06);
     color: #f7fbff;
-}
-
-.page-home .public-hero-notes {
-    justify-content: center;
-    width: 100%;
-    margin-top: 4px;
-    gap: 26px;
-}
-
-.page-home .public-hero-notes small {
-    color: rgba(191, 203, 217, 0.6);
-}
-
-.page-home .public-hero-notes strong {
-    color: #eef5fb;
 }
 
 .page-home .public-stage-visual {
@@ -11134,35 +11159,44 @@ body.page-home::after {
 }
 
 .page-home .section-heading {
-    max-width: 720px;
-    margin: 0 auto 24px;
+    max-width: 860px;
+    margin: 0 auto 18px;
     text-align: center;
     justify-items: center;
 }
 
 .page-home .section-heading h2 {
-    max-width: 11.5ch;
-    font-size: clamp(2rem, 2.9vw, 2.9rem);
+    max-width: 18ch;
+    font-size: clamp(1.68rem, 2.25vw, 2.3rem);
+    line-height: 1.06;
 }
 
 .page-home .public-proof-rail {
-    gap: 18px;
+    gap: 28px;
+    align-items: start;
+    max-width: 1020px;
+    margin-inline: auto;
 }
 
 .page-home .public-proof-rail article {
-    padding-top: 16px;
+    padding-top: 14px;
+    border-top-width: 1px;
+    background: transparent;
+    box-shadow: none;
 }
 
 .page-home .public-proof-rail strong {
-    font-size: 1.16rem;
+    font-size: 1.08rem;
 }
 
 .page-home .public-flow-grid-compact {
-    gap: 24px;
+    gap: 20px;
+    max-width: 1020px;
+    margin-inline: auto;
 }
 
 .page-home .public-flow-step {
-    padding-top: 20px;
+    padding-top: 16px;
 }
 
 .page-home .public-flow-step h3 {
@@ -11171,11 +11205,11 @@ body.page-home::after {
 
 .page-home .public-bridge-layout {
     max-width: 1120px;
-    margin-top: 26px;
+    margin-top: 18px;
 }
 
 .page-home .public-bridge-layout h3 {
-    font-size: 1.56rem;
+    font-size: 1.42rem;
 }
 
 .page-home .public-dual-panel-quiet {
@@ -11236,8 +11270,8 @@ body.page-home::after {
         max-width: 100%;
     }
 
-    .page-home .public-hero-notes {
-        gap: 14px;
+    .page-home .public-hero-proofline {
+        gap: 8px 14px;
     }
 }
 

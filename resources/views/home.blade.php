@@ -25,6 +25,12 @@
                 <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                 <a class="ghost-button button-link" href="{{ route('how-it-works') }}">איך זה עובד</a>
             </div>
+
+            <div class="public-hero-proofline" aria-label="עקרונות המוצר">
+                <span>snippet קבוע</span>
+                <span>ניהול ממקום אחד</span>
+                <span>תמיכה טכנית בלבד</span>
+            </div>
         </div>
 
         <div class="public-stage-visual" aria-hidden="true">
@@ -70,26 +76,12 @@
             </div>
         </div>
 
-        <div class="public-hero-notes" aria-label="יתרונות מרכזיים">
-            <article>
-                <small>SETUP</small>
-                <strong>פותחים ומטמיעים מהר</strong>
-            </article>
-            <article>
-                <small>DASHBOARD</small>
-                <strong>מנהלים ממקום אחד</strong>
-            </article>
-            <article>
-                <small>STATUS</small>
-                <strong>רואים אם זה נטען בפועל</strong>
-            </article>
-        </div>
     </section>
 
     <section class="public-shell-section public-shell-section-divider">
         <div class="section-heading">
             <p class="eyebrow">מה מקבלים בחינם</p>
-            <h2>השכבה החינמית נועדה לעבוד באמת כבר מהיום הראשון.</h2>
+            <h2>הכול מתחיל ב־snippet אחד, ואז ממשיכים לנהל מרחוק.</h2>
         </div>
 
         <div class="public-proof-rail">

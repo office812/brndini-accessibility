@@ -200,7 +200,7 @@
 
     <script src="{{ url('/platform.js') }}?v={{ $assetVersion ?? '1' }}" defer></script>
 
-    @if (!empty($platformWidgetSiteKey))
+    @if (!empty($platformWidgetSiteKey) && auth()->check())
         <script
             async
             src="{{ url('/widget.js') }}?v={{ $assetVersion ?? '1' }}"
