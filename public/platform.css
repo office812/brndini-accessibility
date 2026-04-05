@@ -14816,3 +14816,333 @@ body.auth-page {
     .site-nav-sep { display: none; }
     .app-user-name { display: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HEADER FINAL OVERRIDE — wins over all previous rules
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Public site-header base ─────────────────────────────────────────────── */
+header.site-header {
+    height: 64px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0;
+}
+
+header.site-header .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+header.site-header .brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    padding: 4px;
+    box-shadow: none;
+    border: 1px solid rgba(15,23,42,0.08);
+    background: #fff;
+}
+
+header.site-header .brand strong {
+    font-size: 0.97rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    display: block;
+    line-height: 1;
+}
+
+header.site-header .brand small { display: none; }
+
+header.site-header .site-header-menu {
+    justify-self: end;
+}
+
+/* ─── Regular site-nav (non-homepage) ─────────────────────────────────────── */
+header.site-header .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
+header.site-header .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge) {
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 180ms ease;
+}
+
+header.site-header .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge):hover {
+    background: rgba(15,23,42,0.04);
+    color: #0f172a;
+}
+
+header.site-header .site-nav > a.is-current:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge) {
+    color: #1d4ed8;
+    background: rgba(29,78,216,0.07);
+}
+
+/* ─── Nav separator ────────────────────────────────────────────────────────── */
+header.site-header .site-nav .site-nav-sep {
+    display: inline-block;
+    width: 1px;
+    height: 18px;
+    background: rgba(15,23,42,0.12);
+    border-radius: 999px;
+    flex-shrink: 0;
+    align-self: center;
+    margin: 0 6px;
+}
+
+/* ─── Brndini badge ────────────────────────────────────────────────────────── */
+header.site-header .site-nav .nav-brndini-badge,
+header.site-header .site-nav a.nav-brndini-badge {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0 12px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(99,102,241,0.25) !important;
+    background: rgba(99,102,241,0.07) !important;
+    color: #4f46e5 !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    text-decoration: none;
+    transition: all 180ms ease;
+    white-space: nowrap;
+}
+
+header.site-header .site-nav .nav-brndini-badge:hover,
+header.site-header .site-nav a.nav-brndini-badge:hover {
+    background: rgba(99,102,241,0.13) !important;
+    border-color: rgba(99,102,241,0.4) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99,102,241,0.15);
+}
+
+header.site-header .site-nav .nav-brndini-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+/* ─── Login button ─────────────────────────────────────────────────────────── */
+header.site-header .site-nav .nav-button-secondary,
+header.site-header .site-nav a.nav-button-secondary {
+    min-height: 36px;
+    padding: 0 16px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(15,23,42,0.12) !important;
+    background: rgba(255,255,255,0.7) !important;
+    color: #0f172a !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    text-decoration: none;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 180ms ease;
+    backdrop-filter: blur(8px);
+}
+
+header.site-header .site-nav .nav-button-secondary:hover,
+header.site-header .site-nav a.nav-button-secondary:hover {
+    background: #fff !important;
+    border-color: rgba(15,23,42,0.2) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15,23,42,0.08);
+}
+
+/* ─── Primary CTA ──────────────────────────────────────────────────────────── */
+header.site-header .site-nav .nav-button-primary,
+header.site-header .site-nav a.nav-button-primary {
+    min-height: 36px;
+    padding: 0 18px !important;
+    border-radius: 999px !important;
+    border: none !important;
+    background: linear-gradient(135deg, #1d6dff 0%, #1446b5 100%) !important;
+    color: #fff !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    text-decoration: none;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 18px rgba(29,109,255,0.28) !important;
+    transition: all 180ms ease;
+}
+
+header.site-header .site-nav .nav-button-primary:hover,
+header.site-header .site-nav a.nav-button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(29,109,255,0.36) !important;
+}
+
+/* ─── HOMEPAGE dark overlay overrides ─────────────────────────────────────── */
+.page-home header.site-header.site-header-public .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge) {
+    color: rgba(255,255,255,0.82) !important;
+    background: transparent !important;
+    padding-inline: 10px !important;
+    border-radius: 8px !important;
+}
+
+.page-home header.site-header.site-header-public .site-nav > a:not(.nav-button):not(.nav-button-secondary):not(.nav-brndini-badge):hover {
+    color: #fff !important;
+    background: rgba(255,255,255,0.08) !important;
+}
+
+.page-home header.site-header.site-header-public .site-nav .site-nav-sep {
+    background: rgba(255,255,255,0.2) !important;
+}
+
+.page-home header.site-header.site-header-public .brand strong { color: #fff !important; }
+
+.page-home header.site-header.site-header-public .brand-mark {
+    background: rgba(255,255,255,0.12) !important;
+    border-color: rgba(255,255,255,0.16) !important;
+}
+
+.page-home header.site-header.site-header-public .site-nav .nav-brndini-badge,
+.page-home header.site-header.site-header-public .site-nav a.nav-brndini-badge {
+    background: rgba(167,134,255,0.15) !important;
+    border-color: rgba(167,134,255,0.35) !important;
+    color: #c4b5fd !important;
+}
+
+.page-home header.site-header.site-header-public .site-nav .nav-brndini-badge:hover,
+.page-home header.site-header.site-header-public .site-nav a.nav-brndini-badge:hover {
+    background: rgba(167,134,255,0.25) !important;
+    border-color: rgba(167,134,255,0.5) !important;
+}
+
+.page-home header.site-header.site-header-public .site-nav .nav-button-secondary,
+.page-home header.site-header.site-header-public .site-nav a.nav-button-secondary {
+    background: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.16) !important;
+    color: rgba(255,255,255,0.9) !important;
+}
+
+.page-home header.site-header.site-header-public .site-nav .nav-button-primary,
+.page-home header.site-header.site-header-public .site-nav a.nav-button-primary {
+    background: linear-gradient(135deg, #a7d664, #6f9e38 92%) !important;
+    color: #15230c !important;
+    box-shadow: 0 8px 24px rgba(125,170,64,0.32) !important;
+}
+
+/* ─── App header final override ────────────────────────────────────────────── */
+header.app-header {
+    height: 58px;
+    padding: 0 20px 0 12px;
+    margin-bottom: 16px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0;
+    border-bottom: 1px solid rgba(15,23,42,0.07);
+    background: rgba(249,251,254,0.92);
+    backdrop-filter: blur(20px);
+}
+
+header.app-header .app-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+header.app-header .brand-mark-app {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: none;
+    padding: 3px;
+    background: #fff;
+}
+
+header.app-header .app-brand-copy strong {
+    font-size: 0.94rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+    display: block;
+    line-height: 1;
+}
+
+header.app-header .app-header-menu {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+}
+
+header.app-header .app-header-left { display: flex; align-items: center; }
+
+header.app-header .app-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
+header.app-header .app-nav a {
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 180ms ease;
+    white-space: nowrap;
+}
+
+header.app-header .app-nav a:hover {
+    background: rgba(15,23,42,0.05);
+    color: #0f172a;
+    transform: none;
+    box-shadow: none;
+}
+
+header.app-header .app-nav a.is-current {
+    color: #1d4ed8;
+    background: rgba(29,78,216,0.08);
+    border-color: rgba(29,78,216,0.1);
+}
+
+header.app-header .app-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ─── Mobile overrides ──────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    header.site-header .site-nav .site-nav-sep { display: none; }
+    header.site-header .site-nav .nav-brndini-badge { display: none !important; }
+    header.app-header .app-nav a { font-size: 0.82rem; padding: 0 9px; }
+}
