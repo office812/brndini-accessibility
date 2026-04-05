@@ -10350,3 +10350,96 @@ h3,
         margin-top: 12px;
     }
 }
+
+/* Dashboard + super admin tightening */
+.licenses-welcome {
+    display: grid;
+    gap: 10px;
+}
+
+.licenses-welcome-intro {
+    max-width: 56ch;
+}
+
+.steward-hero-card,
+.super-admin-hero-card {
+    align-items: start;
+}
+
+.steward-hero-copy h2,
+.super-admin-hero-copy h2 {
+    max-width: 13ch;
+}
+
+.steward-hero-copy .panel-intro,
+.super-admin-hero-copy .panel-intro,
+.steward-hero-copy p,
+.steward-feed-item p,
+.steward-side-card p,
+.super-admin-mini-ticket p {
+    max-width: 54ch;
+}
+
+.steward-priority-strip,
+.super-admin-priority-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.steward-priority-card,
+.super-admin-priority-card {
+    display: grid;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(13, 23, 38, 0.06);
+}
+
+.steward-priority-card small,
+.super-admin-priority-card small {
+    color: #6a7c92;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.steward-priority-card strong,
+.super-admin-priority-card strong {
+    font-size: 1rem;
+    color: #0c1625;
+}
+
+.steward-priority-card p,
+.super-admin-priority-card p {
+    margin: 0;
+    color: #5b6d84;
+    line-height: 1.7;
+}
+
+.steward-priority-card.is-focus,
+.super-admin-priority-card.is-focus {
+    background: linear-gradient(180deg, rgba(243, 248, 255, 0.96), rgba(255, 255, 255, 0.94));
+    border-color: rgba(20, 99, 255, 0.12);
+}
+
+.steward-priority-card.is-done,
+.super-admin-priority-card.is-done {
+    background: rgba(249, 251, 253, 0.92);
+}
+
+.super-admin-actions-list {
+    gap: 10px;
+}
+
+.super-admin-actions-list .secondary-button {
+    justify-content: flex-start;
+}
+
+@media (max-width: 1100px) {
+    .steward-priority-strip,
+    .super-admin-priority-strip {
+        grid-template-columns: 1fr;
+    }
+}

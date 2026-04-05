@@ -51,8 +51,8 @@
                 <p class="eyebrow">A11Y Bridge workspace</p>
                 <h1>{{ $user->name }}, זה מרכז העבודה של האתר הפעיל</h1>
                 <p class="licenses-welcome-intro">
-                    כל מה שצריך כדי לתפעל את השכבה הטכנית נמצא כאן: snippet, סטטוס התקנה, statement בסיסי,
-                    חשבון, ותנועה לשכבת Brndini רק כשיש צורך עסקי רחב יותר.
+                    כל מה שצריך כדי לתפעל את השכבה הטכנית נמצא כאן: snippet, סטטוס התקנה,
+                    statement בסיסי, חשבון ותנועה לשכבת Brndini רק כשיש צורך עסקי רחב יותר.
                 </p>
             </section>
 
@@ -93,16 +93,44 @@
                             <div class="steward-main-stack">
                                 <section class="steward-hero-card">
                                     <div class="steward-hero-copy">
-                                        <span class="portal-hero-kicker">סקירה מהירה</span>
-                                        <h2>מצב האתר, ההטמעה והצעדים הבאים במבט אחד.</h2>
+                                        <span class="portal-hero-kicker">הפעולה הבאה</span>
+                                        <h2>
+                                            @if ($installationTone !== 'good')
+                                                לסגור קודם את ההטמעה של האתר הזה.
+                                            @elseif (! $statementConnected)
+                                                להשלים עכשיו statement בסיסי ולסגור את שכבת הציות.
+                                            @elseif ($licenseStatus !== 'active')
+                                                לייצב קודם את הרישוי והחשבון של האתר הזה.
+                                            @else
+                                                האתר מוכן לעבודה. עכשיו נשאר ללטש ולעקוב.
+                                            @endif
+                                        </h2>
                                         <p>
-                                            זהו משטח העבודה הראשי של האתר הזה: האם ה־snippet נטען, מה מצב ההצהרה,
-                                            מה מצב הרישיון, ומה כדאי לסגור עכשיו כדי שהשכבה תהיה חיה ומסודרת.
+                                            @if ($installationTone !== 'good')
+                                                ה־snippet עדיין לא מזוהה בצורה מלאה. זה המסך שממנו צריך להתחיל לפני כל פעולה אחרת.
+                                            @elseif (! $statementConnected)
+                                                ההטמעה כבר חיה, ועכשיו כדאי לחבר הצהרה בסיסית כדי לסגור את התמונה הטכנית של האתר.
+                                            @elseif ($licenseStatus !== 'active')
+                                                ההטמעה וההצהרה נראות בסדר, אבל מצב הרישיון דורש סגירה כדי שהשכבה תישאר יציבה.
+                                            @else
+                                                ההטמעה, ההצהרה והרישוי תקינים. מכאן עובדים על בקרה, ליטוש ושכבת המשך רק אם צריך.
+                                            @endif
                                         </p>
 
                                         <div class="steward-hero-actions">
-                                            <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">התקנה והטמעה</a>
-                                            <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">בדיקות והצהרה</a>
+                                            @if ($installationTone !== 'good')
+                                                <a class="primary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">למסך ההטמעה</a>
+                                                <a class="secondary-button" href="{{ route('dashboard', ['site' => $site->id]) }}#tab-widget">ל־widget</a>
+                                            @elseif (! $statementConnected)
+                                                <a class="primary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">לבדיקות ולהצהרה</a>
+                                                <a class="secondary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">למסך ההטמעה</a>
+                                            @elseif ($licenseStatus !== 'active')
+                                                <a class="primary-button" href="{{ route('dashboard.account', ['site' => $site->id]) }}">לרישוי ולחשבון</a>
+                                                <a class="secondary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">לבדיקות</a>
+                                            @else
+                                                <a class="primary-button" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">לבדיקות ולבקרה</a>
+                                                <a class="secondary-button" href="{{ route('dashboard.install', ['site' => $site->id]) }}">לניהול ההטמעה</a>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -133,6 +161,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                </section>
+
+                                <section class="steward-priority-strip" aria-label="סדר טיפול">
+                                    <article class="steward-priority-card {{ $installationTone === 'good' ? 'is-done' : 'is-focus' }}">
+                                        <small>01</small>
+                                        <strong>הטמעה</strong>
+                                        <p>{{ $installationSummary }}</p>
+                                    </article>
+                                    <article class="steward-priority-card {{ $statementConnected ? 'is-done' : 'is-focus' }}">
+                                        <small>02</small>
+                                        <strong>statement</strong>
+                                        <p>{{ $statementConnected ? 'ההצהרה מחוברת וזמינה.' : 'עדיין חסרה הצהרה מחוברת לאתר הזה.' }}</p>
+                                    </article>
+                                    <article class="steward-priority-card {{ $licenseStatus === 'active' ? 'is-done' : 'is-focus' }}">
+                                        <small>03</small>
+                                        <strong>רישוי</strong>
+                                        <p>{{ $licenseStatus === 'active' ? 'הרישיון פעיל כרגע.' : 'צריך לייצב את מצב הרישיון.' }}</p>
+                                    </article>
                                 </section>
 
                                 <section class="steward-stat-grid">
@@ -176,7 +222,7 @@
                                 <section class="steward-content-grid">
                                     <article class="steward-feed-card">
                                         <div class="steward-feed-head">
-                                            <h3>מה חשוב לדעת</h3>
+                                            <h3>מה הסטטוס כרגע</h3>
                                             <a class="text-link" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">למרכז הציות</a>
                                         </div>
 
@@ -210,7 +256,7 @@
                                     <article class="steward-feed-card">
                                         <div class="steward-feed-head">
                                             <h3>מה כדאי לעשות עכשיו</h3>
-                                            <span class="meta-label">צעדים מומלצים</span>
+                                            <span class="meta-label">סדר עבודה</span>
                                         </div>
 
                                         <div class="steward-feed-list">

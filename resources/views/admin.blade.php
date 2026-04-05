@@ -6,8 +6,7 @@
             <section class="domain-shell-header">
                 <h1>מרכז סופר־אדמין</h1>
                 <p class="domain-shell-header-intro">
-                    נקודת הבקרה של Brndini: משתמשים, אתרים, תמיכה, לידים וקודי מעקב, בשפה תפעולית
-                    קצרה וברורה.
+                    נקודת הבקרה של Brndini: משתמשים, אתרים, תמיכה, לידים וקודי מעקב, בשפה תפעולית קצרה וברורה.
                 </p>
             </section>
 
@@ -82,12 +81,22 @@
 
                         <section class="super-admin-hero-card">
                             <div class="super-admin-hero-copy">
-                                <p class="eyebrow">בקרה מערכתית</p>
-                                <h2>מה דורש טיפול עכשיו, מי צריך חזרה, ומה מצב המערכת.</h2>
-                                <p class="panel-intro">זהו משטח העבודה המרכזי של Brndini: תמונת מצב, טיפול מהיר, לידים, משתמשים, אתרים וקודי מעקב, בלי להעמיס בעוד שכבה שיווקית.</p>
+                                <p class="eyebrow">today queue</p>
+                                <h2>
+                                    @if ($adminSummary['service_leads_needing_action'] > 0)
+                                        יש {{ $adminSummary['service_leads_needing_action'] }} לידים שדורשים טיפול עכשיו.
+                                    @elseif ($adminSummary['tickets_open'] > 0)
+                                        הלידים רגועים כרגע, אבל יש {{ $adminSummary['tickets_open'] }} פניות תמיכה פתוחות.
+                                    @else
+                                        כרגע אין צוואר בקבוק דחוף. אפשר לעבור לבקרה וניקוי שוטף.
+                                    @endif
+                                </h2>
+                                <p class="panel-intro">
+                                    מתחילים מתור העבודה של היום, אחר כך בודקים תמיכה, ורק אחר כך ממשיכים לבקרה רחבה יותר של אתרים, משתמשים וקודי מעקב.
+                                </p>
                                 <div class="super-admin-hero-actions">
-                                    <button class="primary-button" type="button" data-dashboard-tab-link="support">פתח מרכז תמיכה</button>
-                                    <button class="secondary-button" type="button" data-dashboard-tab-link="tracking">ערוך קודי מעקב</button>
+                                    <button class="primary-button" type="button" data-dashboard-tab-link="leads">פתח תור לידים</button>
+                                    <button class="secondary-button" type="button" data-dashboard-tab-link="support">פתח מרכז תמיכה</button>
                                 </div>
                             </div>
 
@@ -102,6 +111,24 @@
                                     @endforeach
                                 </div>
                             </div>
+                        </section>
+
+                        <section class="super-admin-priority-strip" aria-label="תור עבודה ראשי">
+                            <article class="super-admin-priority-card {{ $adminSummary['service_leads_needing_action'] > 0 ? 'is-focus' : 'is-done' }}">
+                                <small>01</small>
+                                <strong>לידים</strong>
+                                <p>{{ $adminSummary['service_leads_needing_action'] > 0 ? $adminSummary['service_leads_needing_action'].' דורשים חזרה או טיפול.' : 'אין כרגע לידים דחופים.' }}</p>
+                            </article>
+                            <article class="super-admin-priority-card {{ $adminSummary['tickets_open'] > 0 ? 'is-focus' : 'is-done' }}">
+                                <small>02</small>
+                                <strong>תמיכה</strong>
+                                <p>{{ $adminSummary['tickets_open'] > 0 ? $adminSummary['tickets_open'].' פניות פתוחות מחכות לטיפול.' : 'מרכז התמיכה שקט כרגע.' }}</p>
+                            </article>
+                            <article class="super-admin-priority-card {{ $platformReadiness['ready'] ? 'is-done' : 'is-focus' }}">
+                                <small>03</small>
+                                <strong>מערכת</strong>
+                                <p>{{ $platformReadiness['ready'] ? 'שכבת השרת נראית יציבה כרגע.' : $platformReadiness['summary'] }}</p>
+                            </article>
                         </section>
 
                         <section class="super-admin-kpi-grid">
@@ -237,15 +264,15 @@
                                     <div class="portal-card-head">
                                         <div>
                                             <p class="eyebrow">פעולות מהירות</p>
-                                            <h2>ניווט ישיר</h2>
+                                            <h2>מה לפתוח עכשיו</h2>
                                         </div>
                                     </div>
                                     <div class="super-admin-actions-list">
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="tracking">עריכת קודי מעקב</button>
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="users">ניהול משתמשים</button>
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="sites">ניהול אתרים</button>
-                                        <button class="secondary-button" type="button" data-dashboard-tab-link="support">טיפול בפניות</button>
                                         <button class="secondary-button" type="button" data-dashboard-tab-link="leads">לידים לשירותים</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="support">טיפול בפניות</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="sites">ניהול אתרים</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="users">ניהול משתמשים</button>
+                                        <button class="secondary-button" type="button" data-dashboard-tab-link="tracking">עריכת קודי מעקב</button>
                                     </div>
                                 </article>
 
