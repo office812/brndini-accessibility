@@ -96,8 +96,10 @@ if ($act === 'ping') {
 
 // ─── TRIGGER DEPLOY ──────────────────────────────────────────────────────────
 } elseif ($act === 'deploy') {
-    // Write trigger inside APP dir - accessible by both PHP-FPM and cron
-    file_put_contents($APP . '/.deploy-trigger', '1');
+    // Write trigger inside APP dir - readable by cron user
+    $triggerFile = $APP . '/.deploy-trigger';
+    file_put_contents($triggerFile, '1');
+    @chmod($triggerFile, 0666); // ensure cron user can read it
     echo json_encode(['queued' => true, 'message' => 'Deploy will run within 60 seconds']);
 
 // ─── APP ENV ─────────────────────────────────────────────────────────────────
