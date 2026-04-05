@@ -19,7 +19,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section">
+    <section class="public-shell-section" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">שתי שכבות. לא יותר.</p>
             <h2>מוצר חינמי להתחלה, ושירותים עסקיים למי שבאמת צריך אותם.</h2>
