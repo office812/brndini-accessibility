@@ -33,6 +33,15 @@ class Brndini_Performance {
         // Preconnect to external domains
         add_action('wp_head', [$this, 'add_preconnect'], 1);
 
+        // Add responsive image sizes to reduce oversized images
+        add_filter('wp_get_attachment_image_attributes', [$this, 'optimize_image_sizes'], 10, 3);
+
+        // Preload LCP image on homepage
+        add_action('wp_head', [$this, 'preload_lcp_image'], 2);
+
+        // Add fetchpriority to above-fold images
+        add_filter('wp_content_img_tag', [$this, 'add_fetchpriority'], 10, 3);
+
         // Limit post revisions
         if (!defined('WP_POST_REVISIONS')) {
             define('WP_POST_REVISIONS', 5);
@@ -290,6 +299,59 @@ class Brndini_Performance {
             wp_dequeue_style('dashicons');
             wp_deregister_style('dashicons');
         }
+    }
+
+    /**
+     * Optimize image sizes - ensure images serve appropriate dimensions
+     */
+    public function optimize_image_sizes($attr, $attachment, $size) {
+        // Add proper sizes attribute for responsive images
+        if (empty($attr['sizes'])) {
+            $attr['sizes'] = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
+        }
+        return $attr;
+    }
+
+    /**
+     * Preload LCP image on homepage for faster rendering
+     */
+    public function preload_lcp_image() {
+        if (is_admin()) return;
+
+        // On homepage, preload the hero/LCP image
+        if (is_front_page() || is_home()) {
+            // Get the first large image from the page content
+            $post = get_post();
+            if ($post) {
+                // Try to find the featured image or first content image
+                $thumb_id = get_post_thumbnail_id($post->ID);
+                if ($thumb_id) {
+                    $img_src = wp_get_attachment_image_url($thumb_id, 'large');
+                    if ($img_src) {
+                        echo '<link rel="preload" as="image" href="' . esc_url($img_src) . '" fetchpriority="high">' . "\n";
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Add fetchpriority=high to first image in content (LCP candidate)
+     */
+    public function add_fetchpriority($filtered_image, $context, $attachment_id) {
+        static $first_image = true;
+
+        if ($first_image && !is_admin()) {
+            // Add fetchpriority=high to the first image
+            if (strpos($filtered_image, 'fetchpriority') === false) {
+                $filtered_image = str_replace('<img ', '<img fetchpriority="high" ', $filtered_image);
+            }
+            // Remove lazy loading from first image (LCP should load eagerly)
+            $filtered_image = str_replace('loading="lazy"', 'loading="eager"', $filtered_image);
+            $first_image = false;
+        }
+
+        return $filtered_image;
     }
 
     /**
