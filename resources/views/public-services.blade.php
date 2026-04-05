@@ -9,11 +9,11 @@
     <section class="public-stage">
         <div class="public-stage-copy">
             <p class="eyebrow">שירותי Brndini</p>
-            <h1>הכלי נשאר חינמי. אם צריך שכבת עבודה רחבה יותר סביב האתר, ממשיכים מכאן.</h1>
+            <h1>כשהאתר צריך יותר מ־widget ודשבורד, Brndini היא שכבת ההמשך העסקית.</h1>
             <p class="hero-text hero-text-lead">
-                הפנייה כאן היא פנייה עסקית מסודרת, לא טיקט תמיכה. Brndini רלוונטית כשצריך
-                תשתית, צמיחה, שדרוג אתר, דפי נחיתה או אוטומציות. אם צריך רק את הכלי, נשארים
-                בתוך A11Y Bridge.
+                כאן לא פותחים טיקט. כאן פותחים שיחה עסקית על אחסון, SEO, קמפיינים, תחזוקה,
+                שדרוג אתר, דפי נחיתה או אוטומציות. אם צריך רק את הכלי החינמי, נשארים בתוך
+                A11Y Bridge.
             </p>
             <div class="public-cta-row">
                 <a class="primary-button button-link" href="#public-service-form">להשאיר פנייה עסקית</a>
@@ -23,9 +23,9 @@
     </section>
 
     <section class="public-shell-section">
-        <div class="section-heading section-heading-center">
+        <div class="section-heading">
             <p class="eyebrow">מתי זה מתאים</p>
-            <h2>לא “שדרוג לתוסף”, אלא שכבת שירות נפרדת כשיש צורך עסקי אמיתי.</h2>
+            <h2>Brndini לא מחליפה את A11Y Bridge. היא נכנסת רק כשיש צורך עסקי רחב יותר.</h2>
         </div>
 
         <div class="public-dual-panel">
@@ -51,9 +51,9 @@
     </section>
 
     <section class="public-shell-section public-shell-section-soft">
-        <div class="section-heading section-heading-center">
+        <div class="section-heading">
             <p class="eyebrow">משפחות השירות</p>
-            <h2>שלושה סוגי עבודה עיקריים. לא קטלוג עמוס.</h2>
+            <h2>שלושה סוגי עבודה עיקריים, בלי קטלוג עמוס ובלי רעש.</h2>
         </div>
 
         <div class="public-shell-grid public-shell-grid-three">
@@ -76,11 +76,11 @@
     </section>
 
     <section class="section-band section-band-alt" id="public-service-form">
-        <div class="section-heading section-heading-center">
+        <div class="section-heading">
             <p class="eyebrow">פנייה עסקית</p>
-            <h2>שלושה צעדים רגועים, במקום טופס כבד.</h2>
+            <h2>שיחה עסקית קצרה, לא טופס מכביד.</h2>
             <p class="hero-text">
-                שירות, מסגרת ופרטי חזרה. זה כל מה שצריך כדי לחזור אליך עם כיוון ברור.
+                בוחרים כיוון, מוסיפים מסגרת ודרך חזרה, ומכניסים את הפנייה למרכז הלידים של Brndini.
             </p>
         </div>
 
@@ -94,11 +94,11 @@
                     <input type="hidden" name="utm_campaign" value="{{ old('utm_campaign', request('utm_campaign')) }}">
                     <input type="hidden" name="referrer_url" value="{{ old('referrer_url', request('referrer_url', request()->headers->get('referer'))) }}">
 
-                    <div class="flow-wizard-intro flow-wizard-intro-compact">
-                        <div>
+                    <div class="flow-wizard-intro flow-wizard-intro-compact flow-wizard-intro-public">
+                        <div class="flow-wizard-intro-copy">
                             <p class="eyebrow">פנייה עסקית קצרה</p>
-                            <strong>מטרה ברורה, מסגרת קצרה ודרך חזרה נוחה</strong>
-                            <p class="signup-note">בלי רעש ובלי עודף שדות לא רלוונטיים.</p>
+                            <strong>מגדירים צורך, קצב ודרך חזרה. זה הכול.</strong>
+                            <p class="signup-note">שלושה שלבים קצרים, בלי למלא “טופס” שמרגיש כמו עבודה.</p>
                         </div>
                         <div class="flow-wizard-stepper" aria-label="התקדמות בפנייה עסקית">
                             <button class="flow-wizard-step {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
@@ -116,7 +116,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-shell-grid">
+                    <div class="flow-shell-grid flow-shell-grid-product">
                         <div class="flow-shell-main">
                             <div class="flow-progress-shell">
                                 <div class="flow-progress-track" aria-hidden="true">
@@ -128,7 +128,7 @@
                                 </div>
                             </div>
 
-                            <div class="flow-stage {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מה השירות, מה האתר, ומה המטרה העסקית.">
+                            <div class="flow-stage flow-stage-product {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מה השירות, מה האתר, ומה המטרה העסקית.">
                                 <div class="flow-stage-head">
                                     <strong>מה אתם צריכים כרגע?</strong>
                                     <p>מספיק לבחור שירות אחד, להוסיף אתר ולנסח מטרה קצרה.</p>
@@ -168,7 +168,7 @@
                                 </div>
                             </div>
 
-                            <div class="flow-stage {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="זמן, דחיפות ותקציב עוזרים להבין איך נכון לפתוח את השיחה.">
+                            <div class="flow-stage flow-stage-product {{ old('flow_step') === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="זמן, דחיפות ותקציב עוזרים להבין איך נכון לפתוח את השיחה.">
                                 <div class="flow-stage-head">
                                     <strong>נבין את המסגרת</strong>
                                     <p>פרטים קצרים שיעזרו לנו להבין קצב, תקציב ואופי העסק.</p>
@@ -243,7 +243,7 @@
                                 </div>
                             </div>
 
-                            <div class="flow-stage {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="כמה מילים על המצב היום ודרך החזרה המועדפת עליך.">
+                            <div class="flow-stage flow-stage-product {{ old('flow_step') === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="כמה מילים על המצב היום ודרך החזרה המועדפת עליך.">
                                 <div class="flow-stage-head">
                                     <strong>נסיים עם פרטי חזרה</strong>
                                     <p>עוד קצת הקשר, ואז הפנייה נכנסת ישירות למרכז הלידים.</p>
@@ -270,8 +270,8 @@
                             </div>
                         </div>
 
-                        <aside class="flow-shell-aside">
-                            <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline flow-summary-card-sticky">
+                        <aside class="flow-shell-aside flow-shell-aside-product">
+                            <div class="flow-summary-card flow-summary-card-lead flow-summary-card-inline flow-summary-card-sticky flow-summary-card-product">
                                 <strong>הפנייה שלך כרגע</strong>
                                 <div class="flow-summary-grid">
                                     <div><span>שירות</span><strong data-flow-summary-target="service_type">אחסון וניהול שרת</strong></div>
@@ -281,9 +281,9 @@
                                 </div>
                             </div>
 
-                            <div class="flow-support-card">
+                            <div class="flow-support-card flow-support-card-product">
                                 <p class="eyebrow">מה קורה אחרי השליחה</p>
-                                <strong>הפנייה נכנסת למרכז הלידים של Brndini, לא למרכז התמיכה הטכנית</strong>
+                                <strong>הפנייה נכנסת למרכז הלידים של Brndini, לא למרכז התמיכה הטכנית.</strong>
                                 <ul class="compact-check-list">
                                     <li>השירות והמטרה נשמרים יחד עם פרטי העסק</li>
                                     <li>אפשר לחזור אליך במייל, טלפון או ווטסאפ</li>
@@ -296,8 +296,8 @@
             </section>
 
             <aside class="support-side-stack">
-                <section class="domain-card">
-                    <h2>פנייה עסקית, לא טיקט תמיכה</h2>
+                <section class="domain-card public-side-note">
+                    <h2>פנייה עסקית, לא תמיכה</h2>
                     <div class="domain-info-list">
                         <div class="domain-info-row">
                             <span>הצורך</span>

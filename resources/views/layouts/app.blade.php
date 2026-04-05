@@ -89,7 +89,7 @@
                     </span>
                     <span>
                         <strong>A11Y Bridge</strong>
-                        <small>פלטפורמה חינמית להטמעת וידג׳ט נגישות והטמעה קבועה</small>
+                        <small>כלי חינמי self-service להטמעת וידג׳ט נגישות</small>
                     </span>
                 </a>
 
@@ -101,13 +101,13 @@
 
                 <div class="site-header-menu" id="site-menu-panel" data-header-menu-panel="site-menu">
                     <nav class="site-nav" aria-label="ניווט ראשי">
-                        <a href="{{ route('home') }}">בית</a>
-                        <a href="{{ route('how-it-works') }}">איך זה עובד</a>
-                        <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
-                        <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
-                        <a href="{{ route('faq') }}">שאלות נפוצות</a>
-                        <a href="{{ route('about') }}">אודות</a>
-                        <a href="{{ route('login.show') }}">התחברות</a>
+                        <a class="{{ request()->routeIs('home') ? 'is-current' : '' }}" href="{{ route('home') }}">בית</a>
+                        <a class="{{ request()->routeIs('how-it-works') ? 'is-current' : '' }}" href="{{ route('how-it-works') }}">איך זה עובד</a>
+                        <a class="{{ request()->routeIs('free-tool') || request()->routeIs('pricing') ? 'is-current' : '' }}" href="{{ route('free-tool') }}">מה כלול בחינם</a>
+                        <a class="{{ request()->routeIs('brndini.services') ? 'is-current' : '' }}" href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
+                        <a class="{{ request()->routeIs('faq') ? 'is-current' : '' }}" href="{{ route('faq') }}">FAQ</a>
+                        <a class="{{ request()->routeIs('about') ? 'is-current' : '' }}" href="{{ route('about') }}">אודות</a>
+                        <a class="nav-button-secondary" href="{{ route('login.show') }}">התחברות</a>
                         <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                     </nav>
                 </div>
@@ -143,19 +143,19 @@
                                 <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
                             </span>
                             <span>
-                                <strong>A11Y Bridge</strong>
-                                <small>פלטפורמה חינמית לווידג׳ט נגישות עבור אתרים, סוכנויות וארגונים.</small>
+                            <strong>A11Y Bridge</strong>
+                                <small>כלי חינמי, שקט וברור לניהול שכבת נגישות טכנית.</small>
                             </span>
                         </a>
                         <p>
-                            כלי חינמי self-service להטמעת וידג׳ט נגישות, עם דשבורד, קוד הטמעה קבוע,
-                            הצהרה בסיסית ותמיכה טכנית בלבד.
+                            A11Y Bridge נותנת התחלה מהירה: חשבון, אתר, קוד הטמעה קבוע, דשבורד,
+                            הצהרה בסיסית ותמיכה טכנית בלבד. Brndini נשארת שכבת שירותים עסקיים נפרדת.
                         </p>
                     </div>
 
                     <div class="site-footer-links">
                         <div class="footer-link-group">
-                            <h3>המוצר</h3>
+                            <h3>A11Y Bridge</h3>
                             <a href="{{ route('home') }}">בית</a>
                             <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                             <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
@@ -165,7 +165,7 @@
                             <h3>Brndini</h3>
                             <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
                             <a href="{{ route('about') }}">אודות</a>
-                            <a href="{{ route('pricing') }}">מודל העבודה</a>
+                            <a href="{{ route('articles.index') }}">מרכז ידע</a>
                         </div>
                         <div class="footer-link-group">
                             <h3>משפטי</h3>
@@ -178,14 +178,13 @@
                 </div>
 
                 <div class="site-footer-bottom">
-                    <span>© {{ now()->year }} A11Y Bridge. כל הזכויות שמורות.</span>
+                    <span>© {{ now()->year }} A11Y Bridge. כלי חינמי self-service. תמיכה טכנית בלבד.</span>
                     <div class="footer-inline-links">
                         <a href="{{ route('home') }}">בית</a>
                         <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                         <a href="{{ route('free-tool') }}">מה כלול בחינם</a>
                         <a href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
-                        <a href="{{ route('faq') }}">שאלות נפוצות</a>
-                        <a href="{{ route('about') }}">אודות</a>
+                        <a href="{{ route('faq') }}">FAQ</a>
                         <a href="{{ route('legal.terms') }}">תנאי שימוש</a>
                         <a href="{{ route('legal.privacy') }}">פרטיות</a>
                         <a href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>

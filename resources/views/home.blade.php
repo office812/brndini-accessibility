@@ -8,94 +8,88 @@
     <section class="public-stage public-stage-home">
         <div class="public-stage-copy">
             <p class="eyebrow">A11Y Bridge</p>
-            <h1>כלי חינמי, שקט ומדויק להטמעת וידג׳ט נגישות ולניהול טכני של האתר.</h1>
+            <h1>שכבה חינמית, ברורה ונקייה להטמעת וידג׳ט נגישות.</h1>
             <p class="hero-text hero-text-lead">
-                פותחים חשבון, מוסיפים אתר, מטמיעים קוד קבוע, ומנהלים את הווידג׳ט, ההצהרה הבסיסית
-                וזיהוי ההתקנה מתוך סביבת עבודה אחת. בלי להציג את זה כשירות נגישות, ובלי להכריח
-                מעבר למסלול שירות כדי להתחיל.
+                פותחים חשבון, מוסיפים אתר, מטמיעים קוד קבוע, ורואים הכול מתוך סביבת עבודה אחת:
+                widget, הצהרה בסיסית, זיהוי התקנה ותמיכה טכנית. לא שירות נגישות, לא trial,
+                ולא שכבת “פרימיום” שחוסמת התחלה.
             </p>
 
             <div class="public-cta-row">
                 <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                 <a class="ghost-button button-link" href="{{ route('how-it-works') }}">איך זה עובד</a>
             </div>
-
-            <div class="public-meta-strip">
-                <span>self-service</span>
-                <span>קוד הטמעה קבוע</span>
-                <span>הצהרה בסיסית</span>
-                <span>תמיכה טכנית בלבד</span>
-            </div>
         </div>
 
         <div class="public-stage-visual" aria-hidden="true">
-            <div class="public-device-shell">
+            <div class="public-device-shell public-device-shell-poster">
                 <div class="public-device-topline">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
-                <div class="public-device-card public-device-card-accent">
-                    <small>workspace</small>
-                    <strong>חשבון אחד, אתר אחד, snippet אחד.</strong>
-                    <p>כל שינוי עתידי נשאר מנוהל מתוך הדשבורד, לא מתוך הקוד.</p>
-                </div>
-                <div class="public-device-grid">
-                    <article>
-                        <small>הטמעה</small>
-                        <strong>קוד קבוע</strong>
-                    </article>
-                    <article>
-                        <small>דשבורד</small>
-                        <strong>ניהול מרוכז</strong>
-                    </article>
-                    <article>
-                        <small>הצהרה</small>
-                        <strong>עמוד בסיסי</strong>
-                    </article>
-                    <article>
-                        <small>סטטוס</small>
-                        <strong>זוהה / לא זוהה</strong>
-                    </article>
+                <div class="public-stage-poster">
+                    <div class="public-stage-poster-copy">
+                        <small>workspace</small>
+                        <strong>חשבון אחד, אתר אחד, snippet אחד.</strong>
+                        <p>מכאן ממשיכים לנהל את שכבת הנגישות הטכנית, בלי לגעת שוב בקוד על כל שינוי קטן.</p>
+                    </div>
+                    <div class="public-stage-poster-stack">
+                        <article>
+                            <span>הטמעה</span>
+                            <strong>קוד קבוע לאתר</strong>
+                            <p>שינויי widget והצהרה נמשכים מתוך המערכת.</p>
+                        </article>
+                        <article>
+                            <span>בקרה</span>
+                            <strong>זוהה / לא זוהה</strong>
+                            <p>חיווי ברור אם ה־snippet נטען באתר בפועל.</p>
+                        </article>
+                        <article>
+                            <span>הצהרה</span>
+                            <strong>עמוד בסיסי וקישור ציבורי</strong>
+                            <p>שכבה התחלתית מסודרת, בלי לבלבל עם שירות נגישות.</p>
+                        </article>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="public-shell-section">
-        <div class="section-heading section-heading-center">
+    <section class="public-shell-section public-shell-section-divider">
+        <div class="section-heading">
             <p class="eyebrow">מה מקבלים בחינם</p>
-            <h2>לא דמו, לא trial ולא “עוד מעט תצטרך לשלם”. שכבה חינמית אמיתית שמספיקה להתחלה רצינית.</h2>
+            <h2>מוצר מלא מספיק כדי להתחיל נכון.</h2>
         </div>
 
         <div class="public-shell-grid public-shell-grid-four">
             <article class="public-shell-card">
                 <small>01</small>
                 <h3>ווידג׳ט מנוהל</h3>
-                <p>שפה, מיקום, טקסט כפתור, מראה בסיסי ושליטה רציפה מתוך המערכת.</p>
+                <p>שפה, טקסט כפתור, מיקום ומראה בסיסי מתוך סביבת העבודה.</p>
             </article>
             <article class="public-shell-card">
                 <small>02</small>
                 <h3>קוד הטמעה קבוע</h3>
-                <p>מטמיעים פעם אחת באתר, ולא חוזרים להחליף snippet על כל שינוי קטן.</p>
+                <p>מטמיעים פעם אחת, וכל שאר העדכונים נשארים מנוהלים מרחוק.</p>
             </article>
             <article class="public-shell-card">
                 <small>03</small>
-                <h3>דשבורד ברור</h3>
-                <p>זיהוי התקנה, סטטוס אתר, הצהרה בסיסית ובקרה טכנית במקום אחד.</p>
+                <h3>דשבורד טכני ברור</h3>
+                <p>זיהוי התקנה, סטטוס אתר, הצהרה בסיסית ובקרה במקום אחד.</p>
             </article>
             <article class="public-shell-card">
                 <small>04</small>
                 <h3>שכבה שקופה</h3>
-                <p>תמיכה טכנית בלבד, בלי להבטיח שירות נגישות ובלי לבלבל מול Brndini.</p>
+                <p>תמיכה טכנית בלבד, עם גבול ברור בין A11Y Bridge לבין Brndini.</p>
             </article>
         </div>
     </section>
 
     <section class="public-shell-section public-shell-section-soft">
-        <div class="section-heading section-heading-center">
+        <div class="section-heading">
             <p class="eyebrow">איך זה עובד</p>
-            <h2>ארבעה צעדים קצרים. זה כל הסיפור.</h2>
+            <h2>ארבעה צעדים קצרים, בלי בלגן מסביב.</h2>
         </div>
 
         <div class="public-flow-grid">
@@ -121,16 +115,16 @@
             </article>
         </div>
 
-        <div class="public-cta-row public-cta-row-center">
+        <div class="public-inline-callout">
+            <p>צריך רק widget, קוד הטמעה, הצהרה בסיסית ובקרה טכנית? נשארים כאן. צריך שכבה עסקית רחבה יותר? ממשיכים ל־Brndini.</p>
             <a class="ghost-button button-link" href="{{ route('how-it-works') }}">למהלך המלא</a>
-            <a class="ghost-button button-link" href="{{ route('free-tool') }}">מה כלול בחינם</a>
         </div>
     </section>
 
-    <section class="public-shell-section">
-        <div class="section-heading section-heading-center">
+    <section class="public-shell-section public-shell-section-last">
+        <div class="section-heading">
             <p class="eyebrow">Brndini layer</p>
-            <h2>נשארים בכלי כשצריך רק שכבה חינמית. ממשיכים ל־Brndini רק כשצריך שכבה עסקית רחבה יותר.</h2>
+            <h2>Brndini היא שכבת המשך עסקית, לא “שדרוג לתוסף”.</h2>
         </div>
 
         <div class="public-dual-panel">
@@ -157,7 +151,7 @@
             </article>
         </div>
 
-        <div class="public-cta-row public-cta-row-center">
+        <div class="public-cta-row">
             <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
             <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">שירותי Brndini</a>
         </div>

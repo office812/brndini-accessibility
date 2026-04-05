@@ -52,11 +52,11 @@
                     <input type="hidden" name="signup_step" value="{{ $signupStep }}">
                     <input type="hidden" name="flow_step" value="{{ $signupStep }}" data-flow-step-input>
 
-                    <div class="flow-wizard-intro flow-wizard-intro-compact">
-                        <div>
+                    <div class="flow-wizard-intro flow-wizard-intro-compact flow-wizard-intro-public">
+                        <div class="flow-wizard-intro-copy">
                             <p class="eyebrow">התחלה מהירה</p>
-                            <strong>פתיחת חשבון בכמה צעדים קצרים</strong>
-                            <p class="signup-note">דומיין, פרטי אתר ופרטי גישה. זה הכול.</p>
+                            <strong>פותחים סביבת עבודה בכמה צעדים קצרים</strong>
+                            <p class="signup-note">דומיין, פרטי אתר ופרטי גישה. זה כל מה שצריך כדי להתחיל.</p>
                         </div>
                         <div class="flow-wizard-stepper" aria-label="התקדמות בהרשמה">
                             <button class="flow-wizard-step {{ $signupStep === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">
@@ -74,7 +74,7 @@
                         </div>
                     </div>
 
-                    <div class="flow-shell-grid">
+                    <div class="flow-shell-grid flow-shell-grid-product">
                         <div class="flow-shell-main">
                             <div class="flow-progress-shell">
                                 <div class="flow-progress-track" aria-hidden="true">
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
 
-                            <div class="flow-stage signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.">
+                            <div class="flow-stage flow-stage-product signup-stage {{ $signupStep === '1' ? 'is-active' : '' }}" data-flow-stage="1" data-flow-caption="מתחילים מהדומיין כדי להכין סביבת עבודה וקוד הטמעה קבוע.">
                                 <div class="flow-stage-head">
                                     <strong>בוא נתחיל מהאתר עצמו</strong>
                                     <p>מכניסים את הדומיין, ואנחנו מכינים סביבת עבודה וקוד הטמעה קבוע.</p>
@@ -98,7 +98,7 @@
                                 <p class="signup-note">ניסיון חינם, בלי כרטיס אשראי. בהמשך נוסיף את שאר הפרטים.</p>
                             </div>
 
-                            <div class="flow-stage signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="נותנים שם ברור לאתר ולעסק, כדי שהמערכת תהיה מסודרת מהרגע הראשון.">
+                            <div class="flow-stage flow-stage-product signup-stage {{ $signupStep === '2' ? 'is-active' : '' }}" data-flow-stage="2" data-flow-caption="נותנים שם ברור לאתר ולעסק, כדי שהמערכת תהיה מסודרת מהרגע הראשון.">
                                 <div class="flow-stage-head">
                                     <strong>נבנה עבורך סביבת עבודה מסודרת</strong>
                                     <p>שם אתר ושם חברה, כדי שהכול יהיה ברור בדשבורד מהיום הראשון.</p>
@@ -115,7 +115,7 @@
                                 </div>
                             </div>
 
-                            <div class="flow-stage signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="פרטי הגישה והאישורים האחרונים, ואז החשבון מוכן.">
+                            <div class="flow-stage flow-stage-product signup-stage {{ $signupStep === '3' ? 'is-active' : '' }}" data-flow-stage="3" data-flow-caption="פרטי הגישה והאישורים האחרונים, ואז החשבון מוכן.">
                                 <div class="flow-stage-head">
                                     <strong>יוצרים את החשבון ומסיימים</strong>
                                     <p>עוד פרטי גישה בסיסיים והמערכת מוכנה.</p>
@@ -162,8 +162,8 @@
                             </div>
                         </div>
 
-                        <aside class="flow-shell-aside">
-                            <div class="flow-summary-card flow-summary-card-compact flow-summary-card-sticky">
+                        <aside class="flow-shell-aside flow-shell-aside-product">
+                            <div class="flow-summary-card flow-summary-card-compact flow-summary-card-sticky flow-summary-card-product">
                                 <strong>מה ייווצר עכשיו</strong>
                                 <div class="flow-summary-grid">
                                     <div><span>דומיין</span><strong data-flow-summary-target="domain">עדיין לא הוזן</strong></div>
@@ -173,7 +173,7 @@
                                 </div>
                             </div>
 
-                            <div class="flow-support-card">
+                            <div class="flow-support-card flow-support-card-product">
                                 <p class="eyebrow">מה קורה מיד אחרי</p>
                                 <strong>המערכת מכינה אתר פעיל עם סביבת עבודה מסודרת</strong>
                                 <ul class="compact-check-list">
@@ -220,16 +220,16 @@
 
             <div class="auth-showcase-footer">
                 <div class="auth-showcase-quote">
-                    <h2>בנה חוויית נגישות ברורה, יציבה ומנוהלת.</h2>
+                    <h2>פותחים חשבון, מטמיעים snippet אחד, ומתחילים לנהל.</h2>
                     <p>
-                        A11Y Bridge נבנתה כדי לתת לבעלי אתרים, לסוכנויות ולמיישמים חוויה שנראית
-                        כמו מוצר נגישות רציני כבר מהרגע הראשון.
+                        A11Y Bridge בנויה כמו סביבת עבודה מוצרית: חשבון ברור, אתר ראשון, קוד הטמעה
+                        קבוע ושכבת ניהול טכנית שנשארת מסודרת מהרגע הראשון.
                     </p>
                 </div>
 
                 <div class="auth-showcase-testimonial">
-                    <strong>“הדבר החזק פה הוא לא רק הווידג׳ט, אלא כל שכבת הניהול שמסביב.”</strong>
-                    <span>שותף סוכנות</span>
+                    <strong>self-service מהיר, עם מסר שקוף ובלי בלבול מול שירותי Brndini.</strong>
+                    <span>A11Y Bridge</span>
                 </div>
             </div>
         </aside>
