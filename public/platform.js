@@ -1051,3 +1051,17 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'i' && installLink) { installLink.click(); }
   if (e.key === 'c' && complianceLink) { complianceLink.click(); }
 });
+
+// ─── Cmd+K trigger button (data-cmdk-open) ───────────────────────────────────
+document.addEventListener('click', function (e) {
+  if (e.target.closest('[data-cmdk-open]')) {
+    var overlay = document.getElementById('cmd-palette');
+    if (overlay) {
+      overlay.hidden = false;
+      overlay.removeAttribute('hidden');
+      var input = document.getElementById('cmd-input');
+      if (input) { window.setTimeout(function(){ input.focus(); }, 50); }
+      document.body.style.overflow = 'hidden';
+    }
+  }
+});

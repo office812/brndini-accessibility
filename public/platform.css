@@ -14646,3 +14646,173 @@ body.auth-page {
 .workspace-snapshot-loading .skeleton-card {
     height: 90px;
 }
+
+/* ─── Header Redesign ─────────────────────────────────────────────────────── */
+
+/* App header — remove subtitle, cleaner brand */
+.app-brand-copy small { display: none; }
+.app-brand-copy strong { font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; color: #10233f; }
+
+/* App header separator */
+.app-header-sep {
+    display: inline-block;
+    width: 1px;
+    height: 22px;
+    background: rgba(15, 23, 42, 0.1);
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+/* App Cmd+K trigger button */
+.app-cmdk-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.09);
+    background: rgba(255, 255, 255, 0.72);
+    color: #64748b;
+    font: inherit;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform var(--motion-fast) ease,
+        background var(--motion-fast) ease,
+        border-color var(--motion-fast) ease,
+        box-shadow var(--motion-fast) ease,
+        color var(--motion-fast) ease;
+}
+.app-cmdk-trigger:hover {
+    transform: translateY(-1px);
+    background: #fff;
+    border-color: rgba(29, 109, 255, 0.18);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.07);
+    color: #1c2c44;
+}
+.app-cmdk-trigger kbd {
+    padding: 2px 6px;
+    border-radius: 6px;
+    background: rgba(15, 23, 42, 0.05);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0;
+    line-height: 1.4;
+}
+
+/* Logout — icon + label, minimal */
+.app-logout-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #64748b;
+    font: inherit;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--motion-fast) ease;
+}
+.app-logout-button:hover {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.14);
+    color: #dc2626;
+    transform: translateY(-1px);
+}
+.app-logout-label { font-size: 0.84rem; }
+
+/* App user pill — tighter */
+.app-user-name { font-size: 0.88rem; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Public header — Brndini badge */
+.nav-brndini-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 0 13px;
+    border-radius: 999px;
+    border: 1px solid rgba(99, 102, 241, 0.22);
+    background: rgba(99, 102, 241, 0.06);
+    color: #4f46e5;
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all var(--motion-fast) ease;
+}
+.nav-brndini-badge:hover {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.36);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.14);
+}
+.nav-brndini-badge.is-current {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+.nav-brndini-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #4f46e5;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Public nav separator */
+.site-nav-sep {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    background: rgba(15, 23, 42, 0.1);
+    border-radius: 999px;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+/* nav-button-secondary */
+.nav-button-secondary {
+    min-height: 38px;
+    padding: 0 15px;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    background: rgba(255, 255, 255, 0.6);
+    color: #1c2c44;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--motion-fast) ease;
+    cursor: pointer;
+}
+.nav-button-secondary:hover {
+    background: #fff;
+    border-color: rgba(15, 23, 42, 0.16);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07);
+}
+
+/* Homepage public header nav override */
+.page-home .site-header-public .site-nav { gap: 8px; }
+
+/* Mobile: hide Cmd+K trigger text */
+@media (max-width: 768px) {
+    .app-cmdk-trigger span { display: none; }
+    .app-cmdk-trigger { padding: 0 10px; gap: 0; min-width: 36px; justify-content: center; }
+    .app-logout-label { display: none; }
+    .app-header-sep { display: none; }
+    .site-nav-sep { display: none; }
+    .app-user-name { display: none; }
+}
