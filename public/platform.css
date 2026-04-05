@@ -15617,6 +15617,12 @@ html { scroll-behavior: smooth; }
    DARK THEME: Missing card types on internal public pages
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* Compact check-list items inside dark cards */
+.public-page:not(.page-home) .compact-check-list li,
+.auth-page .compact-check-list li {
+    color: var(--brand-muted, #97aac6);
+}
+
 .public-page:not(.page-home) .about-mini-card,
 .public-page:not(.page-home) .story-card,
 .public-page:not(.page-home) .process-card-strong,
