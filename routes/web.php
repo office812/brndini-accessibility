@@ -13,6 +13,7 @@ Route::view('/for-agencies', 'for-agencies')->name('agencies');
 Route::view('/use-cases', 'use-cases')->name('use-cases');
 Route::view('/free-tool', 'free-tool')->name('free-tool');
 Route::view('/pricing', 'pricing')->name('pricing');
+Route::view('/brndini', 'products')->name('brndini.home');
 Route::view('/products', 'products')->name('products');
 Route::view('/faq', 'faq')->name('faq');
 Route::get('/brndini-services', [DashboardController::class, 'publicServices'])->name('brndini.services');

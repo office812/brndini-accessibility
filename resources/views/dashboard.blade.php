@@ -48,11 +48,11 @@
 
         <div class="licenses-main">
             <section class="licenses-welcome">
-                <p class="eyebrow">ניהול רישיונות ונגישות</p>
+                <p class="eyebrow">A11Y Bridge workspace</p>
                 <h1>{{ $user->name }}, זה מרכז העבודה של האתר הפעיל</h1>
                 <p class="licenses-welcome-intro">
-                    כל מה שצריך לתפעול השכבה הטכנית נמצא כאן: הטמעה, סטטוס אתר, הצהרה בסיסית,
-                    חשבון ושירותי Brndini כשיש צורך עסקי רחב יותר.
+                    כל מה שצריך כדי לתפעל את השכבה הטכנית נמצא כאן: snippet, סטטוס התקנה, statement בסיסי,
+                    חשבון, ותנועה לשכבת Brndini רק כשיש צורך עסקי רחב יותר.
                 </p>
             </section>
 
@@ -94,10 +94,10 @@
                                 <section class="steward-hero-card">
                                     <div class="steward-hero-copy">
                                         <span class="portal-hero-kicker">סקירה מהירה</span>
-                                        <h2>מצב האתר, הרישיון וההטמעה במבט אחד.</h2>
+                                        <h2>מצב האתר, ההטמעה והצעדים הבאים במבט אחד.</h2>
                                         <p>
-                                            זהו מסך העבודה הראשי: האם הקוד נטען, מה מצב הרישיון, איפה עומדת
-                                            ההצהרה, ומה הפעולה הבאה שכדאי לעשות עכשיו.
+                                            זהו משטח העבודה הראשי של האתר הזה: האם ה־snippet נטען, מה מצב ההצהרה,
+                                            מה מצב הרישיון, ומה כדאי לסגור עכשיו כדי שהשכבה תהיה חיה ומסודרת.
                                         </p>
 
                                         <div class="steward-hero-actions">

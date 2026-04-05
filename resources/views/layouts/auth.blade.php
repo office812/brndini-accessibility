@@ -7,7 +7,7 @@
     <meta name="description" content="A11Y Bridge היא כלי חינמי self-service להטמעת וידג׳ט נגישות, עם דשבורד, קוד הטמעה קבוע, הצהרה בסיסית ותמיכה טכנית בלבד.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=IBM+Plex+Sans+Hebrew:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url('/platform.css') }}?v={{ $assetVersion ?? '1' }}">
     {!! $globalTrackingScripts['google_analytics_head'] ?? '' !!}
     {!! $globalTrackingScripts['google_tag_manager_head'] ?? '' !!}

@@ -1,139 +1,112 @@
 @extends('layouts.app')
 
-@php($title = 'המוצרים הבאים של Brndini | גישה מוקדמת לכלים עתידיים')
-@php($metaDescription = 'Brndini בונה עוד מוצרים וכלים דיגיטליים לעסקים: SEO, לידים, אוטומציות ובקרת אתר. אפשר להצטרף עכשיו לרשימת הגישה המוקדמת.')
+@php($title = 'Brndini | מוצרים, שירותים ושכבות המשך לעסק')
+@php($metaDescription = 'Brndini היא שכבת ההמשך של A11Y Bridge: שירותים עסקיים, מוצרים חינמיים נוספים, וגישה מוקדמת לכלים שנבנים סביב צמיחה, אתרים, תוכן ואוטומציות.')
 @php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
-    <section class="about-hero pricing-page-hero">
-        <div class="about-hero-copy">
-            <p class="eyebrow">Brndini Ecosystem</p>
-            <h1>הווידג׳ט הוא רק ההתחלה. Brndini בונה עוד כלים לעסקים שרוצים יותר שליטה.</h1>
+    <section class="public-stage public-stage-home public-stage-brndini">
+        <div class="public-stage-copy">
+            <p class="eyebrow">Brndini</p>
+            <h1>Brndini היא שכבת ההמשך: מוצרים חינמיים, שירותים עסקיים וכלים שנבנים סביב העסק.</h1>
             <p class="hero-text hero-text-lead">
-                A11Y Bridge היא פלטפורמת הכניסה. במקביל, Brndini מפתחת עוד שכבות מוצר סביב SEO,
-                לידים, אוטומציות, ביצועי אתר וצמיחה דיגיטלית. אם מעניין אותך לתפוס מקום מוקדם,
-                אפשר להיכנס עכשיו לרשימת המתעניינים.
+                A11Y Bridge נשארת המוצר focused סביב נגישות. Brndini מרכזת את מה שממשיך אחרי זה:
+                שירותים עסקיים, כלים נוספים, אוטומציות, צמיחה, תוכן ותשתית.
             </p>
-            <div class="hero-action-row">
-                <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access', 'entry' => 'products-page'])) }}#public-service-form">אני רוצה גישה מוקדמת</a>
-                <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לשירותי Brndini</a>
+            <div class="public-cta-row public-cta-row-hero">
+                <a class="primary-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לשירותי Brndini</a>
+                <a class="ghost-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
             </div>
         </div>
 
-        <div class="about-hero-panel pricing-page-panel">
-            <div class="about-hero-grid">
-                <article class="about-mini-card">
-                    <span class="eyebrow">גישה מוקדמת</span>
-                    <strong>להיות ברשימה לפני כולם</strong>
-                    <p>מי שנכנס עכשיו מקבל עדיפות במוצרים החדשים שייפתחו.</p>
-                </article>
-                <article class="about-mini-card">
-                    <span class="eyebrow">אקוסיסטם</span>
-                    <strong>כלים שמתחברים זה לזה</strong>
-                    <p>לא מוצרים מבודדים, אלא סביבת עבודה שחושבת על תנועה, שליטה וצמיחה.</p>
-                </article>
-                <article class="about-mini-card">
-                    <span class="eyebrow">Brndini</span>
-                    <strong>מותג אחד, כמה שכבות ערך</strong>
-                    <p>כלים חינמיים, שירותים עסקיים ומוצרים חדשים שנבנים על אותה תשתית.</p>
-                </article>
-                <article class="about-mini-card">
-                    <span class="eyebrow">פוקוס</span>
-                    <strong>לא נגישות בלבד</strong>
-                    <p>הדגש כאן הוא על צמיחה, תשתית, לידים, אוטומציות וביצועי אתר.</p>
-                </article>
+        <div class="public-stage-visual" aria-hidden="true">
+            <div class="public-device-shell public-device-shell-poster">
+                <div class="public-stage-canvas public-stage-canvas-brndini">
+                    <div class="public-stage-canvas-copy">
+                        <small>hub / services / tools</small>
+                        <strong>מותג אחד שמחבר בין free tools, lead capture, services ו־future products.</strong>
+                    </div>
+                    <div class="public-stage-canvas-metrics">
+                        <div><small>free tools</small><strong>2+</strong></div>
+                        <div><small>services</small><strong>7</strong></div>
+                        <div><small>entry points</small><strong>CRM-ready</strong></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="section-band">
-        <div class="section-heading section-heading-center">
-            <p class="eyebrow">מה נבנה בהמשך</p>
-            <h2>שכבת מוצרים שתמשוך תנועה, תייצר דאטה ותפתח עוד ערוצים ל־Brndini.</h2>
-            <p class="hero-text">
-                המטרה היא לא לבנות עוד כלי בודד, אלא אקו־סיסטם של מוצרים חינמיים וחכמים
-                שיתאימו לבעלי עסקים, סוכנויות ואתרים שצריכים שליטה טובה יותר.
-            </p>
+    <section class="public-shell-section">
+        <div class="section-heading">
+            <p class="eyebrow">מוצרי כניסה</p>
+            <h2>Brndini לא מתחילה משירות. היא מתחילה ממוצרים שמכניסים ערך ותנועה.</h2>
+        </div>
+
+        <div class="public-proof-rail public-proof-rail-tools">
+            <article>
+                <small>כבר פעיל</small>
+                <strong>A11Y Bridge</strong>
+                <p>widget נגישות, install detection, dashboard ו־statement בסיסי.</p>
+            </article>
+            <article>
+                <small>הבא בתור</small>
+                <strong>Digital Card</strong>
+                <p>כרטיס ביקור דיגיטלי מהיר לאיסוף פרטים, קישורים וזהות עסקית ברורה.</p>
+            </article>
+            <article>
+                <small>כניסת תוכן</small>
+                <strong>Content Hub</strong>
+                <p>חיבור אתר, 2 כתבות חינמיות בחודש, ותשתית להמשך מסלול תוכן גדול יותר.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="public-shell-section public-shell-section-soft">
+        <div class="section-heading">
+            <p class="eyebrow">שירותים עסקיים</p>
+            <h2>כשצריך שכבת המשך רחבה יותר, Brndini נכנסת דרך שירותים ולא דרך “שדרוג לתוסף”.</h2>
+        </div>
+
+        <div class="public-dual-panel public-dual-panel-quiet">
+            <article class="public-decision-card">
+                <p class="eyebrow">צמיחה</p>
+                <h3>SEO, קמפיינים, דפי נחיתה ותוכן.</h3>
+                <ul class="compact-check-list">
+                    <li>יותר תנועה אורגנית</li>
+                    <li>יותר לידים</li>
+                    <li>דפי נחיתה ותוכן ממיר</li>
+                </ul>
+            </article>
+
+            <article class="public-decision-card public-decision-card-accent">
+                <p class="eyebrow">תשתית</p>
+                <h3>אחסון, תחזוקה, שדרוג אתר ואוטומציות.</h3>
+                <ul class="compact-check-list">
+                    <li>מעבר תשתיות</li>
+                    <li>תחזוקה שוטפת</li>
+                    <li>שיפור אתר ותהליכים חכמים</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <section class="public-shell-section public-shell-section-last">
+        <div class="section-heading">
+            <p class="eyebrow">גישה מוקדמת</p>
+            <h2>מי שרוצה להיות קרוב לכלי הבא, יכול להיכנס עכשיו לרשימת העניין.</h2>
+        </div>
+
+        <div class="public-bridge-layout">
+            <div>
+                <h3>זה לא hub עמוס. זו שכבת המשך מסודרת.</h3>
+                <p>השלב הראשון הוא A11Y Bridge. Brndini מחברת אחרי זה בין שירותים, מוצרים וכלים שנכונים לעסק כשהזמן מגיע.</p>
+            </div>
+            <div class="public-cta-row public-cta-row-left">
+                <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access', 'entry' => 'products-page'])) }}#public-service-form">אני רוצה גישה מוקדמת</a>
+                <a class="ghost-button button-link" href="{{ route('brndini.services', $marketingParams) }}">לדבר עם Brndini</a>
+            </div>
         </div>
 
         @include('partials.brndini-future-products')
-    </section>
-
-    <section class="section-band section-band-alt">
-        <div class="section-heading section-heading-center">
-            <p class="eyebrow">למי זה מתאים</p>
-            <h2>רשימת הגישה המוקדמת מיועדת לאנשים שרוצים להישאר קרובים למוצרים הבאים של Brndini.</h2>
-        </div>
-
-        <div class="audience-fit-grid">
-            <article class="audience-fit-card">
-                <span class="status-pill is-neutral">בעלי עסקים</span>
-                <h3>מי שרוצה להיחשף מוקדם לכלי צמיחה חדשים לפני כולם.</h3>
-                <p>אם האתר הוא מנוע עסקי אמיתי, יש יתרון בלהיות ברשימה מוקדם כשהכלים החדשים נפתחים.</p>
-            </article>
-
-            <article class="audience-fit-card">
-                <span class="status-pill is-neutral">סוכנויות</span>
-                <h3>מי שמחפש עוד שכבות מוצר שאפשר להכניס ללקוחות קיימים.</h3>
-                <p>גישה מוקדמת מאפשרת לזהות מהר כלים שיכולים להפוך להצעת ערך נוספת מול הלקוחות שלך.</p>
-            </article>
-
-            <article class="audience-fit-card">
-                <span class="status-pill is-neutral">מנהלי שיווק וצמיחה</span>
-                <h3>מי שרוצה סביבת עבודה חכמה יותר סביב תנועה, לידים ואוטומציה.</h3>
-                <p>לא עוד כלי בודד, אלא אקו־סיסטם שיכול להתרחב סביב העסק ולחבר כמה שכבות פעולה יחד.</p>
-            </article>
-        </div>
-    </section>
-
-    <section class="section-band section-band-plain">
-        <div class="section-heading section-heading-center">
-            <p class="eyebrow">למה להצטרף עכשיו</p>
-            <h2>מי שנכנס מוקדם מקבל יתרון כשכלי חדש נפתח.</h2>
-        </div>
-
-        <div class="about-process-grid">
-            <article class="process-card-strong">
-                <span class="process-index">01</span>
-                <h3>תופסים מקום ברשימת העניין</h3>
-                <p>Brndini יודעת איזה סוג מוצרים מעניינים אותך, ומתי נכון לפנות אליך.</p>
-            </article>
-            <article class="process-card-strong">
-                <span class="process-index">02</span>
-                <h3>נשארים קרובים למותג</h3>
-                <p>גם אם התחלת בווידג׳ט החינמי, אתה כבר בתוך סביבת המוצרים הרחבה יותר.</p>
-            </article>
-            <article class="process-card-strong">
-                <span class="process-index">03</span>
-                <h3>עוברים ראשונים לכלי הבא</h3>
-                <p>כשמוצר חדש ייפתח, מי שהצטרף מוקדם יקבל גישה מהירה יותר והצעות רלוונטיות.</p>
-            </article>
-        </div>
-
-        <div class="brndini-service-actions">
-            <a class="primary-button button-link" href="{{ route('brndini.services', array_merge($marketingParams, ['service' => 'ecosystem_access', 'entry' => 'products-page'])) }}#public-service-form">
-                להצטרף לרשימת הגישה המוקדמת
-            </a>
-        </div>
-    </section>
-
-    <section class="section-band">
-        <div class="section-heading section-heading-center">
-            <p class="eyebrow">איך זה מתחבר למערכת הקיימת</p>
-            <h2>הווידג׳ט החינמי נשאר נקודת הכניסה, והכלים הבאים מרחיבים את סביבת העבודה של Brndini.</h2>
-        </div>
-
-        <div class="decision-grid">
-            <article class="decision-card decision-card-free">
-                <span class="status-pill is-neutral">מה קיים היום</span>
-                <strong>כלי חינמי, דשבורד, הצהרה בסיסית ושכבת ניהול טכנית.</strong>
-                <p>כבר עכשיו אפשר להטמיע, לנהל ולהישאר בתוך סביבת מוצר מסודרת בלי חיכוך.</p>
-            </article>
-            <article class="decision-card decision-card-services">
-                <span class="status-pill is-good">מה מתווסף בהמשך</span>
-                <strong>עוד מוצרים חכמים לצמיחה, תנועה, לידים, אוטומציה וביצועי אתר.</strong>
-                <p>המטרה היא לייצר אקו־סיסטם שמביא אנשים לברנדיני ונשאר רלוונטי גם אחרי התקנת הווידג׳ט.</p>
-            </article>
-        </div>
     </section>
 @endsection
