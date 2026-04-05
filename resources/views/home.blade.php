@@ -94,26 +94,8 @@
             <h2>פותחים חשבון, מטמיעים snippet אחד, וכל שאר השכבה מנוהלת מתוך המערכת.</h2>
         </div>
 
-        <div class="public-showcase-split">
-            <div class="public-showcase-copy">
-                <article>
-                    <small>01</small>
-                    <strong>הטמעה פעם אחת</strong>
-                    <p>snippet קבוע באתר, בלי לחזור למפתח בכל שינוי טקסט או preset.</p>
-                </article>
-                <article>
-                    <small>02</small>
-                    <strong>ניהול מתוך dashboard</strong>
-                    <p>widget, statement וחיווי התקנה ממקום אחד, בשפה שקטה ולא טכנית מדי.</p>
-                </article>
-                <article>
-                    <small>03</small>
-                    <strong>רואים מה חסר עכשיו</strong>
-                    <p>המסכים הפנימיים מראים סטטוס, פעולה הבאה ותחזוקה שוטפת של השכבה.</p>
-                </article>
-            </div>
-
-            <div class="public-showcase-visual" aria-hidden="true">
+        <div class="public-showcase-stack">
+            <div class="public-showcase-visual public-showcase-visual-centered" aria-hidden="true">
                 <div class="public-device-shell public-device-shell-inline">
                     <div class="public-stage-canvas public-stage-canvas-secondary">
                         <div class="public-stage-canvas-topline">
@@ -144,6 +126,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="public-showcase-copy public-showcase-copy-inline">
+                <article>
+                    <small>01</small>
+                    <strong>הטמעה פעם אחת</strong>
+                    <p>snippet קבוע באתר, בלי לחזור למפתח בכל שינוי טקסט או preset.</p>
+                </article>
+                <article>
+                    <small>02</small>
+                    <strong>ניהול מתוך dashboard</strong>
+                    <p>widget, statement וחיווי התקנה ממקום אחד, בשפה שקטה ולא טכנית מדי.</p>
+                </article>
+                <article>
+                    <small>03</small>
+                    <strong>רואים מה חסר עכשיו</strong>
+                    <p>המסכים הפנימיים מראים סטטוס, פעולה הבאה ותחזוקה שוטפת של השכבה.</p>
+                </article>
             </div>
         </div>
     </section>
