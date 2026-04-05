@@ -20,7 +20,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section">
+    <section class="public-shell-section" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">הזרימה</p>
             <h2>ארבעה שלבים. בלי מעקפים.</h2>
@@ -50,7 +50,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section public-shell-section-soft">
+    <section class="public-shell-section public-shell-section-soft" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">מה רואים בפועל</p>
             <h2>המערכת לא נעצרת ב־widget. היא נותנת שכבת עבודה ברורה מסביבו.</h2>

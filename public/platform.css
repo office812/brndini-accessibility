@@ -13325,6 +13325,7 @@ body.auth-page {
 .public-page:not(.page-home) .public-device-shell-services,
 .public-page:not(.page-home) .article-cover,
 .public-page:not(.page-home) .public-shell-card,
+.public-page:not(.page-home) .public-flow-step,
 .public-page:not(.page-home) .public-decision-card,
 .public-page:not(.page-home) .panel-card,
 .public-page:not(.page-home) .knowledge-topic-card,
@@ -13409,6 +13410,7 @@ body.auth-page {
 }
 
 .public-page:not(.page-home) .public-shell-card h3,
+.public-page:not(.page-home) .public-flow-step h3,
 .public-page:not(.page-home) .public-decision-card h3,
 .public-page:not(.page-home) .public-stage-canvas-copy strong,
 .public-page:not(.page-home) .public-stage-canvas-grid strong,

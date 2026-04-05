@@ -29,7 +29,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section">
+    <section class="public-shell-section" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">אשכולות תוכן</p>
             <h2>אותו תחום, מחולק למסלולים ברורים.</h2>

@@ -20,7 +20,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section">
+    <section class="public-shell-section" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">כלול בשכבה החינמית</p>
             <h2>ארבעה דברים שנשארים זמינים כבר בהתחלה.</h2>
@@ -50,7 +50,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section public-shell-section-soft">
+    <section class="public-shell-section public-shell-section-soft" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">מה לא כלול</p>
             <h2>כדי להשאיר את המוצר נקי, יש דברים שנשארים מחוץ לשכבה הזו.</h2>
