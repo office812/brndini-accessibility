@@ -10519,3 +10519,21 @@ h3,
         max-width: calc(100% - 24px);
     }
 }
+
+html,
+body,
+body.public-page,
+.page-shell-public,
+.page-shell-home,
+#main-content {
+    overflow-x: clip;
+}
+
+.public-stage,
+.public-stage-visual,
+.public-device-shell-poster,
+.public-stage-canvas,
+.site-header,
+.site-header-public {
+    max-width: 100%;
+}
