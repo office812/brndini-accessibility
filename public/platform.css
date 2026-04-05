@@ -12055,17 +12055,18 @@ body.has-sticky-header-scrolled .site-header-public {
 
 /* Stitch-inspired homepage reset */
 body.page-home {
-    --stitch-primary: #a4f624;
-    --stitch-primary-deep: #8cdf14;
-    --stitch-surface: #0b1002;
-    --stitch-surface-raised: #151b0a;
-    --stitch-surface-bright: #1c250e;
-    --stitch-outline: #3e4a2d;
-    --stitch-text: #f1f7d9;
-    --stitch-muted: #a8ae93;
+    --stitch-primary: #5b9ce6;
+    --stitch-primary-deep: #5b5fca;
+    --stitch-primary-soft: #b9d2ef;
+    --stitch-surface: #080d17;
+    --stitch-surface-raised: #101827;
+    --stitch-surface-bright: #162235;
+    --stitch-outline: #2b3b58;
+    --stitch-text: #f3f7ff;
+    --stitch-muted: #97aac6;
     background:
-        radial-gradient(circle at 50% 16%, rgba(164, 246, 36, 0.14), transparent 28%),
-        linear-gradient(180deg, #0b1002 0%, #0d1204 54%, #090d02 100%);
+        radial-gradient(circle at 50% 16%, rgba(91, 156, 230, 0.16), transparent 28%),
+        linear-gradient(180deg, #080d17 0%, #0a1020 54%, #070b14 100%);
     color: var(--stitch-text);
     font-family: "Inter", var(--font-ui), sans-serif;
 }
@@ -12085,8 +12086,8 @@ body.page-home {
     min-height: 84px;
     border-radius: 0;
     border: 0;
-    border-bottom: 1px solid rgba(62, 74, 45, 0.18);
-    background: rgba(11, 16, 2, 0.8);
+    border-bottom: 1px solid rgba(43, 59, 88, 0.28);
+    background: rgba(8, 13, 23, 0.82);
     backdrop-filter: blur(18px);
     box-shadow: none;
 }
@@ -12112,8 +12113,8 @@ body.page-home {
     width: 2.15rem;
     height: 2.15rem;
     border-radius: 0.8rem;
-    background: linear-gradient(135deg, rgba(164, 246, 36, 0.18), rgba(255, 255, 255, 0.08));
-    box-shadow: 0 8px 24px rgba(164, 246, 36, 0.12);
+    background: linear-gradient(135deg, rgba(91, 156, 230, 0.22), rgba(91, 95, 202, 0.18));
+    box-shadow: 0 8px 24px rgba(91, 156, 230, 0.18);
 }
 
 .page-home .site-header-public .site-nav {
@@ -12126,7 +12127,7 @@ body.page-home {
     min-height: auto;
     border: 0;
     background: transparent;
-    color: rgba(241, 247, 217, 0.78);
+    color: rgba(243, 247, 255, 0.78);
     font-family: "Inter", var(--font-ui), sans-serif;
     font-size: 0.94rem;
     font-weight: 600;
@@ -12143,7 +12144,7 @@ body.page-home {
     min-height: auto;
     border: 0;
     background: transparent;
-    color: rgba(241, 247, 217, 0.82);
+    color: rgba(243, 247, 255, 0.82);
     font-size: 0.94rem;
     font-weight: 600;
 }
@@ -12154,10 +12155,10 @@ body.page-home {
     border-radius: 999px;
     border: 0;
     background: linear-gradient(135deg, var(--stitch-primary), var(--stitch-primary-deep));
-    color: #081001;
+    color: #f7fbff;
     font-size: 0.88rem;
     font-weight: 800;
-    box-shadow: 0 16px 36px rgba(164, 246, 36, 0.16);
+    box-shadow: 0 16px 36px rgba(91, 156, 230, 0.24);
 }
 
 .page-home .site-header-public .site-nav .nav-button-primary:hover {
@@ -12188,7 +12189,7 @@ body.page-home {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 22%, rgba(164, 246, 36, 0.1) 0%, transparent 42%);
+    background: radial-gradient(circle at 50% 22%, rgba(91, 156, 230, 0.14) 0%, transparent 42%);
     pointer-events: none;
 }
 
@@ -12206,8 +12207,8 @@ body.page-home {
     gap: 10px;
     padding: 10px 18px;
     border-radius: 999px;
-    border: 1px solid rgba(164, 246, 36, 0.18);
-    background: rgba(164, 246, 36, 0.08);
+    border: 1px solid rgba(91, 156, 230, 0.2);
+    background: rgba(91, 156, 230, 0.08);
     color: var(--stitch-primary);
     font-size: 0.74rem;
     font-weight: 800;
@@ -12220,7 +12221,7 @@ body.page-home {
     height: 0.55rem;
     border-radius: 999px;
     background: var(--stitch-primary);
-    box-shadow: 0 0 0 8px rgba(164, 246, 36, 0.12);
+    box-shadow: 0 0 0 8px rgba(91, 156, 230, 0.12);
 }
 
 .page-home .stitch-home-hero h1 {
@@ -12238,7 +12239,7 @@ body.page-home {
 }
 
 .page-home .stitch-home-hero h1 .is-accent {
-    background: linear-gradient(135deg, #f1f7d9 30%, var(--stitch-primary) 100%);
+    background: linear-gradient(135deg, #f3f7ff 20%, var(--stitch-primary-soft) 55%, var(--stitch-primary) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -12278,12 +12279,12 @@ body.page-home {
 
 .page-home .stitch-button-primary {
     background: linear-gradient(135deg, var(--stitch-primary), var(--stitch-primary-deep));
-    color: #071000;
-    box-shadow: 0 18px 42px rgba(164, 246, 36, 0.16);
+    color: #f7fbff;
+    box-shadow: 0 18px 42px rgba(91, 156, 230, 0.24);
 }
 
 .page-home .stitch-button-secondary {
-    border: 1px solid rgba(62, 74, 45, 0.42);
+    border: 1px solid rgba(43, 59, 88, 0.5);
     background: var(--stitch-surface-bright);
     color: var(--stitch-text);
 }
@@ -12300,8 +12301,8 @@ body.page-home {
     margin: 0 auto;
     padding: 18px;
     border-radius: 2rem;
-    border: 1px solid rgba(62, 74, 45, 0.36);
-    background: linear-gradient(180deg, rgba(21, 27, 10, 0.96), rgba(14, 19, 7, 0.98));
+    border: 1px solid rgba(43, 59, 88, 0.36);
+    background: linear-gradient(180deg, rgba(16, 24, 39, 0.96), rgba(10, 16, 32, 0.98));
     box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.5);
 }
 
@@ -12313,8 +12314,8 @@ body.page-home {
     padding: 24px;
     border-radius: 1.9rem;
     background:
-        radial-gradient(circle at 18% 18%, rgba(164, 246, 36, 0.09), transparent 36%),
-        linear-gradient(180deg, rgba(27, 37, 14, 0.92), rgba(19, 27, 10, 0.94));
+        radial-gradient(circle at 18% 18%, rgba(91, 156, 230, 0.12), transparent 36%),
+        linear-gradient(180deg, rgba(18, 31, 53, 0.92), rgba(12, 22, 40, 0.94));
 }
 
 .page-home .stitch-home-product-sidebar {
@@ -12325,8 +12326,8 @@ body.page-home {
 
 .page-home .stitch-avocado {
     position: relative;
-    width: 120px;
-    height: 150px;
+    width: 138px;
+    height: 118px;
     margin-inline: auto;
 }
 
@@ -12334,31 +12335,40 @@ body.page-home {
 .page-home .stitch-avocado-core,
 .page-home .stitch-avocado-seed {
     position: absolute;
-    inset: 0;
-    border-radius: 55% 55% 48% 48% / 54% 54% 44% 44%;
+    border-radius: 0.8rem;
 }
 
 .page-home .stitch-avocado-shell {
-    background: linear-gradient(180deg, #80af2f, #40531a);
-    transform: rotate(12deg);
+    top: 8px;
+    bottom: 8px;
+    left: 6px;
+    width: 30px;
+    background: linear-gradient(180deg, #6568d1, #4f52bb);
 }
 
 .page-home .stitch-avocado-core {
-    inset: 16px 20px 18px 20px;
-    background: linear-gradient(180deg, #d7f38e, #a5d14a);
+    top: 8px;
+    bottom: 8px;
+    left: 36px;
+    right: 34px;
+    background: linear-gradient(180deg, #bad3ef, #a6c4e5);
+    clip-path: polygon(0 0, 28% 0, 100% 84%, 100% 100%, 72% 100%, 0 16%);
 }
 
 .page-home .stitch-avocado-seed {
-    inset: 42px 38px 36px 38px;
-    background: radial-gradient(circle at 35% 30%, #7e4d26, #563214 72%);
-    box-shadow: inset -6px -8px 12px rgba(0, 0, 0, 0.16);
+    top: 8px;
+    bottom: 8px;
+    right: 6px;
+    width: 30px;
+    background: linear-gradient(180deg, #63a8ec, #4f93dc);
+    box-shadow: 0 0 24px rgba(91, 156, 230, 0.18);
 }
 
 .page-home .stitch-home-site-card {
     padding: 20px;
     border-radius: 1.3rem;
-    background: rgba(11, 16, 2, 0.34);
-    border: 1px solid rgba(62, 74, 45, 0.3);
+    background: rgba(8, 13, 23, 0.38);
+    border: 1px solid rgba(43, 59, 88, 0.34);
 }
 
 .page-home .stitch-home-site-card small,
@@ -12366,7 +12376,7 @@ body.page-home {
 .page-home .stitch-home-stats-grid small,
 .page-home .stitch-home-graph-copy small {
     display: block;
-    color: rgba(168, 174, 147, 0.8);
+    color: rgba(151, 170, 198, 0.8);
     font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -12397,8 +12407,8 @@ body.page-home {
 .page-home .stitch-home-site-list span {
     padding: 14px 16px;
     border-radius: 1.1rem;
-    border: 1px solid rgba(62, 74, 45, 0.22);
-    background: rgba(11, 16, 2, 0.24);
+    border: 1px solid rgba(43, 59, 88, 0.28);
+    background: rgba(8, 13, 23, 0.22);
     letter-spacing: 0.02em;
     text-transform: none;
     font-size: 0.88rem;
@@ -12431,16 +12441,16 @@ body.page-home {
     min-height: 36px;
     padding: 0 14px;
     border-radius: 999px;
-    border: 1px solid rgba(62, 74, 45, 0.32);
-    background: rgba(11, 16, 2, 0.28);
-    color: rgba(241, 247, 217, 0.88);
+    border: 1px solid rgba(43, 59, 88, 0.38);
+    background: rgba(8, 13, 23, 0.28);
+    color: rgba(243, 247, 255, 0.88);
     font-size: 0.82rem;
     font-weight: 700;
 }
 
 .page-home .stitch-home-pill.is-active {
-    border-color: rgba(164, 246, 36, 0.28);
-    background: rgba(164, 246, 36, 0.12);
+    border-color: rgba(91, 156, 230, 0.3);
+    background: rgba(91, 156, 230, 0.12);
     color: var(--stitch-primary);
 }
 
@@ -12454,8 +12464,8 @@ body.page-home {
 .page-home .stitch-home-graph-panel {
     padding: 22px;
     border-radius: 1.35rem;
-    border: 1px solid rgba(62, 74, 45, 0.26);
-    background: rgba(11, 16, 2, 0.26);
+    border: 1px solid rgba(43, 59, 88, 0.3);
+    background: rgba(8, 13, 23, 0.26);
 }
 
 .page-home .stitch-home-stats-grid strong,
@@ -12490,7 +12500,7 @@ body.page-home {
     display: block;
     height: 12px;
     border-radius: 999px;
-    background: linear-gradient(90deg, rgba(164, 246, 36, 0.14), rgba(164, 246, 36, 0.02));
+    background: linear-gradient(90deg, rgba(91, 156, 230, 0.18), rgba(91, 95, 202, 0.04));
 }
 
 .page-home .stitch-home-graph-lines span:nth-child(1) { width: 88%; }
@@ -12506,9 +12516,9 @@ body.page-home {
     width: 220px;
     padding: 16px;
     border-radius: 1rem;
-    background: rgba(21, 27, 10, 0.76);
+    background: rgba(16, 24, 39, 0.78);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(164, 246, 36, 0.16);
+    border: 1px solid rgba(91, 156, 230, 0.16);
     box-shadow: 0 28px 56px rgba(0, 0, 0, 0.28);
 }
 
@@ -12517,7 +12527,7 @@ body.page-home {
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
-    color: rgba(168, 174, 147, 0.8);
+    color: rgba(151, 170, 198, 0.78);
     font-size: 0.66rem;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -12542,7 +12552,7 @@ body.page-home {
 .page-home .stitch-home-float-bar {
     height: 0.35rem;
     border-radius: 999px;
-    background: rgba(164, 246, 36, 0.14);
+    background: rgba(91, 156, 230, 0.14);
     overflow: hidden;
 }
 
@@ -12550,7 +12560,7 @@ body.page-home {
     display: block;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, var(--stitch-primary), #d7ff90);
+    background: linear-gradient(90deg, var(--stitch-primary), var(--stitch-primary-soft));
 }
 
 .page-home .stitch-home-proof {
@@ -12559,7 +12569,7 @@ body.page-home {
 
 .page-home .stitch-home-proof p {
     margin: 0 0 18px;
-    color: rgba(168, 174, 147, 0.64);
+    color: rgba(151, 170, 198, 0.58);
     text-align: center;
     font-size: 0.8rem;
     font-weight: 700;
@@ -12570,7 +12580,7 @@ body.page-home {
     justify-content: center;
     flex-wrap: wrap;
     gap: 28px;
-    color: rgba(168, 174, 147, 0.6);
+    color: rgba(151, 170, 198, 0.64);
     font-family: "Plus Jakarta Sans", "Heebo", sans-serif;
     font-size: 0.92rem;
     font-weight: 600;
@@ -12624,14 +12634,14 @@ body.page-home {
     min-height: 350px;
     padding: 28px;
     border-radius: 1.8rem;
-    border: 1px solid rgba(62, 74, 45, 0.24);
-    background: linear-gradient(180deg, rgba(21, 27, 10, 0.94), rgba(13, 18, 5, 0.96));
+    border: 1px solid rgba(43, 59, 88, 0.24);
+    background: linear-gradient(180deg, rgba(16, 24, 39, 0.94), rgba(10, 16, 28, 0.96));
     transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
 }
 
 .page-home .stitch-home-feature-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(164, 246, 36, 0.24);
+    border-color: rgba(91, 156, 230, 0.28);
     box-shadow: 0 24px 56px rgba(0, 0, 0, 0.18);
 }
 
@@ -12639,7 +12649,7 @@ body.page-home {
     width: 3rem;
     height: 3rem;
     border-radius: 1rem;
-    background: rgba(164, 246, 36, 0.1);
+    background: rgba(91, 156, 230, 0.12);
     color: var(--stitch-primary);
     display: inline-flex;
     align-items: center;
@@ -12668,8 +12678,8 @@ body.page-home {
     margin-top: auto;
     min-height: 118px;
     border-radius: 1.2rem;
-    border: 1px solid rgba(62, 74, 45, 0.18);
-    background: linear-gradient(180deg, rgba(28, 37, 14, 0.92), rgba(14, 18, 7, 0.94));
+    border: 1px solid rgba(43, 59, 88, 0.2);
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.92), rgba(10, 16, 28, 0.94));
     position: relative;
     overflow: hidden;
 }
@@ -12690,7 +12700,7 @@ body.page-home {
 .page-home .stitch-home-feature-visual-bars span {
     height: 10px;
     border-radius: 999px;
-    background: linear-gradient(90deg, rgba(164, 246, 36, 0.18), rgba(164, 246, 36, 0.04));
+    background: linear-gradient(90deg, rgba(91, 156, 230, 0.22), rgba(91, 95, 202, 0.05));
 }
 
 .page-home .stitch-home-feature-visual-bars span:nth-child(1) { width: 70%; top: 30px; }
@@ -12700,8 +12710,8 @@ body.page-home {
 .page-home .stitch-home-feature-visual-lines span {
     width: 78%;
     height: 2px;
-    background: rgba(164, 246, 36, 0.24);
-    box-shadow: 0 0 24px rgba(164, 246, 36, 0.1);
+    background: rgba(91, 156, 230, 0.28);
+    box-shadow: 0 0 24px rgba(91, 156, 230, 0.12);
 }
 
 .page-home .stitch-home-feature-visual-lines span:nth-child(1) { top: 34px; }
@@ -12714,7 +12724,7 @@ body.page-home {
     position: absolute;
     inset: 18px 22px;
     border-radius: 999px;
-    background: radial-gradient(circle, rgba(164, 246, 36, 0.18), transparent 58%);
+    background: radial-gradient(circle, rgba(91, 156, 230, 0.18), transparent 58%);
     filter: blur(20px);
 }
 
@@ -12722,7 +12732,7 @@ body.page-home {
     width: 90px;
     height: 90px;
     border-radius: 999px;
-    border: 1px solid rgba(164, 246, 36, 0.26);
+    border: 1px solid rgba(91, 156, 230, 0.28);
 }
 
 .page-home .stitch-home-feature-visual-orbit span:nth-child(2) {
@@ -12730,7 +12740,7 @@ body.page-home {
     height: 18px;
     border-radius: 999px;
     background: var(--stitch-primary);
-    box-shadow: 0 0 16px rgba(164, 246, 36, 0.3);
+    box-shadow: 0 0 16px rgba(91, 156, 230, 0.3);
     top: 28px;
     right: 82px;
 }
@@ -12739,7 +12749,7 @@ body.page-home {
     width: 44px;
     height: 44px;
     border-radius: 14px;
-    border: 1px solid rgba(164, 246, 36, 0.24);
+    border: 1px solid rgba(91, 156, 230, 0.24);
     transform: rotate(18deg);
     top: 38px;
     left: 58px;
@@ -12750,8 +12760,8 @@ body.page-home {
     overflow: hidden;
     padding: 52px 52px;
     border-radius: 2.2rem;
-    border: 1px solid rgba(164, 246, 36, 0.18);
-    background: linear-gradient(180deg, rgba(22, 28, 7, 0.98), rgba(14, 18, 6, 0.98));
+    border: 1px solid rgba(91, 156, 230, 0.18);
+    background: linear-gradient(180deg, rgba(18, 29, 49, 0.98), rgba(10, 16, 30, 0.98));
 }
 
 .page-home .stitch-home-cta-copy {
@@ -12793,7 +12803,7 @@ body.page-home {
     top: 70px;
     left: 84px;
     border-radius: 2rem;
-    border: 3px solid rgba(164, 246, 36, 0.48);
+    border: 3px solid rgba(91, 156, 230, 0.48);
     transform: rotate(16deg);
 }
 
@@ -12803,7 +12813,7 @@ body.page-home {
     top: 40px;
     left: 120px;
     border-radius: 999px;
-    background: radial-gradient(circle, rgba(164, 246, 36, 0.24), transparent 62%);
+    background: radial-gradient(circle, rgba(91, 156, 230, 0.24), transparent 62%);
     filter: blur(22px);
 }
 
@@ -12813,7 +12823,7 @@ body.page-home {
     bottom: 56px;
     left: 140px;
     border-radius: 999px;
-    border: 3px solid rgba(164, 246, 36, 0.24);
+    border: 3px solid rgba(91, 156, 230, 0.24);
 }
 
 .page-home .stitch-home-faq {
@@ -12827,8 +12837,8 @@ body.page-home {
 
 .page-home .stitch-home-faq-list details {
     border-radius: 1rem;
-    border: 1px solid rgba(62, 74, 45, 0.22);
-    background: rgba(21, 27, 10, 0.88);
+    border: 1px solid rgba(43, 59, 88, 0.22);
+    background: rgba(16, 24, 39, 0.88);
     overflow: hidden;
 }
 
@@ -12870,7 +12880,7 @@ body.page-home {
 
 .page-home .site-footer {
     padding: 44px 0 20px;
-    border-top: 1px solid rgba(62, 74, 45, 0.14);
+    border-top: 1px solid rgba(43, 59, 88, 0.16);
     background: transparent;
 }
 
@@ -12910,7 +12920,7 @@ body.page-home {
 .page-home .site-footer p,
 .page-home .site-footer a,
 .page-home .site-footer span {
-    color: rgba(168, 174, 147, 0.82);
+    color: rgba(151, 170, 198, 0.82);
 }
 
 .page-home .site-footer-bottom {
