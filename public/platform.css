@@ -13944,3 +13944,109 @@ body.auth-page {
     color: var(--page-muted);
     line-height: 1.6;
 }
+
+/* ─── Dashboard welcome banner ───────────────────────────────────────────── */
+.dashboard-welcome-banner {
+    margin: 0 0 20px;
+    border-radius: 1.2rem;
+    background: linear-gradient(135deg, rgba(20, 99, 255, 0.08), rgba(20, 99, 255, 0.04));
+    border: 1px solid rgba(20, 99, 255, 0.2);
+    overflow: hidden;
+}
+
+.dashboard-welcome-banner-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    flex-wrap: wrap;
+}
+
+.dashboard-welcome-icon {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 999px;
+    background: rgba(20, 99, 255, 0.12);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-welcome-copy {
+    flex: 1;
+    min-width: 200px;
+}
+
+.dashboard-welcome-copy strong {
+    display: block;
+    font-size: 1.02rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: var(--page-ink);
+}
+
+.dashboard-welcome-copy p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--page-muted);
+    line-height: 1.6;
+}
+
+.dashboard-welcome-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 0.85rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: filter var(--motion-fast) ease;
+}
+
+.dashboard-welcome-cta:hover {
+    filter: brightness(1.1);
+}
+
+/* ─── Dashboard install reminder strip ───────────────────────────────────── */
+.dashboard-install-reminder {
+    margin: 0 0 16px;
+    border-radius: 0.9rem;
+    background: rgba(180, 83, 9, 0.06);
+    border: 1px solid rgba(180, 83, 9, 0.18);
+}
+
+.dashboard-install-reminder-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    color: var(--warning);
+    font-size: 0.9rem;
+}
+
+.dashboard-install-reminder-inner strong {
+    color: var(--page-ink);
+}
+
+.dashboard-install-reminder-inner a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+@media (max-width: 640px) {
+    .dashboard-welcome-banner-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .dashboard-welcome-cta {
+        width: 100%;
+        justify-content: center;
+    }
+}

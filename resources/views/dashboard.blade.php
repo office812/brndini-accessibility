@@ -56,6 +56,31 @@
                 </p>
             </section>
 
+            @if($installationTone !== 'good' && session('status') && str_contains(session('status'), 'החשבון נוצר'))
+<section class="dashboard-welcome-banner">
+    <div class="dashboard-welcome-banner-inner">
+        <div class="dashboard-welcome-icon" aria-hidden="true">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="dashboard-welcome-copy">
+            <strong>ברוך הבא, {{ $user->name }}! החשבון מוכן — עכשיו נחבר את האתר.</strong>
+            <p>שלב אחד נותר: מעתיקים את קוד ההטמעה ומדביקים באתר. לאחר מכן הדשבורד יזהה אוטומטית שהווידג׳ט פעיל.</p>
+        </div>
+        <a class="dashboard-welcome-cta" href="{{ route('dashboard.install', ['site' => $site->id]) }}">
+            לקוד ההטמעה
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+    </div>
+</section>
+@elseif($installationTone !== 'good')
+<section class="dashboard-install-reminder">
+    <div class="dashboard-install-reminder-inner">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="0.8" fill="currentColor"/></svg>
+        <span>הווידג׳ט עדיין לא זוהה באתר <strong>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</strong>. <a href="{{ route('dashboard.install', ['site' => $site->id]) }}">להטמעה ←</a></span>
+    </div>
+</section>
+@endif
+
             @unless($platformReadiness['ready'])
                 <section class="alert-strip">
                     <strong>מצב שרת:</strong>
