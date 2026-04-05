@@ -406,6 +406,101 @@ class Brndini_Performance {
     }
 }
 
+    /**
+     * REST API endpoint to configure FlyingPress settings
+     */
+    public static function register_config_endpoint() {
+        register_rest_route('brndini/v1', '/configure-flyingpress', [
+            'methods' => 'POST',
+            'callback' => [__CLASS__, 'configure_flyingpress'],
+            'permission_callback' => function() {
+                return current_user_can('manage_options');
+            },
+        ]);
+        register_rest_route('brndini/v1', '/flyingpress-status', [
+            'methods' => 'GET',
+            'callback' => [__CLASS__, 'flyingpress_status'],
+            'permission_callback' => function() {
+                return current_user_can('manage_options');
+            },
+        ]);
+    }
+
+    /**
+     * Get current FlyingPress configuration
+     */
+    public static function flyingpress_status() {
+        $config = get_option('flying_press_config', []);
+        return rest_ensure_response([
+            'ok' => true,
+            'config' => $config,
+        ]);
+    }
+
+    /**
+     * Configure FlyingPress for optimal performance
+     */
+    public static function configure_flyingpress() {
+        $config = get_option('flying_press_config', []);
+        if (empty($config)) {
+            return rest_ensure_response(['error' => 'FlyingPress config not found']);
+        }
+
+        // CSS optimizations
+        if (isset($config['css'])) {
+            $config['css']['minify'] = true;
+            $config['css']['remove_unused'] = true;
+        }
+
+        // JS optimizations
+        if (isset($config['js'])) {
+            $config['js']['minify'] = true;
+            $config['js']['defer'] = true;
+            $config['js']['delay'] = true;
+        }
+
+        // HTML optimization
+        if (isset($config['html'])) {
+            $config['html']['minify'] = true;
+        }
+
+        // Image optimization
+        if (isset($config['img']) || isset($config['image'])) {
+            $img_key = isset($config['img']) ? 'img' : 'image';
+            $config[$img_key]['lazy_load'] = true;
+            $config[$img_key]['add_dimensions'] = true;
+        }
+
+        // Font optimization
+        if (isset($config['font'])) {
+            $config['font']['self_host'] = true;
+            $config['font']['preload'] = true;
+            $config['font']['display'] = 'swap';
+        }
+
+        // Cache optimization
+        if (isset($config['cache'])) {
+            $config['cache']['lifespan'] = 2592000; // 30 days
+        }
+
+        // iFrame lazy load
+        if (isset($config['iframe'])) {
+            $config['iframe']['lazy_load'] = true;
+        }
+
+        $updated = update_option('flying_press_config', $config);
+
+        return rest_ensure_response([
+            'ok' => $updated,
+            'message' => $updated ? 'FlyingPress configured successfully' : 'No changes needed or update failed',
+            'config' => $config,
+        ]);
+    }
+}
+
+// Register REST endpoints
+add_action('rest_api_init', ['Brndini_Performance', 'register_config_endpoint']);
+
 // Initialize
 new Brndini_Performance();
 
