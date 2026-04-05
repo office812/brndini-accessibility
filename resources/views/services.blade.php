@@ -11,13 +11,17 @@
         <div class="domain-shell-main">
             <section class="domain-shell-header">
                 <h1>שירותי Brndini</h1>
+                <p class="domain-shell-header-intro">
+                    אם האתר צריך מעבר ל־A11Y Bridge, מכאן פותחים פנייה עסקית מסודרת ל־Brndini:
+                    אחסון, SEO, קמפיינים, תחזוקה, שדרוג אתר, דפי נחיתה או אוטומציות.
+                </p>
             </section>
 
             <section class="domain-card domain-hero-card">
                 <div>
                     <p class="eyebrow">שירותים נוספים לעסק שלך</p>
                     <h2>{{ $site->site_name }}</h2>
-                    <p class="panel-intro">הווידג׳ט נשאר חינמי, אבל אם תרצה עזרה עם אחסון, SEO, קמפיינים, תחזוקה או שדרוג אתר, מכאן אפשר להשאיר פנייה מסודרת. זה אזור שירותי Brndini, לא תמיכה טכנית של המערכת.</p>
+                    <p class="panel-intro">A11Y Bridge נשארת המוצר. כאן נמצאת שכבת Brndini לעבודה עסקית רחבה יותר, בנפרד מהתמיכה הטכנית של המערכת.</p>
                 </div>
 
                 <div class="billing-hero-meta">
@@ -83,7 +87,7 @@
                                 <div class="domain-card-head">
                                     <div>
                                         <h2>פתח פנייה לשירותי Brndini</h2>
-                                        <p class="panel-intro">פנייה כאן מיועדת לשירותים עסקיים של Brndini כמו אחסון, שדרוג אתר, SEO, קמפיינים ותחזוקה. זו לא תמיכה טכנית של המערכת.</p>
+                                        <p class="panel-intro">פנייה כאן מיועדת לשירותים עסקיים של Brndini. זו לא תמיכה טכנית של המערכת, אלא שיחת המשך עסקית סביב האתר.</p>
                                     </div>
                                 </div>
 
@@ -95,9 +99,9 @@
 
                                     <div class="flow-wizard-intro flow-wizard-intro-compact">
                                         <div>
-                                            <p class="eyebrow">פנייה לשירות</p>
-                                            <strong>מגדירים את השירות בכמה צעדים קצרים</strong>
-                                            <p class="signup-note">הצורך, המסגרת העסקית ודרך החזרה. בלי בלגן ובלי טופס אינסופי.</p>
+                                            <p class="eyebrow">Service intake</p>
+                                            <strong>מגדירים צורך, מסגרת ודרך חזרה</strong>
+                                            <p class="signup-note">שלושה שלבים קצרים כדי להכניס את הפנייה ישר ל־lead center של Brndini.</p>
                                         </div>
                                         <div class="flow-wizard-stepper" aria-label="התקדמות בפניית שירות">
                                             <button class="flow-wizard-step {{ old('flow_step', '1') === '1' ? 'is-active' : '' }}" type="button" data-flow-step="1">

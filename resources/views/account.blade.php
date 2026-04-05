@@ -9,10 +9,10 @@
 
         <div class="domain-shell-main">
             <section class="domain-shell-header">
-                <h1>תוכנית ותשלומים</h1>
+                <h1>רישוי, מסלול וחיוב</h1>
                 <p class="domain-shell-header-intro">
                     כאן מנהלים את הרישוי של האתר הפעיל בלבד: מסלול, מחזור חיוב, תוקף,
-                    מפתח ציבורי וכל מה שקשור לתצורת הרישיון של הדומיין הזה.
+                    site key וכל מה שקשור לרישיון של הדומיין הזה.
                 </p>
             </section>
 
@@ -20,7 +20,7 @@
                 <div>
                     <p class="eyebrow">חיוב לכל אתר</p>
                     <h2>{{ $domainLabel }}</h2>
-                    <p class="panel-intro">לכל אתר בחשבון יש חיוב עצמאי, רישיון עצמאי ותאריך חידוש עצמאי. כאן מנהלים את המסלול הספציפי של האתר הפעיל.</p>
+                    <p class="panel-intro">לכל אתר בחשבון יש רישוי עצמאי. במסך הזה רואים את המסלול, המחזור והתוקף של האתר הפעיל בלבד.</p>
                 </div>
 
                 <div class="billing-hero-meta">
@@ -112,7 +112,7 @@
                         </section>
 
                         <section class="domain-card">
-                            <h2>חיוב וחיווי עסקי</h2>
+                            <h2>הקשר עסקי וטכני</h2>
                             <div class="domain-info-list">
                                 <div class="domain-info-row">
                                     <span>קישור רכישה</span>
@@ -136,7 +136,7 @@
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="plans">
                         <section class="domain-card">
-                            <h2>בחירת חבילה</h2>
+                            <h2>בחירת מסלול</h2>
                             <div class="plan-card-grid">
                                 @foreach ($billingPlans as $planKey => $plan)
                                     <article class="plan-choice-card {{ $billing['plan'] === $planKey ? 'is-current' : '' }}">
@@ -182,7 +182,7 @@
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="owner">
                         <section class="domain-card" id="license-owner">
-                            <h2>פרטי בעל הרישיון</h2>
+                            <h2>מי מחזיק את הרישיון הזה</h2>
 
                             <div class="domain-info-list">
                                 <div class="domain-info-row">

@@ -1,7 +1,7 @@
 @php($domainLabel = parse_url($site->domain, PHP_URL_HOST) ?: $site->domain)
 
 <aside class="domain-shell-sidebar">
-    <a class="domain-back-link" href="{{ route('dashboard', ['site' => $site->id]) }}">כל הרישיונות</a>
+    <a class="domain-back-link" href="{{ route('dashboard', ['site' => $site->id]) }}">חזרה ללוח הראשי</a>
 
     <label class="domain-switcher-wrap">
         <span class="meta-label">האתר הפעיל</span>
@@ -13,11 +13,12 @@
     </label>
 
     <div class="domain-select-pill">
-        <span>דומיין: {{ $domainLabel }}</span>
+        <span>{{ $domainLabel }}</span>
         <span aria-hidden="true">{{ $licenseStatus === 'active' ? '✓' : '!' }}</span>
     </div>
 
     <nav class="domain-side-nav" aria-label="ניהול דומיין">
+        <span class="domain-nav-label">A11Y Bridge</span>
         <a class="{{ ($activeSection ?? '') === 'overview' ? 'is-current' : '' }}" href="{{ route('dashboard', ['site' => $site->id]) }}">
             <span>◉</span>
             <span>סקירה</span>
@@ -34,6 +35,7 @@
             <span>✎</span>
             <span>הטמעה</span>
         </a>
+        <span class="domain-nav-label">Brndini</span>
         <a class="{{ ($activeSection ?? '') === 'services' ? 'is-current' : '' }}" href="{{ route('dashboard.services', ['site' => $site->id]) }}">
             <span>✶</span>
             <span>שירותי Brndini</span>

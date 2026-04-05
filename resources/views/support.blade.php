@@ -11,8 +11,8 @@
             <section class="domain-shell-header">
                 <h1>תמיכה טכנית במערכת</h1>
                 <p class="domain-shell-header-intro">
-                    מרכז התמיכה של האתר הפעיל: פניות טכניות על התקנה, רישיון, טעינת הווידג׳ט,
-                    שמירת הגדרות והתנהגות המערכת. לא ייעוץ נגישות, אלא תמיכה במוצר עצמו.
+                    פניות טכניות על install, רישיון, טעינת widget, שמירת הגדרות והתנהגות המערכת.
+                    לא ייעוץ נגישות, אלא תמיכה במוצר עצמו.
                 </p>
             </section>
 
@@ -20,7 +20,7 @@
                 <div>
                     <p class="eyebrow">תמיכה טכנית</p>
                     <h2>{{ $site->site_name }}</h2>
-                    <p class="panel-intro">מכאן פותחים פניות טכניות על המערכת עצמה: הטמעה, רישיון, טעינת הווידג׳ט, או שמירת הגדרות. כל פנייה נשמרת בהקשר של הרישיון והדומיין הנכון.</p>
+                    <p class="panel-intro">מכאן פותחים פניות טכניות על המערכת עצמה. כל פנייה נשמרת בהקשר של האתר, הרישיון והדומיין הנכון.</p>
                 </div>
 
                 <div class="billing-hero-meta">
@@ -63,7 +63,7 @@
                     <div class="dashboard-tab-nav domain-inline-tab-nav" aria-label="לשוניות מרכז התמיכה">
                         <button class="dashboard-tab-button is-active" type="button" data-dashboard-tab-button="new-ticket">פנייה חדשה</button>
                         <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="tickets">הפניות שלי</button>
-                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="guide">מה חשוב לדעת</button>
+                        <button class="dashboard-tab-button" type="button" data-dashboard-tab-button="guide">מה כדאי לצרף</button>
                     </div>
 
                     <div class="dashboard-tab-panel is-active" data-dashboard-tab-panel="new-ticket">
@@ -72,7 +72,7 @@
                                 <div class="domain-card-head">
                                     <div>
                                         <h2>פתח פנייה חדשה</h2>
-                                        <p class="panel-intro">ככל שתתאר את הבעיה בצורה מדויקת יותר, יהיה קל יותר לקשר אותה להתקנה, לרישיון או להגדרות של הווידג׳ט.</p>
+                                        <p class="panel-intro">תיאור מדויק של הבעיה יעזור לקשר אותה מהר יותר להתקנה, לרישיון או להגדרות הווידג׳ט.</p>
                                     </div>
                                 </div>
 
@@ -193,7 +193,7 @@
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="guide">
                         <section class="support-grid">
                             <section class="domain-card">
-                                <h2>מה חשוב לדעת</h2>
+                                <h2>מה כדאי לצרף לפנייה</h2>
                                 <div class="domain-info-list">
                                     <div class="domain-info-row">
                                         <span>דף</span>
@@ -212,7 +212,7 @@
 
                         <aside class="support-side-stack">
                             <section class="domain-card">
-                                <h2>היקף התמיכה</h2>
+                                <h2>גבולות התמיכה</h2>
                                 <p class="panel-intro">התמיכה מיועדת לשימוש במערכת עצמה: התקנה, רישיון, טעינת הווידג׳ט, שמירת הגדרות ועמודי החשבון. היא אינה כוללת ייעוץ, תיקון או ליווי נגישות.</p>
                             </section>
                         </aside>
