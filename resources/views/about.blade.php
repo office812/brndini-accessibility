@@ -31,7 +31,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section">
+    <section class="public-shell-section" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">למה בנינו את זה</p>
             <h2>כי שכבת נגישות לא צריכה להרגיש כמו טלאי.</h2>
@@ -56,7 +56,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section public-shell-section-soft">
+    <section class="public-shell-section public-shell-section-soft" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">עקרונות עבודה</p>
             <h2>אותה שפה בכל נקודת מגע.</h2>
