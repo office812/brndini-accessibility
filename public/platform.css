@@ -15675,3 +15675,309 @@ html { scroll-behavior: smooth; }
 [data-reveal].is-revealed .public-flow-step:nth-child(4),
 [data-reveal].is-revealed .about-mini-card:nth-child(4),
 [data-reveal].is-revealed .process-card-strong:nth-child(4) { transition-delay: 210ms; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS — 480px and 390px breakpoints
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+
+    /* ─── Layout containers ─────────────────────────────────────────────── */
+    .public-stage,
+    .public-shell-section,
+    .site-header,
+    .site-header-public,
+    .site-footer,
+    .auth-screen {
+        max-width: calc(100% - 16px);
+    }
+
+    .page-shell-public,
+    .page-shell-home {
+        width: calc(100% - 16px);
+    }
+
+    /* ─── Hero heading sizes ────────────────────────────────────────────── */
+    .public-stage-copy h1 {
+        font-size: clamp(2.2rem, 12vw, 3.2rem);
+    }
+
+    .page-home .public-stage-copy h1 {
+        font-size: clamp(2.8rem, 14vw, 4.4rem);
+        letter-spacing: -0.07em;
+    }
+
+    .section-heading h2,
+    .section-heading-heroish h2 {
+        font-size: clamp(1.7rem, 7vw, 2.4rem);
+    }
+
+    .domain-shell-header h1 {
+        font-size: clamp(1.8rem, 8vw, 2.6rem);
+    }
+
+    /* ─── Public stage ──────────────────────────────────────────────────── */
+    .public-stage {
+        padding: 6px 0 4px;
+        gap: 14px;
+    }
+
+    .public-stage-copy .hero-text-lead {
+        font-size: 0.94rem;
+        line-height: 1.7;
+    }
+
+    .public-cta-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .public-cta-row .primary-button,
+    .public-cta-row .ghost-button,
+    .public-cta-row .button-link {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .public-cta-row-center {
+        align-items: center;
+    }
+
+    /* ─── Section padding ───────────────────────────────────────────────── */
+    .public-shell-section {
+        padding: 18px 0;
+    }
+
+    .public-shell-section-soft {
+        padding: 16px 14px;
+        border-radius: 22px;
+    }
+
+    .section-heading {
+        margin-bottom: 18px;
+    }
+
+    /* ─── Cards ─────────────────────────────────────────────────────────── */
+    .public-shell-card,
+    .public-flow-step,
+    .public-decision-card {
+        padding: 18px 16px;
+        border-radius: 20px;
+    }
+
+    .domain-card,
+    .licenses-table-card,
+    .portal-content-card,
+    .support-ticket-card {
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    .domain-hero-card {
+        border-radius: 22px;
+    }
+
+    .plan-choice-card {
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .knowledge-topic-card {
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    .faq-item {
+        padding: 16px 18px;
+        border-radius: 18px;
+    }
+
+    /* ─── Dashboard: workspace snapshot 1-col ───────────────────────────── */
+    .workspace-snapshot,
+    .steward-stat-grid,
+    .super-admin-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* ─── Domain info rows: wrap labels ─────────────────────────────────── */
+    .domain-info-row {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .domain-info-row strong {
+        word-break: break-all;
+    }
+
+    /* ─── Tab nav: wrap tabs ─────────────────────────────────────────────── */
+    .dashboard-tab-nav,
+    .domain-inline-tab-nav {
+        gap: 4px;
+    }
+
+    .dashboard-tab-button {
+        font-size: 0.82rem;
+        padding: 7px 12px;
+        min-height: 36px;
+    }
+
+    /* ─── Header pill ────────────────────────────────────────────────────── */
+    .site-header,
+    .site-header-public {
+        margin-top: 10px;
+        padding: 9px 12px;
+        border-radius: 20px;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────────────────────── */
+    .site-footer {
+        padding: 20px 16px 16px;
+    }
+
+    .page-shell-public .site-footer {
+        padding: 24px 16px 18px;
+    }
+
+    /* ─── Auth screens ───────────────────────────────────────────────────── */
+    .auth-screen-signup {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-screen-signup .auth-screen-showcase {
+        display: none;
+    }
+
+    .auth-screen-panel,
+    .auth-screen-signup .auth-screen-panel {
+        padding: 20px 18px;
+        border-radius: 22px;
+    }
+
+    .auth-shell {
+        padding: 14px 0 28px;
+    }
+
+    /* ─── Homepage specific ──────────────────────────────────────────────── */
+    .page-home .page-shell-home {
+        width: calc(100% - 16px);
+    }
+
+    .page-home .public-stage-copy .hero-text-lead {
+        font-size: 0.94rem;
+        max-width: none;
+    }
+
+    .page-home .public-cta-row-hero {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .page-home .public-cta-row-hero .primary-button,
+    .page-home .public-cta-row-hero .ghost-button {
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+    }
+
+    .page-home .site-footer {
+        padding: 16px 16px 20px;
+    }
+
+    /* ─── Newsletter form ────────────────────────────────────────────────── */
+    .stitch-newsletter-input-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .stitch-newsletter-input-row .stitch-button-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* ─── Billing hero meta pills: wrap ──────────────────────────────────── */
+    .billing-hero-meta {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* ─── Section bands ──────────────────────────────────────────────────── */
+    .section-band {
+        padding: 28px 16px;
+        border-radius: 22px;
+    }
+
+    /* ─── Statement page ─────────────────────────────────────────────────── */
+    .legal-card,
+    .statement-public-card {
+        padding: 20px 16px;
+        border-radius: 22px;
+    }
+
+    /* ─── Article body ───────────────────────────────────────────────────── */
+    .knowledge-article-layout .article-body {
+        padding: 18px 16px;
+        font-size: 0.96rem;
+        border-radius: 22px;
+    }
+}
+
+@media (max-width: 390px) {
+
+    /* ─── Smallest phones: tighten further ──────────────────────────────── */
+    .public-stage-copy h1 {
+        font-size: clamp(2rem, 11vw, 2.8rem);
+    }
+
+    .page-home .public-stage-copy h1 {
+        font-size: clamp(2.5rem, 13vw, 3.8rem);
+    }
+
+    .section-heading h2 {
+        font-size: clamp(1.6rem, 8vw, 2.2rem);
+    }
+
+    .site-header,
+    .site-header-public {
+        padding: 8px 10px;
+    }
+
+    .public-stage,
+    .public-shell-section,
+    .site-footer,
+    .auth-screen {
+        max-width: calc(100% - 12px);
+    }
+
+    .page-shell-public,
+    .page-shell-home,
+    .page-home .page-shell-home {
+        width: calc(100% - 12px);
+    }
+
+    .public-shell-card,
+    .public-flow-step,
+    .public-decision-card,
+    .domain-card,
+    .plan-choice-card {
+        padding: 14px 13px;
+        border-radius: 18px;
+    }
+
+    /* Status pills: smaller on tiny screens */
+    .status-pill {
+        font-size: 0.72rem;
+        padding: 3px 8px;
+    }
+
+    /* Primary button: full width on tiny screens */
+    .primary-button,
+    .secondary-button,
+    .ghost-button {
+        min-height: 44px;
+        font-size: 0.88rem;
+    }
+}
