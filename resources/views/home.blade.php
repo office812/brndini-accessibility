@@ -8,10 +8,10 @@
     <section class="public-stage public-stage-home">
         <div class="public-stage-copy">
             <p class="eyebrow">A11Y Bridge</p>
-            <h1>פותחים חשבון, מחברים אתר, ומטמיעים שכבת נגישות מנוהלת.</h1>
+            <h1>שכבת נגישות טכנית שמנהלים מתוך חשבון אחד.</h1>
             <p class="hero-text hero-text-lead">
-                כלי חינמי אחד שמוביל מהר מפתיחת חשבון ל־snippet קבוע, dashboard ברור,
-                statement בסיסי וזיהוי התקנה. בלי מסלול פרימיום מבלבל, ובלי מסגור של שירות נגישות.
+                פותחים חשבון, מחברים אתר, מטמיעים snippet קבוע וממשיכים לנהל widget,
+                statement וזיהוי התקנה מתוך סביבת עבודה אחת. חינם ותמיכה טכנית בלבד.
             </p>
 
             <div class="public-cta-row public-cta-row-hero">
@@ -21,8 +21,8 @@
 
             <div class="public-hero-notes" aria-label="יתרונות מרכזיים">
                 <article>
-                    <small>snippet</small>
-                    <strong>מוסיפים פעם אחת</strong>
+                    <small>setup</small>
+                    <strong>פותחים ומטמיעים מהר</strong>
                 </article>
                 <article>
                     <small>dashboard</small>
@@ -38,27 +38,40 @@
         <div class="public-stage-visual" aria-hidden="true">
             <div class="public-device-shell public-device-shell-poster">
                 <div class="public-stage-canvas">
-                    <div class="public-stage-canvas-line"></div>
-                    <div class="public-stage-canvas-copy">
-                        <small>install / widget / statement</small>
-                        <strong>סביבת עבודה שקטה וברורה שמנהלת את שכבת הנגישות מתוך חשבון אחד.</strong>
-                        <p>לא מחליפים snippet בכל שינוי, לא מחפשים קבצים ידנית, ולא מתבלבלים בין מוצר חינמי לשירות עסקי.</p>
+                    <div class="public-stage-canvas-topline">
+                        <span>A11Y Bridge</span>
+                        <span>INSTALL / WIDGET / STATEMENT</span>
                     </div>
-                    <div class="public-stage-canvas-stack">
-                        <article>
+                    <div class="public-stage-canvas-copy">
+                        <small>workspace</small>
+                        <strong>snippet אחד באתר. כל השאר נמשך מתוך המערכת.</strong>
+                        <p>הטמעה, widget, statement וחיווי התקנה, בלי להחליף קוד בכל שינוי ובלי לערבב מוצר חינמי עם שירות עסקי.</p>
+                    </div>
+                    <div class="public-stage-canvas-grid">
+                        <article class="is-primary">
                             <span>הטמעה</span>
-                            <strong>snippet אחד, מנוהל מרחוק</strong>
-                            <p>מטמיעים פעם אחת, וכל שינוי נמשך מתוך המערכת.</p>
+                            <strong>snippet קבוע</strong>
+                            <p>מטמיעים פעם אחת, ומכאן מנהלים מרחוק.</p>
                         </article>
                         <article>
-                            <span>סטטוס</span>
+                            <span>widget</span>
+                            <strong>מנוהל מתוך dashboard</strong>
+                            <p>טקסט, preset ופעולות נגישות במקום אחד.</p>
+                        </article>
+                        <article>
+                            <span>statement</span>
+                            <strong>מחובר למסך הציות</strong>
+                            <p>נקודת פתיחה בסיסית, שקטה וברורה.</p>
+                        </article>
+                        <article>
+                            <span>status</span>
                             <strong>זוהה / לא זוהה לאחרונה</strong>
-                            <p>חיווי ברור אם שכבת הנגישות נטענת באתר בפועל.</p>
+                            <p>רואים אם שכבת הנגישות נטענת בפועל.</p>
                         </article>
                     </div>
                     <div class="public-stage-canvas-metrics">
-                        <div><small>widget</small><strong>מנוהל</strong></div>
-                        <div><small>statement</small><strong>מחובר</strong></div>
+                        <div><small>snippet</small><strong>פעם אחת</strong></div>
+                        <div><small>dashboard</small><strong>מקום אחד</strong></div>
                         <div><small>support</small><strong>טכני בלבד</strong></div>
                     </div>
                 </div>
