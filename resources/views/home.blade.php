@@ -5,215 +5,195 @@
 @php($marketingParams = array_filter(request()->only(['utm_source', 'utm_medium', 'utm_campaign', 'referrer_url'])))
 
 @section('content')
-    <section class="public-stage public-stage-home">
-        <div class="public-stage-copy public-stage-copy-centered">
-            <div class="public-stage-kicker">
-                <span>A11Y Bridge</span>
-                <span>free self-service</span>
+    <section class="stitch-home-hero">
+        <div class="stitch-home-hero-copy">
+            <div class="stitch-home-badge">
+                <span class="stitch-home-badge-dot"></span>
+                <span>חדש: A11Y Bridge 2.0</span>
             </div>
             <h1>
-                <span>שכבת נגישות</span>
-                <span>טכנית שמחברים</span>
-                <span class="is-accent">בדקות.</span>
+                <span>מטמיעים שכבת נגישות</span>
+                <span class="is-accent">במהירות האור.</span>
             </h1>
-            <p class="hero-text hero-text-lead">
+            <p>
                 פותחים חשבון, מחברים אתר, מטמיעים snippet אחד ומנהלים widget, statement
-                וחיווי התקנה מתוך סביבת עבודה שקטה אחת.
+                וזיהוי התקנה מתוך סביבת עבודה שקטה אחת.
             </p>
-
-            <div class="public-cta-row public-cta-row-hero">
-                <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+            <div class="stitch-home-actions">
+                <a class="stitch-button stitch-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                <a class="stitch-button stitch-button-secondary" href="{{ route('how-it-works') }}">צפו בדמו מהיר</a>
             </div>
         </div>
 
-        <div class="public-stage-visual" aria-hidden="true">
-            <div class="public-device-shell public-device-shell-poster">
-                <div class="public-stage-canvas">
-                    <div class="public-stage-canvas-topline">
-                        <span>A11Y Bridge</span>
-                        <span>INSTALL / WIDGET / STATEMENT</span>
-                    </div>
-                    <div class="public-stage-canvas-compact">
-                        <div class="public-stage-canvas-copy public-stage-canvas-copy-compact">
-                            <small>workspace</small>
-                            <strong>snippet אחד באתר. כל השאר מנוהל מרחוק.</strong>
-                            <p>הטמעה, widget, statement וחיווי התקנה מתוך סביבת עבודה אחת.</p>
-                        </div>
-                        <div class="public-stage-list">
-                            <article class="is-primary">
-                                <span>הטמעה</span>
-                                <strong>snippet קבוע</strong>
-                                <em>מטמיעים פעם אחת</em>
-                            </article>
-                            <article>
-                                <span>widget</span>
-                                <strong>מנוהל מתוך dashboard</strong>
-                                <em>טקסטים ופעולות במקום אחד</em>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="public-stage-canvas-metrics">
-                        <div><small>snippet</small><strong>פעם אחת</strong></div>
-                        <div><small>status</small><strong>זוהה</strong></div>
-                        <div><small>support</small><strong>טכני בלבד</strong></div>
-                    </div>
+        <div class="stitch-home-hero-visual" aria-hidden="true">
+            <div class="stitch-home-hero-float">
+                <div class="stitch-home-float-title">
+                    <span class="stitch-home-float-dot"></span>
+                    <span>Install check</span>
                 </div>
+                <strong>Widget detected</strong>
+                <div class="stitch-home-float-bar"><span></span></div>
             </div>
-        </div>
 
-        <div class="public-stage-hero-actions">
-            <div class="public-hero-proofline" aria-label="עקרונות המוצר">
-                <span>snippet קבוע</span>
-                <span>ניהול ממקום אחד</span>
-                <span>תמיכה טכנית בלבד</span>
-            </div>
-        </div>
-
-    </section>
-
-    <section class="public-shell-section public-shell-section-logo-band">
-        <div class="public-logo-band" aria-label="עקרונות המוצר">
-            <span>snippet קבוע</span>
-            <span>widget מנוהל מרחוק</span>
-            <span>statement בסיסי</span>
-            <span>חיווי התקנה</span>
-            <span>תמיכה טכנית בלבד</span>
-        </div>
-    </section>
-
-    <section class="public-shell-section public-shell-section-showcase">
-        <div class="section-heading section-heading-heroish">
-            <p class="eyebrow">מפסיקים להחליף קוד בכל שינוי</p>
-            <h2>פותחים חשבון, מטמיעים snippet אחד, וכל שאר השכבה מנוהלת מתוך המערכת.</h2>
-        </div>
-
-        <div class="public-showcase-stack">
-            <div class="public-showcase-visual public-showcase-visual-centered" aria-hidden="true">
-                <div class="public-device-shell public-device-shell-inline">
-                    <div class="public-stage-canvas public-stage-canvas-secondary">
-                        <div class="public-stage-canvas-topline">
-                            <span>OVERVIEW / INSTALL / STATUS</span>
-                            <span>A11Y BRIDGE</span>
+            <div class="stitch-home-product">
+                <div class="stitch-home-product-frame">
+                    <div class="stitch-home-product-sidebar">
+                        <div class="stitch-avocado">
+                            <span class="stitch-avocado-shell"></span>
+                            <span class="stitch-avocado-core"></span>
+                            <span class="stitch-avocado-seed"></span>
                         </div>
-                        <div class="public-stage-canvas-grid public-stage-canvas-grid-dual">
-                            <article class="is-primary">
-                                <span>status</span>
-                                <strong>widget זוהה</strong>
-                                <p>הקוד באתר נטען ומעודכן מתוך סביבת העבודה.</p>
+                        <div class="stitch-home-site-card">
+                            <small>A11Y Bridge</small>
+                            <strong>Site workspace</strong>
+                            <p>snippet, statement ו־widget</p>
+                        </div>
+                        <div class="stitch-home-site-list">
+                            <span>snippet קבוע</span>
+                            <span>preset מרחוק</span>
+                            <span>statement בסיסי</span>
+                        </div>
+                    </div>
+
+                    <div class="stitch-home-product-main">
+                        <div class="stitch-home-product-top">
+                            <div class="stitch-home-pill-row">
+                                <span class="stitch-home-pill is-active">widget זוהה</span>
+                                <span class="stitch-home-pill">dashboard חי</span>
+                            </div>
+                            <div class="stitch-home-chip">Site connected</div>
+                        </div>
+
+                        <div class="stitch-home-stats-grid">
+                            <article>
+                                <small>Snippet</small>
+                                <strong>פעם אחת</strong>
+                                <p>מטמיעים פעם אחת בלבד.</p>
                             </article>
                             <article>
-                                <span>statement</span>
-                                <strong>נקודת פתיחה בסיסית</strong>
-                                <p>הצהרה מחוברת למסך הציות בלי לערבב שירות נגישות.</p>
-                            </article>
-                            <article>
-                                <span>preset</span>
+                                <small>Widget</small>
                                 <strong>מנוהל מרחוק</strong>
-                                <p>טקסטים, preset ופעולות נגישות מנוהלים בלי החלפת snippet.</p>
+                                <p>טקסטים ופעולות מתוך dashboard.</p>
                             </article>
                             <article>
-                                <span>support</span>
-                                <strong>טכני בלבד</strong>
-                                <p>פונים לתמיכה טכנית רק כשבאמת צריך עזרה בשימוש במערכת.</p>
+                                <small>Statement</small>
+                                <strong>נקודת פתיחה בסיסית</strong>
+                                <p>מחובר למסך הציות.</p>
                             </article>
+                            <article>
+                                <small>Status</small>
+                                <strong>זוהה לאחרונה</strong>
+                                <p>רואים שהשכבה חיה באתר.</p>
+                            </article>
+                        </div>
+
+                        <div class="stitch-home-graph-panel">
+                            <div class="stitch-home-graph-copy">
+                                <small>Activity</small>
+                                <strong>Install, widget, statement</strong>
+                            </div>
+                            <div class="stitch-home-graph-lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="public-showcase-copy public-showcase-copy-inline">
-                <article>
-                    <small>01</small>
-                    <strong>הטמעה פעם אחת</strong>
-                    <p>snippet קבוע באתר, בלי לחזור למפתח בכל שינוי טקסט או preset.</p>
-                </article>
-                <article>
-                    <small>02</small>
-                    <strong>ניהול מתוך dashboard</strong>
-                    <p>widget, statement וחיווי התקנה ממקום אחד, בשפה שקטה ולא טכנית מדי.</p>
-                </article>
-                <article>
-                    <small>03</small>
-                    <strong>רואים מה חסר עכשיו</strong>
-                    <p>המסכים הפנימיים מראים סטטוס, פעולה הבאה ותחזוקה שוטפת של השכבה.</p>
-                </article>
+    <section class="stitch-home-proof">
+        <p>מתאים לאתרים שרוצים להתחיל מהר</p>
+        <div class="stitch-home-proof-row" aria-label="קהלי יעד">
+            <span>WordPress</span>
+            <span>Shopify</span>
+            <span>Wix</span>
+            <span>Custom stack</span>
+        </div>
+    </section>
+
+    <section class="stitch-home-features">
+        <div class="stitch-home-section-heading">
+            <h2>הכלים הנכונים לשיפור הנגישות</h2>
+            <p>במקום עוד plugin מבולגן, מתחילים ממוצר ברור שאפשר באמת להטמיע ולעבוד איתו.</p>
+        </div>
+
+        <div class="stitch-home-feature-grid">
+            <article class="stitch-home-feature-card">
+                <div class="stitch-home-feature-icon">01</div>
+                <h3>snippet אחד, אתר חי</h3>
+                <p>מטמיעים פעם אחת בלבד וממשיכים לנהל את שכבת הנגישות מתוך סביבת העבודה.</p>
+                <div class="stitch-home-feature-visual stitch-home-feature-visual-bars">
+                    <span></span><span></span><span></span>
+                </div>
+            </article>
+
+            <article class="stitch-home-feature-card">
+                <div class="stitch-home-feature-icon">02</div>
+                <h3>widget, statement ו־status</h3>
+                <p>אותו dashboard מחזיק את טקסטי הווידג׳ט, ההצהרה הבסיסית וחיווי ההטמעה.</p>
+                <div class="stitch-home-feature-visual stitch-home-feature-visual-lines">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </article>
+
+            <article class="stitch-home-feature-card">
+                <div class="stitch-home-feature-icon">03</div>
+                <h3>Brndini כשצריך יותר</h3>
+                <p>כשצריך צמיחה, ביצועים או שכבת שירותים נוספת, ממשיכים ל־Brndini בלי לבלבל את המוצר עצמו.</p>
+                <div class="stitch-home-feature-visual stitch-home-feature-visual-orbit">
+                    <span></span><span></span><span></span>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="stitch-home-cta-band">
+        <div class="stitch-home-cta-surface">
+            <div class="stitch-home-cta-copy">
+                <h2>אל תחכו שהנגישות תהפוך לעוד בלגן. <span>הכניסו שכבה טכנית ברורה עוד היום.</span></h2>
+                <div class="stitch-home-actions">
+                    <a class="stitch-button stitch-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
+                    <a class="stitch-button stitch-button-secondary" href="{{ route('brndini.home', $marketingParams) }}">ל־Brndini</a>
+                </div>
+            </div>
+            <div class="stitch-home-cta-orbs" aria-hidden="true">
+                <span class="is-ring"></span>
+                <span class="is-glow"></span>
+                <span class="is-pill"></span>
             </div>
         </div>
     </section>
 
-    <section class="public-shell-section public-shell-section-metrics">
-        <div class="section-heading section-heading-heroish">
-            <p class="eyebrow">בנוי לבעלי אתרים, לסוכנויות ולצוותים פנימיים</p>
-            <h2>מוצר אחד, סביבת עבודה אחת, וכל מה שצריך כדי להתחיל מהר.</h2>
+    <section class="stitch-home-faq">
+        <div class="stitch-home-section-heading stitch-home-section-heading-centered">
+            <h2>שאלות נפוצות</h2>
+            <p>כל מה שצריך לדעת לפני שמטמיעים את A11Y Bridge.</p>
         </div>
 
-        <div class="public-metric-line">
-            <article>
-                <strong>1</strong>
-                <span>snippet קבוע</span>
-            </article>
-            <article>
-                <strong>4</strong>
-                <span>מסכים מרכזיים לניהול</span>
-            </article>
-            <article>
-                <strong>0</strong>
-                <span>שירות נגישות במסווה</span>
-            </article>
-        </div>
-
-        <div class="public-proof-rail">
-            <article>
-                <small>ווידג׳ט</small>
-                <strong>הגדרות ליבה מתוך dashboard</strong>
-                <p>שפה, טקסט כפתור, preset ופקדים מרכזיים במקום אחד.</p>
-            </article>
-            <article>
-                <small>הטמעה</small>
-                <strong>קוד קבוע לאתר</strong>
-                <p>שינויים נמשכים מרחוק בלי להחליף snippet בכל עדכון.</p>
-            </article>
-            <article>
-                <small>ציות</small>
-                <strong>statement בסיסי וזיהוי התקנה</strong>
-                <p>נקודת פתיחה טכנית מסודרת בלי למסגר את זה כשירות נגישות.</p>
-            </article>
-        </div>
-    </section>
-
-    <section class="public-shell-section public-shell-section-last public-shell-section-darkend">
-        <div class="section-heading section-heading-heroish">
-            <p class="eyebrow">Brndini</p>
-            <h2>כשצריך מעבר למוצר, ממשיכים לשכבה עסקית נפרדת ולא “פרימיום של A11Y Bridge”.</h2>
-        </div>
-
-        <div class="public-dual-panel public-dual-panel-quiet">
-            <article class="public-decision-card">
-                <p class="eyebrow">נשארים ב־A11Y Bridge</p>
-                <h3>כשמה שצריך הוא מוצר self-service ברור, מהיר ושקט ליישום.</h3>
-                <ul class="compact-check-list">
-                    <li>הטמעה באתר קיים</li>
-                    <li>ניהול שוטף של הווידג׳ט והטקסטים</li>
-                    <li>חיווי התקנה ובקרה בסיסית</li>
-                    <li>תמיכה טכנית בלבד</li>
-                </ul>
-            </article>
-
-            <article class="public-decision-card public-decision-card-accent">
-                <p class="eyebrow">ממשיכים ל־Brndini</p>
-                <h3>כשצריך שכבה רחבה יותר של תשתית, צמיחה, ביצועים או מוצרים נוספים.</h3>
-                <ul class="compact-check-list">
-                    <li>שירותים עסקיים נפרדים מהכלי</li>
-                    <li>פנייה עסקית מסודרת ולא טיקט תמיכה</li>
-                    <li>שכבת המשך לעסק, לא “פרימיום נגישות”</li>
-                    <li>גישה גם לכלים נוספים שמתרחבים מתוך Brndini</li>
-                </ul>
-            </article>
-        </div>
-
-        <div class="public-cta-row public-cta-row-center">
-            <a class="primary-button button-link" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
-            <a class="ghost-button button-link" href="{{ route('brndini.home', $marketingParams) }}">ל־Brndini</a>
+        <div class="stitch-home-faq-list">
+            <details>
+                <summary>מה מקבלים בחינם?</summary>
+                <div>
+                    פתיחת חשבון, חיבור אתר, snippet קבוע, widget מנוהל, statement בסיסי,
+                    חיווי התקנה ותמיכה טכנית במערכת.
+                </div>
+            </details>
+            <details>
+                <summary>האם זה שירות נגישות?</summary>
+                <div>
+                    לא. זה כלי self-service. התמיכה היא טכנית בלבד, ו־Brndini נשארת שכבת שירותים עסקיים נפרדת.
+                </div>
+            </details>
+            <details>
+                <summary>כמה זמן לוקח להטמיע?</summary>
+                <div>
+                    ברוב האתרים מטמיעים snippet אחד בתוך כמה דקות, ואז ממשיכים לנהל את השכבה מתוך ה־dashboard.
+                </div>
+            </details>
         </div>
     </section>
 @endsection
