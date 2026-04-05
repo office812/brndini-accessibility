@@ -6,12 +6,15 @@
 
 @section('content')
     <section class="public-stage public-stage-home">
-        <div class="public-stage-copy">
-            <p class="eyebrow">A11Y Bridge</p>
-            <h1>שכבת נגישות טכנית שמנהלים מתוך חשבון אחד.</h1>
+        <div class="public-stage-copy public-stage-copy-centered">
+            <div class="public-stage-kicker">
+                <span>A11Y Bridge</span>
+                <span>self-service</span>
+            </div>
+            <h1>שכבת נגישות טכנית שבעלי אתרים אוהבים להטמיע.</h1>
             <p class="hero-text hero-text-lead">
-                פותחים חשבון, מחברים אתר, מטמיעים snippet קבוע וממשיכים לנהל widget,
-                statement וזיהוי התקנה מתוך סביבת עבודה אחת. חינם ותמיכה טכנית בלבד.
+                פותחים חשבון, מחברים אתר, מטמיעים snippet קבוע ומנהלים widget, statement
+                וזיהוי התקנה מתוך סביבת עבודה אחת. חינם, שקט, ותמיכה טכנית בלבד.
             </p>
 
             <div class="public-cta-row public-cta-row-hero">
@@ -44,7 +47,7 @@
                     </div>
                     <div class="public-stage-canvas-copy">
                         <small>workspace</small>
-                        <strong>snippet אחד באתר. כל השאר נמשך מתוך המערכת.</strong>
+                        <strong>snippet אחד באתר. כל השאר מנוהל מתוך המערכת.</strong>
                         <p>הטמעה, widget, statement וחיווי התקנה, בלי להחליף קוד בכל שינוי ובלי לערבב מוצר חינמי עם שירות עסקי.</p>
                     </div>
                     <div class="public-stage-canvas-grid">
