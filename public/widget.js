@@ -471,14 +471,21 @@
 
     var eyebrow = document.createElement('span');
     eyebrow.className = 'ab-widget-eyebrow';
-    eyebrow.textContent = 'התאמות נגישות באתר';
+    eyebrow.textContent = config.siteName || 'A11Y Bridge';
 
     var title = document.createElement('h2');
     title.className = 'ab-widget-title';
-    title.textContent = 'התאמות נגישות באתר';
+    title.textContent = 'התאמות נגישות מהירות';
+
+    var subtitle = document.createElement('p');
+    subtitle.className = 'ab-widget-brand-subtitle';
+    subtitle.textContent = plan === 'premium'
+      ? 'כל השינויים חלים מיד ונשמרים במכשיר הזה.'
+      : 'החבילה החינמית פתוחה להתחלה מהירה ונשמרת במכשיר הזה.';
 
     panelBrandText.appendChild(eyebrow);
     panelBrandText.appendChild(title);
+    panelBrandText.appendChild(subtitle);
     panelBrand.appendChild(panelBadge);
     panelBrand.appendChild(panelBrandText);
 
@@ -510,9 +517,9 @@
 
     var infoStrip = document.createElement('div');
     infoStrip.className = 'ab-widget-strip';
-    infoStrip.appendChild(createChip(config.siteName || 'האתר שלך'));
-    infoStrip.appendChild(createChip(plan === 'premium' ? 'פרימיום' : 'חינם', plan === 'premium' ? 'is-plan-premium' : 'is-plan-free'));
-    infoStrip.appendChild(createChip(config.audit && config.audit.score ? 'ציון ' + config.audit.score : 'מותאם אישית', 'is-chip-muted'));
+    infoStrip.appendChild(createChip(plan === 'premium' ? 'מסלול מלא' : 'כלי חינמי', plan === 'premium' ? 'is-plan-premium' : 'is-plan-free'));
+    infoStrip.appendChild(createChip('נשמר במכשיר הזה', 'is-chip-muted'));
+    infoStrip.appendChild(createChip(config.statementUrl ? 'הצהרה מחוברת' : 'ללא הצהרה', config.statementUrl ? 'is-chip-positive' : 'is-chip-muted'));
     panel.appendChild(infoStrip);
 
     var panelBody = document.createElement('div');
@@ -530,6 +537,7 @@
 
       panelBody.appendChild(createOverviewCard(config, plan, prefs));
       panelBody.appendChild(createActiveStateCard(prefs));
+      panelBody.appendChild(createStarterStrip(plan, prefs));
 
       var sectionsWrap = document.createElement('div');
       sectionsWrap.className = 'ab-widget-sections ab-layout-' + panelLayout;
@@ -575,7 +583,9 @@
 
       var note = document.createElement('p');
       note.className = 'ab-widget-note';
-      note.textContent = 'מסלול חינם פותח כ־70% מהיכולות. פרימיום מוסיף את ההתאמות המתקדמות והפרופילים הייעודיים.';
+      note.textContent = plan === 'premium'
+        ? 'כל ההתאמות המתקדמות פתוחות כרגע בתוך אותו חלון עבודה.'
+        : 'הכלי החינמי נותן התחלה חזקה. השכבה המתקדמת זמינה רק אם צריך יותר עומק.';
       footer.appendChild(note);
       panelBody.appendChild(footer);
       panel.scrollTop = currentScrollTop;
@@ -588,18 +598,13 @@
       var toolbarHead = document.createElement('div');
       toolbarHead.className = 'ab-widget-toolbar-head';
 
-      var toolbarTitle = document.createElement('strong');
-      toolbarTitle.className = 'ab-widget-toolbar-title';
-      toolbarTitle.textContent = 'קפיצה מהירה והתאמות';
+      var toolbarLabel = document.createElement('strong');
+      toolbarLabel.className = 'ab-widget-toolbar-label';
+      toolbarLabel.textContent = planName === 'premium'
+        ? 'ניווט וחיפוש מהיר'
+        : 'ניווט מהיר בתוך הכלי';
 
-      var toolbarCopy = document.createElement('span');
-      toolbarCopy.className = 'ab-widget-toolbar-copy';
-      toolbarCopy.textContent = planName === 'premium'
-        ? 'כל היכולות פתוחות כאן בגלילה אחת, עם חיפוש וקפיצה מהירה לאזור הרצוי.'
-        : 'החבילה החינמית פתוחה כאן במלואה, והיכולות המתקדמות מרוכזות בהמשך באותו חלון.';
-
-      toolbarHead.appendChild(toolbarTitle);
-      toolbarHead.appendChild(toolbarCopy);
+      toolbarHead.appendChild(toolbarLabel);
 
       var shortcuts = document.createElement('div');
       shortcuts.className = 'ab-widget-shortcuts';
@@ -698,62 +703,44 @@
       }).length;
       var scoreValue = widgetConfig.audit && widgetConfig.audit.score ? String(widgetConfig.audit.score) : '—';
 
-      var hero = document.createElement('article');
-      hero.className = 'ab-widget-hero-card';
+      var summary = document.createElement('article');
+      summary.className = 'ab-widget-summary-card';
 
-      var heroCopy = document.createElement('div');
-      heroCopy.className = 'ab-widget-hero-copy';
+      var summaryHead = document.createElement('div');
+      summaryHead.className = 'ab-widget-summary-head';
 
-      var heroEyebrow = document.createElement('span');
-      heroEyebrow.className = 'ab-widget-overview-label';
-      heroEyebrow.textContent = planName === 'premium' ? 'מרכז התאמות מלא' : 'כלי נגישות חינמי';
+      var summaryTitle = document.createElement('strong');
+      summaryTitle.className = 'ab-widget-summary-title';
+      summaryTitle.textContent = currentPrefs.profile && currentPrefs.profile !== 'none'
+        ? 'פרופיל פעיל שמוחל עכשיו על האתר'
+        : 'התאמות נגישות שמוחלות מיד על האתר';
 
-      var heroTitle = document.createElement('strong');
-      heroTitle.className = 'ab-widget-hero-title';
-      heroTitle.textContent = planName === 'premium'
-        ? 'כל ההתאמות המתקדמות פתוחות עכשיו'
-        : 'רוב ההתאמות פתוחות כבר עכשיו, בלי חסימות בדרך';
+      var summaryCopy = document.createElement('p');
+      summaryCopy.className = 'ab-widget-summary-copy';
+      summaryCopy.textContent = planName === 'premium'
+        ? 'כל הפקדים, הפרופילים וההתאמות המתקדמות פתוחים כאן באותו חלון עבודה.'
+        : 'אפשר להתחיל מיד עם טקסט, צבעים, מיקוד ופרופילים בסיסיים. הכול נשמר במכשיר הזה וחוזר גם בביקור הבא.';
 
-      var heroDescription = document.createElement('p');
-      heroDescription.className = 'ab-widget-hero-description';
-      heroDescription.textContent = planName === 'premium'
-        ? 'הפאנל נשאר פתוח, כל שינוי מוחל מיידית על האתר, וכל ההעדפות הפעילות נשמרות בדפדפן של המשתמש.'
-        : 'אפשר להתחיל עם טקסט, צבעים, מיקוד ופרופילים בסיסיים מייד. היכולות המתקדמות מרוכזות בהמשך בצורה מסודרת אם תרצו להתרחב.';
+      summaryHead.appendChild(summaryTitle);
+      summaryHead.appendChild(summaryCopy);
+      summary.appendChild(summaryHead);
 
-      var heroPills = document.createElement('div');
-      heroPills.className = 'ab-widget-hero-pills';
-      heroPills.appendChild(createChip(widgetConfig.siteName || 'האתר שלך'));
-      heroPills.appendChild(createChip(planName === 'premium' ? 'פרימיום' : 'חינם', planName === 'premium' ? 'is-plan-premium' : 'is-plan-free'));
-      heroPills.appendChild(createChip('ציון ' + scoreValue, 'is-chip-muted'));
-      heroPills.appendChild(createChip(widgetConfig.statementUrl ? 'הצהרה מחוברת' : 'ללא הצהרה', widgetConfig.statementUrl ? 'is-chip-positive' : 'is-chip-muted'));
+      var metrics = document.createElement('div');
+      metrics.className = 'ab-widget-summary-metrics';
+      metrics.appendChild(createOverviewFact('מצב', currentPrefs.profile !== 'none' ? 'פרופיל פעיל' : 'התאמה ידנית'));
+      metrics.appendChild(createOverviewFact('פתוח במסלול', String(unlockedFeatureCount) + ' פקדים · ' + String(unlockedProfileCount) + ' פרופילים'));
+      metrics.appendChild(createOverviewFact('אתר', widgetConfig.statementUrl ? 'הצהרה מחוברת' : 'ללא הצהרה'));
+      overview.appendChild(summary);
+      overview.appendChild(metrics);
 
-      var heroActions = document.createElement('div');
-      heroActions.className = 'ab-widget-hero-actions';
-      heroActions.appendChild(createMiniMetric('פעיל עכשיו', activeEntries.length ? String(activeEntries.length) + ' התאמות' : 'מצב רגיל'));
-      heroActions.appendChild(createMiniMetric('פתוח במסלול', String(unlockedFeatureCount) + ' פקדים · ' + String(unlockedProfileCount) + ' פרופילים'));
-
-      heroCopy.appendChild(heroEyebrow);
-      heroCopy.appendChild(heroTitle);
-      heroCopy.appendChild(heroDescription);
-      heroCopy.appendChild(heroPills);
-      heroCopy.appendChild(heroActions);
-
-      var heroAside = document.createElement('div');
-      heroAside.className = 'ab-widget-hero-aside';
-      heroAside.appendChild(createOverviewFact('מצב', currentPrefs.profile !== 'none' ? 'פרופיל פעיל' : 'התאמה ידנית'));
-      heroAside.appendChild(createOverviewFact('העדפות', activeEntries.length ? String(activeEntries.length) + ' פעילות' : 'אין פעילות'));
-      heroAside.appendChild(createOverviewFact('שכבת אתר', widgetConfig.statementUrl ? 'מחוברת' : 'בסיסית'));
-
-      hero.appendChild(heroCopy);
-      hero.appendChild(heroAside);
-      overview.appendChild(hero);
-
-      var promiseRail = document.createElement('div');
-      promiseRail.className = 'ab-widget-promise-rail';
-      promiseRail.appendChild(createPromiseCard('חל מיידית', 'כל שינוי מיושם ישר באתר, בלי רענון ובלי סגירה של הפאנל.'));
-      promiseRail.appendChild(createPromiseCard('נשמר בדפדפן', 'ההתאמות הפעילות נשמרות למשתמש וחוזרות גם בביקור הבא.'));
-      promiseRail.appendChild(createPromiseCard(planName === 'premium' ? 'שכבה מלאה' : 'חינם קודם', planName === 'premium' ? 'כל היכולות פתוחות כאן בגלילה אחת רציפה.' : 'החינם בנוי להיות שימושי באמת, והמתקדם נשאר כשלב הבא.'));
-      overview.appendChild(promiseRail);
+      var summaryNote = document.createElement('p');
+      summaryNote.className = 'ab-widget-summary-note';
+      summaryNote.textContent = activeEntries.length
+        ? 'כדי לבטל התאמה, אפשר ללחוץ עליה באזור ההתאמות הפעילות.'
+        : scoreValue !== '—'
+          ? 'ציון הנגישות האחרון של האתר: ' + scoreValue + '.'
+          : 'התחילו מפעולה מהירה אחת או עברו ישירות לפרופיל מתאים.';
+      overview.appendChild(summaryNote);
 
       return overview;
     }
@@ -861,6 +848,136 @@
 
       section.appendChild(chips);
       return section;
+    }
+
+    function createStarterStrip(planName, currentPrefs) {
+      var section = document.createElement('section');
+      section.className = 'ab-widget-starter-strip';
+
+      var intro = document.createElement('div');
+      intro.className = 'ab-widget-starter-intro';
+
+      var titleNode = document.createElement('strong');
+      titleNode.className = 'ab-widget-starter-title';
+      titleNode.textContent = 'פעולות מהירות להתחלה';
+
+      var copyNode = document.createElement('p');
+      copyNode.className = 'ab-widget-starter-copy';
+      copyNode.textContent = planName === 'premium'
+        ? 'בחרו את מצב ההתחלה שנוח לכם, ומשם המשיכו בגלילה רגילה לכל ההתאמות.'
+        : 'אפשר להתחיל מ־3 פעולות מהירות שכבר פתוחות בחינם, ואז לרדת להתאמות המלאות.';
+
+      intro.appendChild(titleNode);
+      intro.appendChild(copyNode);
+      section.appendChild(intro);
+
+      var grid = document.createElement('div');
+      grid.className = 'ab-widget-starter-grid';
+
+      grid.appendChild(createStarterActionCard({
+        title: 'קריאה נוחה',
+        description: 'גופן קריא, ריווח נעים והדגשת קישורים.',
+        icon: 'readableFont',
+        active: Boolean(currentPrefs.readableFont || currentPrefs.lineSpacing !== 'normal' || currentPrefs.underlineLinks),
+        buttonLabel: 'הפעל',
+        action: function () {
+          updatePrefs({
+            profile: 'none',
+            readableFont: true,
+            lineSpacing: 'relaxed',
+            underlineLinks: true
+          });
+        }
+      }));
+
+      grid.appendChild(createStarterActionCard({
+        title: 'ניגודיות חזקה',
+        description: 'מגדיל נראות כללית, קישורים וכותרות.',
+        icon: 'contrastMode',
+        active: currentPrefs.contrastMode === 'high' || Boolean(currentPrefs.highlightTitles),
+        buttonLabel: 'הפעל',
+        action: function () {
+          updatePrefs({
+            profile: 'none',
+            contrastMode: 'high',
+            highlightTitles: true,
+            underlineLinks: true
+          });
+        }
+      }));
+
+      grid.appendChild(createStarterActionCard({
+        title: 'פוקוס שקט',
+        description: 'מפחית תנועה ומייצב את חוויית הקריאה.',
+        icon: 'reduceMotion',
+        active: Boolean(currentPrefs.reduceMotion || currentPrefs.cursorMode !== 'default'),
+        buttonLabel: 'הפעל',
+        action: function () {
+          updatePrefs({
+            profile: 'none',
+            reduceMotion: true,
+            cursorMode: 'dark'
+          });
+        }
+      }));
+
+      grid.appendChild(createStarterActionCard({
+        title: 'איפוס מלא',
+        description: 'חוזר לברירת המחדל של האתר בלחיצה אחת.',
+        icon: 'fontScale',
+        active: false,
+        buttonLabel: 'אפס',
+        subtle: true,
+        action: function () {
+          updatePrefs(Object.assign({}, defaultPrefs));
+        }
+      }));
+
+      section.appendChild(grid);
+      return section;
+    }
+
+    function createStarterActionCard(config) {
+      var card = document.createElement('article');
+      card.className = 'ab-widget-starter-card' + (config.subtle ? ' is-subtle' : '') + (config.active ? ' is-active' : '');
+
+      var iconNode = document.createElement('span');
+      iconNode.className = 'ab-widget-card-icon';
+      iconNode.innerHTML = getFeatureIconSvg(config.icon);
+
+      var copyWrap = document.createElement('div');
+      copyWrap.className = 'ab-widget-starter-copywrap';
+
+      var titleNode = document.createElement('strong');
+      titleNode.className = 'ab-widget-card-title';
+      titleNode.textContent = config.title;
+
+      var descNode = document.createElement('p');
+      descNode.className = 'ab-widget-card-copy';
+      descNode.textContent = config.description;
+
+      copyWrap.appendChild(titleNode);
+      copyWrap.appendChild(descNode);
+
+      var actionWrap = document.createElement('div');
+      actionWrap.className = 'ab-widget-card-actions';
+
+      if (config.active) {
+        actionWrap.appendChild(createMiniBadge('פעיל'));
+      }
+
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ab-widget-choice-button' + (config.subtle ? '' : ' is-active');
+      button.textContent = config.buttonLabel;
+      button.addEventListener('click', config.action);
+
+      actionWrap.appendChild(button);
+      card.appendChild(iconNode);
+      card.appendChild(copyWrap);
+      card.appendChild(actionWrap);
+
+      return card;
     }
 
     function getActiveAdjustmentEntries(currentPrefs) {
@@ -1164,39 +1281,20 @@
 
       var card = document.createElement('article');
       card.className = 'ab-widget-upgrade-card';
-      card.appendChild(createMiniBadge('פרימיום'));
+      card.appendChild(createMiniBadge('שכבה מתקדמת'));
 
       var titleNode = document.createElement('strong');
       titleNode.className = 'ab-widget-card-title';
-      titleNode.textContent = 'פתחו את השכבה המתקדמת';
+      titleNode.textContent = 'כשצריך יותר עומק ושליטה';
 
       var descNode = document.createElement('p');
       descNode.className = 'ab-widget-card-copy';
-      descNode.textContent = 'המסלול החינמי כבר נותן את רוב ההתאמות. פרימיום פותח פרופילים חכמים, שליטה עמוקה יותר בטקסט ותצוגה, וכלי מיקוד מתקדמים.';
-
-      var comparison = document.createElement('div');
-      comparison.className = 'ab-widget-premium-compare';
-      comparison.appendChild(createCompareRow('כבר פתוח בחינם', 'טקסט, צבעים, ניגודיות, מיקוד ופרופילים בסיסיים.'));
-      comparison.appendChild(createCompareRow('נפתח בפרימיום', 'פרופילים ייעודיים, שליטה עמוקה יותר ומסלולי עבודה מתקדמים.'));
-
-      var stats = document.createElement('div');
-      stats.className = 'ab-widget-premium-stats';
-
-      var freeStat = document.createElement('div');
-      freeStat.className = 'ab-widget-premium-stat';
-      freeStat.innerHTML = '<strong>חינם</strong><span>כ־70% מההתאמות פתוחות</span>';
-
-      var premiumStat = document.createElement('div');
-      premiumStat.className = 'ab-widget-premium-stat is-highlight';
-      premiumStat.innerHTML = '<strong>פרימיום</strong><span>100% מהיכולות המתקדמות</span>';
-
-      stats.appendChild(freeStat);
-      stats.appendChild(premiumStat);
+      descNode.textContent = 'הכלי החינמי נשאר חזק גם בלי שדרוג. השכבה המתקדמת נועדה למצבים שבהם צריך יותר פרופילים, יותר שליטה ויותר עומק.';
 
       var grid = document.createElement('div');
       grid.className = 'ab-widget-premium-list';
 
-      uniqueItems.slice(0, 6).forEach(function (item) {
+      uniqueItems.slice(0, 4).forEach(function (item) {
         var premiumItem = document.createElement('div');
         premiumItem.className = 'ab-widget-premium-item';
 
@@ -1222,12 +1320,16 @@
         grid.appendChild(premiumItem);
       });
 
-      if (uniqueItems.length > 6) {
+      if (uniqueItems.length > 4) {
         var moreNode = document.createElement('p');
         moreNode.className = 'ab-widget-premium-more';
-        moreNode.textContent = 'ועוד ' + String(uniqueItems.length - 6) + ' יכולות מתקדמות בפרימיום.';
+        moreNode.textContent = 'ועוד ' + String(uniqueItems.length - 4) + ' יכולות מתקדמות זמינות בשכבה הרחבה.';
         grid.appendChild(moreNode);
       }
+
+      var noteNode = document.createElement('p');
+      noteNode.className = 'ab-widget-premium-note';
+      noteNode.textContent = 'לא חייבים לשדרג כדי להשתמש בכלי. זה רק שלב המשך למי שצריך יותר עומק.';
 
       var actionWrap = document.createElement('div');
       actionWrap.className = 'ab-widget-card-actions';
@@ -1235,9 +1337,8 @@
 
       card.appendChild(titleNode);
       card.appendChild(descNode);
-      card.appendChild(comparison);
-      card.appendChild(stats);
       card.appendChild(grid);
+      card.appendChild(noteNode);
       card.appendChild(actionWrap);
       section.appendChild(card);
 
@@ -1428,10 +1529,10 @@
     var style = document.createElement('style');
     style.id = 'ab-widget-styles';
     style.textContent = `
-      .ab-widget-shell{--ab-radius:28px;--ab-motion-fast:140ms;--ab-motion-base:220ms;position:fixed;z-index:999999;bottom:14px;right:14px;display:flex;flex-direction:column-reverse;gap:12px;align-items:flex-end;font-family:"Assistant","Segoe UI",Arial,sans-serif;}
+      .ab-widget-shell{--ab-radius:24px;--ab-motion-fast:140ms;--ab-motion-base:220ms;position:fixed;z-index:999999;bottom:14px;right:14px;display:flex;flex-direction:column-reverse;gap:12px;align-items:flex-end;font-family:"IBM Plex Sans Hebrew","Segoe UI",Arial,sans-serif;}
       .ab-widget-shell.ab-bottom-left{left:14px;right:auto;align-items:flex-start;}
-      .ab-widget-button{--ab-widget-color:#1d6dff;position:relative;display:inline-flex;align-items:center;gap:12px;min-height:60px;padding:0 18px 0 14px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:linear-gradient(135deg,var(--ab-widget-color),#081121 92%);color:#fff;font-weight:800;box-shadow:0 18px 44px rgba(15,23,42,.18);cursor:pointer;overflow:hidden;transition:transform var(--ab-motion-base) ease,box-shadow var(--ab-motion-base) ease,filter var(--ab-motion-base) ease;}
-      .ab-widget-button:hover{transform:translateY(-1px);box-shadow:0 24px 56px rgba(15,23,42,.22);}
+      .ab-widget-button{--ab-widget-color:#1d6dff;position:relative;display:inline-flex;align-items:center;gap:12px;min-height:56px;padding:0 18px 0 14px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:linear-gradient(135deg,var(--ab-widget-color),#10203a 92%);color:#fff;font-weight:800;box-shadow:0 16px 36px rgba(15,23,42,.16);cursor:pointer;overflow:hidden;transition:transform var(--ab-motion-base) ease,box-shadow var(--ab-motion-base) ease,filter var(--ab-motion-base) ease;}
+      .ab-widget-button:hover{transform:translateY(-1px);box-shadow:0 18px 40px rgba(15,23,42,.2);}
       .ab-widget-button::after{content:"";position:absolute;inset:-8px;pointer-events:none;border-radius:inherit;background:radial-gradient(circle at center,rgba(96,165,250,.25),transparent 55%);opacity:0;transform:scale(.9);transition:opacity var(--ab-motion-base) ease,transform var(--ab-motion-base) ease;}
       .ab-widget-button:hover::after,.ab-widget-shell.ab-open .ab-widget-button::after{opacity:1;transform:scale(1);}
       .ab-widget-button-glow{position:absolute;inset:-1px;background:radial-gradient(circle at top right,rgba(255,255,255,.28),transparent 34%);pointer-events:none;}
@@ -1452,8 +1553,8 @@
       .ab-widget-button.ab-preset-bold{background:linear-gradient(135deg,#7c3aed,#ec4899 88%);}
       .ab-widget-button.ab-license-inactive{background:linear-gradient(135deg,#d92d20,#7a0510);}
       .ab-widget-button.ab-widget-unavailable{background:linear-gradient(135deg,#0f172a,#1d4ed8 88%);}
-      .ab-widget-panel{width:min(470px,calc(100vw - 28px));max-height:min(82vh,760px);overflow:auto;border-radius:var(--ab-radius);background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(244,248,252,.96));color:#0f172a;border:1px solid rgba(255,255,255,.76);box-shadow:0 30px 90px rgba(15,23,42,.16);padding:16px;position:relative;opacity:0;transform:translateY(12px) scale(.985);visibility:hidden;pointer-events:none;backdrop-filter:blur(22px);}
-      .ab-widget-panel::before{content:"";position:absolute;inset:0 0 auto 0;height:120px;border-radius:inherit;background:radial-gradient(circle at top right,rgba(29,109,255,.14),transparent 58%);pointer-events:none;}
+      .ab-widget-panel{width:min(456px,calc(100vw - 28px));max-height:min(82vh,760px);overflow:auto;border-radius:var(--ab-radius);background:rgba(251,253,255,.97);color:#0f172a;border:1px solid rgba(15,23,42,.08);box-shadow:0 28px 80px rgba(15,23,42,.14);padding:16px;position:relative;opacity:0;transform:translateY(12px) scale(.985);visibility:hidden;pointer-events:none;backdrop-filter:blur(16px);}
+      .ab-widget-panel::before{content:"";position:absolute;inset:0 0 auto 0;height:92px;border-radius:inherit;background:linear-gradient(180deg,rgba(236,244,255,.88),rgba(251,253,255,0));pointer-events:none;}
       .ab-widget-panel.ab-preset-high-tech{background:linear-gradient(180deg,rgba(245,249,255,.96),rgba(231,239,252,.98));}
       .ab-widget-panel.ab-preset-elegant{background:linear-gradient(180deg,rgba(255,252,247,.96),rgba(245,239,231,.98));}
       .ab-widget-panel.ab-preset-bold{background:linear-gradient(180deg,rgba(253,245,255,.96),rgba(239,230,255,.98));}
@@ -1466,14 +1567,15 @@
       .ab-widget-brand-badge{width:42px;height:42px;display:inline-grid;place-items:center;padding:6px;border-radius:16px;background:rgba(255,255,255,.96);box-shadow:0 10px 24px rgba(29,109,255,.14);overflow:hidden;}
       .ab-widget-brand-logo{width:100%;height:100%;object-fit:contain;display:block;}
       .ab-widget-brand-text{display:grid;gap:2px;}
-      .ab-widget-eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#64748b;font-weight:800;}
-      .ab-widget-title{margin:0;font:800 22px/1.08 "Assistant","Segoe UI",Arial,sans-serif;letter-spacing:-.02em;}
+      .ab-widget-eyebrow{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#64748b;font-weight:800;}
+      .ab-widget-title{margin:0;font:800 21px/1.08 "IBM Plex Sans Hebrew","Segoe UI",Arial,sans-serif;letter-spacing:-.03em;}
+      .ab-widget-brand-subtitle{margin:0;color:#526173;font-size:12px;line-height:1.55;}
       .ab-widget-close{width:38px;height:38px;border:1px solid rgba(15,23,42,.08);border-radius:14px;background:rgba(255,255,255,.72);color:#0f172a;font-size:24px;line-height:1;cursor:pointer;}
       .ab-widget-reset{min-height:38px;padding:0 14px;border:1px solid rgba(15,23,42,.08);border-radius:999px;background:rgba(255,255,255,.72);color:#334155;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease;}
       .ab-widget-reset:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(15,23,42,.08);}
       .ab-widget-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
-      .ab-widget-chip{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:#0b1220;color:#fff;font-size:12px;font-weight:700;}
-      .ab-widget-chip.is-chip-muted{background:rgba(15,23,42,.05);color:#0f172a;}
+      .ab-widget-chip{display:inline-flex;align-items:center;min-height:31px;padding:0 11px;border-radius:999px;background:#0b1220;color:#fff;font-size:11px;font-weight:700;}
+      .ab-widget-chip.is-chip-muted{background:rgba(15,23,42,.045);color:#334155;}
       .ab-widget-chip.is-chip-positive{background:rgba(21,128,61,.1);color:#166534;}
       .ab-widget-chip.is-plan-free{background:rgba(21,128,61,.1);color:#166534;}
       .ab-widget-chip.is-plan-premium{background:rgba(124,58,237,.12);color:#6d28d9;}
@@ -1517,6 +1619,17 @@
       .ab-widget-active-chips{display:flex;flex-wrap:wrap;gap:8px;}
       .ab-widget-active-chip{min-height:34px;padding:0 12px;border:1px solid rgba(29,109,255,.12);border-radius:999px;background:rgba(29,109,255,.08);color:#0d3ea7;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease;}
       .ab-widget-active-chip:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(29,109,255,.12);background:rgba(29,109,255,.12);}
+      .ab-widget-starter-strip{display:grid;gap:10px;padding:13px 14px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.84),rgba(241,246,255,.96));border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);}
+      .ab-widget-starter-intro{display:grid;gap:3px;}
+      .ab-widget-starter-title{font-size:13px;font-weight:900;}
+      .ab-widget-starter-copy{margin:0;color:#64748b;font-size:12px;line-height:1.65;}
+      .ab-widget-starter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+      .ab-widget-starter-card{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:12px;border-radius:18px;background:rgba(255,255,255,.8);border:1px solid rgba(15,23,42,.06);box-shadow:0 8px 18px rgba(15,23,42,.04);transition:transform var(--ab-motion-fast) ease,box-shadow var(--ab-motion-fast) ease,border-color var(--ab-motion-fast) ease;}
+      .ab-widget-starter-card:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(15,23,42,.08);}
+      .ab-widget-starter-card.is-active{border-color:rgba(29,109,255,.18);box-shadow:0 14px 28px rgba(29,109,255,.1);}
+      .ab-widget-starter-card.is-subtle{background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(248,250,252,.94));}
+      .ab-widget-starter-copywrap{display:grid;gap:4px;min-width:0;}
+      .ab-widget-starter-card .ab-widget-card-actions{justify-content:space-between;align-items:center;grid-column:1 / -1;}
       .ab-widget-sections{display:grid;gap:14px;min-width:0;grid-template-columns:1fr;}
       .ab-widget-sections.ab-layout-split{grid-template-columns:1fr;align-items:start;}
       .ab-widget-section{display:grid;gap:10px;}
@@ -1572,7 +1685,55 @@
       .ab-widget-note{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
       .ab-widget-inactive-note{max-width:230px;padding:10px 14px;border-radius:14px;background:rgba(217,45,32,.1);color:#7a0510;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(122,5,16,.08);}
       .ab-widget-unavailable-note{max-width:250px;padding:10px 14px;border-radius:14px;background:rgba(29,78,216,.12);color:#1e3a8a;font-size:12px;font-weight:700;box-shadow:0 8px 18px rgba(29,78,216,.08);}
-      .ab-widget-shell.ab-is-updating .ab-widget-panel{box-shadow:0 32px 96px rgba(29,109,255,.18);border-color:rgba(29,109,255,.16);}
+      .ab-widget-summary-card{display:grid;gap:10px;padding:14px 15px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(244,248,253,.96));border:1px solid rgba(15,23,42,.06);}
+      .ab-widget-summary-head{display:grid;gap:5px;}
+      .ab-widget-summary-title{font-size:20px;line-height:1.15;font-weight:800;letter-spacing:-.03em;}
+      .ab-widget-summary-copy{margin:0;color:#526173;font-size:13px;line-height:1.7;}
+      .ab-widget-summary-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+      .ab-widget-summary-note{margin:0;padding:0 2px;color:#64748b;font-size:12px;line-height:1.6;}
+      .ab-widget-overview-card{display:grid;gap:4px;padding:12px 13px;border-radius:16px;background:#fff;border:1px solid rgba(15,23,42,.06);box-shadow:none;}
+      .ab-widget-overview-label{font-size:10px;color:#64748b;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+      .ab-widget-overview-value{font-size:13px;font-weight:800;line-height:1.5;}
+      .ab-widget-toolbar{display:grid;gap:8px;padding:12px 13px;border-radius:18px;background:rgba(246,249,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:none;}
+      .ab-widget-toolbar-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+      .ab-widget-toolbar-label{font-size:12px;font-weight:800;color:#0f172a;}
+      .ab-widget-shortcuts{display:flex;flex-wrap:wrap;gap:6px;}
+      .ab-widget-shortcut{min-height:32px;padding:0 11px;border:1px solid rgba(15,23,42,.07);border-radius:999px;background:#fff;color:#334155;font:inherit;font-size:11px;font-weight:800;cursor:pointer;transition:transform var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease,color var(--ab-motion-fast) ease;}
+      .ab-widget-shortcut:hover{transform:none;box-shadow:none;background:rgba(29,109,255,.08);color:#0d3ea7;}
+      .ab-widget-search{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:9px 11px;border-radius:14px;background:#fff;border:1px solid rgba(15,23,42,.06);}
+      .ab-widget-search-meta{font-size:10px;color:#64748b;font-weight:800;white-space:nowrap;}
+      .ab-widget-active-state{display:grid;gap:10px;padding:13px 14px;border-radius:18px;background:rgba(247,250,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:none;}
+      .ab-widget-starter-strip{display:grid;gap:10px;padding:13px 14px;border-radius:18px;background:rgba(247,250,253,.96);border:1px solid rgba(15,23,42,.06);box-shadow:none;}
+      .ab-widget-starter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+      .ab-widget-starter-card{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:12px;border-radius:18px;background:#fff;border:1px solid rgba(15,23,42,.06);box-shadow:none;transition:border-color var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease;}
+      .ab-widget-starter-card:hover{transform:none;box-shadow:none;background:rgba(249,251,255,.98);}
+      .ab-widget-starter-card.is-active{border-color:rgba(29,109,255,.18);background:rgba(245,249,255,.98);box-shadow:none;}
+      .ab-widget-section{display:grid;gap:10px;padding:2px 0;}
+      .ab-widget-section-head{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;padding:0 2px;}
+      .ab-widget-section-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:rgba(29,109,255,.08);color:#0d3ea7;box-shadow:none;}
+      .ab-widget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;min-width:0;}
+      .ab-widget-card{position:relative;display:grid;gap:8px;align-content:start;min-height:auto;min-width:0;padding:14px;border-radius:18px;background:#fff;border:1px solid rgba(15,23,42,.06);box-shadow:none;transition:border-color var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease,opacity var(--ab-motion-fast) ease,filter var(--ab-motion-fast) ease;}
+      .ab-widget-card:hover{transform:none;box-shadow:none;background:rgba(250,252,255,.98);}
+      .ab-widget-card.is-search-hit,.ab-widget-premium-item.is-search-hit{border-color:rgba(29,109,255,.2);box-shadow:none;}
+      .ab-widget-profile-card.is-active{border-color:rgba(29,109,255,.2);background:rgba(245,249,255,.98);box-shadow:none;}
+      .ab-widget-card-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:14px;background:rgba(29,109,255,.08);color:#0d3ea7;border:1px solid rgba(29,109,255,.08);box-shadow:none;}
+      .ab-widget-card-title{font-size:13px;font-weight:800;line-height:1.45;}
+      .ab-widget-card-copy{margin:0;color:#64748b;font-size:11px;line-height:1.65;}
+      .ab-widget-choice-button,.ab-widget-toggle-button,.ab-widget-lock-button,.ab-widget-link{min-height:38px;min-width:0;padding:0 12px;border-radius:999px;border:1px solid rgba(15,23,42,.08);background:#fff;color:#0f172a;display:inline-flex;align-items:center;justify-content:center;font:inherit;font-size:12px;font-weight:800;text-decoration:none;cursor:pointer;transition:background var(--ab-motion-fast) ease,color var(--ab-motion-fast) ease,border-color var(--ab-motion-fast) ease;box-shadow:none;text-align:center;white-space:normal;line-height:1.35;}
+      .ab-widget-choice-button:hover,.ab-widget-toggle-button:hover,.ab-widget-lock-button:hover,.ab-widget-link:hover{transform:none;box-shadow:none;background:rgba(249,251,255,.98);}
+      .ab-widget-choice-button.is-active,.ab-widget-toggle-button.is-active{background:#0f172a;color:#fff;border-color:#0f172a;}
+      .ab-widget-upgrade-card{position:relative;display:grid;gap:10px;padding:16px 16px 14px;border-radius:20px;background:linear-gradient(180deg,rgba(247,248,252,.98),rgba(243,246,250,.98));border:1px solid rgba(15,23,42,.08);box-shadow:none;overflow:hidden;}
+      .ab-widget-upgrade-card::after{display:none;}
+      .ab-widget-mini-badge{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:999px;background:rgba(15,23,42,.06);color:#334155;font-size:10px;font-weight:800;}
+      .ab-widget-premium-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:2px;}
+      .ab-widget-premium-item{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:11px 12px;border-radius:16px;background:#fff;border:1px solid rgba(15,23,42,.06);transition:border-color var(--ab-motion-fast) ease,background var(--ab-motion-fast) ease;box-shadow:none;}
+      .ab-widget-premium-item:hover{transform:none;box-shadow:none;border-color:rgba(15,23,42,.1);background:rgba(250,252,255,.98);}
+      .ab-widget-premium-more{margin:0;grid-column:1 / -1;color:#0f172a;font-size:12px;font-weight:700;text-align:center;}
+      .ab-widget-premium-note{margin:0;color:#64748b;font-size:12px;line-height:1.65;}
+      .ab-widget-link-premium{background:#0f172a;color:#fff;border-color:#0f172a;}
+      .ab-widget-footer{display:grid;gap:10px;padding-top:14px;border-top:1px solid rgba(15,23,42,.08);}
+      .ab-widget-note{margin:0;color:#64748b;font-size:12px;line-height:1.6;}
+      .ab-widget-shell.ab-is-updating .ab-widget-panel{box-shadow:0 30px 78px rgba(29,109,255,.16);border-color:rgba(29,109,255,.14);}
       .ab-reading-guide{position:fixed;left:0;right:0;height:72px;pointer-events:none;z-index:999998;background:linear-gradient(180deg,rgba(29,109,255,.04),rgba(29,109,255,.14),rgba(29,109,255,.04));border-top:1px solid rgba(29,109,255,.18);border-bottom:1px solid rgba(29,109,255,.18);backdrop-filter:blur(2px);display:none;}
       html.ab-theme-bright{filter:brightness(1.06) contrast(1.04);}
       html.ab-theme-dark{filter:brightness(.86) contrast(1.08);}
@@ -1600,12 +1761,14 @@
         .ab-widget-panel{width:min(520px,calc(100vw - 24px));max-height:min(78vh,760px);padding:16px;}
         .ab-widget-search{grid-template-columns:1fr;}
         .ab-widget-search-icon,.ab-widget-search-meta{display:none;}
+        .ab-widget-summary-metrics,
         .ab-widget-hero-card,
         .ab-widget-overview,
         .ab-widget-sections,
         .ab-widget-sections.ab-layout-split,
         .ab-widget-grid,
         .ab-widget-grid-profiles,
+        .ab-widget-starter-grid,
         .ab-widget-premium-list,
         .ab-widget-premium-stats,
         .ab-widget-choice-group,
@@ -1622,11 +1785,13 @@
         .ab-widget-toolbar{padding:12px;}
         .ab-widget-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
         .ab-widget-shortcut{justify-content:center;}
+        .ab-widget-summary-metrics,
         .ab-widget-hero-card,
         .ab-widget-overview,
         .ab-widget-sections.ab-layout-split,
         .ab-widget-grid,
         .ab-widget-grid-profiles,
+        .ab-widget-starter-grid,
         .ab-widget-premium-list,
         .ab-widget-premium-stats,
         .ab-widget-promise-rail,
