@@ -120,6 +120,34 @@ if ($act === 'ping') {
         echo json_encode(['log' => implode('', $lines)]);
     }
 
+// ─── WP FIX - Find and disable crashed WordPress plugin ─────────────────────
+} elseif ($act === 'wp-fix') {
+    $base = '/home/535938.cloudwaysapps.com/';
+    $result = ['action' => 'wp-fix'];
+    if (is_dir($base)) {
+        foreach (scandir($base) as $d) {
+            if ($d === '.' || $d === '..' || $d === 'axfpmrapnb') continue;
+            $wpConfig = $base . $d . '/public_html/wp-config.php';
+            if (file_exists($wpConfig)) {
+                $result['wp_dir'] = $d;
+                $pluginName = $_GET['plugin'] ?? 'brndini-performance';
+                $pluginDir = $base . $d . '/public_html/wp-content/plugins/' . basename($pluginName);
+                $result['plugin_path'] = $pluginDir;
+                $result['plugin_exists'] = is_dir($pluginDir);
+                if (is_dir($pluginDir)) {
+                    $renamed = @rename($pluginDir, $pluginDir . '-DISABLED');
+                    $result['renamed'] = $renamed;
+                    $result['status'] = $renamed ? 'Plugin disabled!' : 'Rename failed';
+                } else {
+                    $result['already_disabled'] = is_dir($pluginDir . '-DISABLED');
+                    $result['status'] = 'Not found (may be disabled already)';
+                }
+                break;
+            }
+        }
+    }
+    echo json_encode($result, JSON_PRETTY_PRINT);
+
 } else {
     echo json_encode(['error' => 'unknown action: ' . $act]);
 }
