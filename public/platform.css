@@ -11406,6 +11406,34 @@ body.has-sticky-header-scrolled .site-header-public {
     background: transparent;
 }
 
+.page-home .site-footer-top {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding-bottom: 18px;
+}
+
+.page-home .site-footer-brand {
+    max-width: 480px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.page-home .site-footer-brand p,
+.page-home .site-footer-links {
+    display: none;
+}
+
+.page-home .site-footer-bottom {
+    justify-content: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.page-home .footer-inline-links {
+    justify-content: center;
+    gap: 10px 16px;
+}
+
 .page-home .site-footer-top,
 .page-home .site-footer-bottom {
     border-color: rgba(255, 255, 255, 0.06);
@@ -11466,6 +11494,18 @@ body.has-sticky-header-scrolled .site-header-public {
         margin-bottom: 24px;
     }
 
+    .page-home .site-header-public .site-nav {
+        gap: 4px;
+    }
+
+    .page-home .site-header-public .site-nav a,
+    .page-home .site-header-public .site-nav .nav-button-secondary,
+    .page-home .site-header-public .site-nav .nav-button-primary {
+        min-height: 36px;
+        padding: 0 9px;
+        font-size: 0.78rem;
+    }
+
     .page-home .public-stage-copy h1 {
         max-width: 7.6ch;
         font-size: clamp(3.2rem, 14vw, 5rem);
@@ -11490,10 +11530,29 @@ body.has-sticky-header-scrolled .site-header-public {
 
     .page-home .public-logo-band {
         gap: 10px;
+        grid-template-columns: 1fr;
+        font-size: 0.74rem;
     }
 
     .page-home .public-metric-line strong {
         font-size: 2.5rem;
+    }
+
+    .page-home .public-showcase-copy strong {
+        font-size: 1.14rem;
+    }
+
+    .page-home .public-shell-section-darkend {
+        padding-bottom: 28px;
+    }
+
+    .page-home .site-footer {
+        padding-top: 18px;
+        padding-bottom: 22px;
+    }
+
+    .page-home .footer-inline-links {
+        display: none;
     }
 }
 
