@@ -10443,3 +10443,79 @@ h3,
         grid-template-columns: 1fr;
     }
 }
+
+/* Visual correction after live screenshot review */
+.page-shell-public,
+.site-header,
+.site-header-public,
+.public-stage,
+.public-shell-section,
+.site-footer,
+.articles-shell,
+.faq-shell,
+.legal-shell,
+.public-page .articles-hero,
+.public-page .articles-layout {
+    margin-inline: auto;
+}
+
+.public-stage,
+.public-shell-section,
+.site-footer {
+    max-width: min(1360px, calc(100% - 56px));
+}
+
+.public-stage {
+    grid-template-columns: minmax(380px, 0.94fr) minmax(0, 1.06fr);
+    gap: 64px;
+    padding-top: 56px;
+}
+
+.public-stage-copy {
+    max-width: 680px;
+}
+
+.public-stage-copy h1 {
+    max-width: 9.8ch;
+    font-size: clamp(3.4rem, 6vw, 6.2rem);
+}
+
+.public-stage-copy .hero-text-lead {
+    max-width: 46ch;
+    font-size: 1.04rem;
+}
+
+.public-stage-visual {
+    justify-content: center;
+}
+
+.public-device-shell-poster {
+    max-width: 560px;
+    min-height: 660px;
+}
+
+.public-stage-canvas-copy strong {
+    max-width: 12ch;
+    font-size: 1.86rem;
+}
+
+.public-proof-rail,
+.public-dual-panel,
+.public-bridge-layout {
+    max-width: 1240px;
+}
+
+.site-header,
+.site-header-public {
+    max-width: min(1360px, calc(100% - 56px));
+}
+
+@media (max-width: 760px) {
+    .public-stage,
+    .public-shell-section,
+    .site-footer,
+    .site-header,
+    .site-header-public {
+        max-width: calc(100% - 24px);
+    }
+}
