@@ -1,6 +1,8 @@
 name: Deploy to Cloudways
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -42,11 +44,32 @@ jobs:
           CW_PASSWORD: ${{ secrets.CW_PASSWORD }}
           CW_APP_PATH: ${{ secrets.CW_APP_PATH }}
         run: |
-          REMOTE_CMD='set -e; cd "'"$CW_APP_PATH"'"; git pull origin main; composer install --no-dev --optimize-autoloader --no-interaction; php artisan migrate --force; php artisan optimize:clear'
+          DEPLOY_SCRIPT='
+          set -e
+          cd "'"$CW_APP_PATH"'"
+
+          echo "==> Pulling latest code..."
+          git pull origin main
+
+          echo "==> Installing dependencies..."
+          composer install --no-dev --optimize-autoloader --no-interaction
+
+          echo "==> Running migrations..."
+          php artisan migrate --force
+
+          echo "==> Clearing all caches..."
+          php artisan optimize:clear
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+          echo "==> Deploy complete!"
+          '
+
           if [ -n "$CW_PASSWORD" ]; then
-            sudo apt-get update
-            sudo apt-get install -y sshpass
-            sshpass -p "$CW_PASSWORD" ssh -o StrictHostKeyChecking=no "$CW_USER@$CW_HOST" "$REMOTE_CMD"
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq sshpass
+            sshpass -p "$CW_PASSWORD" ssh -o StrictHostKeyChecking=no "$CW_USER@$CW_HOST" "$DEPLOY_SCRIPT"
           else
-            ssh -i ~/.ssh/id_ed25519 "$CW_USER@$CW_HOST" "$REMOTE_CMD"
+            ssh -i ~/.ssh/id_ed25519 "$CW_USER@$CW_HOST" "$DEPLOY_SCRIPT"
           fi
