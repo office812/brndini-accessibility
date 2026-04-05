@@ -89,6 +89,10 @@
                                         </span>
                                     @endif
                                     @if($installState === 'pending')
+                                        <div class="pending-hint">
+                                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 16h-1v-4h-1m1-4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+                                            טיפ: פתח את האתר בטאב חדש אחרי ההטמעה — המצב יתעדכן אוטומטית תוך דקה.
+                                        </div>
                                         <a class="install-state-action primary-button" href="#" onclick="document.querySelector('[data-dashboard-tab-button=install-code]').click(); return false;">העתק קוד הטמעה</a>
                                     @endif
                                 </div>

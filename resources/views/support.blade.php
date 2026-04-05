@@ -152,9 +152,15 @@
                             </div>
 
                             @if ($supportTickets->isEmpty())
-                                <div class="support-empty-state">
-                                <strong>עדיין אין פניות פעילות</strong>
-                                <p>ברגע שתפתח פנייה ראשונה, היא תופיע כאן עם סטטוס, עדיפות ומספר טיקט מסודר.</p>
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">
+                                        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke="currentColor" stroke-width="1.5"/>
+                                        </svg>
+                                    </div>
+                                    <h3>אין טיקטים פתוחים</h3>
+                                    <p>הכל תקין! אם צריך עזרה טכנית עם המערכת, פותחים טיקט מכאן.</p>
                                 </div>
                             @else
                                 <div class="support-ticket-list">

@@ -420,6 +420,16 @@
                     </div>
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="new-site">
+                        <div class="new-site-hero">
+                            <div class="empty-state-icon">
+                                <svg width="40" height="40" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <h3>הוספת אתר נוסף</h3>
+                            <p>כל אתר מקבל site key ייחודי, קוד הטמעה ונגישות עצמאית שנמשכת מאותו דשבורד.</p>
+                        </div>
                         <section class="licenses-lower-grid licenses-lower-grid-single" id="new-license-form">
                             <article class="portal-content-card">
                                 <div>

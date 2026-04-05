@@ -91,6 +91,19 @@
                             </article>
                         </section>
 
+                        @if($auditSnapshot['score'] === 'N/A' || !isset($auditSnapshot['score']))
+                        <div class="empty-state empty-state-audit">
+                            <div class="empty-state-icon">
+                                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>עדיין לא הרצת בדיקת נגישות</h3>
+                            <p>הבדיקה בודקת ניגודיות, כותרות, alt text ועוד. לוחצים "הרץ בדיקה" למטה כדי להתחיל.</p>
+                        </div>
+                        @endif
+
                         <section class="domain-card" id="audit-report">
                             <h2>בדיקות פתוחות</h2>
                             <div class="audit-check-list">
