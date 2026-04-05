@@ -15045,9 +15045,9 @@ header.site-header .site-nav a.nav-button-primary:hover {
 
 .page-home header.site-header.site-header-public .site-nav .nav-button-primary,
 .page-home header.site-header.site-header-public .site-nav a.nav-button-primary {
-    background: linear-gradient(135deg, #a7d664, #6f9e38 92%) !important;
-    color: #15230c !important;
-    box-shadow: 0 8px 24px rgba(125,170,64,0.32) !important;
+    background: #fff !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
 }
 
 /* ─── App header final override ────────────────────────────────────────────── */
