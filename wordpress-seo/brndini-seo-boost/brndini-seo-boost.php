@@ -381,14 +381,18 @@ class Brndini_SEO_Boost {
     public function handle_case_study_redirects() {
         $request_uri = urldecode($_SERVER['REQUEST_URI'] ?? '');
 
-        // Redirect /case-study/X/ to /סיפורי-הצלחה/X/
+        // Redirect /case-study/X/ to /סיפורי-הצלחה/X/ (301 permanent)
         if (preg_match('#^/case-study/(.+)$#u', $request_uri, $matches)) {
             $slug = $matches[1];
-            $target = '/סיפורי-הצלחה/' . $slug;
-
-            // Check if target page exists before redirecting
-            $target_url = home_url($target);
+            // Always use https to avoid mixed-content and http→https redirect chains
+            $target_url = 'https://brndini.co.il/' . rawurlencode('סיפורי-הצלחה') . '/' . $slug;
             wp_redirect($target_url, 301);
+            exit;
+        }
+
+        // Also handle /case-study/ archive → /סיפורי-הצלחה/
+        if (rtrim($request_uri, '/') === '/case-study') {
+            wp_redirect('https://brndini.co.il/' . rawurlencode('סיפורי-הצלחה') . '/', 301);
             exit;
         }
     }
