@@ -269,8 +269,7 @@ code {
 }
 
 .page-shell {
-    width: min(1260px, calc(100% - 40px));
-    margin: 0 auto;
+    width: 100%;
     min-height: 100vh;
     padding: 18px 0 0;
     display: flex;
@@ -285,15 +284,15 @@ code {
 }
 
 .page-shell-app {
-    width: min(1440px, calc(100% - 24px));
+    width: 100%;
 }
 
 .page-shell-public {
-    width: min(1360px, calc(100% - 44px));
+    width: 100%;
 }
 
 .page-shell-home {
-    width: min(1440px, calc(100% - 48px));
+    width: 100%;
     padding-top: 14px;
 }
 
@@ -8044,7 +8043,7 @@ body.public-page::before {
 
 .page-shell-public,
 .page-shell-home {
-    width: min(1280px, calc(100% - 40px));
+    width: 100%;
 }
 
 .site-header,
@@ -11670,9 +11669,8 @@ body.has-sticky-header-scrolled .site-header-public {
 }
 
 .auth-shell {
-    width: min(1360px, calc(100% - 32px));
-    margin: 0 auto;
-    padding: 22px 0 40px;
+    width: 100%;
+    padding: 22px 24px 40px;
 }
 
 .auth-screen-signup {
@@ -11682,6 +11680,9 @@ body.has-sticky-header-scrolled .site-header-public {
     gap: 20px;
     direction: ltr;
     align-items: start;
+    max-width: 1360px;
+    margin-inline: auto;
+    width: 100%;
 }
 
 .auth-screen-signup .auth-screen-panel,
@@ -11910,6 +11911,9 @@ body.has-sticky-header-scrolled .site-header-public {
     gap: 18px;
     direction: ltr;
     align-items: start;
+    max-width: 1360px;
+    margin-inline: auto;
+    width: 100%;
 }
 
 .auth-screen-login .auth-screen-panel,
@@ -13133,7 +13137,7 @@ body.auth-page {
 
 .public-page:not(.page-home) .page-shell-public,
 .auth-page .auth-shell {
-    width: min(1320px, calc(100% - 40px));
+    width: 100%;
 }
 
 .public-page:not(.page-home) .site-header,
