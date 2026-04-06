@@ -6,6 +6,9 @@
     <title>{{ $title ?? 'A11Y Bridge' }}</title>
     <meta name="description" content="{{ $metaDescription ?? 'A11Y Bridge היא פלטפורמה חינמית להטמעת וידג׳ט נגישות עם דשבורד, קוד הטמעה קבוע וגישה נוחה להצהרה בסיסית.' }}">
     <link rel="canonical" href="{{ $canonicalUrl ?? url()->current() }}">
+    <link rel="icon" type="image/png" href="{{ url('/inn-logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ url('/inn-logo.png') }}">
+    <meta name="theme-color" content="#0a101e">
     <meta property="og:title" content="{{ $title ?? 'A11Y Bridge' }}">
     <meta property="og:description" content="{{ $metaDescription ?? 'פלטפורמה חינמית להטמעת וידג׳ט נגישות עם דשבורד ניהול וקוד הטמעה קבוע.' }}">
     <meta property="og:type" content="website">
@@ -43,7 +46,6 @@
                         </span>
                         <span class="app-brand-copy">
                             <strong>A11Y Bridge</strong>
-                            <small>סביבת ניהול וידג׳ט</small>
                         </span>
                     </a>
                 </div>
@@ -57,39 +59,48 @@
                 <div class="app-header-menu" id="app-menu-panel" data-header-menu-panel="app-menu">
                     <div class="app-header-left">
                         <nav class="app-nav" aria-label="ניווט מערכת">
-                            <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard', $siteRouteParams) }}">הרישיונות שלי</a>
-                            <a class="{{ request()->routeIs('dashboard.services') ? 'is-current' : '' }}" href="{{ route('dashboard.services', $siteRouteParams) }}">השירותים שלי</a>
-                            <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', $siteRouteParams) }}">דוחות ובקרה</a>
-                            <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account', $siteRouteParams) }}">החשבון</a>
+                            <a class="{{ request()->routeIs('dashboard') ? 'is-current' : '' }}" href="{{ route('dashboard', $siteRouteParams) }}">רישיונות</a>
+                            <a class="{{ request()->routeIs('dashboard.services') ? 'is-current' : '' }}" href="{{ route('dashboard.services', $siteRouteParams) }}">שירותים</a>
+                            <a class="{{ request()->routeIs('dashboard.compliance') ? 'is-current' : '' }}" href="{{ route('dashboard.compliance', $siteRouteParams) }}">דוחות</a>
+                            <a class="{{ request()->routeIs('dashboard.support') ? 'is-current' : '' }}" href="{{ route('dashboard.support', $siteRouteParams) }}">תמיכה</a>
+                            <a class="{{ request()->routeIs('dashboard.account') ? 'is-current' : '' }}" href="{{ route('dashboard.account', $siteRouteParams) }}">חשבון</a>
                             @if (($user ?? Auth::user())?->isSuperAdmin())
-                                <a class="{{ request()->routeIs('dashboard.super-admin') ? 'is-current' : '' }}" href="{{ route('dashboard.super-admin') }}">סופר־אדמין</a>
+                                <a class="{{ request()->routeIs('dashboard.super-admin') ? 'is-current' : '' }}" href="{{ route('dashboard.super-admin') }}">אדמין</a>
                             @endif
                         </nav>
                     </div>
 
                     <div class="app-header-right">
-                        <a class="app-header-cta" href="{{ route('dashboard.support', $siteRouteParams) }}">תמיכה טכנית</a>
+                        <button class="app-cmdk-trigger" type="button" aria-label="חיפוש מהיר" data-cmdk-open>
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                            <span>חיפוש</span>
+                            <kbd>⌘K</kbd>
+                        </button>
+                        <span class="app-header-sep" aria-hidden="true"></span>
                         <div class="app-user-pill">
                             <span class="app-user-avatar">{{ strtoupper(mb_substr($user->name ?? Auth::user()->name, 0, 1)) }}</span>
-                            <span>{{ $user->name ?? Auth::user()->name }}</span>
+                            <span class="app-user-name">{{ $user->name ?? Auth::user()->name }}</span>
                         </div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button class="app-logout-button" type="submit">התנתקות</button>
+                            <button class="app-logout-button" type="submit" title="התנתקות">
+                                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <span class="app-logout-label">יציאה</span>
+                            </button>
                         </form>
                     </div>
                 </div>
                 <button class="header-menu-backdrop" type="button" aria-label="סגור תפריט" data-header-menu-backdrop="app-menu"></button>
             </header>
         @else
-            <header class="site-header {{ request()->routeIs('home') ? 'site-header-public' : '' }}">
+            <header class="site-header site-header-public">
                 <a class="brand" href="{{ route('home') }}">
                     <span class="brand-mark" aria-hidden="true">
                         <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
                     </span>
                     <span>
                         <strong>A11Y Bridge</strong>
-                        <small>כלי חינמי self-service להטמעת וידג׳ט נגישות</small>
+                        <small>וידג׳ט נגישות חינמי</small>
                     </span>
                 </a>
 
@@ -106,19 +117,18 @@
                             <a href="{{ route('how-it-works') }}">איך זה עובד</a>
                             <a href="{{ route('articles.index') }}">מרכז ידע</a>
                             <a href="#faq">שאלות נפוצות</a>
-                            <a class="nav-button-secondary nav-button-hub" href="{{ route('login.show') }}">התחברות</a>
-                            <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                         @else
-                            <a class="{{ request()->routeIs('home') ? 'is-current' : '' }}" href="{{ route('home') }}">בית</a>
                             <a class="{{ request()->routeIs('how-it-works') ? 'is-current' : '' }}" href="{{ route('how-it-works') }}">איך זה עובד</a>
-                            <a class="{{ request()->routeIs('free-tool') || request()->routeIs('pricing') ? 'is-current' : '' }}" href="{{ route('free-tool') }}">מה כלול בחינם</a>
+                            <a class="{{ request()->routeIs('free-tool') || request()->routeIs('pricing') ? 'is-current' : '' }}" href="{{ route('free-tool') }}">מה כלול</a>
                             <a class="{{ request()->routeIs('articles.*') ? 'is-current' : '' }}" href="{{ route('articles.index') }}">מרכז ידע</a>
                             <a class="{{ request()->routeIs('faq') ? 'is-current' : '' }}" href="{{ route('faq') }}">שאלות נפוצות</a>
-                            <a class="{{ request()->routeIs('about') ? 'is-current' : '' }}" href="{{ route('about') }}">אודות</a>
-                            <a class="nav-button-secondary nav-button-hub {{ request()->routeIs('brndini.home') || request()->routeIs('products') || request()->routeIs('brndini.services') ? 'is-current' : '' }}" href="{{ route('brndini.home', $marketingParams) }}">Brndini</a>
-                            <a class="nav-button-secondary" href="{{ route('login.show') }}">התחברות</a>
-                            <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">פתיחת חשבון חינמי</a>
                         @endif
+                        <span class="site-nav-sep" aria-hidden="true"></span>
+                        <a class="nav-brndini-badge {{ request()->routeIs('brndini.*') || request()->routeIs('products') ? 'is-current' : '' }}" href="{{ route('brndini.home', $marketingParams) }}">
+                            <span class="nav-brndini-dot" aria-hidden="true"></span>Brndini
+                        </a>
+                        <a class="nav-button-secondary" href="{{ route('login.show') }}">התחברות</a>
+                        <a class="nav-button nav-button-primary" href="{{ route('register.show') }}">הצטרפות חינם</a>
                     </nav>
                 </div>
                 <button class="header-menu-backdrop" type="button" aria-label="סגור תפריט" data-header-menu-backdrop="site-menu"></button>
@@ -227,6 +237,23 @@
             </footer>
         @endguest
     </div>
+
+    <!-- Command Palette -->
+<div class="cmd-palette-overlay" id="cmd-palette" aria-modal="true" role="dialog" aria-label="חיפוש מהיר" hidden>
+    <div class="cmd-palette-panel">
+        <div class="cmd-palette-search">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" aria-hidden="true" class="cmd-search-icon"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="text" id="cmd-input" placeholder="חפש עמוד, פעולה..." autocomplete="off" dir="rtl">
+            <kbd class="cmd-esc-hint">ESC</kbd>
+        </div>
+        <ul class="cmd-results" id="cmd-results" role="listbox"></ul>
+        <div class="cmd-palette-footer">
+            <span><kbd>↑↓</kbd> ניווט</span>
+            <span><kbd>↵</kbd> מעבר</span>
+            <span><kbd>ESC</kbd> סגירה</span>
+        </div>
+    </div>
+</div>
 
     <script src="{{ url('/platform.js') }}?v={{ $assetVersion ?? '1' }}" defer></script>
 

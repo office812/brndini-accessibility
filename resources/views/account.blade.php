@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="billing-hero-meta">
-                    <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
+                    <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-bad' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
                     <span class="status-pill is-neutral">{{ $currentPlan['name'] }}</span>
                     <span class="status-pill is-neutral">חידוש: {{ $licenseExpiresLabel }}</span>
                 </div>

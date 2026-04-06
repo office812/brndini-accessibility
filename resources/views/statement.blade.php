@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@php($title = ($statementPreview['title'] ?? 'הצהרת נגישות') . ' | A11Y Bridge')
+@php($metaDescription = 'הצהרת נגישות עבור ' . ($site->site_name ?? $site->domain ?? 'האתר') . '. מוצגת על ידי A11Y Bridge.')
+
 @section('content')
     <section class="legal-shell">
         <article class="legal-card statement-public-card">

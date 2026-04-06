@@ -46,7 +46,7 @@
         </div>
     </section>
 
-    <section class="section-band">
+    <section class="section-band" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">למה זה מתאים לסוכנויות</p>
             <h2>כי סוכנות צריכה flow אחיד, ברור וקל להסבר ללקוחות, לא עוד כלי צדדי שמרגיש זמני.</h2>
@@ -88,7 +88,7 @@
         </div>
     </section>
 
-    <section class="section-band section-band-alt">
+    <section class="section-band section-band-alt" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">איך זה נראה ביום הראשון</p>
             <h2>סוכנות יכולה להתחיל מהר, ועדיין להרגיש שיש לה סביבת עבודה מסודרת לאורך זמן.</h2>

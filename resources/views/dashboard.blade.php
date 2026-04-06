@@ -36,7 +36,7 @@
 
             <div class="licenses-sidebar-block licenses-sidebar-help">
                 <span class="meta-label">אתר פעיל</span>
-                <h3>{{ $site->site_name }}</h3>
+                <h3 class="site-name-with-favicon"><img class="site-favicon" src="" data-site-favicon="{{ $site->domain }}" alt="" aria-hidden="true" width="20" height="20">{{ $site->site_name }}</h3>
                 <p>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</p>
                 <div class="mini-status-list">
                     <span class="status-pill {{ $licenseStatus === 'active' ? 'is-good' : 'is-warn' }}">{{ $licenseStatus === 'active' ? 'רישיון פעיל' : 'רישיון לא פעיל' }}</span>
@@ -55,6 +55,52 @@
                     statement בסיסי, חשבון ותנועה לשכבת Brndini רק כשיש צורך עסקי רחב יותר.
                 </p>
             </section>
+
+            @if($installationTone !== 'good' && session('status') && str_contains(session('status'), 'החשבון נוצר'))
+<section class="dashboard-welcome-banner">
+    <div class="dashboard-welcome-banner-inner">
+        <div class="dashboard-welcome-icon" aria-hidden="true">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="dashboard-welcome-copy">
+            <strong>ברוך הבא, {{ $user->name }}! החשבון מוכן — עכשיו נחבר את האתר.</strong>
+            <p>שלב אחד נותר: מעתיקים את קוד ההטמעה ומדביקים באתר. לאחר מכן הדשבורד יזהה אוטומטית שהווידג׳ט פעיל.</p>
+        </div>
+        <a class="dashboard-welcome-cta" href="{{ route('dashboard.install', ['site' => $site->id]) }}">
+            לקוד ההטמעה
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+    </div>
+</section>
+@elseif($installationTone !== 'good')
+<section class="dashboard-install-reminder">
+    <div class="dashboard-install-reminder-inner">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="0.8" fill="currentColor"/></svg>
+        <span>הווידג׳ט עדיין לא זוהה באתר <strong>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</strong>. <a href="{{ route('dashboard.install', ['site' => $site->id]) }}">להטמעה ←</a></span>
+    </div>
+</section>
+@elseif($installationTone === 'good' && $statementConnected && $licenseStatus === 'active')
+<section class="dashboard-all-done-banner">
+    <div class="dashboard-all-done-icon" aria-hidden="true">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+    </div>
+    <div class="dashboard-all-done-copy">
+        <strong>הכול מוכן — ווידג׳ט פעיל, הצהרה מחוברת, רישיון תקין</strong>
+        <p>האתר <strong>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</strong> עובד. אפשר להמשיך לבדיקות, לעדכן הגדרות, או פשוט לתת לזה לרוץ.</p>
+    </div>
+    <div class="dashboard-all-done-badge">
+        <span class="status-pill is-good">ווידג׳ט פעיל</span>
+        <span class="status-pill is-good">הצהרה מחוברת</span>
+    </div>
+</section>
+@elseif($installationTone === 'good' && !$statementConnected)
+<section class="dashboard-install-reminder" style="background: rgba(20,45,80,0.4); border-color: rgba(99,179,255,0.2);">
+    <div class="dashboard-install-reminder-inner">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"/></svg>
+        <span>הווידג׳ט פעיל — <strong>שלב אחרון:</strong> <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">חבר הצהרת נגישות ←</a></span>
+    </div>
+</section>
+@endif
 
             @unless($platformReadiness['ready'])
                 <section class="alert-strip">
@@ -395,6 +441,16 @@
                     </div>
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="new-site">
+                        <div class="new-site-hero">
+                            <div class="empty-state-icon">
+                                <svg width="40" height="40" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <h3>הוספת אתר נוסף</h3>
+                            <p>כל אתר מקבל site key ייחודי, קוד הטמעה ונגישות עצמאית שנמשכת מאותו דשבורד.</p>
+                        </div>
                         <section class="licenses-lower-grid licenses-lower-grid-single" id="new-license-form">
                             <article class="portal-content-card">
                                 <div>

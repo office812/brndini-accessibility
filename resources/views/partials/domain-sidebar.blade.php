@@ -13,6 +13,7 @@
     </label>
 
     <div class="domain-select-pill">
+        <img class="site-favicon" src="" data-site-favicon="{{ $site->domain }}" alt="" aria-hidden="true" width="20" height="20">
         <span>{{ $domainLabel }}</span>
         <span aria-hidden="true">{{ $licenseStatus === 'active' ? '✓' : '!' }}</span>
     </div>

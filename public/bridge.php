@@ -39,8 +39,9 @@ if ($act === 'ping') {
 
 // ─── WRITE FILE ──────────────────────────────────────────────────────────────
 } elseif ($act === 'write') {
-    $rel     = ltrim($_GET['path'] ?? '', '/');
-    $content = base64_decode($_GET['content'] ?? '');
+    $rel     = ltrim(($_POST['path'] ?? $_GET['path'] ?? ''), '/');
+    $raw     = $_POST['content'] ?? $_GET['content'] ?? '';
+    $content = base64_decode($raw);
     if (!$rel || $content === false) {
         echo json_encode(['error' => 'missing path or content']);
     } else {
@@ -96,8 +97,10 @@ if ($act === 'ping') {
 
 // ─── TRIGGER DEPLOY ──────────────────────────────────────────────────────────
 } elseif ($act === 'deploy') {
-    // Write trigger inside APP dir - accessible by both PHP-FPM and cron
-    file_put_contents($APP . '/.deploy-trigger', '1');
+    // Write trigger inside APP dir - readable by cron user
+    $triggerFile = $APP . '/.deploy-trigger';
+    file_put_contents($triggerFile, '1');
+    @chmod($triggerFile, 0666); // ensure cron user can read it
     echo json_encode(['queued' => true, 'message' => 'Deploy will run within 60 seconds']);
 
 // ─── APP ENV ─────────────────────────────────────────────────────────────────
@@ -120,33 +123,36 @@ if ($act === 'ping') {
         echo json_encode(['log' => implode('', $lines)]);
     }
 
-// ─── WP FIX - Find and disable crashed WordPress plugin ─────────────────────
-} elseif ($act === 'wp-fix') {
-    $base = '/home/535938.cloudwaysapps.com/';
-    $result = ['action' => 'wp-fix'];
-    if (is_dir($base)) {
-        foreach (scandir($base) as $d) {
-            if ($d === '.' || $d === '..' || $d === 'axfpmrapnb') continue;
-            $wpConfig = $base . $d . '/public_html/wp-config.php';
-            if (file_exists($wpConfig)) {
-                $result['wp_dir'] = $d;
-                $pluginName = $_GET['plugin'] ?? 'brndini-performance';
-                $pluginDir = $base . $d . '/public_html/wp-content/plugins/' . basename($pluginName);
-                $result['plugin_path'] = $pluginDir;
-                $result['plugin_exists'] = is_dir($pluginDir);
-                if (is_dir($pluginDir)) {
-                    $renamed = @rename($pluginDir, $pluginDir . '-DISABLED');
-                    $result['renamed'] = $renamed;
-                    $result['status'] = $renamed ? 'Plugin disabled!' : 'Rename failed';
-                } else {
-                    $result['already_disabled'] = is_dir($pluginDir . '-DISABLED');
-                    $result['status'] = 'Not found (may be disabled already)';
-                }
-                break;
-            }
-        }
+// ─── ARTISAN ─────────────────────────────────────────────────────────────────
+} elseif ($act === 'artisan') {
+    $cmd = $_GET['cmd'] ?? '';
+    // Whitelist safe artisan commands
+    $allowed = ['migrate', 'migrate --force', 'cache:clear', 'config:clear', 'view:clear', 'route:clear', 'optimize:clear'];
+    if (!in_array($cmd, $allowed)) {
+        echo json_encode(['error' => 'command not allowed: ' . $cmd]);
+    } else {
+        $phpBin  = PHP_BINARY;
+        $artisan = $APP . '/artisan';
+        $output  = shell_exec("cd $APP && $phpBin $artisan $cmd 2>&1");
+        echo json_encode(['ok' => true, 'output' => $output]);
     }
-    echo json_encode($result, JSON_PRETTY_PRINT);
+
+// ─── SHELL EXEC ──────────────────────────────────────────────────────────────
+} elseif ($act === 'shell') {
+    $cmd = $_POST['cmd'] ?? $_GET['cmd'] ?? '';
+    if (!$cmd) {
+        echo json_encode(['error' => 'missing cmd']);
+    } else {
+        $output = shell_exec("cd $APP && $cmd 2>&1");
+        echo json_encode(['ok' => true, 'output' => $output]);
+    }
+
+// ─── DELETE FILE ─────────────────────────────────────────────────────────────
+} elseif ($act === 'delete') {
+    $rel = ltrim($_GET['path'] ?? '', '/');
+    $abs = $APP . '/' . $rel;
+    $r = @unlink($abs);
+    echo json_encode(['ok' => $r, 'path' => $abs]);
 
 } else {
     echo json_encode(['error' => 'unknown action: ' . $act]);

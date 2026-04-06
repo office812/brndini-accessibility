@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\WelcomeMail;
+use App\Mail\WelcomeWithEmbedCode;
 use App\Models\User;
 use App\Models\Site;
 use App\Support\SiteSettings;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Carbon;
 use Throwable;
@@ -120,19 +120,20 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        $firstSite = $user->sites->first();
+        $site = $user->sites->first();
 
-        try {
-            if ($firstSite) {
-                Mail::to($user->email)->send(new WelcomeMail($user, $firstSite));
+        // שלח אימייל עם קוד ההטמעה — fail silently אם SMTP לא מוגדר
+        if ($site) {
+            try {
+                Mail::to($user->email)->send(new WelcomeWithEmbedCode($user, $site));
+            } catch (Throwable) {
+                // המשך בלי אימייל אם שליחה נכשלת
             }
-        } catch (Throwable) {
-            // Do not block registration if email fails
         }
 
         return redirect()
-            ->route('dashboard', ['site' => optional($firstSite)->id])
-            ->with('status', 'החשבון נוצר. עכשיו אפשר להגדיר את ה-widget ולקבל קוד הטמעה.');
+            ->route('dashboard.install', ['site' => optional($site)->id])
+            ->with('new_account', true);
     }
 
     public function login(Request $request): RedirectResponse

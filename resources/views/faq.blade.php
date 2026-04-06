@@ -20,7 +20,7 @@
         </div>
     </section>
 
-    <section class="public-shell-section">
+    <section class="public-shell-section" data-reveal>
         <div class="section-heading section-heading-center">
             <p class="eyebrow">שאלות ותשובות</p>
             <h2>מה שצריך להבין לפני שמטמיעים.</h2>

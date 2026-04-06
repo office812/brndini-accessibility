@@ -91,6 +91,19 @@
                             </article>
                         </section>
 
+                        @if($auditSnapshot['score'] === 'N/A' || !isset($auditSnapshot['score']))
+                        <div class="empty-state empty-state-audit">
+                            <div class="empty-state-icon">
+                                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <h3>עדיין לא הרצת בדיקת נגישות</h3>
+                            <p>הבדיקה בודקת ניגודיות, כותרות, alt text ועוד. לוחצים "הרץ בדיקה" למטה כדי להתחיל.</p>
+                        </div>
+                        @endif
+
                         <section class="domain-card" id="audit-report">
                             <h2>בדיקות פתוחות</h2>
                             <div class="audit-check-list">
@@ -171,29 +184,38 @@
                     </div>
 
                     <div class="dashboard-tab-panel" data-dashboard-tab-panel="statement-builder">
+
+                        {{-- Statement live banner --}}
+                        @if ($statementUrl)
+                            <div class="statement-live-banner">
+                                <div class="statement-live-banner-icon" aria-hidden="true">
+                                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+                                </div>
+                                <div class="statement-live-banner-body">
+                                    <strong>ההצהרה חיה ומוכנה לשיתוף</strong>
+                                    <span class="statement-live-url" id="statement-public-url">{{ $statementUrl }}</span>
+                                </div>
+                                <div class="statement-live-banner-actions">
+                                    <button class="ghost-button" type="button" data-copy-target="statement-public-url">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/></svg>
+                                        העתק קישור
+                                    </button>
+                                    <a class="primary-button" href="{{ $statementUrl }}" target="_blank" rel="noreferrer" style="font-size:0.85rem;padding:8px 14px;height:auto;">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" stroke="currentColor" stroke-width="2"/><polyline points="15 3 21 3 21 9" stroke="currentColor" stroke-width="2"/><line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" stroke-width="2"/></svg>
+                                        פתח הצהרה
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+
                         <section class="domain-card statement-builder-shell">
                             <div class="statement-builder-head">
                                 <div>
                                     <p class="eyebrow">יוצר הצהרת נגישות</p>
-                                    <h2>תהליך מונחה, קל ונעים ליצירת ההצהרה</h2>
-                                    <p class="panel-intro">עונים על כמה שאלות קצרות, בוחרים אפשרויות, ובסוף מקבלים ניסוח מוכן עם קישור ציבורי שאפשר לחבר לווידג׳ט ולחשבון.</p>
-                                </div>
-
-                                <div class="statement-builder-actions">
-                                    @if ($statementUrl)
-                                        <a class="secondary-button" href="{{ $statementUrl }}" target="_blank" rel="noreferrer">פתח הצהרה</a>
-                                    @endif
-                                    @if ($statementUrl)
-                                        <button class="copy-button" type="button" data-copy-target="statement-public-url">העתק קישור</button>
-                                    @endif
+                                    <h2>{{ $statementUrl ? 'עדכן את ההצהרה' : 'תהליך מונחה, קל ונעים ליצירת ההצהרה' }}</h2>
+                                    <p class="panel-intro">{{ $statementUrl ? 'הפרטים שמולאו כאן מוצגים בהצהרה הציבורית. שינויים יתעדכנו מיידית.' : 'עונים על כמה שאלות קצרות, בוחרים אפשרויות, ובסוף מקבלים ניסוח מוכן עם קישור ציבורי.' }}</p>
                                 </div>
                             </div>
-
-                            @if ($statementUrl)
-                                <div class="domain-code-block compact-code-block">
-                                    <code id="statement-public-url">{{ $statementUrl }}</code>
-                                </div>
-                            @endif
 
                             <div class="statement-builder-grid" data-widget-pane-root>
                                 <form class="statement-builder-form" method="POST" action="{{ route('dashboard.compliance.statement', ['site' => $site->id]) }}">

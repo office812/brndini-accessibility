@@ -758,3 +758,363 @@ document.addEventListener('DOMContentLoaded', function () {
 
   syncPreview();
 });
+
+// ─── Toast Notification System ───────────────────────────────────────────────
+(function () {
+  var toastContainer = null;
+
+  function ensureContainer() {
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.className = 'toast-container';
+      toastContainer.setAttribute('aria-live', 'polite');
+      toastContainer.setAttribute('aria-atomic', 'false');
+      document.body.appendChild(toastContainer);
+    }
+    return toastContainer;
+  }
+
+  window.showToast = function (message, type) {
+    type = type || 'success';
+    var container = ensureContainer();
+    var toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+
+    var icon = type === 'success'
+      ? '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : type === 'error'
+      ? '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>'
+      : '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="0.8" fill="currentColor"/></svg>';
+
+    toast.innerHTML = '<span class="toast-icon">' + icon + '</span><span class="toast-text">' + message + '</span>';
+    container.appendChild(toast);
+
+    requestAnimationFrame(function () {
+      toast.classList.add('is-visible');
+    });
+
+    window.setTimeout(function () {
+      toast.classList.add('is-hiding');
+      window.setTimeout(function () {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 350);
+    }, 3000);
+  };
+})();
+
+// ─── Enhanced Copy Button Feedback ───────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-copy-target]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var targetId = btn.getAttribute('data-copy-target');
+      var target = targetId ? document.getElementById(targetId) : null;
+      if (!target || !navigator.clipboard) return;
+
+      navigator.clipboard.writeText(target.textContent || '').then(function () {
+        btn.classList.add('is-copied');
+        var orig = btn.innerHTML;
+        btn.innerHTML = '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> הועתק!';
+        if (window.showToast) window.showToast('הקוד הועתק ללוח', 'success');
+        window.setTimeout(function () {
+          btn.classList.remove('is-copied');
+          btn.innerHTML = orig;
+        }, 2000);
+      });
+    });
+  });
+});
+
+// ─── Relative Timestamps ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  function timeAgo(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+    if (seconds < 60) return 'לפני רגע';
+    var minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return 'לפני ' + minutes + ' דקות';
+    var hours = Math.floor(minutes / 60);
+    if (hours < 24) return 'לפני ' + hours + ' שעות';
+    var days = Math.floor(hours / 24);
+    if (days < 30) return 'לפני ' + days + ' ימים';
+    var months = Math.floor(days / 30);
+    if (months < 12) return 'לפני ' + months + ' חודשים';
+    return 'לפני ' + Math.floor(months / 12) + ' שנים';
+  }
+
+  function updateRelativeTimes() {
+    document.querySelectorAll('time[data-relative]').forEach(function (el) {
+      var dt = el.getAttribute('datetime');
+      if (!dt) return;
+      var date = new Date(dt);
+      if (isNaN(date)) return;
+      el.setAttribute('title', el.textContent.trim() || dt);
+      el.textContent = timeAgo(date);
+    });
+  }
+
+  updateRelativeTimes();
+  window.setInterval(updateRelativeTimes, 60000);
+});
+
+// ─── Site Favicons in Sidebar ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('[data-site-favicon]').forEach(function (img) {
+    var domain = img.getAttribute('data-site-favicon');
+    if (!domain) return;
+    try {
+      var host = new URL(domain.startsWith('http') ? domain : 'https://' + domain).hostname;
+      img.src = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(host) + '&sz=32';
+      img.onerror = function () { img.style.display = 'none'; };
+    } catch (e) { img.style.display = 'none'; }
+  });
+});
+
+// ─── Counter Animations ──────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+  var counters = document.querySelectorAll('[data-counter]');
+  if (!counters.length || !window.IntersectionObserver) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      observer.unobserve(entry.target);
+      var el = entry.target;
+      var target = parseInt(el.getAttribute('data-counter'), 10);
+      var duration = 1400;
+      var start = performance.now();
+
+      function tick(now) {
+        var elapsed = Math.min((now - start) / duration, 1);
+        var ease = 1 - Math.pow(1 - elapsed, 3);
+        el.textContent = Math.round(ease * target).toLocaleString('he-IL');
+        if (elapsed < 1) requestAnimationFrame(tick);
+        else el.textContent = target.toLocaleString('he-IL');
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.4 });
+
+  counters.forEach(function (el) { observer.observe(el); });
+});
+
+// ─── Command Palette (Cmd+K) ─────────────────────────────────────────────────
+(function () {
+  var overlay = document.getElementById('cmd-palette');
+  var input   = document.getElementById('cmd-input');
+  var results = document.getElementById('cmd-results');
+  if (!overlay || !input || !results) return;
+
+  // Build navigation items from current page links + static items
+  function buildItems() {
+    var items = [];
+
+    // Static navigation items
+    var staticItems = [
+      { label: 'דשבורד', icon: '◉', href: '/dashboard', category: 'ניווט' },
+      { label: 'הטמעה', icon: '⌨', href: '/dashboard/install', category: 'ניווט' },
+      { label: 'ציות ובקרה', icon: '◇', href: '/dashboard/compliance', category: 'ניווט' },
+      { label: 'תמיכה טכנית', icon: '◎', href: '/dashboard/support', category: 'ניווט' },
+      { label: 'חשבון', icon: '⊙', href: '/dashboard/account', category: 'ניווט' },
+      { label: 'דף הבית', icon: '⌂', href: '/', category: 'אתר' },
+      { label: 'תמחור', icon: '₪', href: '/pricing', category: 'אתר' },
+      { label: 'הרשמה', icon: '+', href: '/signup', category: 'חשבון' },
+      { label: 'כניסה', icon: '→', href: '/login', category: 'חשבון' },
+    ];
+
+    // Collect links from page nav
+    document.querySelectorAll('nav a[href], .licenses-product-nav a[href], .domain-sidebar-nav a[href]').forEach(function (a) {
+      var label = (a.textContent || '').trim();
+      if (label && a.href && !items.find(function(i){ return i.href === a.getAttribute('href'); })) {
+        items.push({ label: label, href: a.getAttribute('href'), category: 'עמוד', icon: '◦' });
+      }
+    });
+
+    return staticItems.concat(items);
+  }
+
+  var allItems = [];
+  var selectedIdx = -1;
+
+  function open() {
+    allItems = buildItems();
+    overlay.hidden = false;
+    overlay.removeAttribute('hidden');
+    input.value = '';
+    renderResults('');
+    window.setTimeout(function () { input.focus(); }, 50);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    overlay.hidden = true;
+    overlay.setAttribute('hidden', '');
+    input.value = '';
+    results.innerHTML = '';
+    selectedIdx = -1;
+    document.body.style.overflow = '';
+  }
+
+  function renderResults(query) {
+    var q = query.toLowerCase().trim();
+    var filtered = q
+      ? allItems.filter(function (i) { return i.label.toLowerCase().includes(q) || (i.category || '').toLowerCase().includes(q); })
+      : allItems.slice(0, 7);
+
+    results.innerHTML = '';
+    selectedIdx = filtered.length ? 0 : -1;
+
+    filtered.forEach(function (item, idx) {
+      var li = document.createElement('li');
+      li.className = 'cmd-result-item' + (idx === 0 ? ' is-selected' : '');
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-selected', idx === 0 ? 'true' : 'false');
+      li.innerHTML =
+        '<span class="cmd-result-icon">' + (item.icon || '◦') + '</span>' +
+        '<span class="cmd-result-label">' + item.label + '</span>' +
+        (item.category ? '<span class="cmd-result-cat">' + item.category + '</span>' : '');
+      li.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        navigate(item.href);
+      });
+      li.addEventListener('mouseover', function () {
+        setSelected(idx);
+      });
+      results.appendChild(li);
+    });
+  }
+
+  function setSelected(idx) {
+    var items = results.querySelectorAll('.cmd-result-item');
+    items.forEach(function (el, i) {
+      el.classList.toggle('is-selected', i === idx);
+      el.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+    selectedIdx = idx;
+  }
+
+  function navigate(href) {
+    close();
+    if (href) window.location.href = href;
+  }
+
+  input.addEventListener('input', function () {
+    renderResults(input.value);
+  });
+
+  input.addEventListener('keydown', function (e) {
+    var items = results.querySelectorAll('.cmd-result-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelected(Math.min(selectedIdx + 1, items.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelected(Math.max(selectedIdx - 1, 0));
+    } else if (e.key === 'Enter') {
+      var sel = results.querySelector('.cmd-result-item.is-selected');
+      if (sel) sel.dispatchEvent(new MouseEvent('mousedown'));
+    } else if (e.key === 'Escape') {
+      close();
+    }
+  });
+
+  overlay.addEventListener('mousedown', function (e) {
+    if (e.target === overlay) close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      overlay.hidden ? open() : close();
+    }
+    if (e.key === 'Escape' && !overlay.hidden) close();
+  });
+
+  // Add Cmd+K hint to authenticated header if exists
+  var appHeader = document.querySelector('.app-header-actions, .app-topbar-actions, [data-cmd-hint]');
+  if (appHeader) {
+    var hint = document.createElement('button');
+    hint.className = 'cmd-trigger-hint';
+    hint.setAttribute('aria-label', 'פתיחת חיפוש מהיר');
+    hint.innerHTML = '<svg width="14" height="14" fill="none" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>חיפוש</span><kbd>⌘K</kbd>';
+    hint.addEventListener('click', open);
+    appHeader.prepend(hint);
+  }
+})();
+
+// ─── Keyboard Shortcut: I = Install, C = Compliance ──────────────────────────
+document.addEventListener('keydown', function (e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+  var installLink = document.querySelector('a[href*="/install"]');
+  var complianceLink = document.querySelector('a[href*="/compliance"]');
+
+  if (e.key === 'i' && installLink) { installLink.click(); }
+  if (e.key === 'c' && complianceLink) { complianceLink.click(); }
+});
+
+// ─── Cmd+K trigger button (data-cmdk-open) ───────────────────────────────────
+document.addEventListener('click', function (e) {
+  if (e.target.closest('[data-cmdk-open]')) {
+    var overlay = document.getElementById('cmd-palette');
+    if (overlay) {
+      overlay.hidden = false;
+      overlay.removeAttribute('hidden');
+      var input = document.getElementById('cmd-input');
+      if (input) { window.setTimeout(function(){ input.focus(); }, 50); }
+      document.body.style.overflow = 'hidden';
+    }
+  }
+});
+
+// ─── Scroll Reveal ────────────────────────────────────────────────────────────
+(function () {
+  if (!window.IntersectionObserver) return;
+  var els = document.querySelectorAll('[data-reveal]');
+  if (!els.length) return;
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-revealed');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (el) { obs.observe(el); });
+})();
+
+// ─── FAQ accordion smooth animation ──────────────────────────────────────────
+document.querySelectorAll('details').forEach(function (d) {
+  d.addEventListener('toggle', function () {
+    if (d.open) d.classList.add('is-open');
+    else d.classList.remove('is-open');
+  });
+});
+
+// ─── Newsletter form: AJAX submit with toast ──────────────────────────────────
+(function () {
+  var form = document.querySelector('.stitch-home-newsletter-form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = form.querySelector('button[type="submit"]');
+    var email = form.querySelector('input[name="email"]').value;
+    if (!email) return;
+    btn.disabled = true;
+    btn.textContent = 'שולח...';
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+      body: new URLSearchParams(new FormData(form))
+    }).then(function (r) { return r.json().catch(function(){ return {}; }); })
+      .then(function () {
+        if (window.showToast) showToast('! נוספת לרשימה בהצלחה', 'success');
+        form.querySelector('input[name="email"]').value = '';
+        btn.textContent = 'הצטרפת!';
+        btn.style.background = '#22c55e';
+      }).catch(function () {
+        if (window.showToast) showToast('שגיאה — נסה שוב', 'error');
+        btn.disabled = false;
+        btn.textContent = 'הצטרפות לרשימה';
+      });
+  });
+})();
