@@ -5,6 +5,10 @@ User-agent: *
 Disallow: /wp-admin/
 Allow: /wp-admin/admin-ajax.php
 
+# Utility / System pages (noindex meta handles search results)
+Disallow: /ty/
+Disallow: /privacy-center-il/
+
 # Welcome AI crawlers
 User-agent: GPTBot
 Allow: /

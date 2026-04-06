@@ -62,6 +62,9 @@ class Brndini_Performance {
         // Add critical resource hints
         add_filter('wp_resource_hints', [$this, 'resource_hints'], 10, 2);
 
+        // Enforce font-display: swap on Google Fonts
+        add_filter('style_loader_tag', [$this, 'enforce_font_display_swap'], 10, 3);
+
         // Optimize database on cron
         add_action('brndini_db_optimize', [$this, 'optimize_database']);
         if (!wp_next_scheduled('brndini_db_optimize')) {
@@ -214,6 +217,21 @@ class Brndini_Performance {
 <link rel="dns-prefetch" href="//connect.facebook.net">
 <link rel="dns-prefetch" href="//www.google-analytics.com">
 <?php
+    }
+
+    /**
+     * Enforce font-display: swap on all Google Fonts loaded via Elementor
+     * Reduces render-blocking and improves LCP
+     */
+    public function enforce_font_display_swap($tag, $handle, $src) {
+        if (strpos($src, 'fonts.googleapis.com') !== false) {
+            if (strpos($src, 'display=swap') === false) {
+                $src = add_query_arg('display', 'swap', $src);
+                $tag = str_replace($handle, $handle, $tag);
+                $tag = preg_replace('/href=[\'"]([^\'"]+)[\'"]/', 'href="' . esc_url($src) . '"', $tag);
+            }
+        }
+        return $tag;
     }
 
     /**

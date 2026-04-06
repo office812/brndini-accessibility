@@ -3,11 +3,17 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "minify:js": "npx terser public/platform.js -o public/platform.min.js -c drop_console=true,drop_debugger=true -m && npx terser public/widget.js -o public/widget.min.js -c drop_console=true,drop_debugger=true -m",
+        "minify:css": "npx cssnano public/platform.css public/platform.min.css",
+        "minify": "npm run minify:js && npm run minify:css",
+        "build:all": "npm run build && npm run minify"
     },
     "devDependencies": {
         "axios": "^1.1.2",
+        "cssnano-cli": "^1.0.5",
         "laravel-vite-plugin": "^0.7.5",
+        "terser": "^5.31.0",
         "vite": "^4.0.0"
     }
 }
