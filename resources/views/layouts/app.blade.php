@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=IBM+Plex+Sans+Hebrew:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url('/platform.css') }}?v={{ $assetVersion ?? '1' }}">
+    <link rel="stylesheet" href="{{ url('/platform.css') }}?v={{ filemtime(public_path('platform.css')) }}">
     {!! $globalTrackingScripts['google_analytics_head'] ?? '' !!}
     {!! $globalTrackingScripts['google_tag_manager_head'] ?? '' !!}
     {!! $globalTrackingScripts['meta_pixel_head'] ?? '' !!}
