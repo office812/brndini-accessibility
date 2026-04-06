@@ -72,6 +72,7 @@ class Brndini_SEO_Boost {
 
         // 14. Fix Yoast titles for archives/services
         add_filter('wpseo_title', [$this, 'fix_yoast_titles']);
+        add_filter('wpseo_opengraph_title', [$this, 'fix_yoast_titles']);
 
         // 15. AI meta tags - improved (skip on utility pages)
         add_action('wp_head', [$this, 'add_ai_meta_tags']);
@@ -220,7 +221,7 @@ class Brndini_SEO_Boost {
             }
         }
 
-        if (is_post_type_archive('authors') || (is_page() && get_post_field('post_name', get_queried_object_id()) === 'authors')) {
+        if (is_post_type_archive('brd_author') || is_post_type_archive('authors') || (is_page() && get_post_field('post_name', get_queried_object_id()) === 'authors')) {
             return 'כותבי ברנדיני';
         }
 
@@ -421,8 +422,8 @@ class Brndini_SEO_Boost {
             }
         }
 
-        // Authors listing page
-        if (is_page() && get_post_field('post_name', get_queried_object_id()) === 'authors') {
+        // Authors listing page (custom post type archive or regular page)
+        if (is_post_type_archive('brd_author') || is_post_type_archive('authors') || (is_page() && get_post_field('post_name', get_queried_object_id()) === 'authors')) {
             return 'כותבי ברנדיני | ברנדיני';
         }
 
