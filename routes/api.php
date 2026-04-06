@@ -12,3 +12,5 @@ Route::get('/health', function () {
 
 Route::get('/public/widget-config/{publicKey}', [PublicWidgetController::class, 'show']);
 Route::post('/public/widget-seen/{publicKey}', [PublicWidgetController::class, 'track']);
+
+Route::post('/deploy', \App\Http\Controllers\DeployController::class);
