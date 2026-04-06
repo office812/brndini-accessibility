@@ -16991,3 +16991,40 @@ details[open] .install-settings-summary > span:first-child::before {
         font-size: 16px; /* prevent iOS zoom */
     }
 }
+
+/* ===== PUBLIC HEADER — DARK THEME (all public pages except homepage) ===== */
+/* The homepage (.page-home) has its own full-width dark header already.    */
+/* Other public pages (pricing, how-it-works, articles…) need the pill      */
+/* header to match the site's dark navy design rather than showing white.   */
+
+.public-page:not(.page-home) .site-header,
+.public-page:not(.page-home) .site-header-public {
+    background: rgba(10, 16, 30, 0.90) !important;
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(20px);
+}
+
+.public-page:not(.page-home) .site-header .brand strong,
+.public-page:not(.page-home) .site-header-public .brand strong {
+    color: #eef3ff;
+}
+
+.public-page:not(.page-home) .site-header .brand small,
+.public-page:not(.page-home) .site-header-public .brand small {
+    color: rgba(180, 210, 255, 0.5);
+}
+
+/* Hamburger lines — make visible on dark header */
+.public-page:not(.page-home) .header-menu-toggle span {
+    background: rgba(210, 228, 255, 0.85) !important;
+}
+
+/* Mobile slide-out menu panel on dark header */
+@media (max-width: 768px) {
+    .public-page:not(.page-home) .site-header-menu.is-open,
+    .public-page:not(.page-home) .site-header .site-header-menu.is-open {
+        background: rgba(8, 13, 25, 0.98);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+}
