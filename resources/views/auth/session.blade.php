@@ -7,76 +7,76 @@
 
 {{-- ═══════════════════════════ LOGIN ═══════════════════════════════ --}}
 @if ($isLogin)
-<section class="auth-screen auth-screen-login">
-    <div class="auth-screen-panel">
-        <a class="auth-brand" href="{{ route('home') }}">
+<div class="onb-page">
+
+    <header class="onb-header">
+        <a class="onb-brand" href="{{ route('home') }}">
             <span class="brand-mark" aria-hidden="true">
                 <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">
             </span>
-            <span>
-                <strong>A11Y Bridge</strong>
-                <small>כלי חינמי להטמעת וידג׳ט נגישות</small>
-            </span>
+            <strong>A11Y Bridge</strong>
         </a>
+        <a class="onb-login-link" href="{{ route('register.show') }}">אין לך חשבון? פתח חינם</a>
+    </header>
 
-        <div class="auth-screen-copy">
-            <p class="eyebrow">התחברות</p>
-            <h1>חזרה מהירה לסביבת העבודה</h1>
-            <p class="hero-text">כניסה ישירה לדשבורד, להטמעה, להצהרה ולתמיכה.</p>
-        </div>
+    <main class="onb-main" id="main-content">
+        <div class="onb-card onb-login-card">
 
-        <form class="stack-form auth-form" method="POST" action="{{ route('login') }}">
-            @csrf
-            <label for="login_email">אימייל</label>
-            <input id="login_email" name="email" type="email" value="{{ old('email') }}" required autocomplete="email">
-
-            <label for="login_password">סיסמה</label>
-            <div class="password-field">
-                <input id="login_password" name="password" type="password" required autocomplete="current-password">
-                <button class="password-toggle" type="button" data-password-toggle="login_password" aria-label="הצג סיסמה">
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
-                </button>
+            <div class="onb-login-intro">
+                <p class="onb-question">כניסה לחשבון</p>
+                <p class="onb-sub">כניסה ישירה לדשבורד, לקוד ההטמעה ולהצהרת הנגישות שלך.</p>
             </div>
 
-            <button class="primary-button auth-submit" type="submit">כניסה לחשבון</button>
-        </form>
+            @if ($errors->has('login'))
+                <div class="onb-error" role="alert">{{ $errors->first('login') }}</div>
+            @endif
 
-        <div class="auth-links-row">
-            <a href="{{ route('register.show') }}">אין לך חשבון? פתח חשבון חינם</a>
-            <a href="{{ route('home') }}">חזרה לאתר</a>
-        </div>
-    </div>
+            <form class="onb-form" method="POST" action="{{ route('login') }}" novalidate>
+                @csrf
 
-    <aside class="auth-screen-showcase">
-        <div class="auth-showcase-media">
-            <div class="auth-showcase-glow"></div>
-            <div class="auth-showcase-window">
-                <div class="auth-showcase-header"><span></span><span></span><span></span></div>
-                <div class="auth-showcase-body">
-                    <div class="auth-showcase-stat">
-                        <span class="auth-showcase-label">ווידג׳ט מנוהל</span>
-                        <strong>מתקינים פעם אחת</strong>
-                        <p>קוד הטמעה קבוע עם הגדרות שנמשכות מהפלטפורמה.</p>
-                    </div>
-                    <div class="auth-showcase-stat">
-                        <span class="auth-showcase-label">ציות</span>
-                        <strong>הצהרה + עמוד ציבורי</strong>
-                        <p>קישור להצהרה, פרטי קשר וניסוח בסיסי ברור לגולשים.</p>
+                <div class="onb-field">
+                    <label class="onb-label" for="login_email">אימייל</label>
+                    <input class="onb-input" id="login_email" name="email" type="email"
+                        value="{{ old('email') }}" required autocomplete="email"
+                        placeholder="you@example.com">
+                </div>
+
+                <div class="onb-field">
+                    <label class="onb-label" for="login_password">סיסמה</label>
+                    <div class="onb-input-wrap">
+                        <input class="onb-input" id="login_password" name="password" type="password"
+                            required autocomplete="current-password" placeholder="••••••••">
+                        <button class="onb-pw-toggle" type="button" data-password-toggle="login_password" aria-label="הצג סיסמה">
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+                        </button>
                     </div>
                 </div>
-            </div>
+
+                <button class="onb-submit" type="submit">כניסה לחשבון ←</button>
+            </form>
+
+            <p class="onb-back-link" style="margin-top:16px;">
+                <a href="{{ route('home') }}">← חזרה לאתר</a>
+            </p>
         </div>
-        <div class="auth-showcase-footer">
-            <div class="auth-showcase-quote">
-                <h2>פותחים חשבון, מטמיעים קוד אחד, ומתחילים לנהל.</h2>
-            </div>
-            <div class="auth-showcase-testimonial">
-                <strong>מוצר חינמי שמוביל מהר לאתר ראשון מחובר, בלי בלבול.</strong>
-                <span>A11Y Bridge</span>
-            </div>
+
+        <div class="onb-trust" style="margin-top:24px;">
+            <span class="onb-trust-item">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                מאובטח
+            </span>
+            <span class="onb-trust-item">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                חינמי לחלוטין
+            </span>
+            <span class="onb-trust-item">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                ללא כרטיס אשראי
+            </span>
         </div>
-    </aside>
-</section>
+    </main>
+
+</div>
 
 {{-- ═══════════════════════════ SIGNUP ══════════════════════════════ --}}
 @else

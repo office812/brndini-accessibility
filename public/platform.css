@@ -17028,3 +17028,53 @@ details[open] .install-settings-summary > span:first-child::before {
         border-color: rgba(255, 255, 255, 0.08);
     }
 }
+
+/* ===== LOGIN PAGE — Dark wizard style (matches signup) ===== */
+.onb-login-card {
+    max-width: 440px;
+}
+
+.onb-login-intro {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.onb-login-intro .onb-question {
+    margin-bottom: 8px;
+}
+
+.onb-login-intro .onb-sub {
+    font-size: 0.88rem;
+    color: rgba(200, 218, 255, 0.55);
+    line-height: 1.5;
+}
+
+.onb-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.onb-input-wrap .onb-input {
+    width: 100%;
+    padding-left: 44px;
+}
+
+.onb-pw-toggle {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(200, 218, 255, 0.45);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+}
+
+.onb-pw-toggle:hover {
+    color: rgba(200, 218, 255, 0.9);
+}
