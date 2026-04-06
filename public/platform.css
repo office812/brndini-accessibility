@@ -8480,7 +8480,7 @@ body.public-page::after {
 
 .page-shell-public,
 .page-shell-home {
-    width: min(1200px, calc(100% - 48px));
+    width: 100%;
 }
 
 .site-header,
@@ -9036,7 +9036,7 @@ body.app-page::before {
 }
 
 .page-shell-app {
-    width: min(1460px, calc(100% - 28px));
+    width: 100%;
 }
 
 .app-page .app-header {
@@ -10544,7 +10544,7 @@ body.public-page {
 }
 
 .page-shell-home {
-    width: min(1360px, calc(100% - 40px));
+    width: 100%;
     padding-top: 20px;
 }
 
@@ -10919,7 +10919,7 @@ body.page-home::after {
 }
 
 .page-home .page-shell-home {
-    width: min(1480px, calc(100% - 40px));
+    width: 100%;
     padding-top: 18px;
 }
 
@@ -12076,7 +12076,7 @@ body.page-home {
 }
 
 .page-home .page-shell-home {
-    width: min(1320px, calc(100% - 40px));
+    width: 100%;
     padding-top: 0;
 }
 
