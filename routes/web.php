@@ -25,6 +25,7 @@ Route::get('/articles', [ArticleController::class, 'index'])->name('articles.ind
 Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::get('/signup', [AuthController::class, 'showRegister'])->name('register.show');
+Route::get('/register', fn() => redirect()->route('register.show'));
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/newsletter', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
@@ -45,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/sites', [DashboardController::class, 'storeSite'])->name('dashboard.sites.store');
     Route::post('/dashboard/account/billing', [DashboardController::class, 'updateBilling'])->name('dashboard.account.billing');
     Route::post('/dashboard/account/activate', [DashboardController::class, 'activateLicense'])->name('dashboard.account.activate');
+    Route::post('/dashboard/install/verify', [DashboardController::class, 'verifyInstall'])->name('dashboard.install.verify');
     Route::post('/dashboard/compliance/audit', [DashboardController::class, 'runAudit'])->name('dashboard.compliance.audit');
     Route::post('/dashboard/compliance/alerts', [DashboardController::class, 'updateAlerts'])->name('dashboard.compliance.alerts');
     Route::post('/dashboard/compliance/statement', [DashboardController::class, 'updateStatementBuilder'])->name('dashboard.compliance.statement');

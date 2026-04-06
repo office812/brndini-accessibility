@@ -93,7 +93,7 @@
                 <button class="header-menu-backdrop" type="button" aria-label="סגור תפריט" data-header-menu-backdrop="app-menu"></button>
             </header>
         @else
-            <header class="site-header {{ request()->routeIs('home') ? 'site-header-public' : '' }}">
+            <header class="site-header site-header-public">
                 <a class="brand" href="{{ route('home') }}">
                     <span class="brand-mark" aria-hidden="true">
                         <img class="brand-logo-image" src="{{ url('/inn-logo.png') }}" alt="">

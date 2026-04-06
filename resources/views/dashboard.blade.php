@@ -79,6 +79,27 @@
         <span>הווידג׳ט עדיין לא זוהה באתר <strong>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</strong>. <a href="{{ route('dashboard.install', ['site' => $site->id]) }}">להטמעה ←</a></span>
     </div>
 </section>
+@elseif($installationTone === 'good' && $statementConnected && $licenseStatus === 'active')
+<section class="dashboard-all-done-banner">
+    <div class="dashboard-all-done-icon" aria-hidden="true">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+    </div>
+    <div class="dashboard-all-done-copy">
+        <strong>הכול מוכן — ווידג׳ט פעיל, הצהרה מחוברת, רישיון תקין</strong>
+        <p>האתר <strong>{{ parse_url($site->domain, PHP_URL_HOST) ?: $site->domain }}</strong> עובד. אפשר להמשיך לבדיקות, לעדכן הגדרות, או פשוט לתת לזה לרוץ.</p>
+    </div>
+    <div class="dashboard-all-done-badge">
+        <span class="status-pill is-good">ווידג׳ט פעיל</span>
+        <span class="status-pill is-good">הצהרה מחוברת</span>
+    </div>
+</section>
+@elseif($installationTone === 'good' && !$statementConnected)
+<section class="dashboard-install-reminder" style="background: rgba(20,45,80,0.4); border-color: rgba(99,179,255,0.2);">
+    <div class="dashboard-install-reminder-inner">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"/></svg>
+        <span>הווידג׳ט פעיל — <strong>שלב אחרון:</strong> <a href="{{ route('dashboard.compliance', ['site' => $site->id]) }}">חבר הצהרת נגישות ←</a></span>
+    </div>
+</section>
 @endif
 
             @unless($platformReadiness['ready'])

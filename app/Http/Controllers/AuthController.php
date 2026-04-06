@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeWithEmbedCode;
 use App\Models\User;
 use App\Models\Site;
 use App\Support\SiteSettings;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -118,9 +120,20 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
+        $site = $user->sites->first();
+
+        // שלח אימייל עם קוד ההטמעה — fail silently אם SMTP לא מוגדר
+        if ($site) {
+            try {
+                Mail::to($user->email)->send(new WelcomeWithEmbedCode($user, $site));
+            } catch (Throwable) {
+                // המשך בלי אימייל אם שליחה נכשלת
+            }
+        }
+
         return redirect()
-            ->route('dashboard', ['site' => optional($user->sites->first())->id])
-            ->with('status', 'החשבון נוצר. עכשיו אפשר להגדיר את ה-widget ולקבל קוד הטמעה.');
+            ->route('dashboard.install', ['site' => optional($site)->id])
+            ->with('new_account', true);
     }
 
     public function login(Request $request): RedirectResponse
