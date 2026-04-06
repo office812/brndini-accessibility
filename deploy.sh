@@ -6,7 +6,10 @@ if [ -f "$TRIGGER" ]; then
   rm "$TRIGGER"
   echo "[$(date)] TRIGGER FOUND" >> "$LOG"
   cd /home/535938.cloudwaysapps.com/axfpmrapnb/public_html
-  # Remove ALL PHP-user-owned blade files that may block git reset
+  # Ensure git can write to directories that PHP may have taken ownership of
+  chmod 777 resources/views/errors/ 2>/dev/null || true
+  chmod 777 storage/framework/views/ 2>/dev/null || true
+  # Remove PHP-user-owned files that block git reset
   find resources/views/errors/ -name "*.blade.php" -delete 2>/dev/null || true
   find storage/framework/views/ -name "*.php" -delete 2>/dev/null || true
   git fetch origin main >> "$LOG" 2>&1
