@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use App\Models\Site;
 use App\Support\SiteSettings;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Carbon;
 use Throwable;
@@ -118,8 +120,18 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
+        $firstSite = $user->sites->first();
+
+        try {
+            if ($firstSite) {
+                Mail::to($user->email)->send(new WelcomeMail($user, $firstSite));
+            }
+        } catch (Throwable) {
+            // Do not block registration if email fails
+        }
+
         return redirect()
-            ->route('dashboard', ['site' => optional($user->sites->first())->id])
+            ->route('dashboard', ['site' => optional($firstSite)->id])
             ->with('status', 'החשבון נוצר. עכשיו אפשר להגדיר את ה-widget ולקבל קוד הטמעה.');
     }
 
