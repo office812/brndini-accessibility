@@ -12,6 +12,8 @@ if [ -f "$TRIGGER" ]; then
   # Remove PHP-user-owned files that block git reset
   find resources/views/errors/ -name "*.blade.php" -delete 2>/dev/null || true
   find storage/framework/views/ -name "*.php" -delete 2>/dev/null || true
+  # Remove untracked files that would conflict with git reset (e.g. bridge.php placed manually)
+  git clean -f public/bridge.php 2>/dev/null || true
   git fetch origin main >> "$LOG" 2>&1
   git reset --hard origin/main >> "$LOG" 2>&1
   chmod 755 deploy.sh
