@@ -15981,3 +15981,360 @@ html { scroll-behavior: smooth; }
         font-size: 0.88rem;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   INSTALL PAGE — REDESIGN 2026
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Welcome banner */
+.install-welcome-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    color: #15803d;
+}
+.install-welcome-icon {
+    flex-shrink: 0;
+    color: #16a34a;
+}
+.install-welcome-banner strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+.install-welcome-banner span {
+    font-size: 0.88rem;
+    opacity: 0.85;
+}
+
+/* Code hero section */
+.install-code-hero {
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 28px 28px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+.install-code-hero-header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 6px;
+}
+.install-code-hero-sub {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0 0 20px;
+}
+.install-code-hero-sub code {
+    background: #f1f5f9;
+    padding: 1px 6px;
+    border-radius: 5px;
+    font-size: 0.85em;
+    direction: ltr;
+    display: inline-block;
+}
+
+/* Code block */
+.install-code-block-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.install-code-block {
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 16px 18px;
+    overflow-x: auto;
+}
+.install-code-pre {
+    margin: 0;
+    white-space: pre;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    direction: ltr;
+    text-align: left;
+}
+.install-code-pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+}
+
+/* Action buttons row */
+.install-code-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.install-copy-btn {
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+.install-verify-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Status row below code */
+.install-status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 0.82rem;
+}
+.install-seen-url,
+.install-seen-label {
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Quick steps strip */
+.install-steps-strip {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 16px;
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.install-step-card {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0 8px;
+}
+.install-step-card .install-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+}
+.install-step-card.is-done .install-step-num {
+    background: #16a34a;
+    color: #fff;
+}
+.install-step-card strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+}
+.install-step-card p {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    margin: 0;
+}
+.install-step-card code {
+    font-size: 0.75em;
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 4px;
+    direction: ltr;
+    display: inline-block;
+}
+.install-steps-arrow {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    flex-shrink: 0;
+}
+
+/* Platform guides */
+.install-platform-card {
+    margin-bottom: 16px;
+}
+.install-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 16px;
+}
+.install-platform-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+.install-platform-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+.install-platform-item strong {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+.install-platform-item p {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+}
+.install-platform-item code {
+    font-size: 0.82em;
+    background: #e2e8f0;
+    padding: 1px 5px;
+    border-radius: 4px;
+    direction: ltr;
+    display: inline-block;
+}
+
+/* Settings details/summary */
+.install-settings-details {
+    margin-bottom: 16px;
+}
+.install-settings-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1e293b;
+    list-style: none;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.install-settings-summary::-webkit-details-marker { display: none; }
+.install-settings-summary::marker { content: ''; }
+.install-settings-summary > span:first-child::before {
+    content: '▶ ';
+    font-size: 0.7em;
+    color: #94a3b8;
+    transition: transform 0.2s;
+}
+details[open] .install-settings-summary > span:first-child::before {
+    content: '▼ ';
+}
+.install-settings-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* License card */
+.install-license-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+    border-left: 4px solid #f59e0b;
+}
+.install-license-icon {
+    flex-shrink: 0;
+    color: #d97706;
+    margin-top: 2px;
+}
+.install-license-card h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+.install-license-card p {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ─── Mobile ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .install-code-hero {
+        padding: 20px 16px 16px;
+        border-radius: 16px;
+    }
+    .install-code-hero-header h1 { font-size: 1.2rem; }
+    .install-code-actions { flex-direction: column; }
+    .install-copy-btn, .install-verify-btn { width: 100%; }
+    .install-steps-strip {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+    }
+    .install-steps-arrow { transform: rotate(90deg); align-self: center; }
+    .install-platform-grid { grid-template-columns: 1fr; }
+    .install-settings-summary { flex-direction: column; align-items: flex-start; }
+    .install-welcome-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE SIDEBAR — COLLAPSED BY DEFAULT ON SMALL SCREENS
+   ═══════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+    /* Collapse sidebar nav on very small screens */
+    .domain-shell-sidebar {
+        padding: 10px 12px;
+    }
+    .domain-shell-sidebar .domain-back-link {
+        display: none; /* replaced by header nav */
+    }
+    .domain-shell-sidebar .domain-switcher-wrap,
+    .domain-shell-sidebar .domain-select-pill {
+        display: none;
+    }
+    /* Nav becomes a horizontal scrolling strip */
+    .domain-side-nav {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 6px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+    }
+    .domain-side-nav::-webkit-scrollbar { display: none; }
+    .domain-nav-label { display: none; }
+    .domain-side-nav a {
+        min-height: 36px !important;
+        padding: 6px 12px !important;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        border-radius: 20px !important;
+        flex-shrink: 0;
+    }
+    /* Install code hero on mobile */
+    .install-code-hero {
+        padding: 16px 14px 14px;
+    }
+    .install-code-pre {
+        font-size: 0.72rem;
+    }
+}

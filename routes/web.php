@@ -25,6 +25,7 @@ Route::get('/articles', [ArticleController::class, 'index'])->name('articles.ind
 Route::get('/articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.show');
 Route::get('/signup', [AuthController::class, 'showRegister'])->name('register.show');
+Route::get('/register', fn() => redirect()->route('register.show'));
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/newsletter', [\App\Http\Controllers\NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');

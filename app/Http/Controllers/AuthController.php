@@ -118,9 +118,10 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
+        $site = $user->sites->first();
         return redirect()
-            ->route('dashboard', ['site' => optional($user->sites->first())->id])
-            ->with('status', 'החשבון נוצר. עכשיו אפשר להגדיר את ה-widget ולקבל קוד הטמעה.');
+            ->route('dashboard.install', ['site' => optional($site)->id])
+            ->with('new_account', true);
     }
 
     public function login(Request $request): RedirectResponse
