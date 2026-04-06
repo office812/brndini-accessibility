@@ -12,15 +12,21 @@ class AuthAndWidgetFlowTest extends TestCase
 
     public function test_a_user_can_register_and_receive_a_site_key(): void
     {
+        \Illuminate\Support\Facades\Mail::fake();
+
         $response = $this->post('/register', [
             'company_name' => 'Brndini',
             'email' => 'hello@example.com',
             'password' => 'secret123',
+            'password_confirmation' => 'secret123',
             'site_name' => 'Brndini Main Site',
             'domain' => 'brndini.com',
+            'accepted_terms' => '1',
+            'accepted_privacy' => '1',
+            'acknowledged_self_service' => '1',
         ]);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirectContains('/dashboard');
         $this->assertAuthenticated();
 
         $this->assertDatabaseHas('users', [
@@ -36,12 +42,18 @@ class AuthAndWidgetFlowTest extends TestCase
 
     public function test_the_public_widget_endpoint_returns_widget_settings(): void
     {
+        \Illuminate\Support\Facades\Mail::fake();
+
         $this->post('/register', [
             'company_name' => 'Brndini',
             'email' => 'hello@example.com',
             'password' => 'secret123',
+            'password_confirmation' => 'secret123',
             'site_name' => 'Brndini Main Site',
             'domain' => 'brndini.com',
+            'accepted_terms' => '1',
+            'accepted_privacy' => '1',
+            'acknowledged_self_service' => '1',
         ]);
 
         $site = Site::firstOrFail();

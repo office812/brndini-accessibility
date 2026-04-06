@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ServiceLeadReceived;
+use App\Mail\SupportTicketCreated;
+use App\Mail\SupportTicketResponded;
 use App\Models\AppSetting;
 use App\Models\Article;
 use App\Models\ServiceLead;
@@ -17,6 +20,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -591,6 +595,13 @@ class DashboardController extends Controller
             'reference_code' => 'SUP-' . str_pad((string) $ticket->id, 5, '0', STR_PAD_LEFT),
         ]);
 
+        try {
+            $adminEmail = config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il');
+            Mail::to($adminEmail)->send(new SupportTicketCreated($ticket->fresh(), $request->user(), $site));
+        } catch (Throwable) {
+            // Do not block ticket creation if email fails
+        }
+
         return redirect()
             ->route('dashboard.support', ['site' => $site->id])
             ->with('status', 'הפנייה נפתחה בהצלחה. צוות התמיכה יוכל לחזור אליך מתוך סביבת הניהול של האתר הזה.');
@@ -618,6 +629,18 @@ class DashboardController extends Controller
 
         $site = $this->resolveSite($request, $request->user(), (int) $validated['site_id']);
         ServiceLead::storeRuntime($request->user(), $site, $validated);
+
+        try {
+            $adminEmail = config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il');
+            $leadData = array_merge($validated, [
+                'user_name' => $request->user()->name,
+                'user_email' => $request->user()->email,
+                'site_name' => $site->site_name,
+            ]);
+            Mail::to($adminEmail)->send(new ServiceLeadReceived($leadData, 'dashboard'));
+        } catch (Throwable) {
+            // Do not block lead creation if email fails
+        }
 
         return redirect()
             ->route('dashboard.services', ['site' => $site->id])
@@ -651,6 +674,13 @@ class DashboardController extends Controller
         ]);
 
         ServiceLead::storePublicRuntime($validated);
+
+        try {
+            $adminEmail = config('services.a11y_bridge.super_admin_email', 'office@brndini.co.il');
+            Mail::to($adminEmail)->send(new ServiceLeadReceived($validated, 'public'));
+        } catch (Throwable) {
+            // Do not block lead creation if email fails
+        }
 
         return redirect()
             ->route('brndini.services')
@@ -692,6 +722,17 @@ class DashboardController extends Controller
                 ]);
             } else {
                 RuntimeStore::put('support-ticket-' . $ticket->id, 'admin_response', $response === '' ? null : $response);
+            }
+
+            if ($response !== '') {
+                try {
+                    $ticketUser = $ticket->user ?? User::find($ticket->user_id);
+                    if ($ticketUser) {
+                        Mail::to($ticketUser->email)->send(new SupportTicketResponded($ticket->fresh(), $response));
+                    }
+                } catch (Throwable) {
+                    // Do not block admin update if email fails
+                }
             }
         } else {
             SupportTicket::updateRuntime($ticketKey, $admin, $validated);

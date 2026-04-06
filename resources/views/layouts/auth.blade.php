@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=IBM+Plex+Sans+Hebrew:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{ url('/inn-logo.png') }}">
     <meta name="theme-color" content="#0a101e">
-    <link rel="stylesheet" href="{{ url('/platform.css') }}?v={{ $assetVersion ?? '1' }}">
+    <link rel="stylesheet" href="{{ url('/platform.css') }}?v={{ filemtime(public_path('platform.css')) }}">
     {!! $globalTrackingScripts['google_analytics_head'] ?? '' !!}
     {!! $globalTrackingScripts['google_tag_manager_head'] ?? '' !!}
     {!! $globalTrackingScripts['meta_pixel_head'] ?? '' !!}
