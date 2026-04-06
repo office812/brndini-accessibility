@@ -8,4 +8,19 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {
+        minify: 'terser',
+        cssMinify: true,
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true,
+            },
+        },
+        rollupOptions: {
+            output: {
+                manualChunks: undefined,
+            },
+        },
+    },
 });
