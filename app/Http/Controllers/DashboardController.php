@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -381,6 +382,39 @@ class DashboardController extends Controller
         return redirect()
             ->route('dashboard.account', ['site' => $site->id])
             ->with('status', 'הרישיון הופעל. הקוד של האתר הזה פעיל עכשיו, והווידג׳ט יחזור להיטען כרגיל.');
+    }
+
+    public function verifyInstall(Request $request): RedirectResponse
+    {
+        $site = $this->resolveSite($request, $request->user());
+        $domain = rtrim($site->domain, '/');
+
+        try {
+            $response = Http::timeout(12)
+                ->withHeaders(['User-Agent' => 'A11YBridge-Verify/1.0'])
+                ->withoutVerifying()
+                ->get($domain);
+
+            $body = $response->body();
+            $found = str_contains($body, $site->public_key)
+                  || str_contains($body, 'data-a11y-bridge')
+                  || (str_contains($body, 'widget.js') && str_contains($body, 'a11y'));
+
+            if ($found) {
+                $site->markWidgetSeen($domain);
+                return redirect()
+                    ->route('dashboard.install', ['site' => $site->id])
+                    ->with('verify_ok', 'הווידג\'ט זוהה באתר! הכל עובד.');
+            }
+
+            return redirect()
+                ->route('dashboard.install', ['site' => $site->id])
+                ->with('verify_fail', 'הקוד לא נמצא בעמוד הבית. ודא שהדבקת את הקוד לפני </body> ושמרת.');
+        } catch (Throwable $e) {
+            return redirect()
+                ->route('dashboard.install', ['site' => $site->id])
+                ->with('verify_fail', 'לא הצלחנו לגשת לאתר. ודא שהדומיין תקין ושהאתר פעיל: ' . $domain);
+        }
     }
 
     public function runAudit(Request $request): RedirectResponse

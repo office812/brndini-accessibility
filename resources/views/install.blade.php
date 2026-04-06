@@ -37,12 +37,29 @@
                             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke="currentColor" stroke-width="2"/></svg>
                             העתק קוד
                         </button>
-                        <a class="ghost-button install-verify-btn" href="{{ request()->fullUrlWithQuery(['_verify' => '1']) }}" id="install-verify-btn">
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
-                            בדוק שהווידג׳ט פועל
-                        </a>
+                        <form method="POST" action="{{ route('dashboard.install.verify', ['site' => $site->id]) }}" style="display:contents">
+                            @csrf
+                            <button class="ghost-button install-verify-btn" type="submit" id="install-verify-btn">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+                                בדוק שהווידג׳ט פועל
+                            </button>
+                        </form>
                     </div>
                 </div>
+
+                {{-- Verify flash messages --}}
+                @if(session('verify_ok'))
+                    <div class="install-verify-result is-ok" role="status">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+                        {{ session('verify_ok') }}
+                    </div>
+                @endif
+                @if(session('verify_fail'))
+                    <div class="install-verify-result is-fail" role="alert">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        {{ session('verify_fail') }}
+                    </div>
+                @endif
 
                 {{-- Installation status pill --}}
                 <div class="install-status-row">
