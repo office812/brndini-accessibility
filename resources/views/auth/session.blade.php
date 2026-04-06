@@ -52,7 +52,10 @@
                     </div>
                 </div>
 
-                <button class="onb-submit" type="submit">כניסה לחשבון ←</button>
+                <button class="primary-button onb-cta onb-submit" type="submit">
+                    כניסה לחשבון
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
             </form>
 
             <p class="onb-back-link" style="margin-top:16px;">
