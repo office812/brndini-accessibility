@@ -41,7 +41,7 @@ class Brndini_SEO_Boost {
         // === EXISTING FEATURES ===
         add_action('wp_head', [$this, 'add_service_schema']);
         add_action('init', [$this, 'register_llms_txt_route']);
-        add_filter('robots_txt', [$this, 'modify_robots_txt'], 10, 2);
+        add_filter('robots_txt', [$this, 'modify_robots_txt'], 999, 2);
         add_filter('wp_get_attachment_image_attributes', [$this, 'fix_empty_alt_text'], 10, 3);
 
         // === SEO OVERHAUL - NEW FEATURES ===
@@ -641,25 +641,29 @@ Email: office@brndini.co.il
      * Modify robots.txt to welcome AI crawlers + block utility pages
      */
     public function modify_robots_txt($output, $public) {
-        // Block utility pages from crawl (noindex handles search results)
-        $utility_rules = "\n# Utility / System Pages - noindex handled via meta\n";
-        $utility_rules .= "Disallow: /ty/\n";
-        $utility_rules .= "Disallow: /privacy-center-il/\n\n";
+        // Insert utility page Disallow rules into the Yoast User-agent: * block
+        $rules = "Disallow: /ty/\nDisallow: /privacy-center-il/\n";
 
-        // AI crawlers welcome
-        $ai_rules = "# AI Crawlers - Welcome\n";
-        $ai_rules .= "User-agent: GPTBot\nAllow: /\n\n";
-        $ai_rules .= "User-agent: ChatGPT-User\nAllow: /\n\n";
-        $ai_rules .= "User-agent: Google-Extended\nAllow: /\n\n";
-        $ai_rules .= "User-agent: PerplexityBot\nAllow: /\n\n";
-        $ai_rules .= "User-agent: ClaudeBot\nAllow: /\n\n";
-        $ai_rules .= "User-agent: Claude-Web\nAllow: /\n\n";
-        $ai_rules .= "User-agent: Amazonbot\nAllow: /\n\n";
-        $ai_rules .= "User-agent: anthropic-ai\nAllow: /\n\n";
-        $ai_rules .= "User-agent: cohere-ai\nAllow: /\n\n";
-        $ai_rules .= "User-agent: Bytespider\nAllow: /\n\n";
+        // Insert after the last Disallow in the YOAST BLOCK's User-agent: * section
+        if (preg_match('/# START YOAST BLOCK.*?User-agent:\s*\*\s*\n/s', $output)) {
+            $output = preg_replace(
+                '/(# START YOAST BLOCK.*?User-agent:\s*\*\s*\n)/s',
+                "$1" . $rules,
+                $output,
+                1
+            );
+        } elseif (strpos($output, 'User-agent: *') !== false) {
+            $output = preg_replace(
+                '/(User-agent:\s*\*\s*\n)/',
+                "$1" . $rules,
+                $output,
+                1
+            );
+        } else {
+            $output .= "\nUser-agent: *\n" . $rules;
+        }
 
-        return $output . $utility_rules . $ai_rules;
+        return $output;
     }
 }
 
