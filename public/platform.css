@@ -16338,3 +16338,464 @@ details[open] .install-settings-summary > span:first-child::before {
         font-size: 0.72rem;
     }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   ONBOARDING WIZARD  (.onb-*)
+   3-step signup flow — clean, centered, Linear/Vercel quality
+   ════════════════════════════════════════════════════════════════ */
+
+/* Page shell */
+.onb-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--page-bg);
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.onb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--surface-strong);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.onb-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--page-ink);
+}
+
+.onb-brand .brand-logo-image {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.onb-brand strong {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.onb-login-link {
+    font-size: 0.85rem;
+    color: var(--page-muted);
+    text-decoration: none;
+    transition: color var(--motion-fast);
+}
+
+.onb-login-link:hover {
+    color: var(--accent);
+}
+
+/* ── Main layout ─────────────────────────────────────────────── */
+.onb-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px 64px;
+    gap: 24px;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.onb-card {
+    width: 100%;
+    max-width: 468px;
+    background: var(--surface-strong);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 36px 40px 40px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ── Progress dots ───────────────────────────────────────────── */
+.onb-progress {
+    display: flex;
+    align-items: center;
+    margin-bottom: 36px;
+    gap: 0;
+}
+
+.onb-dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: default;
+    pointer-events: none;
+}
+
+.onb-dot-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background: var(--surface-alt);
+    color: var(--page-muted);
+    border: 1.5px solid var(--line);
+    transition: background var(--motion-base), color var(--motion-base), border-color var(--motion-base), box-shadow var(--motion-base);
+}
+
+.onb-dot-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #a0aab4;
+    white-space: nowrap;
+    transition: color var(--motion-base);
+}
+
+/* Active step */
+.onb-dot.is-active .onb-dot-num {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(20, 99, 255, 0.14);
+}
+
+.onb-dot.is-active .onb-dot-label {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Completed step (PHP: is-done, JS: is-complete) */
+.onb-dot.is-done .onb-dot-num,
+.onb-dot.is-complete .onb-dot-num {
+    background: #e8f0ff;
+    color: var(--accent);
+    border-color: rgba(20, 99, 255, 0.3);
+}
+
+.onb-dot.is-done .onb-dot-label,
+.onb-dot.is-complete .onb-dot-label {
+    color: var(--accent);
+}
+
+/* Connector line between dots */
+.onb-dot-line {
+    flex: 1;
+    height: 1.5px;
+    min-width: 36px;
+    background: var(--line);
+    margin-bottom: 22px; /* aligns with center of dot while label sits below */
+    transition: background var(--motion-base);
+}
+
+.onb-dot-line.is-done {
+    background: rgba(20, 99, 255, 0.35);
+}
+
+/* ── Steps ───────────────────────────────────────────────────── */
+.onb-step {
+    display: none;
+}
+
+.onb-step.is-active {
+    display: block;
+    animation: onbIn 0.22s ease;
+}
+
+@keyframes onbIn {
+    from { opacity: 0; transform: translateY(7px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Step head ───────────────────────────────────────────────── */
+.onb-step-head {
+    margin-bottom: 28px;
+}
+
+.onb-question {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--page-ink);
+    margin: 0 0 7px;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+
+.onb-hint {
+    font-size: 0.88rem;
+    color: var(--page-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Fields ──────────────────────────────────────────────────── */
+.onb-field {
+    margin-bottom: 16px;
+}
+
+.onb-label {
+    display: block;
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.onb-label-optional {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.onb-optional {
+    font-size: 0.72rem;
+    color: var(--page-muted);
+    font-weight: 400;
+    background: var(--surface-alt);
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+}
+
+.onb-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: 1.5px solid rgba(15, 23, 42, 0.14);
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: var(--font-ui);
+    color: var(--page-ink);
+    background: var(--surface-strong);
+    transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
+    outline: none;
+    direction: ltr;
+    text-align: left;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+}
+
+.onb-input::placeholder {
+    color: #b4bdca;
+}
+
+.onb-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(20, 99, 255, 0.1);
+}
+
+/* Password field inside onb step */
+.onb-step .password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.onb-step .password-field .onb-input {
+    padding-left: 44px;
+}
+
+.onb-step .password-toggle {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: var(--page-muted);
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.onb-step .password-toggle:hover {
+    color: var(--page-ink);
+}
+
+/* ── CTA / Actions ───────────────────────────────────────────── */
+.onb-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 8px;
+    border-radius: 10px;
+}
+
+.onb-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.onb-actions .onb-back {
+    flex-shrink: 0;
+    height: 48px;
+    border-radius: 10px;
+}
+
+.onb-actions .onb-cta {
+    flex: 1;
+    margin-top: 0;
+}
+
+.onb-reassure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    color: #a0aab4;
+    margin-top: 14px;
+    line-height: 1.5;
+}
+
+.onb-reassure svg {
+    flex-shrink: 0;
+    color: var(--page-muted);
+}
+
+/* ── Consents ────────────────────────────────────────────────── */
+.onb-consents {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0 8px;
+}
+
+.onb-consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: #374151;
+    line-height: 1.55;
+    user-select: none;
+}
+
+.onb-consent-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.onb-consent-row a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: rgba(20, 99, 255, 0.35);
+    transition: text-decoration-color var(--motion-fast);
+}
+
+.onb-consent-row a:hover {
+    text-decoration-color: var(--accent);
+}
+
+/* ── Trust strip ─────────────────────────────────────────────── */
+.onb-trust {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.onb-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: var(--page-muted);
+}
+
+.onb-trust-item svg {
+    color: var(--accent);
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+/* ── Back link ───────────────────────────────────────────────── */
+.onb-back-link {
+    text-align: center;
+    margin: 0;
+}
+
+.onb-back-link a {
+    font-size: 0.8rem;
+    color: #a0aab4;
+    text-decoration: none;
+    transition: color var(--motion-fast);
+}
+
+.onb-back-link a:hover {
+    color: var(--accent);
+}
+
+/* ── Error states ────────────────────────────────────────────── */
+.onb-form .onb-error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #dc2626;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.84rem;
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 560px) {
+    .onb-header {
+        padding: 12px 16px;
+    }
+
+    .onb-main {
+        padding: 24px 12px 48px;
+        gap: 18px;
+        justify-content: flex-start;
+    }
+
+    .onb-card {
+        padding: 24px 20px 28px;
+        border-radius: 12px;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+    }
+
+    .onb-question {
+        font-size: 1.2rem;
+    }
+
+    .onb-dot-line {
+        min-width: 20px;
+    }
+
+    .onb-trust {
+        gap: 12px;
+    }
+
+    .onb-input {
+        font-size: 16px; /* prevent iOS zoom */
+    }
+}
