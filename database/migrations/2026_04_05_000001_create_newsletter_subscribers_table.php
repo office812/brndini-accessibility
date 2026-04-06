@@ -8,13 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('newsletter_subscribers', function (Blueprint $table) {
-            $table->id();
-            $table->string('email')->unique();
-            $table->string('source')->default('homepage');
-            $table->timestamp('subscribed_at')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('newsletter_subscribers')) {
+            Schema::create('newsletter_subscribers', function (Blueprint $table) {
+                $table->id();
+                $table->string('email')->unique();
+                $table->string('source')->default('homepage');
+                $table->timestamp('subscribed_at')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void
