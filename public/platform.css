@@ -16339,6 +16339,117 @@ details[open] .install-settings-summary > span:first-child::before {
     }
 }
 
+/* ── Install next-step card ──────────────────────────────────── */
+.install-next-step-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 22px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(20, 99, 255, 0.2);
+    background: rgba(20, 99, 255, 0.04);
+}
+
+.install-next-step-card.install-next-step-pending {
+    border-color: var(--line);
+    background: var(--surface-alt);
+    opacity: 0.85;
+}
+
+.install-next-step-icon {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    background: rgba(20, 99, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    margin-top: 2px;
+}
+
+.install-next-step-pending .install-next-step-icon {
+    background: var(--line);
+    color: var(--page-muted);
+}
+
+.install-next-step-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.install-next-step-body strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--page-ink);
+    margin-bottom: 4px;
+}
+
+.install-next-step-body p {
+    font-size: 0.85rem;
+    color: var(--page-muted);
+    margin: 0 0 14px;
+    line-height: 1.5;
+}
+
+.install-next-step-pending .install-next-step-body p {
+    margin-bottom: 0;
+}
+
+.install-next-step-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.9rem;
+    padding: 9px 18px;
+    height: auto;
+}
+
+/* ── Statement live banner ───────────────────────────────────── */
+.statement-live-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--success-bg);
+    border: 1px solid rgba(21, 128, 61, 0.2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+}
+
+.statement-live-banner-icon {
+    flex-shrink: 0;
+    color: var(--success);
+}
+
+.statement-live-banner-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.statement-live-banner-body strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--success);
+    margin-bottom: 2px;
+}
+
+.statement-live-banner-body .statement-live-url {
+    font-size: 0.82rem;
+    color: var(--page-muted);
+    word-break: break-all;
+    font-family: monospace;
+}
+
+.statement-live-banner-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
 /* ── Install verify result banner ────────────────────────────── */
 .install-verify-result {
     display: flex;

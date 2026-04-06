@@ -160,6 +160,33 @@
                 </div>
             </details>
 
+            {{-- ─── Next step: statement (shown once widget is verified) ─────────── --}}
+            @if($installationTone === 'good')
+                <section class="install-next-step-card domain-card">
+                    <div class="install-next-step-icon" aria-hidden="true">
+                        <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/></svg>
+                    </div>
+                    <div class="install-next-step-body">
+                        <strong>הווידג׳ט פעיל — השלב הבא הוא הצהרת הנגישות</strong>
+                        <p>לפי חוק הנגישות הישראלי, אתרים חייבים להציג הצהרת נגישות ציבורית. A11Y Bridge מייצר אותה בשבילך בתהליך מונחה של 2 דקות.</p>
+                        <a class="primary-button install-next-step-cta" href="{{ route('dashboard.compliance', ['site' => $site->id]) }}#statement-builder">
+                            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2"/></svg>
+                            צור הצהרת נגישות
+                        </a>
+                    </div>
+                </section>
+            @elseif(!$installationEverSeen)
+                <section class="install-next-step-card install-next-step-pending domain-card">
+                    <div class="install-next-step-icon" aria-hidden="true">
+                        <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </div>
+                    <div class="install-next-step-body">
+                        <strong>אחרי ההטמעה — תצטרך גם הצהרת נגישות</strong>
+                        <p>הצהרת נגישות היא חובה חוקית בישראל. ברגע שהווידג׳ט מוודא — כפתור ליצירת ההצהרה יופיע כאן.</p>
+                    </div>
+                </section>
+            @endif
+
             {{-- ─── License activation (if needed) ─────────────────────────────── --}}
             @if ($licenseStatus !== 'active')
                 <section class="domain-card install-license-card">
