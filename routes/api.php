@@ -7,6 +7,7 @@ Route::get('/health', function () {
     return response()->json([
         'ok' => true,
         'product' => 'A11Y Bridge Platform',
+        'deploy' => 'webhook-active',
     ]);
 });
 
