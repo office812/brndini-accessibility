@@ -5,6 +5,18 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
+// Serve widget.js with short cache so updates reach users quickly
+Route::get('/widget.js', function () {
+    $path = resource_path('js/widget.js');
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response(file_get_contents($path), 200)
+        ->header('Content-Type', 'application/javascript; charset=UTF-8')
+        ->header('Cache-Control', 'public, max-age=300, must-revalidate')
+        ->header('Vary', 'Accept-Encoding');
+})->name('widget.js');
+
 Route::get('/', [DashboardController::class, 'home'])->name('home');
 Route::view('/about', 'about')->name('about');
 Route::view('/how-it-works', 'how-it-works')->name('how-it-works');
